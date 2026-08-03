@@ -1,0 +1,28 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from typing import Optional
+from typing_extensions import Literal
+
+from .._models import BaseModel
+
+__all__ = ["LinkedAccountGitHubOAuth"]
+
+
+class LinkedAccountGitHubOAuth(BaseModel):
+    """A GitHub OAuth account linked to the user."""
+
+    email: Optional[str] = None
+
+    first_verified_at: Optional[float] = None
+
+    latest_verified_at: Optional[float] = None
+
+    name: Optional[str] = None
+
+    subject: str
+
+    type: Literal["github_oauth"]
+
+    username: Optional[str] = None
+
+    verified_at: float

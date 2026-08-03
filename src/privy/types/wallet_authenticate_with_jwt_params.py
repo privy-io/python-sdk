@@ -8,17 +8,17 @@ __all__ = ["WalletAuthenticateWithJwtParams"]
 
 
 class WalletAuthenticateWithJwtParams(TypedDict, total=False):
-    user_jwt: Required[str]
-    """The user's JWT, to be used to authenticate the user."""
-
-    encryption_type: Literal["HPKE"]
+    encryption_type: Required[Literal["HPKE"]]
     """The encryption type for the authentication response.
 
     Currently only supports HPKE.
     """
 
-    recipient_public_key: str
+    recipient_public_key: Required[str]
     """
     The public key of your ECDH keypair, in base64-encoded, SPKI-format, whose
     private key will be able to decrypt the session key.
     """
+
+    user_jwt: Required[str]
+    """The user's JWT, to be used to authenticate the user."""

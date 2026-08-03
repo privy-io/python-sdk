@@ -1,64 +1,18 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, List, Union, Optional
-from typing_extensions import Literal, TypeAlias
+from typing import List, Optional
 
 from ..._models import BaseModel
+from ..transaction_detail import TransactionDetail
+from ..blockchain_transaction_status import BlockchainTransactionStatus
 
-__all__ = [
-    "TransactionGetResponse",
-    "Transaction",
-    "TransactionDetails",
-    "TransactionDetailsUnionMember0",
-    "TransactionDetailsUnionMember1",
-]
+__all__ = ["TransactionGetResponse", "Transaction", "TransactionDetails"]
 
 
-class TransactionDetailsUnionMember0(BaseModel):
-    asset: Literal["usdc", "eth", "pol", "sol"]
+class TransactionDetails(TransactionDetail):
+    """Details of a wallet transaction, varying by transaction type."""
 
-    chain: Literal["ethereum", "arbitrum", "base", "linea", "optimism", "polygon", "solana", "zksync_era"]
-
-    display_values: Dict[str, str]
-
-    raw_value: str
-
-    raw_value_decimals: float
-
-    recipient: str
-
-    recipient_privy_user_id: Optional[str] = None
-
-    sender: str
-
-    sender_privy_user_id: Optional[str] = None
-
-    type: Literal["transfer_sent"]
-
-
-class TransactionDetailsUnionMember1(BaseModel):
-    asset: Literal["usdc", "eth", "pol", "sol"]
-
-    chain: Literal["ethereum", "arbitrum", "base", "linea", "optimism", "polygon", "solana", "zksync_era"]
-
-    display_values: Dict[str, str]
-
-    raw_value: str
-
-    raw_value_decimals: float
-
-    recipient: str
-
-    recipient_privy_user_id: Optional[str] = None
-
-    sender: str
-
-    sender_privy_user_id: Optional[str] = None
-
-    type: Literal["transfer_received"]
-
-
-TransactionDetails: TypeAlias = Union[TransactionDetailsUnionMember0, TransactionDetailsUnionMember1, None]
+    pass
 
 
 class Transaction(BaseModel):
@@ -66,15 +20,21 @@ class Transaction(BaseModel):
 
     created_at: float
 
-    details: Optional[TransactionDetails] = None
+    details: TransactionDetails
+    """Details of a wallet transaction, varying by transaction type."""
 
     privy_transaction_id: str
 
-    status: Literal["broadcasted", "confirmed", "execution_reverted", "failed"]
+    status: BlockchainTransactionStatus
+    """Status of a blockchain transaction submitted by Privy."""
 
     transaction_hash: Optional[str] = None
 
     wallet_id: str
+
+    sponsored: Optional[bool] = None
+
+    user_operation_hash: Optional[str] = None
 
 
 class TransactionGetResponse(BaseModel):

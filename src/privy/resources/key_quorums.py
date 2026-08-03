@@ -2,13 +2,11 @@
 
 from __future__ import annotations
 
-from typing import List
-
 import httpx
 
-from ..types import key_quorum_create_params, key_quorum_update_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from .._utils import maybe_transform, strip_not_given, async_maybe_transform
+from ..types import KeyQuorumID, key_quorum_create_params, key_quorum_update_params
+from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
+from .._utils import path_template, maybe_transform, strip_not_given, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -19,11 +17,15 @@ from .._response import (
 )
 from .._base_client import make_request_options
 from ..types.key_quorum import KeyQuorum
+from ..types.key_quorum_id import KeyQuorumID
+from ..types.success_response import SuccessResponse
 
 __all__ = ["KeyQuorumsResource", "AsyncKeyQuorumsResource"]
 
 
 class KeyQuorumsResource(SyncAPIResource):
+    """Operations related to key quorums"""
+
     @cached_property
     def with_raw_response(self) -> KeyQuorumsResourceWithRawResponse:
         """
@@ -46,20 +48,37 @@ class KeyQuorumsResource(SyncAPIResource):
     def create(
         self,
         *,
-        public_keys: List[str],
-        authorization_threshold: float | NotGiven = NOT_GIVEN,
-        display_name: str | NotGiven = NOT_GIVEN,
+        authorization_threshold: float | Omit = omit,
+        display_name: str | Omit = omit,
+        key_quorum_ids: SequenceNotStr[str] | Omit = omit,
+        public_keys: SequenceNotStr[str] | Omit = omit,
+        user_ids: SequenceNotStr[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> KeyQuorum:
         """
         Create a new key quorum.
 
         Args:
+          authorization_threshold: The number of keys that must sign for an action to be valid. Must be less than
+              or equal to total number of key quorum members.
+
+          key_quorum_ids: List of key quorum IDs that should be members of this key quorum. Key quorums
+              can only be nested 1 level deep. At least one of `user_ids`, `public_keys`, or
+              `key_quorum_ids` is required.
+
+          public_keys: List of P-256 public keys of the keys that should be authorized to sign on the
+              key quorum, in base64-encoded DER format. At least one of `user_ids`,
+              `public_keys`, or `key_quorum_ids` is required.
+
+          user_ids: List of user IDs of the users that should be authorized to sign on the key
+              quorum. At least one of `user_ids`, `public_keys`, or `key_quorum_ids` is
+              required.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -72,9 +91,11 @@ class KeyQuorumsResource(SyncAPIResource):
             "/v1/key_quorums",
             body=maybe_transform(
                 {
-                    "public_keys": public_keys,
                     "authorization_threshold": authorization_threshold,
                     "display_name": display_name,
+                    "key_quorum_ids": key_quorum_ids,
+                    "public_keys": public_keys,
+                    "user_ids": user_ids,
                 },
                 key_quorum_create_params.KeyQuorumCreateParams,
             ),
@@ -84,27 +105,30 @@ class KeyQuorumsResource(SyncAPIResource):
             cast_to=KeyQuorum,
         )
 
-    def update(
+    def _delete(
         self,
-        key_quorum_id: str,
+        key_quorum_id: KeyQuorumID,
         *,
-        public_keys: List[str],
-        authorization_threshold: float | NotGiven = NOT_GIVEN,
-        display_name: str | NotGiven = NOT_GIVEN,
-        privy_authorization_signature: str | NotGiven = NOT_GIVEN,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KeyQuorum:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
         """
-        Update a key quorum by key quorum ID.
+        Delete a key quorum by key quorum ID.
 
         Args:
+          key_quorum_id: A unique identifier for a key quorum.
+
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
 
           extra_headers: Send extra headers
 
@@ -117,16 +141,92 @@ class KeyQuorumsResource(SyncAPIResource):
         if not key_quorum_id:
             raise ValueError(f"Expected a non-empty value for `key_quorum_id` but received {key_quorum_id!r}")
         extra_headers = {
-            **strip_not_given({"privy-authorization-signature": privy_authorization_signature}),
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
+            **(extra_headers or {}),
+        }
+        return self._delete(
+            path_template("/v1/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SuccessResponse,
+        )
+
+    def _update(
+        self,
+        key_quorum_id: KeyQuorumID,
+        *,
+        authorization_threshold: float | Omit = omit,
+        display_name: str | Omit = omit,
+        key_quorum_ids: SequenceNotStr[str] | Omit = omit,
+        public_keys: SequenceNotStr[str] | Omit = omit,
+        user_ids: SequenceNotStr[str] | Omit = omit,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> KeyQuorum:
+        """
+        Update a key quorum by key quorum ID.
+
+        Args:
+          key_quorum_id: A unique identifier for a key quorum.
+
+          authorization_threshold: The number of keys that must sign for an action to be valid. Must be less than
+              or equal to total number of key quorum members.
+
+          key_quorum_ids: List of key quorum IDs that should be members of this key quorum. Key quorums
+              can only be nested 1 level deep.
+
+          public_keys: List of P-256 public keys of the keys that should be authorized to sign on the
+              key quorum, in base64-encoded DER format.
+
+          user_ids: List of user IDs of the users that should be authorized to sign on the key
+              quorum.
+
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not key_quorum_id:
+            raise ValueError(f"Expected a non-empty value for `key_quorum_id` but received {key_quorum_id!r}")
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
             **(extra_headers or {}),
         }
         return self._patch(
-            f"/v1/key_quorums/{key_quorum_id}",
+            path_template("/v1/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
             body=maybe_transform(
                 {
-                    "public_keys": public_keys,
                     "authorization_threshold": authorization_threshold,
                     "display_name": display_name,
+                    "key_quorum_ids": key_quorum_ids,
+                    "public_keys": public_keys,
+                    "user_ids": user_ids,
                 },
                 key_quorum_update_params.KeyQuorumUpdateParams,
             ),
@@ -136,62 +236,23 @@ class KeyQuorumsResource(SyncAPIResource):
             cast_to=KeyQuorum,
         )
 
-    def delete(
-        self,
-        key_quorum_id: str,
-        *,
-        privy_authorization_signature: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KeyQuorum:
-        """
-        Delete a key quorum by key quorum ID.
-
-        Args:
-          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
-              should be comma separated.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not key_quorum_id:
-            raise ValueError(f"Expected a non-empty value for `key_quorum_id` but received {key_quorum_id!r}")
-        extra_headers = {
-            **strip_not_given({"privy-authorization-signature": privy_authorization_signature}),
-            **(extra_headers or {}),
-        }
-        return self._delete(
-            f"/v1/key_quorums/{key_quorum_id}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=KeyQuorum,
-        )
-
     def get(
         self,
-        key_quorum_id: str,
+        key_quorum_id: KeyQuorumID,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> KeyQuorum:
         """
         Get a key quorum by ID.
 
         Args:
+          key_quorum_id: A unique identifier for a key quorum.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -203,7 +264,7 @@ class KeyQuorumsResource(SyncAPIResource):
         if not key_quorum_id:
             raise ValueError(f"Expected a non-empty value for `key_quorum_id` but received {key_quorum_id!r}")
         return self._get(
-            f"/v1/key_quorums/{key_quorum_id}",
+            path_template("/v1/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -212,6 +273,8 @@ class KeyQuorumsResource(SyncAPIResource):
 
 
 class AsyncKeyQuorumsResource(AsyncAPIResource):
+    """Operations related to key quorums"""
+
     @cached_property
     def with_raw_response(self) -> AsyncKeyQuorumsResourceWithRawResponse:
         """
@@ -234,20 +297,37 @@ class AsyncKeyQuorumsResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        public_keys: List[str],
-        authorization_threshold: float | NotGiven = NOT_GIVEN,
-        display_name: str | NotGiven = NOT_GIVEN,
+        authorization_threshold: float | Omit = omit,
+        display_name: str | Omit = omit,
+        key_quorum_ids: SequenceNotStr[str] | Omit = omit,
+        public_keys: SequenceNotStr[str] | Omit = omit,
+        user_ids: SequenceNotStr[str] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> KeyQuorum:
         """
         Create a new key quorum.
 
         Args:
+          authorization_threshold: The number of keys that must sign for an action to be valid. Must be less than
+              or equal to total number of key quorum members.
+
+          key_quorum_ids: List of key quorum IDs that should be members of this key quorum. Key quorums
+              can only be nested 1 level deep. At least one of `user_ids`, `public_keys`, or
+              `key_quorum_ids` is required.
+
+          public_keys: List of P-256 public keys of the keys that should be authorized to sign on the
+              key quorum, in base64-encoded DER format. At least one of `user_ids`,
+              `public_keys`, or `key_quorum_ids` is required.
+
+          user_ids: List of user IDs of the users that should be authorized to sign on the key
+              quorum. At least one of `user_ids`, `public_keys`, or `key_quorum_ids` is
+              required.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -260,9 +340,11 @@ class AsyncKeyQuorumsResource(AsyncAPIResource):
             "/v1/key_quorums",
             body=await async_maybe_transform(
                 {
-                    "public_keys": public_keys,
                     "authorization_threshold": authorization_threshold,
                     "display_name": display_name,
+                    "key_quorum_ids": key_quorum_ids,
+                    "public_keys": public_keys,
+                    "user_ids": user_ids,
                 },
                 key_quorum_create_params.KeyQuorumCreateParams,
             ),
@@ -272,27 +354,30 @@ class AsyncKeyQuorumsResource(AsyncAPIResource):
             cast_to=KeyQuorum,
         )
 
-    async def update(
+    async def _delete(
         self,
-        key_quorum_id: str,
+        key_quorum_id: KeyQuorumID,
         *,
-        public_keys: List[str],
-        authorization_threshold: float | NotGiven = NOT_GIVEN,
-        display_name: str | NotGiven = NOT_GIVEN,
-        privy_authorization_signature: str | NotGiven = NOT_GIVEN,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KeyQuorum:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
         """
-        Update a key quorum by key quorum ID.
+        Delete a key quorum by key quorum ID.
 
         Args:
+          key_quorum_id: A unique identifier for a key quorum.
+
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
 
           extra_headers: Send extra headers
 
@@ -305,16 +390,92 @@ class AsyncKeyQuorumsResource(AsyncAPIResource):
         if not key_quorum_id:
             raise ValueError(f"Expected a non-empty value for `key_quorum_id` but received {key_quorum_id!r}")
         extra_headers = {
-            **strip_not_given({"privy-authorization-signature": privy_authorization_signature}),
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
+            **(extra_headers or {}),
+        }
+        return await self._delete(
+            path_template("/v1/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SuccessResponse,
+        )
+
+    async def _update(
+        self,
+        key_quorum_id: KeyQuorumID,
+        *,
+        authorization_threshold: float | Omit = omit,
+        display_name: str | Omit = omit,
+        key_quorum_ids: SequenceNotStr[str] | Omit = omit,
+        public_keys: SequenceNotStr[str] | Omit = omit,
+        user_ids: SequenceNotStr[str] | Omit = omit,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> KeyQuorum:
+        """
+        Update a key quorum by key quorum ID.
+
+        Args:
+          key_quorum_id: A unique identifier for a key quorum.
+
+          authorization_threshold: The number of keys that must sign for an action to be valid. Must be less than
+              or equal to total number of key quorum members.
+
+          key_quorum_ids: List of key quorum IDs that should be members of this key quorum. Key quorums
+              can only be nested 1 level deep.
+
+          public_keys: List of P-256 public keys of the keys that should be authorized to sign on the
+              key quorum, in base64-encoded DER format.
+
+          user_ids: List of user IDs of the users that should be authorized to sign on the key
+              quorum.
+
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not key_quorum_id:
+            raise ValueError(f"Expected a non-empty value for `key_quorum_id` but received {key_quorum_id!r}")
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
             **(extra_headers or {}),
         }
         return await self._patch(
-            f"/v1/key_quorums/{key_quorum_id}",
+            path_template("/v1/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
             body=await async_maybe_transform(
                 {
-                    "public_keys": public_keys,
                     "authorization_threshold": authorization_threshold,
                     "display_name": display_name,
+                    "key_quorum_ids": key_quorum_ids,
+                    "public_keys": public_keys,
+                    "user_ids": user_ids,
                 },
                 key_quorum_update_params.KeyQuorumUpdateParams,
             ),
@@ -324,62 +485,23 @@ class AsyncKeyQuorumsResource(AsyncAPIResource):
             cast_to=KeyQuorum,
         )
 
-    async def delete(
-        self,
-        key_quorum_id: str,
-        *,
-        privy_authorization_signature: str | NotGiven = NOT_GIVEN,
-        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
-        # The extra values given here take precedence over values defined on the client or passed to this method.
-        extra_headers: Headers | None = None,
-        extra_query: Query | None = None,
-        extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> KeyQuorum:
-        """
-        Delete a key quorum by key quorum ID.
-
-        Args:
-          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
-              should be comma separated.
-
-          extra_headers: Send extra headers
-
-          extra_query: Add additional query parameters to the request
-
-          extra_body: Add additional JSON properties to the request
-
-          timeout: Override the client-level default timeout for this request, in seconds
-        """
-        if not key_quorum_id:
-            raise ValueError(f"Expected a non-empty value for `key_quorum_id` but received {key_quorum_id!r}")
-        extra_headers = {
-            **strip_not_given({"privy-authorization-signature": privy_authorization_signature}),
-            **(extra_headers or {}),
-        }
-        return await self._delete(
-            f"/v1/key_quorums/{key_quorum_id}",
-            options=make_request_options(
-                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
-            ),
-            cast_to=KeyQuorum,
-        )
-
     async def get(
         self,
-        key_quorum_id: str,
+        key_quorum_id: KeyQuorumID,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> KeyQuorum:
         """
         Get a key quorum by ID.
 
         Args:
+          key_quorum_id: A unique identifier for a key quorum.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -391,7 +513,7 @@ class AsyncKeyQuorumsResource(AsyncAPIResource):
         if not key_quorum_id:
             raise ValueError(f"Expected a non-empty value for `key_quorum_id` but received {key_quorum_id!r}")
         return await self._get(
-            f"/v1/key_quorums/{key_quorum_id}",
+            path_template("/v1/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -406,11 +528,11 @@ class KeyQuorumsResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             key_quorums.create,
         )
-        self.update = to_raw_response_wrapper(
-            key_quorums.update,
+        self._delete = to_raw_response_wrapper(
+            key_quorums._delete,
         )
-        self.delete = to_raw_response_wrapper(
-            key_quorums.delete,
+        self._update = to_raw_response_wrapper(
+            key_quorums._update,
         )
         self.get = to_raw_response_wrapper(
             key_quorums.get,
@@ -424,11 +546,11 @@ class AsyncKeyQuorumsResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             key_quorums.create,
         )
-        self.update = async_to_raw_response_wrapper(
-            key_quorums.update,
+        self._delete = async_to_raw_response_wrapper(
+            key_quorums._delete,
         )
-        self.delete = async_to_raw_response_wrapper(
-            key_quorums.delete,
+        self._update = async_to_raw_response_wrapper(
+            key_quorums._update,
         )
         self.get = async_to_raw_response_wrapper(
             key_quorums.get,
@@ -442,11 +564,11 @@ class KeyQuorumsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             key_quorums.create,
         )
-        self.update = to_streamed_response_wrapper(
-            key_quorums.update,
+        self._delete = to_streamed_response_wrapper(
+            key_quorums._delete,
         )
-        self.delete = to_streamed_response_wrapper(
-            key_quorums.delete,
+        self._update = to_streamed_response_wrapper(
+            key_quorums._update,
         )
         self.get = to_streamed_response_wrapper(
             key_quorums.get,
@@ -460,11 +582,11 @@ class AsyncKeyQuorumsResourceWithStreamingResponse:
         self.create = async_to_streamed_response_wrapper(
             key_quorums.create,
         )
-        self.update = async_to_streamed_response_wrapper(
-            key_quorums.update,
+        self._delete = async_to_streamed_response_wrapper(
+            key_quorums._delete,
         )
-        self.delete = async_to_streamed_response_wrapper(
-            key_quorums.delete,
+        self._update = async_to_streamed_response_wrapper(
+            key_quorums._update,
         )
         self.get = async_to_streamed_response_wrapper(
             key_quorums.get,

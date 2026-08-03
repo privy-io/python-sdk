@@ -17,7 +17,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestAccounts:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create(self, client: PrivyAPI) -> None:
         account = client.fiat.accounts.create(
@@ -28,7 +28,7 @@ class TestAccounts:
         )
         assert_matches_type(AccountCreateResponse, account, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: PrivyAPI) -> None:
         account = client.fiat.accounts.create(
@@ -78,7 +78,7 @@ class TestAccounts:
         )
         assert_matches_type(AccountCreateResponse, account, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: PrivyAPI) -> None:
         response = client.fiat.accounts.with_raw_response.create(
@@ -93,7 +93,7 @@ class TestAccounts:
         account = response.parse()
         assert_matches_type(AccountCreateResponse, account, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: PrivyAPI) -> None:
         with client.fiat.accounts.with_streaming_response.create(
@@ -110,7 +110,7 @@ class TestAccounts:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_create(self, client: PrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
@@ -121,7 +121,7 @@ class TestAccounts:
                 provider="bridge-sandbox",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_get(self, client: PrivyAPI) -> None:
         account = client.fiat.accounts.get(
@@ -130,7 +130,7 @@ class TestAccounts:
         )
         assert_matches_type(AccountGetResponse, account, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_get(self, client: PrivyAPI) -> None:
         response = client.fiat.accounts.with_raw_response.get(
@@ -143,7 +143,7 @@ class TestAccounts:
         account = response.parse()
         assert_matches_type(AccountGetResponse, account, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_get(self, client: PrivyAPI) -> None:
         with client.fiat.accounts.with_streaming_response.get(
@@ -158,7 +158,7 @@ class TestAccounts:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_get(self, client: PrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
@@ -173,7 +173,7 @@ class TestAsyncAccounts:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create(self, async_client: AsyncPrivyAPI) -> None:
         account = await async_client.fiat.accounts.create(
@@ -184,7 +184,7 @@ class TestAsyncAccounts:
         )
         assert_matches_type(AccountCreateResponse, account, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
         account = await async_client.fiat.accounts.create(
@@ -234,7 +234,7 @@ class TestAsyncAccounts:
         )
         assert_matches_type(AccountCreateResponse, account, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_create(self, async_client: AsyncPrivyAPI) -> None:
         response = await async_client.fiat.accounts.with_raw_response.create(
@@ -249,7 +249,7 @@ class TestAsyncAccounts:
         account = await response.parse()
         assert_matches_type(AccountCreateResponse, account, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_create(self, async_client: AsyncPrivyAPI) -> None:
         async with async_client.fiat.accounts.with_streaming_response.create(
@@ -266,7 +266,7 @@ class TestAsyncAccounts:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_create(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
@@ -277,7 +277,7 @@ class TestAsyncAccounts:
                 provider="bridge-sandbox",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_get(self, async_client: AsyncPrivyAPI) -> None:
         account = await async_client.fiat.accounts.get(
@@ -286,7 +286,7 @@ class TestAsyncAccounts:
         )
         assert_matches_type(AccountGetResponse, account, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncPrivyAPI) -> None:
         response = await async_client.fiat.accounts.with_raw_response.get(
@@ -299,7 +299,7 @@ class TestAsyncAccounts:
         account = await response.parse()
         assert_matches_type(AccountGetResponse, account, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncPrivyAPI) -> None:
         async with async_client.fiat.accounts.with_streaming_response.get(
@@ -314,7 +314,7 @@ class TestAsyncAccounts:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_get(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):

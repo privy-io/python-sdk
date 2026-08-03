@@ -9,6 +9,8 @@ __all__ = ["WalletCreateWalletsWithRecoveryResponse"]
 
 
 class WalletCreateWalletsWithRecoveryResponse(BaseModel):
+    """The response from creating wallets with an associated recovery user."""
+
     recovery_user_id: str
     """The ID of the created user."""
 

@@ -5,13 +5,16 @@ from __future__ import annotations
 from typing import List
 from typing_extensions import Literal, Required, TypedDict
 
+from .onramp_provider import OnrampProvider
+
 __all__ = ["FiatGetKYCLinkParams"]
 
 
 class FiatGetKYCLinkParams(TypedDict, total=False):
     email: Required[str]
 
-    provider: Required[Literal["bridge", "bridge-sandbox"]]
+    provider: Required[OnrampProvider]
+    """Valid set of onramp providers"""
 
     endorsements: List[Literal["sepa"]]
 

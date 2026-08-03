@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import httpx
 
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
+from .._types import Body, Query, Headers, NotGiven, not_given
+from .._utils import path_template
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -14,12 +15,14 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.transaction_get_response import TransactionGetResponse
+from ..types.transaction import Transaction
 
 __all__ = ["TransactionsResource", "AsyncTransactionsResource"]
 
 
 class TransactionsResource(SyncAPIResource):
+    """Operations related to transactions"""
+
     @cached_property
     def with_raw_response(self) -> TransactionsResourceWithRawResponse:
         """
@@ -48,8 +51,8 @@ class TransactionsResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> TransactionGetResponse:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Transaction:
         """
         Get a transaction by transaction ID.
 
@@ -67,15 +70,17 @@ class TransactionsResource(SyncAPIResource):
         if not transaction_id:
             raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
         return self._get(
-            f"/v1/transactions/{transaction_id}",
+            path_template("/v1/transactions/{transaction_id}", transaction_id=transaction_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=TransactionGetResponse,
+            cast_to=Transaction,
         )
 
 
 class AsyncTransactionsResource(AsyncAPIResource):
+    """Operations related to transactions"""
+
     @cached_property
     def with_raw_response(self) -> AsyncTransactionsResourceWithRawResponse:
         """
@@ -104,8 +109,8 @@ class AsyncTransactionsResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> TransactionGetResponse:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Transaction:
         """
         Get a transaction by transaction ID.
 
@@ -123,11 +128,11 @@ class AsyncTransactionsResource(AsyncAPIResource):
         if not transaction_id:
             raise ValueError(f"Expected a non-empty value for `transaction_id` but received {transaction_id!r}")
         return await self._get(
-            f"/v1/transactions/{transaction_id}",
+            path_template("/v1/transactions/{transaction_id}", transaction_id=transaction_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=TransactionGetResponse,
+            cast_to=Transaction,
         )
 
 

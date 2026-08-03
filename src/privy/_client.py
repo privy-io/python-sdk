@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import os
 import base64
-from typing import Any, Dict, Union, Mapping, cast
+from typing import TYPE_CHECKING, Any, Dict, Mapping, cast
 from typing_extensions import Self, Literal, override
 
 import httpx
@@ -12,35 +12,40 @@ import httpx
 from . import _exceptions
 from ._qs import Querystring
 from ._types import (
-    NOT_GIVEN,
     Omit,
     Timeout,
     NotGiven,
     Transport,
     ProxiesTypes,
     RequestOptions,
+    not_given,
 )
-from ._utils import is_given, get_async_library
+from ._utils import (
+    is_given,
+    is_mapping_t,
+    get_async_library,
+)
+from ._compat import cached_property
 from ._version import __version__
-from .lib.users import (
-    UsersResource as PrivyUsersResource,
-    AsyncUsersResource as PrivyAsyncUsersResource,
-)
-from .resources import users, policies, key_quorums, transactions
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import PrivyAPIError, APIStatusError
-from .lib.wallets import (
-    WalletsResource as PrivyWalletsResource,
-    AsyncWalletsResource as PrivyAsyncWalletsResource,
-)
 from ._base_client import (
     DEFAULT_MAX_RETRIES,
     SyncAPIClient,
     AsyncAPIClient,
 )
-from .resources.fiat import fiat
-from .lib.http_client import PrivyHTTPClient
-from .resources.wallets import wallets
+
+if TYPE_CHECKING:
+    from .resources import apps, fiat, users, intents, wallets, policies, key_quorums, transactions
+    from .resources.users import UsersResource, AsyncUsersResource
+    from .resources.intents import IntentsResource, AsyncIntentsResource
+    from .resources.policies import PoliciesResource, AsyncPoliciesResource
+    from .resources.webhooks import WebhooksResource, AsyncWebhooksResource
+    from .resources.apps.apps import AppsResource, AsyncAppsResource
+    from .resources.fiat.fiat import FiatResource, AsyncFiatResource
+    from .resources.key_quorums import KeyQuorumsResource, AsyncKeyQuorumsResource
+    from .resources.transactions import TransactionsResource, AsyncTransactionsResource
+    from .resources.wallets.wallets import WalletsResource, AsyncWalletsResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -56,20 +61,11 @@ __all__ = [
 
 ENVIRONMENTS: Dict[str, str] = {
     "production": "https://api.privy.io",
-    "staging": "https://auth.staging.privy.io",
+    "staging": "https://api.staging.privy.io",
 }
 
 
 class PrivyAPI(SyncAPIClient):
-    wallets: PrivyWalletsResource
-    users: PrivyUsersResource
-    policies: policies.PoliciesResource
-    transactions: transactions.TransactionsResource
-    key_quorums: key_quorums.KeyQuorumsResource
-    fiat: fiat.FiatResource
-    with_raw_response: PrivyAPIWithRawResponse
-    with_streaming_response: PrivyAPIWithStreamedResponse
-
     # client options
     app_id: str
     app_secret: str
@@ -81,10 +77,9 @@ class PrivyAPI(SyncAPIClient):
         *,
         app_id: str | None = None,
         app_secret: str | None = None,
-        environment: Literal["production", "staging"] | NotGiven = NOT_GIVEN,
-        authorization_key: str | None = None,
-        base_url: str | httpx.URL | None | NotGiven = NOT_GIVEN,
-        timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
+        environment: Literal["production", "staging"] | NotGiven = not_given,
+        base_url: str | httpx.URL | None | NotGiven = not_given,
+        timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -130,7 +125,6 @@ class PrivyAPI(SyncAPIClient):
         if is_given(base_url) and base_url is not None:
             # cast required because mypy doesn't understand the type narrowing
             base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
-            self._base_url_overridden = True
         elif is_given(environment):
             if base_url_env and base_url is not None:
                 raise ValueError(
@@ -141,10 +135,8 @@ class PrivyAPI(SyncAPIClient):
                 base_url = ENVIRONMENTS[environment]
             except KeyError as exc:
                 raise ValueError(f"Unknown environment: {environment}") from exc
-            self._base_url_overridden = False
         elif base_url_env is not None:
             base_url = base_url_env
-            self._base_url_overridden = True
         else:
             self._environment = environment = "production"
 
@@ -152,36 +144,95 @@ class PrivyAPI(SyncAPIClient):
                 base_url = ENVIRONMENTS[environment]
             except KeyError as exc:
                 raise ValueError(f"Unknown environment: {environment}") from exc
-            self._base_url_overridden = False
+
+        custom_headers_env = os.environ.get("PRIVY_API_CUSTOM_HEADERS")
+        if custom_headers_env is not None:
+            parsed: dict[str, str] = {}
+            for line in custom_headers_env.split("\n"):
+                colon = line.find(":")
+                if colon >= 0:
+                    parsed[line[:colon].strip()] = line[colon + 1 :].strip()
+            default_headers = {**parsed, **(default_headers if is_mapping_t(default_headers) else {})}
 
         super().__init__(
             version=__version__,
             base_url=base_url,
             max_retries=max_retries,
             timeout=timeout,
-            http_client=http_client
-            or PrivyHTTPClient(
-                app_id=app_id or "",
-                timeout=timeout if isinstance(timeout, (int, float)) else None,
-                authorization_key=authorization_key,
-            ),
+            http_client=http_client,
             custom_headers=default_headers,
             custom_query=default_query,
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.wallets = PrivyWalletsResource(self)
-        self.users = PrivyUsersResource(self)
-        self.policies = policies.PoliciesResource(self)
-        self.transactions = transactions.TransactionsResource(self)
-        self.key_quorums = key_quorums.KeyQuorumsResource(self)
-        self.fiat = fiat.FiatResource(self)
-        self.with_raw_response = PrivyAPIWithRawResponse(self)
-        self.with_streaming_response = PrivyAPIWithStreamedResponse(self)
+    @cached_property
+    def wallets(self) -> WalletsResource:
+        from .resources.wallets import WalletsResource
 
-    def update_authorization_key(self, authorization_key: str) -> None:
-        if isinstance(self._client, PrivyHTTPClient):
-            self._client._authorization_key = authorization_key.replace("wallet-auth:", "")
+        return WalletsResource(self)
+
+    @cached_property
+    def users(self) -> UsersResource:
+        """Operations related to users"""
+        from .resources.users import UsersResource
+
+        return UsersResource(self)
+
+    @cached_property
+    def policies(self) -> PoliciesResource:
+        """Operations related to policies"""
+        from .resources.policies import PoliciesResource
+
+        return PoliciesResource(self)
+
+    @cached_property
+    def transactions(self) -> TransactionsResource:
+        """Operations related to transactions"""
+        from .resources.transactions import TransactionsResource
+
+        return TransactionsResource(self)
+
+    @cached_property
+    def key_quorums(self) -> KeyQuorumsResource:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import KeyQuorumsResource
+
+        return KeyQuorumsResource(self)
+
+    @cached_property
+    def intents(self) -> IntentsResource:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import IntentsResource
+
+        return IntentsResource(self)
+
+    @cached_property
+    def apps(self) -> AppsResource:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AppsResource
+
+        return AppsResource(self)
+
+    @cached_property
+    def fiat(self) -> FiatResource:
+        """Operations related to fiat onramping and offramping"""
+        from .resources.fiat import FiatResource
+
+        return FiatResource(self)
+
+    @cached_property
+    def webhooks(self) -> WebhooksResource:
+        from .resources.webhooks import WebhooksResource
+
+        return WebhooksResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> PrivyAPIWithRawResponse:
+        return PrivyAPIWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> PrivyAPIWithStreamedResponse:
+        return PrivyAPIWithStreamedResponse(self)
 
     @property
     @override
@@ -211,11 +262,10 @@ class PrivyAPI(SyncAPIClient):
         app_id: str | None = None,
         app_secret: str | None = None,
         environment: Literal["production", "staging"] | None = None,
-        authorization_key: str | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.Client | None = None,
-        max_retries: int | NotGiven = NOT_GIVEN,
+        max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -244,12 +294,11 @@ class PrivyAPI(SyncAPIClient):
             params = set_default_query
 
         http_client = http_client or self._client
-        client = self.__class__(
+        return self.__class__(
             app_id=app_id or self.app_id,
             app_secret=app_secret or self.app_secret,
             base_url=base_url or self.base_url,
             environment=environment or self._environment,
-            authorization_key=authorization_key,
             timeout=self.timeout if isinstance(timeout, NotGiven) else timeout,
             http_client=http_client,
             max_retries=max_retries if is_given(max_retries) else self.max_retries,
@@ -257,8 +306,6 @@ class PrivyAPI(SyncAPIClient):
             default_query=params,
             **_extra_kwargs,
         )
-        client._base_url_overridden = self._base_url_overridden or base_url is not None
-        return client
 
     # Alias for `copy` for nicer inline usage, e.g.
     # client.with_options(timeout=10).foo.create(...)
@@ -299,15 +346,6 @@ class PrivyAPI(SyncAPIClient):
 
 
 class AsyncPrivyAPI(AsyncAPIClient):
-    wallets: PrivyAsyncWalletsResource
-    users: PrivyAsyncUsersResource
-    policies: policies.AsyncPoliciesResource
-    transactions: transactions.AsyncTransactionsResource
-    key_quorums: key_quorums.AsyncKeyQuorumsResource
-    fiat: fiat.AsyncFiatResource
-    with_raw_response: AsyncPrivyAPIWithRawResponse
-    with_streaming_response: AsyncPrivyAPIWithStreamedResponse
-
     # client options
     app_id: str
     app_secret: str
@@ -319,9 +357,9 @@ class AsyncPrivyAPI(AsyncAPIClient):
         *,
         app_id: str | None = None,
         app_secret: str | None = None,
-        environment: Literal["production", "staging"] | NotGiven = NOT_GIVEN,
-        base_url: str | httpx.URL | None | NotGiven = NOT_GIVEN,
-        timeout: Union[float, Timeout, None, NotGiven] = NOT_GIVEN,
+        environment: Literal["production", "staging"] | NotGiven = not_given,
+        base_url: str | httpx.URL | None | NotGiven = not_given,
+        timeout: float | Timeout | None | NotGiven = not_given,
         max_retries: int = DEFAULT_MAX_RETRIES,
         default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -367,7 +405,6 @@ class AsyncPrivyAPI(AsyncAPIClient):
         if is_given(base_url) and base_url is not None:
             # cast required because mypy doesn't understand the type narrowing
             base_url = cast("str | httpx.URL", base_url)  # pyright: ignore[reportUnnecessaryCast]
-            self._base_url_overridden = True
         elif is_given(environment):
             if base_url_env and base_url is not None:
                 raise ValueError(
@@ -378,10 +415,8 @@ class AsyncPrivyAPI(AsyncAPIClient):
                 base_url = ENVIRONMENTS[environment]
             except KeyError as exc:
                 raise ValueError(f"Unknown environment: {environment}") from exc
-            self._base_url_overridden = False
         elif base_url_env is not None:
             base_url = base_url_env
-            self._base_url_overridden = True
         else:
             self._environment = environment = "production"
 
@@ -389,7 +424,15 @@ class AsyncPrivyAPI(AsyncAPIClient):
                 base_url = ENVIRONMENTS[environment]
             except KeyError as exc:
                 raise ValueError(f"Unknown environment: {environment}") from exc
-            self._base_url_overridden = False
+
+        custom_headers_env = os.environ.get("PRIVY_API_CUSTOM_HEADERS")
+        if custom_headers_env is not None:
+            parsed: dict[str, str] = {}
+            for line in custom_headers_env.split("\n"):
+                colon = line.find(":")
+                if colon >= 0:
+                    parsed[line[:colon].strip()] = line[colon + 1 :].strip()
+            default_headers = {**parsed, **(default_headers if is_mapping_t(default_headers) else {})}
 
         super().__init__(
             version=__version__,
@@ -402,14 +445,74 @@ class AsyncPrivyAPI(AsyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.wallets = PrivyAsyncWalletsResource(self)
-        self.users = PrivyAsyncUsersResource(self)
-        self.policies = policies.AsyncPoliciesResource(self)
-        self.transactions = transactions.AsyncTransactionsResource(self)
-        self.key_quorums = key_quorums.AsyncKeyQuorumsResource(self)
-        self.fiat = fiat.AsyncFiatResource(self)
-        self.with_raw_response = AsyncPrivyAPIWithRawResponse(self)
-        self.with_streaming_response = AsyncPrivyAPIWithStreamedResponse(self)
+    @cached_property
+    def wallets(self) -> AsyncWalletsResource:
+        from .resources.wallets import AsyncWalletsResource
+
+        return AsyncWalletsResource(self)
+
+    @cached_property
+    def users(self) -> AsyncUsersResource:
+        """Operations related to users"""
+        from .resources.users import AsyncUsersResource
+
+        return AsyncUsersResource(self)
+
+    @cached_property
+    def policies(self) -> AsyncPoliciesResource:
+        """Operations related to policies"""
+        from .resources.policies import AsyncPoliciesResource
+
+        return AsyncPoliciesResource(self)
+
+    @cached_property
+    def transactions(self) -> AsyncTransactionsResource:
+        """Operations related to transactions"""
+        from .resources.transactions import AsyncTransactionsResource
+
+        return AsyncTransactionsResource(self)
+
+    @cached_property
+    def key_quorums(self) -> AsyncKeyQuorumsResource:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import AsyncKeyQuorumsResource
+
+        return AsyncKeyQuorumsResource(self)
+
+    @cached_property
+    def intents(self) -> AsyncIntentsResource:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import AsyncIntentsResource
+
+        return AsyncIntentsResource(self)
+
+    @cached_property
+    def apps(self) -> AsyncAppsResource:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AsyncAppsResource
+
+        return AsyncAppsResource(self)
+
+    @cached_property
+    def fiat(self) -> AsyncFiatResource:
+        """Operations related to fiat onramping and offramping"""
+        from .resources.fiat import AsyncFiatResource
+
+        return AsyncFiatResource(self)
+
+    @cached_property
+    def webhooks(self) -> AsyncWebhooksResource:
+        from .resources.webhooks import AsyncWebhooksResource
+
+        return AsyncWebhooksResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> AsyncPrivyAPIWithRawResponse:
+        return AsyncPrivyAPIWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncPrivyAPIWithStreamedResponse:
+        return AsyncPrivyAPIWithStreamedResponse(self)
 
     @property
     @override
@@ -440,9 +543,9 @@ class AsyncPrivyAPI(AsyncAPIClient):
         app_secret: str | None = None,
         environment: Literal["production", "staging"] | None = None,
         base_url: str | httpx.URL | None = None,
-        timeout: float | Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | Timeout | None | NotGiven = not_given,
         http_client: httpx.AsyncClient | None = None,
-        max_retries: int | NotGiven = NOT_GIVEN,
+        max_retries: int | NotGiven = not_given,
         default_headers: Mapping[str, str] | None = None,
         set_default_headers: Mapping[str, str] | None = None,
         default_query: Mapping[str, object] | None = None,
@@ -471,7 +574,7 @@ class AsyncPrivyAPI(AsyncAPIClient):
             params = set_default_query
 
         http_client = http_client or self._client
-        client = self.__class__(
+        return self.__class__(
             app_id=app_id or self.app_id,
             app_secret=app_secret or self.app_secret,
             base_url=base_url or self.base_url,
@@ -483,8 +586,6 @@ class AsyncPrivyAPI(AsyncAPIClient):
             default_query=params,
             **_extra_kwargs,
         )
-        client._base_url_overridden = self._base_url_overridden or base_url is not None
-        return client
 
     # Alias for `copy` for nicer inline usage, e.g.
     # client.with_options(timeout=10).foo.create(...)
@@ -525,43 +626,251 @@ class AsyncPrivyAPI(AsyncAPIClient):
 
 
 class PrivyAPIWithRawResponse:
+    _client: PrivyAPI
+
     def __init__(self, client: PrivyAPI) -> None:
-        self.wallets = wallets.WalletsResourceWithRawResponse(client.wallets)
-        self.users = users.UsersResourceWithRawResponse(client.users)
-        self.policies = policies.PoliciesResourceWithRawResponse(client.policies)
-        self.transactions = transactions.TransactionsResourceWithRawResponse(client.transactions)
-        self.key_quorums = key_quorums.KeyQuorumsResourceWithRawResponse(client.key_quorums)
-        self.fiat = fiat.FiatResourceWithRawResponse(client.fiat)
+        self._client = client
+
+    @cached_property
+    def wallets(self) -> wallets.WalletsResourceWithRawResponse:
+        from .resources.wallets import WalletsResourceWithRawResponse
+
+        return WalletsResourceWithRawResponse(self._client.wallets)
+
+    @cached_property
+    def users(self) -> users.UsersResourceWithRawResponse:
+        """Operations related to users"""
+        from .resources.users import UsersResourceWithRawResponse
+
+        return UsersResourceWithRawResponse(self._client.users)
+
+    @cached_property
+    def policies(self) -> policies.PoliciesResourceWithRawResponse:
+        """Operations related to policies"""
+        from .resources.policies import PoliciesResourceWithRawResponse
+
+        return PoliciesResourceWithRawResponse(self._client.policies)
+
+    @cached_property
+    def transactions(self) -> transactions.TransactionsResourceWithRawResponse:
+        """Operations related to transactions"""
+        from .resources.transactions import TransactionsResourceWithRawResponse
+
+        return TransactionsResourceWithRawResponse(self._client.transactions)
+
+    @cached_property
+    def key_quorums(self) -> key_quorums.KeyQuorumsResourceWithRawResponse:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import KeyQuorumsResourceWithRawResponse
+
+        return KeyQuorumsResourceWithRawResponse(self._client.key_quorums)
+
+    @cached_property
+    def intents(self) -> intents.IntentsResourceWithRawResponse:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import IntentsResourceWithRawResponse
+
+        return IntentsResourceWithRawResponse(self._client.intents)
+
+    @cached_property
+    def apps(self) -> apps.AppsResourceWithRawResponse:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AppsResourceWithRawResponse
+
+        return AppsResourceWithRawResponse(self._client.apps)
+
+    @cached_property
+    def fiat(self) -> fiat.FiatResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
+        from .resources.fiat import FiatResourceWithRawResponse
+
+        return FiatResourceWithRawResponse(self._client.fiat)
 
 
 class AsyncPrivyAPIWithRawResponse:
+    _client: AsyncPrivyAPI
+
     def __init__(self, client: AsyncPrivyAPI) -> None:
-        self.wallets = wallets.AsyncWalletsResourceWithRawResponse(client.wallets)
-        self.users = users.AsyncUsersResourceWithRawResponse(client.users)
-        self.policies = policies.AsyncPoliciesResourceWithRawResponse(client.policies)
-        self.transactions = transactions.AsyncTransactionsResourceWithRawResponse(client.transactions)
-        self.key_quorums = key_quorums.AsyncKeyQuorumsResourceWithRawResponse(client.key_quorums)
-        self.fiat = fiat.AsyncFiatResourceWithRawResponse(client.fiat)
+        self._client = client
+
+    @cached_property
+    def wallets(self) -> wallets.AsyncWalletsResourceWithRawResponse:
+        from .resources.wallets import AsyncWalletsResourceWithRawResponse
+
+        return AsyncWalletsResourceWithRawResponse(self._client.wallets)
+
+    @cached_property
+    def users(self) -> users.AsyncUsersResourceWithRawResponse:
+        """Operations related to users"""
+        from .resources.users import AsyncUsersResourceWithRawResponse
+
+        return AsyncUsersResourceWithRawResponse(self._client.users)
+
+    @cached_property
+    def policies(self) -> policies.AsyncPoliciesResourceWithRawResponse:
+        """Operations related to policies"""
+        from .resources.policies import AsyncPoliciesResourceWithRawResponse
+
+        return AsyncPoliciesResourceWithRawResponse(self._client.policies)
+
+    @cached_property
+    def transactions(self) -> transactions.AsyncTransactionsResourceWithRawResponse:
+        """Operations related to transactions"""
+        from .resources.transactions import AsyncTransactionsResourceWithRawResponse
+
+        return AsyncTransactionsResourceWithRawResponse(self._client.transactions)
+
+    @cached_property
+    def key_quorums(self) -> key_quorums.AsyncKeyQuorumsResourceWithRawResponse:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import AsyncKeyQuorumsResourceWithRawResponse
+
+        return AsyncKeyQuorumsResourceWithRawResponse(self._client.key_quorums)
+
+    @cached_property
+    def intents(self) -> intents.AsyncIntentsResourceWithRawResponse:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import AsyncIntentsResourceWithRawResponse
+
+        return AsyncIntentsResourceWithRawResponse(self._client.intents)
+
+    @cached_property
+    def apps(self) -> apps.AsyncAppsResourceWithRawResponse:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AsyncAppsResourceWithRawResponse
+
+        return AsyncAppsResourceWithRawResponse(self._client.apps)
+
+    @cached_property
+    def fiat(self) -> fiat.AsyncFiatResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
+        from .resources.fiat import AsyncFiatResourceWithRawResponse
+
+        return AsyncFiatResourceWithRawResponse(self._client.fiat)
 
 
 class PrivyAPIWithStreamedResponse:
+    _client: PrivyAPI
+
     def __init__(self, client: PrivyAPI) -> None:
-        self.wallets = wallets.WalletsResourceWithStreamingResponse(client.wallets)
-        self.users = users.UsersResourceWithStreamingResponse(client.users)
-        self.policies = policies.PoliciesResourceWithStreamingResponse(client.policies)
-        self.transactions = transactions.TransactionsResourceWithStreamingResponse(client.transactions)
-        self.key_quorums = key_quorums.KeyQuorumsResourceWithStreamingResponse(client.key_quorums)
-        self.fiat = fiat.FiatResourceWithStreamingResponse(client.fiat)
+        self._client = client
+
+    @cached_property
+    def wallets(self) -> wallets.WalletsResourceWithStreamingResponse:
+        from .resources.wallets import WalletsResourceWithStreamingResponse
+
+        return WalletsResourceWithStreamingResponse(self._client.wallets)
+
+    @cached_property
+    def users(self) -> users.UsersResourceWithStreamingResponse:
+        """Operations related to users"""
+        from .resources.users import UsersResourceWithStreamingResponse
+
+        return UsersResourceWithStreamingResponse(self._client.users)
+
+    @cached_property
+    def policies(self) -> policies.PoliciesResourceWithStreamingResponse:
+        """Operations related to policies"""
+        from .resources.policies import PoliciesResourceWithStreamingResponse
+
+        return PoliciesResourceWithStreamingResponse(self._client.policies)
+
+    @cached_property
+    def transactions(self) -> transactions.TransactionsResourceWithStreamingResponse:
+        """Operations related to transactions"""
+        from .resources.transactions import TransactionsResourceWithStreamingResponse
+
+        return TransactionsResourceWithStreamingResponse(self._client.transactions)
+
+    @cached_property
+    def key_quorums(self) -> key_quorums.KeyQuorumsResourceWithStreamingResponse:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import KeyQuorumsResourceWithStreamingResponse
+
+        return KeyQuorumsResourceWithStreamingResponse(self._client.key_quorums)
+
+    @cached_property
+    def intents(self) -> intents.IntentsResourceWithStreamingResponse:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import IntentsResourceWithStreamingResponse
+
+        return IntentsResourceWithStreamingResponse(self._client.intents)
+
+    @cached_property
+    def apps(self) -> apps.AppsResourceWithStreamingResponse:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AppsResourceWithStreamingResponse
+
+        return AppsResourceWithStreamingResponse(self._client.apps)
+
+    @cached_property
+    def fiat(self) -> fiat.FiatResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
+        from .resources.fiat import FiatResourceWithStreamingResponse
+
+        return FiatResourceWithStreamingResponse(self._client.fiat)
 
 
 class AsyncPrivyAPIWithStreamedResponse:
+    _client: AsyncPrivyAPI
+
     def __init__(self, client: AsyncPrivyAPI) -> None:
-        self.wallets = wallets.AsyncWalletsResourceWithStreamingResponse(client.wallets)
-        self.users = users.AsyncUsersResourceWithStreamingResponse(client.users)
-        self.policies = policies.AsyncPoliciesResourceWithStreamingResponse(client.policies)
-        self.transactions = transactions.AsyncTransactionsResourceWithStreamingResponse(client.transactions)
-        self.key_quorums = key_quorums.AsyncKeyQuorumsResourceWithStreamingResponse(client.key_quorums)
-        self.fiat = fiat.AsyncFiatResourceWithStreamingResponse(client.fiat)
+        self._client = client
+
+    @cached_property
+    def wallets(self) -> wallets.AsyncWalletsResourceWithStreamingResponse:
+        from .resources.wallets import AsyncWalletsResourceWithStreamingResponse
+
+        return AsyncWalletsResourceWithStreamingResponse(self._client.wallets)
+
+    @cached_property
+    def users(self) -> users.AsyncUsersResourceWithStreamingResponse:
+        """Operations related to users"""
+        from .resources.users import AsyncUsersResourceWithStreamingResponse
+
+        return AsyncUsersResourceWithStreamingResponse(self._client.users)
+
+    @cached_property
+    def policies(self) -> policies.AsyncPoliciesResourceWithStreamingResponse:
+        """Operations related to policies"""
+        from .resources.policies import AsyncPoliciesResourceWithStreamingResponse
+
+        return AsyncPoliciesResourceWithStreamingResponse(self._client.policies)
+
+    @cached_property
+    def transactions(self) -> transactions.AsyncTransactionsResourceWithStreamingResponse:
+        """Operations related to transactions"""
+        from .resources.transactions import AsyncTransactionsResourceWithStreamingResponse
+
+        return AsyncTransactionsResourceWithStreamingResponse(self._client.transactions)
+
+    @cached_property
+    def key_quorums(self) -> key_quorums.AsyncKeyQuorumsResourceWithStreamingResponse:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import AsyncKeyQuorumsResourceWithStreamingResponse
+
+        return AsyncKeyQuorumsResourceWithStreamingResponse(self._client.key_quorums)
+
+    @cached_property
+    def intents(self) -> intents.AsyncIntentsResourceWithStreamingResponse:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import AsyncIntentsResourceWithStreamingResponse
+
+        return AsyncIntentsResourceWithStreamingResponse(self._client.intents)
+
+    @cached_property
+    def apps(self) -> apps.AsyncAppsResourceWithStreamingResponse:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AsyncAppsResourceWithStreamingResponse
+
+        return AsyncAppsResourceWithStreamingResponse(self._client.apps)
+
+    @cached_property
+    def fiat(self) -> fiat.AsyncFiatResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
+        from .resources.fiat import AsyncFiatResourceWithStreamingResponse
+
+        return AsyncFiatResourceWithStreamingResponse(self._client.fiat)
 
 
 Client = PrivyAPI

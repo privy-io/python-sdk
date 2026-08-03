@@ -1,26 +1,16 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import Optional
-from typing_extensions import Literal
 
 from ..._models import BaseModel
+from ..onramp_kyc_status import OnrampKYCStatus
 
 __all__ = ["KYCGetResponse"]
 
 
 class KYCGetResponse(BaseModel):
-    status: Literal[
-        "not_found",
-        "active",
-        "awaiting_questionnaire",
-        "awaiting_ubo",
-        "incomplete",
-        "not_started",
-        "offboarded",
-        "paused",
-        "rejected",
-        "under_review",
-    ]
+    status: OnrampKYCStatus
+    """Status of the KYC verification process."""
 
     user_id: str
 

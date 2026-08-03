@@ -23,7 +23,7 @@ from .onramp import (
     OnrampResourceWithStreamingResponse,
     AsyncOnrampResourceWithStreamingResponse,
 )
-from ...types import fiat_get_status_params, fiat_get_kyc_link_params, fiat_configure_app_params
+from ...types import OnrampProvider, fiat_get_status_params, fiat_get_kyc_link_params, fiat_configure_app_params
 from .offramp import (
     OfframpResource,
     AsyncOfframpResource,
@@ -32,8 +32,8 @@ from .offramp import (
     OfframpResourceWithStreamingResponse,
     AsyncOfframpResourceWithStreamingResponse,
 )
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._utils import path_template, maybe_transform, async_maybe_transform
 from .accounts import (
     AccountsResource,
     AsyncAccountsResource,
@@ -51,28 +51,35 @@ from ..._response import (
     async_to_streamed_response_wrapper,
 )
 from ..._base_client import make_request_options
+from ...types.onramp_provider import OnrampProvider
+from ...types.success_response import SuccessResponse
 from ...types.fiat_get_status_response import FiatGetStatusResponse
 from ...types.fiat_get_kyc_link_response import FiatGetKYCLinkResponse
-from ...types.fiat_configure_app_response import FiatConfigureAppResponse
 
 __all__ = ["FiatResource", "AsyncFiatResource"]
 
 
 class FiatResource(SyncAPIResource):
+    """Operations related to fiat onramping and offramping"""
+
     @cached_property
     def accounts(self) -> AccountsResource:
+        """Operations related to fiat onramping and offramping"""
         return AccountsResource(self._client)
 
     @cached_property
     def kyc(self) -> KYCResource:
+        """Operations related to fiat onramping and offramping"""
         return KYCResource(self._client)
 
     @cached_property
     def onramp(self) -> OnrampResource:
+        """Operations related to fiat onramping and offramping"""
         return OnrampResource(self._client)
 
     @cached_property
     def offramp(self) -> OfframpResource:
+        """Operations related to fiat onramping and offramping"""
         return OfframpResource(self._client)
 
     @cached_property
@@ -99,14 +106,14 @@ class FiatResource(SyncAPIResource):
         app_id: str,
         *,
         api_key: str,
-        provider: Literal["bridge", "bridge-sandbox"],
+        provider: OnrampProvider,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FiatConfigureAppResponse:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
         """Updates the app configuration for the specified onramp provider.
 
         This is used to
@@ -114,6 +121,8 @@ class FiatResource(SyncAPIResource):
 
         Args:
           app_id: The ID of the app that is being configured for fiat onramping and offramping
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -126,7 +135,7 @@ class FiatResource(SyncAPIResource):
         if not app_id:
             raise ValueError(f"Expected a non-empty value for `app_id` but received {app_id!r}")
         return self._post(
-            f"/v1/apps/{app_id}/fiat",
+            path_template("/v1/apps/{app_id}/fiat", app_id=app_id),
             body=maybe_transform(
                 {
                     "api_key": api_key,
@@ -137,7 +146,7 @@ class FiatResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FiatConfigureAppResponse,
+            cast_to=SuccessResponse,
         )
 
     def get_kyc_link(
@@ -145,23 +154,25 @@ class FiatResource(SyncAPIResource):
         user_id: str,
         *,
         email: str,
-        provider: Literal["bridge", "bridge-sandbox"],
-        endorsements: List[Literal["sepa"]] | NotGiven = NOT_GIVEN,
-        full_name: str | NotGiven = NOT_GIVEN,
-        redirect_uri: str | NotGiven = NOT_GIVEN,
-        type: Literal["individual", "business"] | NotGiven = NOT_GIVEN,
+        provider: OnrampProvider,
+        endorsements: List[Literal["sepa"]] | Omit = omit,
+        full_name: str | Omit = omit,
+        redirect_uri: str | Omit = omit,
+        type: Literal["individual", "business"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FiatGetKYCLinkResponse:
         """
         Returns a KYC link for a user
 
         Args:
           user_id: The ID of the user
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -174,7 +185,7 @@ class FiatResource(SyncAPIResource):
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return self._post(
-            f"/v1/users/{user_id}/fiat/kyc_link",
+            path_template("/v1/users/{user_id}/fiat/kyc_link", user_id=user_id),
             body=maybe_transform(
                 {
                     "email": email,
@@ -196,19 +207,22 @@ class FiatResource(SyncAPIResource):
         self,
         user_id: str,
         *,
-        provider: Literal["bridge", "bridge-sandbox"],
+        provider: OnrampProvider,
+        tx_hash: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FiatGetStatusResponse:
         """
         Returns a list of fiat transactions and their statuses
 
         Args:
           user_id: The ID of the user
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -221,8 +235,14 @@ class FiatResource(SyncAPIResource):
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return self._post(
-            f"/v1/users/{user_id}/fiat/status",
-            body=maybe_transform({"provider": provider}, fiat_get_status_params.FiatGetStatusParams),
+            path_template("/v1/users/{user_id}/fiat/status", user_id=user_id),
+            body=maybe_transform(
+                {
+                    "provider": provider,
+                    "tx_hash": tx_hash,
+                },
+                fiat_get_status_params.FiatGetStatusParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -231,20 +251,26 @@ class FiatResource(SyncAPIResource):
 
 
 class AsyncFiatResource(AsyncAPIResource):
+    """Operations related to fiat onramping and offramping"""
+
     @cached_property
     def accounts(self) -> AsyncAccountsResource:
+        """Operations related to fiat onramping and offramping"""
         return AsyncAccountsResource(self._client)
 
     @cached_property
     def kyc(self) -> AsyncKYCResource:
+        """Operations related to fiat onramping and offramping"""
         return AsyncKYCResource(self._client)
 
     @cached_property
     def onramp(self) -> AsyncOnrampResource:
+        """Operations related to fiat onramping and offramping"""
         return AsyncOnrampResource(self._client)
 
     @cached_property
     def offramp(self) -> AsyncOfframpResource:
+        """Operations related to fiat onramping and offramping"""
         return AsyncOfframpResource(self._client)
 
     @cached_property
@@ -271,14 +297,14 @@ class AsyncFiatResource(AsyncAPIResource):
         app_id: str,
         *,
         api_key: str,
-        provider: Literal["bridge", "bridge-sandbox"],
+        provider: OnrampProvider,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> FiatConfigureAppResponse:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
         """Updates the app configuration for the specified onramp provider.
 
         This is used to
@@ -286,6 +312,8 @@ class AsyncFiatResource(AsyncAPIResource):
 
         Args:
           app_id: The ID of the app that is being configured for fiat onramping and offramping
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -298,7 +326,7 @@ class AsyncFiatResource(AsyncAPIResource):
         if not app_id:
             raise ValueError(f"Expected a non-empty value for `app_id` but received {app_id!r}")
         return await self._post(
-            f"/v1/apps/{app_id}/fiat",
+            path_template("/v1/apps/{app_id}/fiat", app_id=app_id),
             body=await async_maybe_transform(
                 {
                     "api_key": api_key,
@@ -309,7 +337,7 @@ class AsyncFiatResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=FiatConfigureAppResponse,
+            cast_to=SuccessResponse,
         )
 
     async def get_kyc_link(
@@ -317,23 +345,25 @@ class AsyncFiatResource(AsyncAPIResource):
         user_id: str,
         *,
         email: str,
-        provider: Literal["bridge", "bridge-sandbox"],
-        endorsements: List[Literal["sepa"]] | NotGiven = NOT_GIVEN,
-        full_name: str | NotGiven = NOT_GIVEN,
-        redirect_uri: str | NotGiven = NOT_GIVEN,
-        type: Literal["individual", "business"] | NotGiven = NOT_GIVEN,
+        provider: OnrampProvider,
+        endorsements: List[Literal["sepa"]] | Omit = omit,
+        full_name: str | Omit = omit,
+        redirect_uri: str | Omit = omit,
+        type: Literal["individual", "business"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FiatGetKYCLinkResponse:
         """
         Returns a KYC link for a user
 
         Args:
           user_id: The ID of the user
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -346,7 +376,7 @@ class AsyncFiatResource(AsyncAPIResource):
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return await self._post(
-            f"/v1/users/{user_id}/fiat/kyc_link",
+            path_template("/v1/users/{user_id}/fiat/kyc_link", user_id=user_id),
             body=await async_maybe_transform(
                 {
                     "email": email,
@@ -368,19 +398,22 @@ class AsyncFiatResource(AsyncAPIResource):
         self,
         user_id: str,
         *,
-        provider: Literal["bridge", "bridge-sandbox"],
+        provider: OnrampProvider,
+        tx_hash: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> FiatGetStatusResponse:
         """
         Returns a list of fiat transactions and their statuses
 
         Args:
           user_id: The ID of the user
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -393,8 +426,14 @@ class AsyncFiatResource(AsyncAPIResource):
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return await self._post(
-            f"/v1/users/{user_id}/fiat/status",
-            body=await async_maybe_transform({"provider": provider}, fiat_get_status_params.FiatGetStatusParams),
+            path_template("/v1/users/{user_id}/fiat/status", user_id=user_id),
+            body=await async_maybe_transform(
+                {
+                    "provider": provider,
+                    "tx_hash": tx_hash,
+                },
+                fiat_get_status_params.FiatGetStatusParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -418,18 +457,22 @@ class FiatResourceWithRawResponse:
 
     @cached_property
     def accounts(self) -> AccountsResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
         return AccountsResourceWithRawResponse(self._fiat.accounts)
 
     @cached_property
     def kyc(self) -> KYCResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
         return KYCResourceWithRawResponse(self._fiat.kyc)
 
     @cached_property
     def onramp(self) -> OnrampResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
         return OnrampResourceWithRawResponse(self._fiat.onramp)
 
     @cached_property
     def offramp(self) -> OfframpResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
         return OfframpResourceWithRawResponse(self._fiat.offramp)
 
 
@@ -449,18 +492,22 @@ class AsyncFiatResourceWithRawResponse:
 
     @cached_property
     def accounts(self) -> AsyncAccountsResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
         return AsyncAccountsResourceWithRawResponse(self._fiat.accounts)
 
     @cached_property
     def kyc(self) -> AsyncKYCResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
         return AsyncKYCResourceWithRawResponse(self._fiat.kyc)
 
     @cached_property
     def onramp(self) -> AsyncOnrampResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
         return AsyncOnrampResourceWithRawResponse(self._fiat.onramp)
 
     @cached_property
     def offramp(self) -> AsyncOfframpResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
         return AsyncOfframpResourceWithRawResponse(self._fiat.offramp)
 
 
@@ -480,18 +527,22 @@ class FiatResourceWithStreamingResponse:
 
     @cached_property
     def accounts(self) -> AccountsResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
         return AccountsResourceWithStreamingResponse(self._fiat.accounts)
 
     @cached_property
     def kyc(self) -> KYCResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
         return KYCResourceWithStreamingResponse(self._fiat.kyc)
 
     @cached_property
     def onramp(self) -> OnrampResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
         return OnrampResourceWithStreamingResponse(self._fiat.onramp)
 
     @cached_property
     def offramp(self) -> OfframpResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
         return OfframpResourceWithStreamingResponse(self._fiat.offramp)
 
 
@@ -511,16 +562,20 @@ class AsyncFiatResourceWithStreamingResponse:
 
     @cached_property
     def accounts(self) -> AsyncAccountsResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
         return AsyncAccountsResourceWithStreamingResponse(self._fiat.accounts)
 
     @cached_property
     def kyc(self) -> AsyncKYCResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
         return AsyncKYCResourceWithStreamingResponse(self._fiat.kyc)
 
     @cached_property
     def onramp(self) -> AsyncOnrampResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
         return AsyncOnrampResourceWithStreamingResponse(self._fiat.onramp)
 
     @cached_property
     def offramp(self) -> AsyncOfframpResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
         return AsyncOfframpResourceWithStreamingResponse(self._fiat.offramp)

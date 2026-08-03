@@ -2,45 +2,53 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable, Optional
-from typing_extensions import Literal, Required, Annotated, TypeAlias, TypedDict
+from typing import Optional
+from typing_extensions import Literal, Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
+from .owner_id_input import OwnerIDInput
+from .owner_input_param import OwnerInputParam
+from .wallet_chain_type import WalletChainType
+from .policy_input_param import PolicyInputParam
+from .additional_signer_input_param import AdditionalSignerInputParam
 
-__all__ = ["WalletCreateParams", "AdditionalSigner", "Owner", "OwnerPublicKey", "OwnerUserID"]
+__all__ = ["WalletCreateParams", "Entity"]
 
 
 class WalletCreateParams(TypedDict, total=False):
-    chain_type: Required[Literal["solana", "ethereum", "cosmos", "stellar", "sui", "tron"]]
-    """Chain type of the wallet. "ethereum" supports any EVM-compatible network."""
+    chain_type: Required[WalletChainType]
+    """The wallet chain types."""
 
-    additional_signers: Iterable[AdditionalSigner]
+    additional_signers: AdditionalSignerInputParam
     """Additional signers for the wallet."""
 
-    owner: Optional[Owner]
-    """The P-256 public key of the owner of the wallet.
+    display_name: str
+    """A human-readable label for the wallet."""
 
-    If you provide this, do not specify an owner_id as it will be generated
-    automatically.
+    entity: Entity
+    """The entity the wallet is attributed to."""
+
+    external_id: str
+    """A customer-provided identifier for mapping to external systems.
+
+    URL-safe characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be
+    changed after creation.
     """
 
-    owner_id: Optional[str]
-    """The key quorum ID to set as the owner of the wallet.
+    owner: Optional[OwnerInputParam]
+    """
+    The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+    null to remove the current owner.
+    """
+
+    owner_id: Optional[OwnerIDInput]
+    """The key quorum ID to set as the owner of the resource.
 
     If you provide this, do not specify an owner.
     """
 
-    policy_ids: List[str]
-    """List of policy IDs for policies that should be enforced on the wallet.
-
-    Currently, only one policy is supported per wallet.
-    """
-
-    privy_authorization_signature: Annotated[str, PropertyInfo(alias="privy-authorization-signature")]
-    """Request authorization signature.
-
-    If multiple signatures are required, they should be comma separated.
-    """
+    policy_ids: PolicyInputParam
+    """An optional list of up to one policy ID to enforce on the wallet."""
 
     privy_idempotency_key: Annotated[str, PropertyInfo(alias="privy-idempotency-key")]
     """
@@ -49,18 +57,9 @@ class WalletCreateParams(TypedDict, total=False):
     """
 
 
-class AdditionalSigner(TypedDict, total=False):
-    override_policy_ids: Required[List[str]]
+class Entity(TypedDict, total=False):
+    """The entity the wallet is attributed to."""
 
-    signer_id: Required[str]
+    id: Required[str]
 
-
-class OwnerPublicKey(TypedDict, total=False):
-    public_key: Required[str]
-
-
-class OwnerUserID(TypedDict, total=False):
-    user_id: Required[str]
-
-
-Owner: TypeAlias = Union[OwnerPublicKey, OwnerUserID]
+    type: Required[Literal["user"]]

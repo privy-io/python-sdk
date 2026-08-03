@@ -2,16 +2,19 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable
-from typing_extensions import Literal, Required, TypeAlias, TypedDict
+from typing import Union, Iterable
+from typing_extensions import Required, TypeAlias, TypedDict
+
+from .wallet_chain_type import WalletChainType
+from .policy_input_param import PolicyInputParam
+from .linked_account_email_input_param import LinkedAccountEmailInputParam
+from .linked_account_custom_jwt_input_param import LinkedAccountCustomJwtInputParam
 
 __all__ = [
     "WalletCreateWalletsWithRecoveryParams",
     "PrimarySigner",
     "RecoveryUser",
     "RecoveryUserLinkedAccount",
-    "RecoveryUserLinkedAccountUnionMember0",
-    "RecoveryUserLinkedAccountUnionMember1",
     "Wallet",
 ]
 
@@ -29,23 +32,7 @@ class PrimarySigner(TypedDict, total=False):
     """The JWT subject ID of the user."""
 
 
-class RecoveryUserLinkedAccountUnionMember0(TypedDict, total=False):
-    address: Required[str]
-    """The email address of the user."""
-
-    type: Required[Literal["email"]]
-
-
-class RecoveryUserLinkedAccountUnionMember1(TypedDict, total=False):
-    custom_user_id: Required[str]
-    """The JWT subject ID of the user."""
-
-    type: Required[Literal["custom_auth"]]
-
-
-RecoveryUserLinkedAccount: TypeAlias = Union[
-    RecoveryUserLinkedAccountUnionMember0, RecoveryUserLinkedAccountUnionMember1
-]
+RecoveryUserLinkedAccount: TypeAlias = Union[LinkedAccountEmailInputParam, LinkedAccountCustomJwtInputParam]
 
 
 class RecoveryUser(TypedDict, total=False):
@@ -53,11 +40,18 @@ class RecoveryUser(TypedDict, total=False):
 
 
 class Wallet(TypedDict, total=False):
-    chain_type: Required[Literal["solana", "ethereum", "cosmos", "stellar", "sui", "tron"]]
-    """Chain type of the wallet. "ethereum" supports any EVM-compatible network."""
+    chain_type: Required[WalletChainType]
+    """The wallet chain types."""
 
-    policy_ids: List[str]
-    """List of policy IDs for policies that should be enforced on the wallet.
+    display_name: str
+    """A human-readable label for the wallet."""
 
-    Currently, only one policy is supported per wallet.
+    external_id: str
+    """A customer-provided identifier for mapping to external systems.
+
+    URL-safe characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be
+    changed after creation.
     """
+
+    policy_ids: PolicyInputParam
+    """An optional list of up to one policy ID to enforce on the wallet."""

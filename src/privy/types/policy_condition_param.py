@@ -1,0 +1,46 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from __future__ import annotations
+
+from typing import Union
+from typing_extensions import TypeAlias
+
+from .system_condition_param import SystemConditionParam
+from .aggregation_condition_param import AggregationConditionParam
+from .tron_calldata_condition_param import TronCalldataConditionParam
+from .message_signing_condition_param import MessageSigningConditionParam
+from .tron_transaction_condition_param import TronTransactionConditionParam
+from .ethereum_calldata_condition_param import EthereumCalldataConditionParam
+from .tempo_transaction_condition_param import TempoTransactionConditionParam
+from .action_request_body_condition_param import ActionRequestBodyConditionParam
+from .ethereum_transaction_condition_param import EthereumTransactionConditionParam
+from .sui_transaction_command_condition_param import SuiTransactionCommandConditionParam
+from .ethereum_typed_data_domain_condition_param import EthereumTypedDataDomainConditionParam
+from .solana_program_instruction_condition_param import SolanaProgramInstructionConditionParam
+from .ethereum_7702_authorization_condition_param import Ethereum7702AuthorizationConditionParam
+from .ethereum_typed_data_message_condition_param import EthereumTypedDataMessageConditionParam
+from .sui_transfer_objects_command_condition_param import SuiTransferObjectsCommandConditionParam
+from .solana_token_program_instruction_condition_param import SolanaTokenProgramInstructionConditionParam
+from .solana_system_program_instruction_condition_param import SolanaSystemProgramInstructionConditionParam
+
+__all__ = ["PolicyConditionParam"]
+
+PolicyConditionParam: TypeAlias = Union[
+    EthereumTransactionConditionParam,
+    EthereumCalldataConditionParam,
+    EthereumTypedDataDomainConditionParam,
+    EthereumTypedDataMessageConditionParam,
+    Ethereum7702AuthorizationConditionParam,
+    TempoTransactionConditionParam,
+    SolanaProgramInstructionConditionParam,
+    SolanaSystemProgramInstructionConditionParam,
+    SolanaTokenProgramInstructionConditionParam,
+    SystemConditionParam,
+    TronTransactionConditionParam,
+    TronCalldataConditionParam,
+    SuiTransactionCommandConditionParam,
+    SuiTransferObjectsCommandConditionParam,
+    ActionRequestBodyConditionParam,
+    AggregationConditionParam,
+    MessageSigningConditionParam,
+]

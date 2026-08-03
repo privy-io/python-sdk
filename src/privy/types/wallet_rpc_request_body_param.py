@@ -1,0 +1,64 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from __future__ import annotations
+
+from typing import Union
+from typing_extensions import TypeAlias
+
+from .spark_transfer_rpc_input_param import SparkTransferRpcInputParam
+from .spark_withdraw_rpc_input_param import SparkWithdrawRpcInputParam
+from .spark_get_balance_rpc_input_param import SparkGetBalanceRpcInputParam
+from .export_private_key_rpc_input_param import ExportPrivateKeyRpcInputParam
+from .export_seed_phrase_rpc_input_param import ExportSeedPhraseRpcInputParam
+from .ethereum_send_calls_rpc_input_param import EthereumSendCallsRpcInputParam
+from .solana_sign_message_rpc_input_param import SolanaSignMessageRpcInputParam
+from .spark_transfer_tokens_rpc_input_param import SparkTransferTokensRpcInputParam
+from .tron_send_transaction_rpc_input_param import TronSendTransactionRpcInputParam
+from .tron_sign_transaction_rpc_input_param import TronSignTransactionRpcInputParam
+from .ethereum_personal_sign_rpc_input_param import EthereumPersonalSignRpcInputParam
+from .solana_sign_transaction_rpc_input_param import SolanaSignTransactionRpcInputParam
+from .ethereum_sign_typed_data_rpc_input_param import EthereumSignTypedDataRpcInputParam
+from .ethereum_secp_256k_1_sign_rpc_input_param import EthereumSecp256k1SignRpcInputParam
+from .ethereum_send_transaction_rpc_input_param import EthereumSendTransactionRpcInputParam
+from .ethereum_sign_transaction_rpc_input_param import EthereumSignTransactionRpcInputParam
+from .spark_claim_static_deposit_rpc_input_param import SparkClaimStaticDepositRpcInputParam
+from .spark_pay_lightning_invoice_rpc_input_param import SparkPayLightningInvoiceRpcInputParam
+from .ethereum_sign_user_operation_rpc_input_param import EthereumSignUserOperationRpcInputParam
+from .spark_create_lightning_invoice_rpc_input_param import SparkCreateLightningInvoiceRpcInputParam
+from .spark_get_withdrawal_fee_quote_rpc_input_param import SparkGetWithdrawalFeeQuoteRpcInputParam
+from .ethereum_sign_7702_authorization_rpc_input_param import EthereumSign7702AuthorizationRpcInputParam
+from .solana_sign_and_send_transaction_rpc_input_param import SolanaSignAndSendTransactionRpcInputParam
+from .spark_get_static_deposit_address_rpc_input_param import SparkGetStaticDepositAddressRpcInputParam
+from .spark_get_claim_static_deposit_quote_rpc_input_param import SparkGetClaimStaticDepositQuoteRpcInputParam
+from .spark_sign_message_with_identity_key_rpc_input_param import SparkSignMessageWithIdentityKeyRpcInputParam
+
+__all__ = ["WalletRpcRequestBodyParam"]
+
+WalletRpcRequestBodyParam: TypeAlias = Union[
+    EthereumSignTransactionRpcInputParam,
+    EthereumSendTransactionRpcInputParam,
+    EthereumPersonalSignRpcInputParam,
+    EthereumSignTypedDataRpcInputParam,
+    EthereumSecp256k1SignRpcInputParam,
+    EthereumSign7702AuthorizationRpcInputParam,
+    EthereumSignUserOperationRpcInputParam,
+    EthereumSendCallsRpcInputParam,
+    SolanaSignTransactionRpcInputParam,
+    SolanaSignAndSendTransactionRpcInputParam,
+    SolanaSignMessageRpcInputParam,
+    SparkTransferRpcInputParam,
+    SparkGetBalanceRpcInputParam,
+    SparkTransferTokensRpcInputParam,
+    SparkGetStaticDepositAddressRpcInputParam,
+    SparkGetClaimStaticDepositQuoteRpcInputParam,
+    SparkClaimStaticDepositRpcInputParam,
+    SparkCreateLightningInvoiceRpcInputParam,
+    SparkPayLightningInvoiceRpcInputParam,
+    SparkSignMessageWithIdentityKeyRpcInputParam,
+    SparkWithdrawRpcInputParam,
+    SparkGetWithdrawalFeeQuoteRpcInputParam,
+    TronSignTransactionRpcInputParam,
+    TronSendTransactionRpcInputParam,
+    ExportPrivateKeyRpcInputParam,
+    ExportSeedPhraseRpcInputParam,
+]

@@ -1,0 +1,46 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from typing_extensions import Literal, TypeAlias
+
+__all__ = ["MoonpayCurrencyCode"]
+
+MoonpayCurrencyCode: TypeAlias = Literal[
+    "AVAX_CCHAIN",
+    "CELO_CELO",
+    "CUSD_CELO",
+    "DAI_ETHEREUM",
+    "ETH_ETHEREUM",
+    "ETH_ARBITRUM",
+    "ETH_OPTIMISM",
+    "ETH_POLYGON",
+    "ETH_BASE",
+    "FIL_FVM",
+    "MATIC_ETHEREUM",
+    "MATIC_POLYGON",
+    "POL_POLYGON",
+    "POL_ETHEREUM",
+    "USDC_ETHEREUM",
+    "USDC_ARBITRUM",
+    "USDC_OPTIMISM",
+    "USDC_POLYGON",
+    "USDC_BASE",
+    "USDC_CCHAIN",
+    "USDC_SOL",
+    "USDT_ETHEREUM",
+    "USDT_POLYGON",
+    "WETH_POLYGON",
+    "WBTC_ETHEREUM",
+    "BNB_BNB",
+    "BNB_BSC",
+    "MON_MON",
+    "CELO",
+    "CUSD",
+    "DAI",
+    "ETH",
+    "FIL",
+    "MATIC",
+    "USDC",
+    "USDT",
+    "WETH",
+    "WBTC",
+]

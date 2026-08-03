@@ -1,5 +1,29 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from .earn import (
+    EarnResource,
+    AsyncEarnResource,
+    EarnResourceWithRawResponse,
+    AsyncEarnResourceWithRawResponse,
+    EarnResourceWithStreamingResponse,
+    AsyncEarnResourceWithStreamingResponse,
+)
+from .swap import (
+    SwapResource,
+    AsyncSwapResource,
+    SwapResourceWithRawResponse,
+    AsyncSwapResourceWithRawResponse,
+    SwapResourceWithStreamingResponse,
+    AsyncSwapResourceWithStreamingResponse,
+)
+from .actions import (
+    ActionsResource,
+    AsyncActionsResource,
+    ActionsResourceWithRawResponse,
+    AsyncActionsResourceWithRawResponse,
+    ActionsResourceWithStreamingResponse,
+    AsyncActionsResourceWithStreamingResponse,
+)
 from .balance import (
     BalanceResource,
     AsyncBalanceResource,
@@ -26,6 +50,18 @@ from .transactions import (
 )
 
 __all__ = [
+    "ActionsResource",
+    "AsyncActionsResource",
+    "ActionsResourceWithRawResponse",
+    "AsyncActionsResourceWithRawResponse",
+    "ActionsResourceWithStreamingResponse",
+    "AsyncActionsResourceWithStreamingResponse",
+    "EarnResource",
+    "AsyncEarnResource",
+    "EarnResourceWithRawResponse",
+    "AsyncEarnResourceWithRawResponse",
+    "EarnResourceWithStreamingResponse",
+    "AsyncEarnResourceWithStreamingResponse",
     "TransactionsResource",
     "AsyncTransactionsResource",
     "TransactionsResourceWithRawResponse",
@@ -38,6 +74,12 @@ __all__ = [
     "AsyncBalanceResourceWithRawResponse",
     "BalanceResourceWithStreamingResponse",
     "AsyncBalanceResourceWithStreamingResponse",
+    "SwapResource",
+    "AsyncSwapResource",
+    "SwapResourceWithRawResponse",
+    "AsyncSwapResourceWithRawResponse",
+    "SwapResourceWithStreamingResponse",
+    "AsyncSwapResourceWithStreamingResponse",
     "WalletsResource",
     "AsyncWalletsResource",
     "WalletsResourceWithRawResponse",

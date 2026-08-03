@@ -2,7 +2,13 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal, Required, TypedDict
+from typing_extensions import Required, TypedDict
+
+from ..onramp_asset import OnrampAsset
+from ..onramp_chain import OnrampChain
+from ..fiat_currency import FiatCurrency
+from ..onramp_provider import OnrampProvider
+from ..fiat_payment_rail import FiatPaymentRail
 
 __all__ = ["OfframpCreateParams", "Destination", "Source"]
 
@@ -12,22 +18,27 @@ class OfframpCreateParams(TypedDict, total=False):
 
     destination: Required[Destination]
 
-    provider: Required[Literal["bridge", "bridge-sandbox"]]
+    provider: Required[OnrampProvider]
+    """Valid set of onramp providers"""
 
     source: Required[Source]
 
 
 class Destination(TypedDict, total=False):
-    currency: Required[Literal["usd", "eur"]]
+    currency: Required[FiatCurrency]
+    """Supported fiat currencies."""
 
     external_account_id: Required[str]
 
-    payment_rail: Required[Literal["sepa", "ach_push", "wire"]]
+    payment_rail: Required[FiatPaymentRail]
+    """Supported fiat payment rails."""
 
 
 class Source(TypedDict, total=False):
-    chain: Required[Literal["ethereum", "base", "arbitrum", "polygon", "optimism"]]
+    chain: Required[OnrampChain]
+    """Supported blockchain chains for onramp and offramp."""
 
-    currency: Required[Literal["usdc"]]
+    currency: Required[OnrampAsset]
+    """Supported crypto assets for onramp and offramp."""
 
     from_address: Required[str]

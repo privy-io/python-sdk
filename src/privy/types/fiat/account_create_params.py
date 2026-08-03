@@ -5,15 +5,20 @@ from __future__ import annotations
 from typing import List
 from typing_extensions import Literal, Required, TypedDict
 
+from ..fiat_currency import FiatCurrency
+from ..onramp_provider import OnrampProvider
+
 __all__ = ["AccountCreateParams", "Account", "Address", "Iban", "Swift", "SwiftAccount", "SwiftAddress"]
 
 
 class AccountCreateParams(TypedDict, total=False):
     account_owner_name: Required[str]
 
-    currency: Required[Literal["usd", "eur"]]
+    currency: Required[FiatCurrency]
+    """Supported fiat currencies."""
 
-    provider: Required[Literal["bridge", "bridge-sandbox"]]
+    provider: Required[OnrampProvider]
+    """Valid set of onramp providers"""
 
     account: Account
 

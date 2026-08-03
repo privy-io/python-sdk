@@ -7,8 +7,9 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._utils import maybe_transform, async_maybe_transform
+from ...types import TransactionChainNameInput
+from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
+from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -19,12 +20,17 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.wallets import transaction_get_params
+from ...types.wallet_asset import WalletAsset
+from ...types.transaction_chain_name_input import TransactionChainNameInput
+from ...types.transaction_token_address_input import TransactionTokenAddressInput
 from ...types.wallets.transaction_get_response import TransactionGetResponse
 
 __all__ = ["TransactionsResource", "AsyncTransactionsResource"]
 
 
 class TransactionsResource(SyncAPIResource):
+    """Operations related to wallets"""
+
     @cached_property
     def with_raw_response(self) -> TransactionsResourceWithRawResponse:
         """
@@ -48,22 +54,39 @@ class TransactionsResource(SyncAPIResource):
         self,
         wallet_id: str,
         *,
-        asset: Union[Literal["usdc", "eth", "pol", "sol"], List[Literal["usdc", "eth", "pol", "sol"]]],
-        chain: Literal["base"],
-        cursor: str | NotGiven = NOT_GIVEN,
-        limit: Optional[float] | NotGiven = NOT_GIVEN,
+        chain: TransactionChainNameInput,
+        token: Union[TransactionTokenAddressInput, SequenceNotStr[TransactionTokenAddressInput]] | Omit = omit,
+        asset: Union[
+            Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "pathusd", "sol", "trx"],
+            List[WalletAsset],
+        ]
+        | Omit = omit,
+        cursor: str | Omit = omit,
+        include_archived: bool | Omit = omit,
+        limit: Optional[float] | Omit = omit,
+        tx_hash: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TransactionGetResponse:
         """
         Get incoming and outgoing transactions of a wallet by wallet ID.
 
         Args:
           wallet_id: ID of the wallet.
+
+          chain: Chains supported for transaction history queries.
+
+          token: Exactly one of `token` or `asset` is required. Cannot be used together with
+              `asset`.
+
+          asset: Exactly one of `asset` or `token` is required. Cannot be used together with
+              `token`.
+
+          include_archived: Include archived wallets in lookup. Defaults to false.
 
           extra_headers: Send extra headers
 
@@ -76,7 +99,7 @@ class TransactionsResource(SyncAPIResource):
         if not wallet_id:
             raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
         return self._get(
-            f"/v1/wallets/{wallet_id}/transactions",
+            path_template("/v1/wallets/{wallet_id}/transactions", wallet_id=wallet_id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -84,10 +107,13 @@ class TransactionsResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
-                        "asset": asset,
                         "chain": chain,
+                        "token": token,
+                        "asset": asset,
                         "cursor": cursor,
+                        "include_archived": include_archived,
                         "limit": limit,
+                        "tx_hash": tx_hash,
                     },
                     transaction_get_params.TransactionGetParams,
                 ),
@@ -97,6 +123,8 @@ class TransactionsResource(SyncAPIResource):
 
 
 class AsyncTransactionsResource(AsyncAPIResource):
+    """Operations related to wallets"""
+
     @cached_property
     def with_raw_response(self) -> AsyncTransactionsResourceWithRawResponse:
         """
@@ -120,22 +148,39 @@ class AsyncTransactionsResource(AsyncAPIResource):
         self,
         wallet_id: str,
         *,
-        asset: Union[Literal["usdc", "eth", "pol", "sol"], List[Literal["usdc", "eth", "pol", "sol"]]],
-        chain: Literal["base"],
-        cursor: str | NotGiven = NOT_GIVEN,
-        limit: Optional[float] | NotGiven = NOT_GIVEN,
+        chain: TransactionChainNameInput,
+        token: Union[TransactionTokenAddressInput, SequenceNotStr[TransactionTokenAddressInput]] | Omit = omit,
+        asset: Union[
+            Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "pathusd", "sol", "trx"],
+            List[WalletAsset],
+        ]
+        | Omit = omit,
+        cursor: str | Omit = omit,
+        include_archived: bool | Omit = omit,
+        limit: Optional[float] | Omit = omit,
+        tx_hash: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> TransactionGetResponse:
         """
         Get incoming and outgoing transactions of a wallet by wallet ID.
 
         Args:
           wallet_id: ID of the wallet.
+
+          chain: Chains supported for transaction history queries.
+
+          token: Exactly one of `token` or `asset` is required. Cannot be used together with
+              `asset`.
+
+          asset: Exactly one of `asset` or `token` is required. Cannot be used together with
+              `token`.
+
+          include_archived: Include archived wallets in lookup. Defaults to false.
 
           extra_headers: Send extra headers
 
@@ -148,7 +193,7 @@ class AsyncTransactionsResource(AsyncAPIResource):
         if not wallet_id:
             raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
         return await self._get(
-            f"/v1/wallets/{wallet_id}/transactions",
+            path_template("/v1/wallets/{wallet_id}/transactions", wallet_id=wallet_id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -156,10 +201,13 @@ class AsyncTransactionsResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform(
                     {
-                        "asset": asset,
                         "chain": chain,
+                        "token": token,
+                        "asset": asset,
                         "cursor": cursor,
+                        "include_archived": include_archived,
                         "limit": limit,
+                        "tx_hash": tx_hash,
                     },
                     transaction_get_params.TransactionGetParams,
                 ),

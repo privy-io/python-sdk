@@ -17,35 +17,36 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestTransactions:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_get(self, client: PrivyAPI) -> None:
         transaction = client.wallets.transactions.get(
             wallet_id="wallet_id",
-            asset="usdc",
-            chain="base",
+            chain="ethereum",
         )
         assert_matches_type(TransactionGetResponse, transaction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_get_with_all_params(self, client: PrivyAPI) -> None:
         transaction = client.wallets.transactions.get(
             wallet_id="wallet_id",
+            chain="ethereum",
+            token="string",
             asset="usdc",
-            chain="base",
             cursor="x",
+            include_archived=True,
             limit=100,
+            tx_hash="tx_hash",
         )
         assert_matches_type(TransactionGetResponse, transaction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_get(self, client: PrivyAPI) -> None:
         response = client.wallets.transactions.with_raw_response.get(
             wallet_id="wallet_id",
-            asset="usdc",
-            chain="base",
+            chain="ethereum",
         )
 
         assert response.is_closed is True
@@ -53,13 +54,12 @@ class TestTransactions:
         transaction = response.parse()
         assert_matches_type(TransactionGetResponse, transaction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_get(self, client: PrivyAPI) -> None:
         with client.wallets.transactions.with_streaming_response.get(
             wallet_id="wallet_id",
-            asset="usdc",
-            chain="base",
+            chain="ethereum",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -69,14 +69,13 @@ class TestTransactions:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_get(self, client: PrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
             client.wallets.transactions.with_raw_response.get(
                 wallet_id="",
-                asset="usdc",
-                chain="base",
+                chain="ethereum",
             )
 
 
@@ -85,35 +84,36 @@ class TestAsyncTransactions:
         "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
     )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_get(self, async_client: AsyncPrivyAPI) -> None:
         transaction = await async_client.wallets.transactions.get(
             wallet_id="wallet_id",
-            asset="usdc",
-            chain="base",
+            chain="ethereum",
         )
         assert_matches_type(TransactionGetResponse, transaction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_get_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
         transaction = await async_client.wallets.transactions.get(
             wallet_id="wallet_id",
+            chain="ethereum",
+            token="string",
             asset="usdc",
-            chain="base",
             cursor="x",
+            include_archived=True,
             limit=100,
+            tx_hash="tx_hash",
         )
         assert_matches_type(TransactionGetResponse, transaction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncPrivyAPI) -> None:
         response = await async_client.wallets.transactions.with_raw_response.get(
             wallet_id="wallet_id",
-            asset="usdc",
-            chain="base",
+            chain="ethereum",
         )
 
         assert response.is_closed is True
@@ -121,13 +121,12 @@ class TestAsyncTransactions:
         transaction = await response.parse()
         assert_matches_type(TransactionGetResponse, transaction, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncPrivyAPI) -> None:
         async with async_client.wallets.transactions.with_streaming_response.get(
             wallet_id="wallet_id",
-            asset="usdc",
-            chain="base",
+            chain="ethereum",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -137,12 +136,11 @@ class TestAsyncTransactions:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_get(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
             await async_client.wallets.transactions.with_raw_response.get(
                 wallet_id="",
-                asset="usdc",
-                chain="base",
+                chain="ethereum",
             )

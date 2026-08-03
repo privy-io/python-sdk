@@ -10,12 +10,17 @@ import pytest
 from privy import PrivyAPI, AsyncPrivyAPI
 from privy.types import (
     Wallet,
+    RawSignResponse,
     WalletRpcResponse,
+    WalletExportResponseBody,
+    WalletInitImportResponse,
+    WalletBatchCreateResponse,
     WalletAuthenticateWithJwtResponse,
     WalletCreateWalletsWithRecoveryResponse,
 )
 from tests.utils import assert_matches_type
 from privy.pagination import SyncCursor, AsyncCursor
+from privy.types.wallets import TransferActionResponse
 
 # pyright: reportDeprecated=false
 
@@ -25,7 +30,7 @@ base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 class TestWallets:
     parametrize = pytest.mark.parametrize("client", [False, True], indirect=True, ids=["loose", "strict"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create(self, client: PrivyAPI) -> None:
         wallet = client.wallets.create(
@@ -33,26 +38,31 @@ class TestWallets:
         )
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_with_all_params(self, client: PrivyAPI) -> None:
         wallet = client.wallets.create(
             chain_type="ethereum",
             additional_signers=[
                 {
-                    "override_policy_ids": ["string"],
-                    "signer_id": "signer_id",
+                    "signer_id": "string",
+                    "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
                 }
             ],
-            owner={"public_key": "public_key"},
-            owner_id="owner_id",
+            display_name="display_name",
+            entity={
+                "id": "x",
+                "type": "user",
+            },
+            external_id="my-order-123",
+            owner={"user_id": "user_id"},
+            owner_id="string",
             policy_ids=["xxxxxxxxxxxxxxxxxxxxxxxx"],
-            privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
         )
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create(self, client: PrivyAPI) -> None:
         response = client.wallets.with_raw_response.create(
@@ -64,7 +74,7 @@ class TestWallets:
         wallet = response.parse()
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create(self, client: PrivyAPI) -> None:
         with client.wallets.with_streaming_response.create(
@@ -78,83 +88,29 @@ class TestWallets:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
-    @parametrize
-    def test_method_update(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.update(
-            wallet_id="wallet_id",
-        )
-        assert_matches_type(Wallet, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_method_update_with_all_params(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.update(
-            wallet_id="wallet_id",
-            additional_signers=[
-                {
-                    "override_policy_ids": ["string"],
-                    "signer_id": "signer_id",
-                }
-            ],
-            owner={"public_key": "public_key"},
-            owner_id="owner_id",
-            policy_ids=["tb54eps4z44ed0jepousxi4n"],
-            privy_authorization_signature="privy-authorization-signature",
-        )
-        assert_matches_type(Wallet, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_raw_response_update(self, client: PrivyAPI) -> None:
-        response = client.wallets.with_raw_response.update(
-            wallet_id="wallet_id",
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = response.parse()
-        assert_matches_type(Wallet, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_streaming_response_update(self, client: PrivyAPI) -> None:
-        with client.wallets.with_streaming_response.update(
-            wallet_id="wallet_id",
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            wallet = response.parse()
-            assert_matches_type(Wallet, wallet, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    def test_path_params_update(self, client: PrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            client.wallets.with_raw_response.update(
-                wallet_id="",
-            )
-
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list(self, client: PrivyAPI) -> None:
         wallet = client.wallets.list()
         assert_matches_type(SyncCursor[Wallet], wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_list_with_all_params(self, client: PrivyAPI) -> None:
         wallet = client.wallets.list(
-            chain_type="solana",
+            address="string",
+            authorization_key="s=-/fw-L-+N\n",
+            chain_type="ethereum",
             cursor="x",
+            entity_id="entity_id",
+            external_id="external_id",
+            include_archived=True,
             limit=100,
+            user_id="user_id",
         )
         assert_matches_type(SyncCursor[Wallet], wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_list(self, client: PrivyAPI) -> None:
         response = client.wallets.with_raw_response.list()
@@ -164,7 +120,7 @@ class TestWallets:
         wallet = response.parse()
         assert_matches_type(SyncCursor[Wallet], wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_list(self, client: PrivyAPI) -> None:
         with client.wallets.with_streaming_response.list() as response:
@@ -176,57 +132,2884 @@ class TestWallets:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_export(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._export(
+            wallet_id="wallet_id",
+            encryption_type="HPKE",
+            recipient_public_key="BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=",
+        )
+        assert_matches_type(WalletExportResponseBody, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_export_with_all_params(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._export(
+            wallet_id="wallet_id",
+            encryption_type="HPKE",
+            recipient_public_key="BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=",
+            export_seed_phrase=True,
+            privy_authorization_signature="privy-authorization-signature",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletExportResponseBody, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_export(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._export(
+            wallet_id="wallet_id",
+            encryption_type="HPKE",
+            recipient_public_key="BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletExportResponseBody, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_export(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._export(
+            wallet_id="wallet_id",
+            encryption_type="HPKE",
+            recipient_public_key="BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletExportResponseBody, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_export(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            client.wallets.with_raw_response._export(
+                wallet_id="",
+                encryption_type="HPKE",
+                recipient_public_key="BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_init_import_overload_1(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="hd",
+            index=0,
+        )
+        assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_init_import_overload_1(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="hd",
+            index=0,
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_init_import_overload_1(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="hd",
+            index=0,
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_init_import_overload_2(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="private-key",
+        )
+        assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_init_import_overload_2(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="private-key",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_init_import_overload_2(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="private-key",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_raw_sign(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._raw_sign(
+            wallet_id="wallet_id",
+            params={
+                "bytes": "0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633",
+                "encoding": "hex",
+                "hash_function": "sha256",
+            },
+        )
+        assert_matches_type(RawSignResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_raw_sign_with_all_params(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._raw_sign(
+            wallet_id="wallet_id",
+            params={
+                "bytes": "0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633",
+                "encoding": "hex",
+                "hash_function": "sha256",
+            },
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(RawSignResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_raw_sign(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._raw_sign(
+            wallet_id="wallet_id",
+            params={
+                "bytes": "0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633",
+                "encoding": "hex",
+                "hash_function": "sha256",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(RawSignResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_raw_sign(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._raw_sign(
+            wallet_id="wallet_id",
+            params={
+                "bytes": "0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633",
+                "encoding": "hex",
+                "hash_function": "sha256",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(RawSignResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_raw_sign(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            client.wallets.with_raw_response._raw_sign(
+                wallet_id="",
+                params={
+                    "bytes": "0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633",
+                    "encoding": "hex",
+                    "hash_function": "sha256",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_1(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signTransaction",
+            params={"transaction": {}},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_1(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signTransaction",
+            params={
+                "transaction": {
+                    "authorization_list": [
+                        {
+                            "chain_id": "string",
+                            "contract": "contract",
+                            "nonce": "string",
+                            "r": "string",
+                            "s": "string",
+                            "y_parity": 0,
+                        }
+                    ],
+                    "chain_id": "string",
+                    "data": "string",
+                    "from": "from",
+                    "gas_limit": "string",
+                    "gas_price": "string",
+                    "max_fee_per_gas": "string",
+                    "max_priority_fee_per_gas": "string",
+                    "nonce": "string",
+                    "to": "to",
+                    "type": 0,
+                    "value": "string",
+                }
+            },
+            address="address",
+            chain_type="ethereum",
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_1(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signTransaction",
+            params={"transaction": {}},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_1(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signTransaction",
+            params={"transaction": {}},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_1(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="eth_signTransaction",
+                params={"transaction": {}},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_2(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="eth_sendTransaction",
+            params={"transaction": {}},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_2(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="eth_sendTransaction",
+            params={
+                "transaction": {
+                    "authorization_list": [
+                        {
+                            "chain_id": "string",
+                            "contract": "contract",
+                            "nonce": "string",
+                            "r": "string",
+                            "s": "string",
+                            "y_parity": 0,
+                        }
+                    ],
+                    "chain_id": "string",
+                    "data": "string",
+                    "from": "from",
+                    "gas_limit": "string",
+                    "gas_price": "string",
+                    "max_fee_per_gas": "string",
+                    "max_priority_fee_per_gas": "string",
+                    "nonce": "string",
+                    "to": "to",
+                    "type": 0,
+                    "value": "string",
+                }
+            },
+            address="address",
+            chain_type="ethereum",
+            experimental_data_suffix="string",
+            reference_id="x",
+            sponsor=True,
+            sponsor_options={"asset": "string"},
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_2(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="eth_sendTransaction",
+            params={"transaction": {}},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_2(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="eth_sendTransaction",
+            params={"transaction": {}},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_2(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                caip2="-l-f12-k:_--l__36_",
+                method="eth_sendTransaction",
+                params={"transaction": {}},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_3(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="personal_sign",
+            params={
+                "encoding": "utf-8",
+                "message": "message",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_3(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="personal_sign",
+            params={
+                "encoding": "utf-8",
+                "message": "message",
+            },
+            address="address",
+            caip2="-l-f12-k:_--l__36_",
+            chain_type="ethereum",
+            signature_options={"type": "ecdsa"},
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_3(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="personal_sign",
+            params={
+                "encoding": "utf-8",
+                "message": "message",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_3(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="personal_sign",
+            params={
+                "encoding": "utf-8",
+                "message": "message",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_3(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="personal_sign",
+                params={
+                    "encoding": "utf-8",
+                    "message": "message",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_4(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signTypedData_v4",
+            params={
+                "typed_data": {
+                    "domain": {"foo": "bar"},
+                    "message": {"foo": "bar"},
+                    "primary_type": "primary_type",
+                    "types": {
+                        "foo": [
+                            {
+                                "name": "name",
+                                "type": "type",
+                            }
+                        ]
+                    },
+                }
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_4(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signTypedData_v4",
+            params={
+                "typed_data": {
+                    "domain": {"foo": "bar"},
+                    "message": {"foo": "bar"},
+                    "primary_type": "primary_type",
+                    "types": {
+                        "foo": [
+                            {
+                                "name": "name",
+                                "type": "type",
+                            }
+                        ]
+                    },
+                }
+            },
+            address="address",
+            caip2="-l-f12-k:_--l__36_",
+            chain_type="ethereum",
+            signature_options={"type": "ecdsa"},
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_4(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signTypedData_v4",
+            params={
+                "typed_data": {
+                    "domain": {"foo": "bar"},
+                    "message": {"foo": "bar"},
+                    "primary_type": "primary_type",
+                    "types": {
+                        "foo": [
+                            {
+                                "name": "name",
+                                "type": "type",
+                            }
+                        ]
+                    },
+                }
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_4(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signTypedData_v4",
+            params={
+                "typed_data": {
+                    "domain": {"foo": "bar"},
+                    "message": {"foo": "bar"},
+                    "primary_type": "primary_type",
+                    "types": {
+                        "foo": [
+                            {
+                                "name": "name",
+                                "type": "type",
+                            }
+                        ]
+                    },
+                }
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_4(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="eth_signTypedData_v4",
+                params={
+                    "typed_data": {
+                        "domain": {"foo": "bar"},
+                        "message": {"foo": "bar"},
+                        "primary_type": "primary_type",
+                        "types": {
+                            "foo": [
+                                {
+                                    "name": "name",
+                                    "type": "type",
+                                }
+                            ]
+                        },
+                    }
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_5(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="secp256k1_sign",
+            params={"hash": "string"},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_5(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="secp256k1_sign",
+            params={"hash": "string"},
+            address="address",
+            chain_type="ethereum",
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_5(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="secp256k1_sign",
+            params={"hash": "string"},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_5(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="secp256k1_sign",
+            params={"hash": "string"},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_5(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="secp256k1_sign",
+                params={"hash": "string"},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_6(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_sign7702Authorization",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_6(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_sign7702Authorization",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+                "executor": "self",
+                "nonce": "string",
+            },
+            address="address",
+            chain_type="ethereum",
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_6(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_sign7702Authorization",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_6(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_sign7702Authorization",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_6(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="eth_sign7702Authorization",
+                params={
+                    "chain_id": "string",
+                    "contract": "contract",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_7(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signUserOperation",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+                "user_operation": {
+                    "call_data": "string",
+                    "call_gas_limit": "string",
+                    "max_fee_per_gas": "string",
+                    "max_priority_fee_per_gas": "string",
+                    "nonce": "string",
+                    "pre_verification_gas": "string",
+                    "sender": "sender",
+                    "verification_gas_limit": "string",
+                },
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_7(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signUserOperation",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+                "user_operation": {
+                    "call_data": "string",
+                    "call_gas_limit": "string",
+                    "max_fee_per_gas": "string",
+                    "max_priority_fee_per_gas": "string",
+                    "nonce": "string",
+                    "pre_verification_gas": "string",
+                    "sender": "sender",
+                    "verification_gas_limit": "string",
+                    "factory": "factory",
+                    "factory_data": "string",
+                    "paymaster": "paymaster",
+                    "paymaster_data": "string",
+                    "paymaster_post_op_gas_limit": "string",
+                    "paymaster_verification_gas_limit": "string",
+                },
+            },
+            address="address",
+            chain_type="ethereum",
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_7(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signUserOperation",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+                "user_operation": {
+                    "call_data": "string",
+                    "call_gas_limit": "string",
+                    "max_fee_per_gas": "string",
+                    "max_priority_fee_per_gas": "string",
+                    "nonce": "string",
+                    "pre_verification_gas": "string",
+                    "sender": "sender",
+                    "verification_gas_limit": "string",
+                },
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_7(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signUserOperation",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+                "user_operation": {
+                    "call_data": "string",
+                    "call_gas_limit": "string",
+                    "max_fee_per_gas": "string",
+                    "max_priority_fee_per_gas": "string",
+                    "nonce": "string",
+                    "pre_verification_gas": "string",
+                    "sender": "sender",
+                    "verification_gas_limit": "string",
+                },
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_7(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="eth_signUserOperation",
+                params={
+                    "chain_id": "string",
+                    "contract": "contract",
+                    "user_operation": {
+                        "call_data": "string",
+                        "call_gas_limit": "string",
+                        "max_fee_per_gas": "string",
+                        "max_priority_fee_per_gas": "string",
+                        "nonce": "string",
+                        "pre_verification_gas": "string",
+                        "sender": "sender",
+                        "verification_gas_limit": "string",
+                    },
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_8(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="wallet_sendCalls",
+            params={"calls": [{"to": "to"}]},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_8(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="wallet_sendCalls",
+            params={
+                "calls": [
+                    {
+                        "to": "to",
+                        "data": "string",
+                        "value": "string",
+                    }
+                ]
+            },
+            address="address",
+            chain_type="ethereum",
+            experimental_data_suffix="string",
+            sponsor=True,
+            sponsor_options={"asset": "string"},
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_8(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="wallet_sendCalls",
+            params={"calls": [{"to": "to"}]},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_8(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="wallet_sendCalls",
+            params={"calls": [{"to": "to"}]},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_8(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                caip2="-l-f12-k:_--l__36_",
+                method="wallet_sendCalls",
+                params={"calls": [{"to": "to"}]},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_9(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="signTransaction",
+            params={
+                "encoding": "base64",
+                "transaction": "transaction",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_9(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="signTransaction",
+            params={
+                "encoding": "base64",
+                "transaction": "transaction",
+            },
+            address="address",
+            chain_type="solana",
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_9(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="signTransaction",
+            params={
+                "encoding": "base64",
+                "transaction": "transaction",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_9(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="signTransaction",
+            params={
+                "encoding": "base64",
+                "transaction": "transaction",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_9(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="signTransaction",
+                params={
+                    "encoding": "base64",
+                    "transaction": "transaction",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_10(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="signAndSendTransaction",
+            params={
+                "encoding": "base64",
+                "transaction": "transaction",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_10(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="signAndSendTransaction",
+            params={
+                "encoding": "base64",
+                "transaction": "transaction",
+            },
+            address="address",
+            chain_type="solana",
+            optimistic_broadcast=True,
+            reference_id="x",
+            sponsor=True,
+            sponsor_options={"asset": "string"},
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_10(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="signAndSendTransaction",
+            params={
+                "encoding": "base64",
+                "transaction": "transaction",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_10(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="signAndSendTransaction",
+            params={
+                "encoding": "base64",
+                "transaction": "transaction",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_10(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                caip2="-l-f12-k:_--l__36_",
+                method="signAndSendTransaction",
+                params={
+                    "encoding": "base64",
+                    "transaction": "transaction",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_11(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessage",
+            params={
+                "encoding": "base64",
+                "message": "message",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_11(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessage",
+            params={
+                "encoding": "base64",
+                "message": "message",
+            },
+            address="address",
+            chain_type="solana",
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_11(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessage",
+            params={
+                "encoding": "base64",
+                "message": "message",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_11(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessage",
+            params={
+                "encoding": "base64",
+                "message": "message",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_11(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="signMessage",
+                params={
+                    "encoding": "base64",
+                    "message": "message",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_12(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="transfer",
+            params={
+                "amount_sats": 0,
+                "receiver_spark_address": "receiver_spark_address",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_12(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="transfer",
+            params={
+                "amount_sats": 0,
+                "receiver_spark_address": "receiver_spark_address",
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_12(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="transfer",
+            params={
+                "amount_sats": 0,
+                "receiver_spark_address": "receiver_spark_address",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_12(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="transfer",
+            params={
+                "amount_sats": 0,
+                "receiver_spark_address": "receiver_spark_address",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_12(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="transfer",
+                params={
+                    "amount_sats": 0,
+                    "receiver_spark_address": "receiver_spark_address",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_13(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getBalance",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_13(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getBalance",
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_13(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getBalance",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_13(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getBalance",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_13(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="getBalance",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_14(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="transferTokens",
+            params={
+                "receiver_spark_address": "receiver_spark_address",
+                "token_amount": 0,
+                "token_identifier": "token_identifier",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_14(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="transferTokens",
+            params={
+                "receiver_spark_address": "receiver_spark_address",
+                "token_amount": 0,
+                "token_identifier": "token_identifier",
+                "output_selection_strategy": "SMALL_FIRST",
+                "selected_outputs": [
+                    {
+                        "previous_transaction_hash": "previous_transaction_hash",
+                        "previous_transaction_vout": 0,
+                        "output": {
+                            "owner_public_key": "owner_public_key",
+                            "token_amount": "token_amount",
+                            "id": "id",
+                            "revocation_commitment": "revocation_commitment",
+                            "token_identifier": "token_identifier",
+                            "token_public_key": "token_public_key",
+                            "withdraw_bond_sats": 0,
+                            "withdraw_relative_block_locktime": 0,
+                        },
+                    }
+                ],
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_14(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="transferTokens",
+            params={
+                "receiver_spark_address": "receiver_spark_address",
+                "token_amount": 0,
+                "token_identifier": "token_identifier",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_14(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="transferTokens",
+            params={
+                "receiver_spark_address": "receiver_spark_address",
+                "token_amount": 0,
+                "token_identifier": "token_identifier",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_14(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="transferTokens",
+                params={
+                    "receiver_spark_address": "receiver_spark_address",
+                    "token_amount": 0,
+                    "token_identifier": "token_identifier",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_15(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getStaticDepositAddress",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_15(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getStaticDepositAddress",
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_15(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getStaticDepositAddress",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_15(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getStaticDepositAddress",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_15(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="getStaticDepositAddress",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_16(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getClaimStaticDepositQuote",
+            params={"transaction_id": "transaction_id"},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_16(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getClaimStaticDepositQuote",
+            params={
+                "transaction_id": "transaction_id",
+                "output_index": 0,
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_16(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getClaimStaticDepositQuote",
+            params={"transaction_id": "transaction_id"},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_16(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getClaimStaticDepositQuote",
+            params={"transaction_id": "transaction_id"},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_16(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="getClaimStaticDepositQuote",
+                params={"transaction_id": "transaction_id"},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_17(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="claimStaticDeposit",
+            params={
+                "credit_amount_sats": 0,
+                "signature": "signature",
+                "transaction_id": "transaction_id",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_17(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="claimStaticDeposit",
+            params={
+                "credit_amount_sats": 0,
+                "signature": "signature",
+                "transaction_id": "transaction_id",
+                "output_index": 0,
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_17(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="claimStaticDeposit",
+            params={
+                "credit_amount_sats": 0,
+                "signature": "signature",
+                "transaction_id": "transaction_id",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_17(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="claimStaticDeposit",
+            params={
+                "credit_amount_sats": 0,
+                "signature": "signature",
+                "transaction_id": "transaction_id",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_17(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="claimStaticDeposit",
+                params={
+                    "credit_amount_sats": 0,
+                    "signature": "signature",
+                    "transaction_id": "transaction_id",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_18(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="createLightningInvoice",
+            params={"amount_sats": 0},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_18(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="createLightningInvoice",
+            params={
+                "amount_sats": 0,
+                "description_hash": "description_hash",
+                "expiry_seconds": 0,
+                "include_spark_address": True,
+                "memo": "memo",
+                "receiver_identity_pubkey": "receiver_identity_pubkey",
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_18(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="createLightningInvoice",
+            params={"amount_sats": 0},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_18(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="createLightningInvoice",
+            params={"amount_sats": 0},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_18(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="createLightningInvoice",
+                params={"amount_sats": 0},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_19(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="payLightningInvoice",
+            params={
+                "invoice": "invoice",
+                "max_fee_sats": 0,
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_19(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="payLightningInvoice",
+            params={
+                "invoice": "invoice",
+                "max_fee_sats": 0,
+                "amount_sats_to_send": 0,
+                "prefer_spark": True,
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_19(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="payLightningInvoice",
+            params={
+                "invoice": "invoice",
+                "max_fee_sats": 0,
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_19(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="payLightningInvoice",
+            params={
+                "invoice": "invoice",
+                "max_fee_sats": 0,
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_19(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="payLightningInvoice",
+                params={
+                    "invoice": "invoice",
+                    "max_fee_sats": 0,
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_20(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessageWithIdentityKey",
+            params={"message": "message"},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_20(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessageWithIdentityKey",
+            params={
+                "message": "message",
+                "compact": True,
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_20(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessageWithIdentityKey",
+            params={"message": "message"},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_20(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessageWithIdentityKey",
+            params={"message": "message"},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_20(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="signMessageWithIdentityKey",
+                params={"message": "message"},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_21(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="withdraw",
+            params={
+                "exit_speed": "FAST",
+                "onchain_address": "onchain_address",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_21(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="withdraw",
+            params={
+                "exit_speed": "FAST",
+                "onchain_address": "onchain_address",
+                "amount_sats": 0,
+                "deduct_fee_from_withdrawal_amount": True,
+                "fee_amount_sats": 0,
+                "fee_quote_id": "fee_quote_id",
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_21(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="withdraw",
+            params={
+                "exit_speed": "FAST",
+                "onchain_address": "onchain_address",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_21(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="withdraw",
+            params={
+                "exit_speed": "FAST",
+                "onchain_address": "onchain_address",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_21(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="withdraw",
+                params={
+                    "exit_speed": "FAST",
+                    "onchain_address": "onchain_address",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_22(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getWithdrawalFeeQuote",
+            params={
+                "amount_sats": 0,
+                "onchain_address": "onchain_address",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_22(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getWithdrawalFeeQuote",
+            params={
+                "amount_sats": 0,
+                "onchain_address": "onchain_address",
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_22(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getWithdrawalFeeQuote",
+            params={
+                "amount_sats": 0,
+                "onchain_address": "onchain_address",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_22(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getWithdrawalFeeQuote",
+            params={
+                "amount_sats": 0,
+                "onchain_address": "onchain_address",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_22(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="getWithdrawalFeeQuote",
+                params={
+                    "amount_sats": 0,
+                    "onchain_address": "onchain_address",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_23(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_signTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ],
+                    "expiration": 0,
+                    "ref_block_bytes": "E1CB",
+                    "ref_block_hash": "E1CB97d8EBbDbaAa",
+                }
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_23(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_signTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ],
+                    "expiration": 0,
+                    "ref_block_bytes": "E1CB",
+                    "ref_block_hash": "E1CB97d8EBbDbaAa",
+                    "data": "d6BC",
+                    "fee_limit": 0,
+                    "timestamp": 0,
+                }
+            },
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_23(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_signTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ],
+                    "expiration": 0,
+                    "ref_block_bytes": "E1CB",
+                    "ref_block_hash": "E1CB97d8EBbDbaAa",
+                }
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_23(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_signTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ],
+                    "expiration": 0,
+                    "ref_block_bytes": "E1CB",
+                    "ref_block_hash": "E1CB97d8EBbDbaAa",
+                }
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_23(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="tron_signTransaction",
+                params={
+                    "raw_data": {
+                        "contract": [
+                            {
+                                "amount": 1,
+                                "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                                "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                                "type": "TransferContract",
+                            }
+                        ],
+                        "expiration": 0,
+                        "ref_block_bytes": "E1CB",
+                        "ref_block_hash": "E1CB97d8EBbDbaAa",
+                    }
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_24(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_sendTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ]
+                }
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_24(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_sendTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ],
+                    "data": "d6BC",
+                    "expiration": 0,
+                    "fee_limit": 0,
+                    "ref_block_bytes": "E1CB",
+                    "ref_block_hash": "E1CB97d8EBbDbaAa",
+                    "timestamp": 0,
+                },
+                "reference_id": "reference_id",
+            },
+            caip2="-l-f12-k:_--l__36_",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_24(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_sendTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ]
+                }
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_24(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_sendTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ]
+                }
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_24(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="tron_sendTransaction",
+                params={
+                    "raw_data": {
+                        "contract": [
+                            {
+                                "amount": 1,
+                                "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                                "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                                "type": "TransferContract",
+                            }
+                        ]
+                    }
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_25(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportPrivateKey",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_25(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportPrivateKey",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "export_seed_phrase": True,
+                "export_type": "display",
+            },
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_25(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportPrivateKey",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_25(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportPrivateKey",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_25(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                address="address",
+                method="exportPrivateKey",
+                params={
+                    "encryption_type": "HPKE",
+                    "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_26(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_26(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "export_seed_phrase": True,
+                "export_type": "display",
+            },
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_26(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_26(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_26(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                address="address",
+                method="exportSeedPhrase",
+                params={
+                    "encryption_type": "HPKE",
+                    "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_submit_import(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._submit_import(
+            wallet={
+                "address": "0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+                "chain_type": "ethereum",
+                "ciphertext": "PRoRXygG+YYSDBXjCopNYZmx8Z6nvdl1D0lpePTYZdZI2VGfK+LkFt+GlEJqdoi9",
+                "encapsulated_key": "BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=",
+                "encryption_type": "HPKE",
+                "entropy_type": "private-key",
+            },
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_submit_import_with_all_params(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._submit_import(
+            wallet={
+                "address": "0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+                "chain_type": "ethereum",
+                "ciphertext": "PRoRXygG+YYSDBXjCopNYZmx8Z6nvdl1D0lpePTYZdZI2VGfK+LkFt+GlEJqdoi9",
+                "encapsulated_key": "BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=",
+                "encryption_type": "HPKE",
+                "entropy_type": "private-key",
+                "hpke_config": {
+                    "aad": "aad",
+                    "aead_algorithm": "CHACHA20_POLY1305",
+                    "info": "info",
+                },
+            },
+            additional_signers=[
+                {
+                    "signer_id": "string",
+                    "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                }
+            ],
+            display_name="display_name",
+            external_id="external_id",
+            owner={"user_id": "user_id"},
+            owner_id="rkiz0ivz254drv1xw982v3jq",
+            policy_ids=["xxxxxxxxxxxxxxxxxxxxxxxx"],
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_submit_import(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._submit_import(
+            wallet={
+                "address": "0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+                "chain_type": "ethereum",
+                "ciphertext": "PRoRXygG+YYSDBXjCopNYZmx8Z6nvdl1D0lpePTYZdZI2VGfK+LkFt+GlEJqdoi9",
+                "encapsulated_key": "BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=",
+                "encryption_type": "HPKE",
+                "entropy_type": "private-key",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_submit_import(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._submit_import(
+            wallet={
+                "address": "0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+                "chain_type": "ethereum",
+                "ciphertext": "PRoRXygG+YYSDBXjCopNYZmx8Z6nvdl1D0lpePTYZdZI2VGfK+LkFt+GlEJqdoi9",
+                "encapsulated_key": "BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=",
+                "encryption_type": "HPKE",
+                "entropy_type": "private-key",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(Wallet, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_transfer(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._transfer(
+            wallet_id="wallet_id",
+            destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
+            source={
+                "asset": "usdc",
+                "chain": "base",
+            },
+        )
+        assert_matches_type(TransferActionResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_transfer_with_all_params(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._transfer(
+            wallet_id="wallet_id",
+            destination={
+                "address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2",
+                "asset": "usdc",
+                "chain": "base",
+            },
+            source={
+                "asset": "usdc",
+                "chain": "base",
+                "amount": "10.5",
+            },
+            amount="amount",
+            amount_type="exact_input",
+            fee_configuration={
+                "type": "total_fee_bps",
+                "value": 50,
+            },
+            slippage_bps=100,
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(TransferActionResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_transfer(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._transfer(
+            wallet_id="wallet_id",
+            destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
+            source={
+                "asset": "usdc",
+                "chain": "base",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(TransferActionResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_transfer(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._transfer(
+            wallet_id="wallet_id",
+            destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
+            source={
+                "asset": "usdc",
+                "chain": "base",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(TransferActionResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_transfer(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            client.wallets.with_raw_response._transfer(
+                wallet_id="",
+                destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
+                source={
+                    "asset": "usdc",
+                    "chain": "base",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_update(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._update(
+            wallet_id="wallet_id",
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_update_with_all_params(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._update(
+            wallet_id="wallet_id",
+            additional_signers=[
+                {
+                    "signer_id": "string",
+                    "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                }
+            ],
+            display_name="display_name",
+            owner={"user_id": "user_id"},
+            owner_id="string",
+            policy_ids=["tb54eps4z44ed0jepousxi4n"],
+            privy_authorization_signature="privy-authorization-signature",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_update(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._update(
+            wallet_id="wallet_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_update(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._update(
+            wallet_id="wallet_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(Wallet, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_update(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            client.wallets.with_raw_response._update(
+                wallet_id="",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_archive(self, client: PrivyAPI) -> None:
+        wallet = client.wallets.archive(
+            "wallet_id",
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_archive(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response.archive(
+            "wallet_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_archive(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response.archive(
+            "wallet_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(Wallet, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_archive(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            client.wallets.with_raw_response.archive(
+                "",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_authenticate_with_jwt(self, client: PrivyAPI) -> None:
-        with pytest.warns(DeprecationWarning):
-            wallet = client.wallets.authenticate_with_jwt(
-                user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
-            )
-
+        wallet = client.wallets.authenticate_with_jwt(
+            encryption_type="HPKE",
+            recipient_public_key="DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1",
+            user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
+        )
         assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
-    @parametrize
-    def test_method_authenticate_with_jwt_with_all_params(self, client: PrivyAPI) -> None:
-        with pytest.warns(DeprecationWarning):
-            wallet = client.wallets.authenticate_with_jwt(
-                user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
-                encryption_type="HPKE",
-                recipient_public_key="DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1",
-            )
-
-        assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_authenticate_with_jwt(self, client: PrivyAPI) -> None:
-        with pytest.warns(DeprecationWarning):
-            response = client.wallets.with_raw_response.authenticate_with_jwt(
-                user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
-            )
+        response = client.wallets.with_raw_response.authenticate_with_jwt(
+            encryption_type="HPKE",
+            recipient_public_key="DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1",
+            user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         wallet = response.parse()
         assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_authenticate_with_jwt(self, client: PrivyAPI) -> None:
-        with pytest.warns(DeprecationWarning):
-            with client.wallets.with_streaming_response.authenticate_with_jwt(
-                user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
-            ) as response:
-                assert not response.is_closed
-                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        with client.wallets.with_streaming_response.authenticate_with_jwt(
+            encryption_type="HPKE",
+            recipient_public_key="DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1",
+            user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-                wallet = response.parse()
-                assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
+            wallet = response.parse()
+            assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_create_batch(self, client: PrivyAPI) -> None:
+        wallet = client.wallets.create_batch(
+            wallets=[{"chain_type": "ethereum"}, {"chain_type": "solana"}],
+        )
+        assert_matches_type(WalletBatchCreateResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_create_batch(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response.create_batch(
+            wallets=[{"chain_type": "ethereum"}, {"chain_type": "solana"}],
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletBatchCreateResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_create_batch(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response.create_batch(
+            wallets=[{"chain_type": "ethereum"}, {"chain_type": "solana"}],
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletBatchCreateResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_create_wallets_with_recovery(self, client: PrivyAPI) -> None:
         with pytest.warns(DeprecationWarning):
@@ -245,7 +3028,7 @@ class TestWallets:
 
         assert_matches_type(WalletCreateWalletsWithRecoveryResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_create_wallets_with_recovery(self, client: PrivyAPI) -> None:
         with pytest.warns(DeprecationWarning):
@@ -267,7 +3050,7 @@ class TestWallets:
         wallet = response.parse()
         assert_matches_type(WalletCreateWalletsWithRecoveryResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_create_wallets_with_recovery(self, client: PrivyAPI) -> None:
         with pytest.warns(DeprecationWarning):
@@ -291,19 +3074,28 @@ class TestWallets:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_method_get(self, client: PrivyAPI) -> None:
         wallet = client.wallets.get(
-            "wallet_id",
+            wallet_id="wallet_id",
         )
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_get_with_all_params(self, client: PrivyAPI) -> None:
+        wallet = client.wallets.get(
+            wallet_id="wallet_id",
+            include_archived=True,
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_raw_response_get(self, client: PrivyAPI) -> None:
         response = client.wallets.with_raw_response.get(
-            "wallet_id",
+            wallet_id="wallet_id",
         )
 
         assert response.is_closed is True
@@ -311,11 +3103,11 @@ class TestWallets:
         wallet = response.parse()
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_get(self, client: PrivyAPI) -> None:
         with client.wallets.with_streaming_response.get(
-            "wallet_id",
+            wallet_id="wallet_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -325,34 +3117,425 @@ class TestWallets:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_path_params_get(self, client: PrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
             client.wallets.with_raw_response.get(
-                "",
+                wallet_id="",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_overload_1(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
+    def test_method_get_wallet_by_address(self, client: PrivyAPI) -> None:
+        wallet = client.wallets.get_wallet_by_address(
+            address="0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_get_wallet_by_address_with_all_params(self, client: PrivyAPI) -> None:
+        wallet = client.wallets.get_wallet_by_address(
+            address="0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+            include_archived=True,
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_get_wallet_by_address(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response.get_wallet_by_address(
+            address="0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_get_wallet_by_address(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response.get_wallet_by_address(
+            address="0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(Wallet, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+
+class TestAsyncWallets:
+    parametrize = pytest.mark.parametrize(
+        "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
+    )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_create(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets.create(
+            chain_type="ethereum",
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_create_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets.create(
+            chain_type="ethereum",
+            additional_signers=[
+                {
+                    "signer_id": "string",
+                    "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                }
+            ],
+            display_name="display_name",
+            entity={
+                "id": "x",
+                "type": "user",
+            },
+            external_id="my-order-123",
+            owner={"user_id": "user_id"},
+            owner_id="string",
+            policy_ids=["xxxxxxxxxxxxxxxxxxxxxxxx"],
+            privy_idempotency_key="privy-idempotency-key",
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_create(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response.create(
+            chain_type="ethereum",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_create(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response.create(
+            chain_type="ethereum",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(Wallet, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_list(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets.list()
+        assert_matches_type(AsyncCursor[Wallet], wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_list_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets.list(
+            address="string",
+            authorization_key="s=-/fw-L-+N\n",
+            chain_type="ethereum",
+            cursor="x",
+            entity_id="entity_id",
+            external_id="external_id",
+            include_archived=True,
+            limit=100,
+            user_id="user_id",
+        )
+        assert_matches_type(AsyncCursor[Wallet], wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_list(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response.list()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(AsyncCursor[Wallet], wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_list(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response.list() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(AsyncCursor[Wallet], wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_export(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._export(
             wallet_id="wallet_id",
+            encryption_type="HPKE",
+            recipient_public_key="BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=",
+        )
+        assert_matches_type(WalletExportResponseBody, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_export_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._export(
+            wallet_id="wallet_id",
+            encryption_type="HPKE",
+            recipient_public_key="BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=",
+            export_seed_phrase=True,
+            privy_authorization_signature="privy-authorization-signature",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletExportResponseBody, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_export(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._export(
+            wallet_id="wallet_id",
+            encryption_type="HPKE",
+            recipient_public_key="BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletExportResponseBody, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_export(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._export(
+            wallet_id="wallet_id",
+            encryption_type="HPKE",
+            recipient_public_key="BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletExportResponseBody, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_export(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._export(
+                wallet_id="",
+                encryption_type="HPKE",
+                recipient_public_key="BDAZLOIdTaPycEYkgG0MvCzbIKJLli/yWkAV5yCa9yOsZ4JsrLweA5MnP8YIiY4k/RRzC+APhhO+P+Hoz/rt7Go=",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_init_import_overload_1(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="hd",
+            index=0,
+        )
+        assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_init_import_overload_1(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="hd",
+            index=0,
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_init_import_overload_1(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="hd",
+            index=0,
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_init_import_overload_2(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="private-key",
+        )
+        assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_init_import_overload_2(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="private-key",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_init_import_overload_2(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._init_import(
+            address="address",
+            chain_type="ethereum",
+            encryption_type="HPKE",
+            entropy_type="private-key",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletInitImportResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_raw_sign(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._raw_sign(
+            wallet_id="wallet_id",
+            params={
+                "bytes": "0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633",
+                "encoding": "hex",
+                "hash_function": "sha256",
+            },
+        )
+        assert_matches_type(RawSignResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_raw_sign_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._raw_sign(
+            wallet_id="wallet_id",
+            params={
+                "bytes": "0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633",
+                "encoding": "hex",
+                "hash_function": "sha256",
+            },
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(RawSignResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_raw_sign(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._raw_sign(
+            wallet_id="wallet_id",
+            params={
+                "bytes": "0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633",
+                "encoding": "hex",
+                "hash_function": "sha256",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(RawSignResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_raw_sign(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._raw_sign(
+            wallet_id="wallet_id",
+            params={
+                "bytes": "0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633",
+                "encoding": "hex",
+                "hash_function": "sha256",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(RawSignResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_raw_sign(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._raw_sign(
+                wallet_id="",
+                params={
+                    "bytes": "0a0234ea220809701d7a17a77e04408093e981a6335a66080112620a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412310a15417009bf59e27d2031a23a61e1590289fc3d21b3cd121541132b98ed6fb80a2d45f177cdef091ae2d9dc115418e80770a0bee581a633",
+                    "encoding": "hex",
+                    "hash_function": "sha256",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_1(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="eth_signTransaction",
             params={"transaction": {}},
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_with_all_params_overload_1(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_with_all_params_overload_1(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="eth_signTransaction",
             params={
                 "transaction": {
+                    "authorization_list": [
+                        {
+                            "chain_id": "string",
+                            "contract": "contract",
+                            "nonce": "string",
+                            "r": "string",
+                            "s": "string",
+                            "y_parity": 0,
+                        }
+                    ],
                     "chain_id": "string",
-                    "data": "data",
+                    "data": "string",
                     "from": "from",
                     "gas_limit": "string",
                     "gas_price": "string",
@@ -366,73 +3549,85 @@ class TestWallets:
             },
             address="address",
             chain_type="ethereum",
+            body_wallet_id="wallet_id",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_rpc_overload_1(self, client: PrivyAPI) -> None:
-        response = client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
+    async def test_raw_response_rpc_overload_1(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
             method="eth_signTransaction",
             params={"transaction": {}},
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = response.parse()
+        wallet = await response.parse()
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_rpc_overload_1(self, client: PrivyAPI) -> None:
-        with client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
+    async def test_streaming_response_rpc_overload_1(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
             method="eth_signTransaction",
             params={"transaction": {}},
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            wallet = response.parse()
+            wallet = await response.parse()
             assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_rpc_overload_1(self, client: PrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            client.wallets.with_raw_response.rpc(
-                wallet_id="",
+    async def test_path_params_rpc_overload_1(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
                 method="eth_signTransaction",
                 params={"transaction": {}},
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_overload_2(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_overload_2(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             caip2="-l-f12-k:_--l__36_",
             method="eth_sendTransaction",
             params={"transaction": {}},
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_with_all_params_overload_2(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_with_all_params_overload_2(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             caip2="-l-f12-k:_--l__36_",
             method="eth_sendTransaction",
             params={
                 "transaction": {
+                    "authorization_list": [
+                        {
+                            "chain_id": "string",
+                            "contract": "contract",
+                            "nonce": "string",
+                            "r": "string",
+                            "s": "string",
+                            "y_parity": 0,
+                        }
+                    ],
                     "chain_id": "string",
-                    "data": "data",
+                    "data": "string",
                     "from": "from",
                     "gas_limit": "string",
                     "gas_price": "string",
@@ -446,16 +3641,22 @@ class TestWallets:
             },
             address="address",
             chain_type="ethereum",
+            experimental_data_suffix="string",
+            reference_id="x",
+            sponsor=True,
+            sponsor_options={"asset": "string"},
+            body_wallet_id="wallet_id",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_rpc_overload_2(self, client: PrivyAPI) -> None:
-        response = client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
+    async def test_raw_response_rpc_overload_2(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
             caip2="-l-f12-k:_--l__36_",
             method="eth_sendTransaction",
             params={"transaction": {}},
@@ -463,14 +3664,14 @@ class TestWallets:
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = response.parse()
+        wallet = await response.parse()
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_rpc_overload_2(self, client: PrivyAPI) -> None:
-        with client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
+    async def test_streaming_response_rpc_overload_2(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
             caip2="-l-f12-k:_--l__36_",
             method="eth_sendTransaction",
             params={"transaction": {}},
@@ -478,27 +3679,27 @@ class TestWallets:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            wallet = response.parse()
+            wallet = await response.parse()
             assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_rpc_overload_2(self, client: PrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            client.wallets.with_raw_response.rpc(
-                wallet_id="",
+    async def test_path_params_rpc_overload_2(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
                 caip2="-l-f12-k:_--l__36_",
                 method="eth_sendTransaction",
                 params={"transaction": {}},
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_overload_3(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_overload_3(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="personal_sign",
             params={
                 "encoding": "utf-8",
@@ -507,28 +3708,32 @@ class TestWallets:
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_with_all_params_overload_3(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_with_all_params_overload_3(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="personal_sign",
             params={
                 "encoding": "utf-8",
                 "message": "message",
             },
             address="address",
+            caip2="-l-f12-k:_--l__36_",
             chain_type="ethereum",
+            signature_options={"type": "ecdsa"},
+            body_wallet_id="wallet_id",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_rpc_overload_3(self, client: PrivyAPI) -> None:
-        response = client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
+    async def test_raw_response_rpc_overload_3(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
             method="personal_sign",
             params={
                 "encoding": "utf-8",
@@ -538,14 +3743,14 @@ class TestWallets:
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = response.parse()
+        wallet = await response.parse()
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_rpc_overload_3(self, client: PrivyAPI) -> None:
-        with client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
+    async def test_streaming_response_rpc_overload_3(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
             method="personal_sign",
             params={
                 "encoding": "utf-8",
@@ -555,17 +3760,17 @@ class TestWallets:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            wallet = response.parse()
+            wallet = await response.parse()
             assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_rpc_overload_3(self, client: PrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            client.wallets.with_raw_response.rpc(
-                wallet_id="",
+    async def test_path_params_rpc_overload_3(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
                 method="personal_sign",
                 params={
                     "encoding": "utf-8",
@@ -573,11 +3778,11 @@ class TestWallets:
                 },
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_overload_4(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_overload_4(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="eth_signTypedData_v4",
             params={
                 "typed_data": {
@@ -597,11 +3802,11 @@ class TestWallets:
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_with_all_params_overload_4(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_with_all_params_overload_4(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="eth_signTypedData_v4",
             params={
                 "typed_data": {
@@ -619,17 +3824,21 @@ class TestWallets:
                 }
             },
             address="address",
+            caip2="-l-f12-k:_--l__36_",
             chain_type="ethereum",
+            signature_options={"type": "ecdsa"},
+            body_wallet_id="wallet_id",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_rpc_overload_4(self, client: PrivyAPI) -> None:
-        response = client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
+    async def test_raw_response_rpc_overload_4(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
             method="eth_signTypedData_v4",
             params={
                 "typed_data": {
@@ -650,14 +3859,14 @@ class TestWallets:
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = response.parse()
+        wallet = await response.parse()
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_rpc_overload_4(self, client: PrivyAPI) -> None:
-        with client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
+    async def test_streaming_response_rpc_overload_4(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
             method="eth_signTypedData_v4",
             params={
                 "typed_data": {
@@ -678,17 +3887,17 @@ class TestWallets:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            wallet = response.parse()
+            wallet = await response.parse()
             assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_rpc_overload_4(self, client: PrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            client.wallets.with_raw_response.rpc(
-                wallet_id="",
+    async def test_path_params_rpc_overload_4(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
                 method="eth_signTypedData_v4",
                 params={
                     "typed_data": {
@@ -707,11 +3916,77 @@ class TestWallets:
                 },
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_overload_5(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_overload_5(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="secp256k1_sign",
+            params={"hash": "string"},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_5(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="secp256k1_sign",
+            params={"hash": "string"},
+            address="address",
+            chain_type="ethereum",
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_5(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="secp256k1_sign",
+            params={"hash": "string"},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_5(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="secp256k1_sign",
+            params={"hash": "string"},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_5(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="secp256k1_sign",
+                params={"hash": "string"},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_6(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="eth_sign7702Authorization",
             params={
                 "chain_id": "string",
@@ -720,29 +3995,32 @@ class TestWallets:
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_with_all_params_overload_5(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_with_all_params_overload_6(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="eth_sign7702Authorization",
             params={
                 "chain_id": "string",
                 "contract": "contract",
+                "executor": "self",
                 "nonce": "string",
             },
             address="address",
             chain_type="ethereum",
+            body_wallet_id="wallet_id",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_rpc_overload_5(self, client: PrivyAPI) -> None:
-        response = client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
+    async def test_raw_response_rpc_overload_6(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
             method="eth_sign7702Authorization",
             params={
                 "chain_id": "string",
@@ -752,14 +4030,14 @@ class TestWallets:
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = response.parse()
+        wallet = await response.parse()
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_rpc_overload_5(self, client: PrivyAPI) -> None:
-        with client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
+    async def test_streaming_response_rpc_overload_6(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
             method="eth_sign7702Authorization",
             params={
                 "chain_id": "string",
@@ -769,17 +4047,17 @@ class TestWallets:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            wallet = response.parse()
+            wallet = await response.parse()
             assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_rpc_overload_5(self, client: PrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            client.wallets.with_raw_response.rpc(
-                wallet_id="",
+    async def test_path_params_rpc_overload_6(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
                 method="eth_sign7702Authorization",
                 params={
                     "chain_id": "string",
@@ -787,75 +4065,230 @@ class TestWallets:
                 },
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_overload_6(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="secp256k1_sign",
-            params={"hash": "hash"},
+    async def test_method_rpc_overload_7(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signUserOperation",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+                "user_operation": {
+                    "call_data": "string",
+                    "call_gas_limit": "string",
+                    "max_fee_per_gas": "string",
+                    "max_priority_fee_per_gas": "string",
+                    "nonce": "string",
+                    "pre_verification_gas": "string",
+                    "sender": "sender",
+                    "verification_gas_limit": "string",
+                },
+            },
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_with_all_params_overload_6(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="secp256k1_sign",
-            params={"hash": "hash"},
+    async def test_method_rpc_with_all_params_overload_7(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signUserOperation",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+                "user_operation": {
+                    "call_data": "string",
+                    "call_gas_limit": "string",
+                    "max_fee_per_gas": "string",
+                    "max_priority_fee_per_gas": "string",
+                    "nonce": "string",
+                    "pre_verification_gas": "string",
+                    "sender": "sender",
+                    "verification_gas_limit": "string",
+                    "factory": "factory",
+                    "factory_data": "string",
+                    "paymaster": "paymaster",
+                    "paymaster_data": "string",
+                    "paymaster_post_op_gas_limit": "string",
+                    "paymaster_verification_gas_limit": "string",
+                },
+            },
             address="address",
             chain_type="ethereum",
+            body_wallet_id="wallet_id",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_rpc_overload_6(self, client: PrivyAPI) -> None:
-        response = client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
-            method="secp256k1_sign",
-            params={"hash": "hash"},
+    async def test_raw_response_rpc_overload_7(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signUserOperation",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+                "user_operation": {
+                    "call_data": "string",
+                    "call_gas_limit": "string",
+                    "max_fee_per_gas": "string",
+                    "max_priority_fee_per_gas": "string",
+                    "nonce": "string",
+                    "pre_verification_gas": "string",
+                    "sender": "sender",
+                    "verification_gas_limit": "string",
+                },
+            },
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = response.parse()
+        wallet = await response.parse()
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_rpc_overload_6(self, client: PrivyAPI) -> None:
-        with client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
-            method="secp256k1_sign",
-            params={"hash": "hash"},
+    async def test_streaming_response_rpc_overload_7(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="eth_signUserOperation",
+            params={
+                "chain_id": "string",
+                "contract": "contract",
+                "user_operation": {
+                    "call_data": "string",
+                    "call_gas_limit": "string",
+                    "max_fee_per_gas": "string",
+                    "max_priority_fee_per_gas": "string",
+                    "nonce": "string",
+                    "pre_verification_gas": "string",
+                    "sender": "sender",
+                    "verification_gas_limit": "string",
+                },
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            wallet = response.parse()
+            wallet = await response.parse()
             assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_rpc_overload_6(self, client: PrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            client.wallets.with_raw_response.rpc(
-                wallet_id="",
-                method="secp256k1_sign",
-                params={"hash": "hash"},
+    async def test_path_params_rpc_overload_7(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="eth_signUserOperation",
+                params={
+                    "chain_id": "string",
+                    "contract": "contract",
+                    "user_operation": {
+                        "call_data": "string",
+                        "call_gas_limit": "string",
+                        "max_fee_per_gas": "string",
+                        "max_priority_fee_per_gas": "string",
+                        "nonce": "string",
+                        "pre_verification_gas": "string",
+                        "sender": "sender",
+                        "verification_gas_limit": "string",
+                    },
+                },
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_overload_7(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_overload_8(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="wallet_sendCalls",
+            params={"calls": [{"to": "to"}]},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_8(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="wallet_sendCalls",
+            params={
+                "calls": [
+                    {
+                        "to": "to",
+                        "data": "string",
+                        "value": "string",
+                    }
+                ]
+            },
+            address="address",
+            chain_type="ethereum",
+            experimental_data_suffix="string",
+            sponsor=True,
+            sponsor_options={"asset": "string"},
+            body_wallet_id="wallet_id",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_8(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="wallet_sendCalls",
+            params={"calls": [{"to": "to"}]},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_8(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            caip2="-l-f12-k:_--l__36_",
+            method="wallet_sendCalls",
+            params={"calls": [{"to": "to"}]},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_8(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                caip2="-l-f12-k:_--l__36_",
+                method="wallet_sendCalls",
+                params={"calls": [{"to": "to"}]},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_9(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="signTransaction",
             params={
                 "encoding": "base64",
@@ -864,11 +4297,11 @@ class TestWallets:
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_with_all_params_overload_7(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_with_all_params_overload_9(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="signTransaction",
             params={
                 "encoding": "base64",
@@ -876,16 +4309,18 @@ class TestWallets:
             },
             address="address",
             chain_type="solana",
+            body_wallet_id="wallet_id",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_rpc_overload_7(self, client: PrivyAPI) -> None:
-        response = client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
+    async def test_raw_response_rpc_overload_9(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
             method="signTransaction",
             params={
                 "encoding": "base64",
@@ -895,14 +4330,14 @@ class TestWallets:
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = response.parse()
+        wallet = await response.parse()
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_rpc_overload_7(self, client: PrivyAPI) -> None:
-        with client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
+    async def test_streaming_response_rpc_overload_9(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
             method="signTransaction",
             params={
                 "encoding": "base64",
@@ -912,17 +4347,17 @@ class TestWallets:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            wallet = response.parse()
+            wallet = await response.parse()
             assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_rpc_overload_7(self, client: PrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            client.wallets.with_raw_response.rpc(
-                wallet_id="",
+    async def test_path_params_rpc_overload_9(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
                 method="signTransaction",
                 params={
                     "encoding": "base64",
@@ -930,11 +4365,11 @@ class TestWallets:
                 },
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_overload_8(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_overload_10(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             caip2="-l-f12-k:_--l__36_",
             method="signAndSendTransaction",
             params={
@@ -944,11 +4379,11 @@ class TestWallets:
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_with_all_params_overload_8(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_with_all_params_overload_10(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             caip2="-l-f12-k:_--l__36_",
             method="signAndSendTransaction",
             params={
@@ -957,16 +4392,22 @@ class TestWallets:
             },
             address="address",
             chain_type="solana",
+            optimistic_broadcast=True,
+            reference_id="x",
+            sponsor=True,
+            sponsor_options={"asset": "string"},
+            body_wallet_id="wallet_id",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_rpc_overload_8(self, client: PrivyAPI) -> None:
-        response = client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
+    async def test_raw_response_rpc_overload_10(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
             caip2="-l-f12-k:_--l__36_",
             method="signAndSendTransaction",
             params={
@@ -977,14 +4418,14 @@ class TestWallets:
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = response.parse()
+        wallet = await response.parse()
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_rpc_overload_8(self, client: PrivyAPI) -> None:
-        with client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
+    async def test_streaming_response_rpc_overload_10(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
             caip2="-l-f12-k:_--l__36_",
             method="signAndSendTransaction",
             params={
@@ -995,17 +4436,17 @@ class TestWallets:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            wallet = response.parse()
+            wallet = await response.parse()
             assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_rpc_overload_8(self, client: PrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            client.wallets.with_raw_response.rpc(
-                wallet_id="",
+    async def test_path_params_rpc_overload_10(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
                 caip2="-l-f12-k:_--l__36_",
                 method="signAndSendTransaction",
                 params={
@@ -1014,11 +4455,11 @@ class TestWallets:
                 },
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_overload_9(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_overload_11(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="signMessage",
             params={
                 "encoding": "base64",
@@ -1027,11 +4468,11 @@ class TestWallets:
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_rpc_with_all_params_overload_9(self, client: PrivyAPI) -> None:
-        wallet = client.wallets.rpc(
-            wallet_id="wallet_id",
+    async def test_method_rpc_with_all_params_overload_11(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
             method="signMessage",
             params={
                 "encoding": "base64",
@@ -1039,16 +4480,18 @@ class TestWallets:
             },
             address="address",
             chain_type="solana",
+            body_wallet_id="wallet_id",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_rpc_overload_9(self, client: PrivyAPI) -> None:
-        response = client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
+    async def test_raw_response_rpc_overload_11(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
             method="signMessage",
             params={
                 "encoding": "base64",
@@ -1058,14 +4501,14 @@ class TestWallets:
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = response.parse()
+        wallet = await response.parse()
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_rpc_overload_9(self, client: PrivyAPI) -> None:
-        with client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
+    async def test_streaming_response_rpc_overload_11(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
             method="signMessage",
             params={
                 "encoding": "base64",
@@ -1075,17 +4518,17 @@ class TestWallets:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-            wallet = response.parse()
+            wallet = await response.parse()
             assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_rpc_overload_9(self, client: PrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            client.wallets.with_raw_response.rpc(
-                wallet_id="",
+    async def test_path_params_rpc_overload_11(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
                 method="signMessage",
                 params={
                     "encoding": "base64",
@@ -1093,44 +4536,1327 @@ class TestWallets:
                 },
             )
 
-
-class TestAsyncWallets:
-    parametrize = pytest.mark.parametrize(
-        "async_client", [False, True, {"http_client": "aiohttp"}], indirect=True, ids=["loose", "strict", "aiohttp"]
-    )
-
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_create(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.create(
-            chain_type="ethereum",
+    async def test_method_rpc_overload_12(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="transfer",
+            params={
+                "amount_sats": 0,
+                "receiver_spark_address": "receiver_spark_address",
+            },
         )
-        assert_matches_type(Wallet, wallet, path=["response"])
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_create_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.create(
-            chain_type="ethereum",
-            additional_signers=[
-                {
-                    "override_policy_ids": ["string"],
-                    "signer_id": "signer_id",
-                }
-            ],
-            owner={"public_key": "public_key"},
-            owner_id="owner_id",
-            policy_ids=["xxxxxxxxxxxxxxxxxxxxxxxx"],
+    async def test_method_rpc_with_all_params_overload_12(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="transfer",
+            params={
+                "amount_sats": 0,
+                "receiver_spark_address": "receiver_spark_address",
+            },
+            network="MAINNET",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_12(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="transfer",
+            params={
+                "amount_sats": 0,
+                "receiver_spark_address": "receiver_spark_address",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_12(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="transfer",
+            params={
+                "amount_sats": 0,
+                "receiver_spark_address": "receiver_spark_address",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_12(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="transfer",
+                params={
+                    "amount_sats": 0,
+                    "receiver_spark_address": "receiver_spark_address",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_13(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getBalance",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_13(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getBalance",
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_13(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getBalance",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_13(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getBalance",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_13(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="getBalance",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_14(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="transferTokens",
+            params={
+                "receiver_spark_address": "receiver_spark_address",
+                "token_amount": 0,
+                "token_identifier": "token_identifier",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_14(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="transferTokens",
+            params={
+                "receiver_spark_address": "receiver_spark_address",
+                "token_amount": 0,
+                "token_identifier": "token_identifier",
+                "output_selection_strategy": "SMALL_FIRST",
+                "selected_outputs": [
+                    {
+                        "previous_transaction_hash": "previous_transaction_hash",
+                        "previous_transaction_vout": 0,
+                        "output": {
+                            "owner_public_key": "owner_public_key",
+                            "token_amount": "token_amount",
+                            "id": "id",
+                            "revocation_commitment": "revocation_commitment",
+                            "token_identifier": "token_identifier",
+                            "token_public_key": "token_public_key",
+                            "withdraw_bond_sats": 0,
+                            "withdraw_relative_block_locktime": 0,
+                        },
+                    }
+                ],
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_14(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="transferTokens",
+            params={
+                "receiver_spark_address": "receiver_spark_address",
+                "token_amount": 0,
+                "token_identifier": "token_identifier",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_14(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="transferTokens",
+            params={
+                "receiver_spark_address": "receiver_spark_address",
+                "token_amount": 0,
+                "token_identifier": "token_identifier",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_14(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="transferTokens",
+                params={
+                    "receiver_spark_address": "receiver_spark_address",
+                    "token_amount": 0,
+                    "token_identifier": "token_identifier",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_15(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getStaticDepositAddress",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_15(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getStaticDepositAddress",
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_15(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getStaticDepositAddress",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_15(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getStaticDepositAddress",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_15(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="getStaticDepositAddress",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_16(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getClaimStaticDepositQuote",
+            params={"transaction_id": "transaction_id"},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_16(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getClaimStaticDepositQuote",
+            params={
+                "transaction_id": "transaction_id",
+                "output_index": 0,
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_16(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getClaimStaticDepositQuote",
+            params={"transaction_id": "transaction_id"},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_16(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getClaimStaticDepositQuote",
+            params={"transaction_id": "transaction_id"},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_16(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="getClaimStaticDepositQuote",
+                params={"transaction_id": "transaction_id"},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_17(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="claimStaticDeposit",
+            params={
+                "credit_amount_sats": 0,
+                "signature": "signature",
+                "transaction_id": "transaction_id",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_17(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="claimStaticDeposit",
+            params={
+                "credit_amount_sats": 0,
+                "signature": "signature",
+                "transaction_id": "transaction_id",
+                "output_index": 0,
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_17(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="claimStaticDeposit",
+            params={
+                "credit_amount_sats": 0,
+                "signature": "signature",
+                "transaction_id": "transaction_id",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_17(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="claimStaticDeposit",
+            params={
+                "credit_amount_sats": 0,
+                "signature": "signature",
+                "transaction_id": "transaction_id",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_17(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="claimStaticDeposit",
+                params={
+                    "credit_amount_sats": 0,
+                    "signature": "signature",
+                    "transaction_id": "transaction_id",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_18(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="createLightningInvoice",
+            params={"amount_sats": 0},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_18(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="createLightningInvoice",
+            params={
+                "amount_sats": 0,
+                "description_hash": "description_hash",
+                "expiry_seconds": 0,
+                "include_spark_address": True,
+                "memo": "memo",
+                "receiver_identity_pubkey": "receiver_identity_pubkey",
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_18(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="createLightningInvoice",
+            params={"amount_sats": 0},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_18(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="createLightningInvoice",
+            params={"amount_sats": 0},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_18(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="createLightningInvoice",
+                params={"amount_sats": 0},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_19(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="payLightningInvoice",
+            params={
+                "invoice": "invoice",
+                "max_fee_sats": 0,
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_19(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="payLightningInvoice",
+            params={
+                "invoice": "invoice",
+                "max_fee_sats": 0,
+                "amount_sats_to_send": 0,
+                "prefer_spark": True,
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_19(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="payLightningInvoice",
+            params={
+                "invoice": "invoice",
+                "max_fee_sats": 0,
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_19(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="payLightningInvoice",
+            params={
+                "invoice": "invoice",
+                "max_fee_sats": 0,
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_19(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="payLightningInvoice",
+                params={
+                    "invoice": "invoice",
+                    "max_fee_sats": 0,
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_20(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessageWithIdentityKey",
+            params={"message": "message"},
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_20(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessageWithIdentityKey",
+            params={
+                "message": "message",
+                "compact": True,
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_20(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessageWithIdentityKey",
+            params={"message": "message"},
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_20(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="signMessageWithIdentityKey",
+            params={"message": "message"},
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_20(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="signMessageWithIdentityKey",
+                params={"message": "message"},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_21(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="withdraw",
+            params={
+                "exit_speed": "FAST",
+                "onchain_address": "onchain_address",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_21(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="withdraw",
+            params={
+                "exit_speed": "FAST",
+                "onchain_address": "onchain_address",
+                "amount_sats": 0,
+                "deduct_fee_from_withdrawal_amount": True,
+                "fee_amount_sats": 0,
+                "fee_quote_id": "fee_quote_id",
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_21(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="withdraw",
+            params={
+                "exit_speed": "FAST",
+                "onchain_address": "onchain_address",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_21(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="withdraw",
+            params={
+                "exit_speed": "FAST",
+                "onchain_address": "onchain_address",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_21(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="withdraw",
+                params={
+                    "exit_speed": "FAST",
+                    "onchain_address": "onchain_address",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_22(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getWithdrawalFeeQuote",
+            params={
+                "amount_sats": 0,
+                "onchain_address": "onchain_address",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_22(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="getWithdrawalFeeQuote",
+            params={
+                "amount_sats": 0,
+                "onchain_address": "onchain_address",
+            },
+            network="MAINNET",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_22(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getWithdrawalFeeQuote",
+            params={
+                "amount_sats": 0,
+                "onchain_address": "onchain_address",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_22(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="getWithdrawalFeeQuote",
+            params={
+                "amount_sats": 0,
+                "onchain_address": "onchain_address",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_22(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="getWithdrawalFeeQuote",
+                params={
+                    "amount_sats": 0,
+                    "onchain_address": "onchain_address",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_23(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_signTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ],
+                    "expiration": 0,
+                    "ref_block_bytes": "E1CB",
+                    "ref_block_hash": "E1CB97d8EBbDbaAa",
+                }
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_23(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_signTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ],
+                    "expiration": 0,
+                    "ref_block_bytes": "E1CB",
+                    "ref_block_hash": "E1CB97d8EBbDbaAa",
+                    "data": "d6BC",
+                    "fee_limit": 0,
+                    "timestamp": 0,
+                }
+            },
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_23(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_signTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ],
+                    "expiration": 0,
+                    "ref_block_bytes": "E1CB",
+                    "ref_block_hash": "E1CB97d8EBbDbaAa",
+                }
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_23(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_signTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ],
+                    "expiration": 0,
+                    "ref_block_bytes": "E1CB",
+                    "ref_block_hash": "E1CB97d8EBbDbaAa",
+                }
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_23(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="tron_signTransaction",
+                params={
+                    "raw_data": {
+                        "contract": [
+                            {
+                                "amount": 1,
+                                "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                                "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                                "type": "TransferContract",
+                            }
+                        ],
+                        "expiration": 0,
+                        "ref_block_bytes": "E1CB",
+                        "ref_block_hash": "E1CB97d8EBbDbaAa",
+                    }
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_24(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_sendTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ]
+                }
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_24(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_sendTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ],
+                    "data": "d6BC",
+                    "expiration": 0,
+                    "fee_limit": 0,
+                    "ref_block_bytes": "E1CB",
+                    "ref_block_hash": "E1CB97d8EBbDbaAa",
+                    "timestamp": 0,
+                },
+                "reference_id": "reference_id",
+            },
+            caip2="-l-f12-k:_--l__36_",
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_24(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_sendTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ]
+                }
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_24(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            method="tron_sendTransaction",
+            params={
+                "raw_data": {
+                    "contract": [
+                        {
+                            "amount": 1,
+                            "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                            "type": "TransferContract",
+                        }
+                    ]
+                }
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_24(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                method="tron_sendTransaction",
+                params={
+                    "raw_data": {
+                        "contract": [
+                            {
+                                "amount": 1,
+                                "owner_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                                "to_address": "41E1CB97d8EBbDbaAae6d9B1ca0D1cFaADcCcbdaDa",
+                                "type": "TransferContract",
+                            }
+                        ]
+                    }
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_25(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportPrivateKey",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_25(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportPrivateKey",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "export_seed_phrase": True,
+                "export_type": "display",
+            },
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_25(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportPrivateKey",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_25(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportPrivateKey",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_25(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                address="address",
+                method="exportPrivateKey",
+                params={
+                    "encryption_type": "HPKE",
+                    "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_26(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_26(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "export_seed_phrase": True,
+                "export_type": "display",
+            },
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_26(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_26(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_26(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                address="address",
+                method="exportSeedPhrase",
+                params={
+                    "encryption_type": "HPKE",
+                    "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_submit_import(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._submit_import(
+            wallet={
+                "address": "0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+                "chain_type": "ethereum",
+                "ciphertext": "PRoRXygG+YYSDBXjCopNYZmx8Z6nvdl1D0lpePTYZdZI2VGfK+LkFt+GlEJqdoi9",
+                "encapsulated_key": "BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=",
+                "encryption_type": "HPKE",
+                "entropy_type": "private-key",
+            },
         )
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_raw_response_create(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.create(
-            chain_type="ethereum",
+    async def test_method_submit_import_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._submit_import(
+            wallet={
+                "address": "0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+                "chain_type": "ethereum",
+                "ciphertext": "PRoRXygG+YYSDBXjCopNYZmx8Z6nvdl1D0lpePTYZdZI2VGfK+LkFt+GlEJqdoi9",
+                "encapsulated_key": "BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=",
+                "encryption_type": "HPKE",
+                "entropy_type": "private-key",
+                "hpke_config": {
+                    "aad": "aad",
+                    "aead_algorithm": "CHACHA20_POLY1305",
+                    "info": "info",
+                },
+            },
+            additional_signers=[
+                {
+                    "signer_id": "string",
+                    "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                }
+            ],
+            display_name="display_name",
+            external_id="external_id",
+            owner={"user_id": "user_id"},
+            owner_id="rkiz0ivz254drv1xw982v3jq",
+            policy_ids=["xxxxxxxxxxxxxxxxxxxxxxxx"],
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_submit_import(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._submit_import(
+            wallet={
+                "address": "0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+                "chain_type": "ethereum",
+                "ciphertext": "PRoRXygG+YYSDBXjCopNYZmx8Z6nvdl1D0lpePTYZdZI2VGfK+LkFt+GlEJqdoi9",
+                "encapsulated_key": "BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=",
+                "encryption_type": "HPKE",
+                "entropy_type": "private-key",
+            },
         )
 
         assert response.is_closed is True
@@ -1138,11 +5864,18 @@ class TestAsyncWallets:
         wallet = await response.parse()
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_streaming_response_create(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.create(
-            chain_type="ethereum",
+    async def test_streaming_response_submit_import(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._submit_import(
+            wallet={
+                "address": "0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+                "chain_type": "ethereum",
+                "ciphertext": "PRoRXygG+YYSDBXjCopNYZmx8Z6nvdl1D0lpePTYZdZI2VGfK+LkFt+GlEJqdoi9",
+                "encapsulated_key": "BOhR6xITDt5THJawHHJKrKdI9CBr2M/SDWzZZAaOW4gCMsSpC65U007WyKiwuuOVAo1BNm4YgcBBROuMmyIZXZk=",
+                "encryption_type": "HPKE",
+                "entropy_type": "private-key",
+            },
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1152,36 +5885,128 @@ class TestAsyncWallets:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_transfer(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._transfer(
+            wallet_id="wallet_id",
+            destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
+            source={
+                "asset": "usdc",
+                "chain": "base",
+            },
+        )
+        assert_matches_type(TransferActionResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_transfer_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._transfer(
+            wallet_id="wallet_id",
+            destination={
+                "address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2",
+                "asset": "usdc",
+                "chain": "base",
+            },
+            source={
+                "asset": "usdc",
+                "chain": "base",
+                "amount": "10.5",
+            },
+            amount="amount",
+            amount_type="exact_input",
+            fee_configuration={
+                "type": "total_fee_bps",
+                "value": 50,
+            },
+            slippage_bps=100,
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(TransferActionResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_transfer(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._transfer(
+            wallet_id="wallet_id",
+            destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
+            source={
+                "asset": "usdc",
+                "chain": "base",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(TransferActionResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_transfer(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._transfer(
+            wallet_id="wallet_id",
+            destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
+            source={
+                "asset": "usdc",
+                "chain": "base",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(TransferActionResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_transfer(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._transfer(
+                wallet_id="",
+                destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
+                source={
+                    "asset": "usdc",
+                    "chain": "base",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_update(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.update(
+        wallet = await async_client.wallets._update(
             wallet_id="wallet_id",
         )
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_update_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.update(
+        wallet = await async_client.wallets._update(
             wallet_id="wallet_id",
             additional_signers=[
                 {
-                    "override_policy_ids": ["string"],
-                    "signer_id": "signer_id",
+                    "signer_id": "string",
+                    "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
                 }
             ],
-            owner={"public_key": "public_key"},
-            owner_id="owner_id",
+            display_name="display_name",
+            owner={"user_id": "user_id"},
+            owner_id="string",
             policy_ids=["tb54eps4z44ed0jepousxi4n"],
             privy_authorization_signature="privy-authorization-signature",
+            privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_update(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.update(
+        response = await async_client.wallets.with_raw_response._update(
             wallet_id="wallet_id",
         )
 
@@ -1190,10 +6015,10 @@ class TestAsyncWallets:
         wallet = await response.parse()
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_update(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.update(
+        async with async_client.wallets.with_streaming_response._update(
             wallet_id="wallet_id",
         ) as response:
             assert not response.is_closed
@@ -1204,103 +6029,131 @@ class TestAsyncWallets:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_update(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            await async_client.wallets.with_raw_response.update(
+            await async_client.wallets.with_raw_response._update(
                 wallet_id="",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_list(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.list()
-        assert_matches_type(AsyncCursor[Wallet], wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_list_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.list(
-            chain_type="solana",
-            cursor="x",
-            limit=100,
+    async def test_method_archive(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets.archive(
+            "wallet_id",
         )
-        assert_matches_type(AsyncCursor[Wallet], wallet, path=["response"])
+        assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_raw_response_list(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.list()
+    async def test_raw_response_archive(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response.archive(
+            "wallet_id",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         wallet = await response.parse()
-        assert_matches_type(AsyncCursor[Wallet], wallet, path=["response"])
+        assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_streaming_response_list(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.list() as response:
+    async def test_streaming_response_archive(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response.archive(
+            "wallet_id",
+        ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             wallet = await response.parse()
-            assert_matches_type(AsyncCursor[Wallet], wallet, path=["response"])
+            assert_matches_type(Wallet, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_archive(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response.archive(
+                "",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_authenticate_with_jwt(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.warns(DeprecationWarning):
-            wallet = await async_client.wallets.authenticate_with_jwt(
-                user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
-            )
-
+        wallet = await async_client.wallets.authenticate_with_jwt(
+            encryption_type="HPKE",
+            recipient_public_key="DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1",
+            user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
+        )
         assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_authenticate_with_jwt_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.warns(DeprecationWarning):
-            wallet = await async_client.wallets.authenticate_with_jwt(
-                user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
-                encryption_type="HPKE",
-                recipient_public_key="DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1",
-            )
-
-        assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_authenticate_with_jwt(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.warns(DeprecationWarning):
-            response = await async_client.wallets.with_raw_response.authenticate_with_jwt(
-                user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
-            )
+        response = await async_client.wallets.with_raw_response.authenticate_with_jwt(
+            encryption_type="HPKE",
+            recipient_public_key="DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1",
+            user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
+        )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         wallet = await response.parse()
         assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_authenticate_with_jwt(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.warns(DeprecationWarning):
-            async with async_client.wallets.with_streaming_response.authenticate_with_jwt(
-                user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
-            ) as response:
-                assert not response.is_closed
-                assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        async with async_client.wallets.with_streaming_response.authenticate_with_jwt(
+            encryption_type="HPKE",
+            recipient_public_key="DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1",
+            user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
-                wallet = await response.parse()
-                assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
+            wallet = await response.parse()
+            assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_create_batch(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets.create_batch(
+            wallets=[{"chain_type": "ethereum"}, {"chain_type": "solana"}],
+        )
+        assert_matches_type(WalletBatchCreateResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_create_batch(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response.create_batch(
+            wallets=[{"chain_type": "ethereum"}, {"chain_type": "solana"}],
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletBatchCreateResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_create_batch(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response.create_batch(
+            wallets=[{"chain_type": "ethereum"}, {"chain_type": "solana"}],
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletBatchCreateResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_create_wallets_with_recovery(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.warns(DeprecationWarning):
@@ -1319,7 +6172,7 @@ class TestAsyncWallets:
 
         assert_matches_type(WalletCreateWalletsWithRecoveryResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_create_wallets_with_recovery(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.warns(DeprecationWarning):
@@ -1341,7 +6194,7 @@ class TestAsyncWallets:
         wallet = await response.parse()
         assert_matches_type(WalletCreateWalletsWithRecoveryResponse, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_create_wallets_with_recovery(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.warns(DeprecationWarning):
@@ -1365,19 +6218,28 @@ class TestAsyncWallets:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_method_get(self, async_client: AsyncPrivyAPI) -> None:
         wallet = await async_client.wallets.get(
-            "wallet_id",
+            wallet_id="wallet_id",
         )
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_get_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets.get(
+            wallet_id="wallet_id",
+            include_archived=True,
+        )
+        assert_matches_type(Wallet, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_raw_response_get(self, async_client: AsyncPrivyAPI) -> None:
         response = await async_client.wallets.with_raw_response.get(
-            "wallet_id",
+            wallet_id="wallet_id",
         )
 
         assert response.is_closed is True
@@ -1385,11 +6247,11 @@ class TestAsyncWallets:
         wallet = await response.parse()
         assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_get(self, async_client: AsyncPrivyAPI) -> None:
         async with async_client.wallets.with_streaming_response.get(
-            "wallet_id",
+            wallet_id="wallet_id",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -1399,770 +6261,53 @@ class TestAsyncWallets:
 
         assert cast(Any, response.is_closed) is True
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_path_params_get(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
             await async_client.wallets.with_raw_response.get(
-                "",
+                wallet_id="",
             )
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_rpc_overload_1(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="eth_signTransaction",
-            params={"transaction": {}},
+    async def test_method_get_wallet_by_address(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets.get_wallet_by_address(
+            address="0xF1DBff66C993EE895C8cb176c30b07A559d76496",
         )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+        assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_rpc_with_all_params_overload_1(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="eth_signTransaction",
-            params={
-                "transaction": {
-                    "chain_id": "string",
-                    "data": "data",
-                    "from": "from",
-                    "gas_limit": "string",
-                    "gas_price": "string",
-                    "max_fee_per_gas": "string",
-                    "max_priority_fee_per_gas": "string",
-                    "nonce": "string",
-                    "to": "to",
-                    "type": 0,
-                    "value": "string",
-                }
-            },
-            address="address",
-            chain_type="ethereum",
-            privy_authorization_signature="privy-authorization-signature",
-            privy_idempotency_key="privy-idempotency-key",
+    async def test_method_get_wallet_by_address_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets.get_wallet_by_address(
+            address="0xF1DBff66C993EE895C8cb176c30b07A559d76496",
+            include_archived=True,
         )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+        assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_raw_response_rpc_overload_1(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
-            method="eth_signTransaction",
-            params={"transaction": {}},
+    async def test_raw_response_get_wallet_by_address(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response.get_wallet_by_address(
+            address="0xF1DBff66C993EE895C8cb176c30b07A559d76496",
         )
 
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         wallet = await response.parse()
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+        assert_matches_type(Wallet, wallet, path=["response"])
 
-    @pytest.mark.skip()
+    @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_streaming_response_rpc_overload_1(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
-            method="eth_signTransaction",
-            params={"transaction": {}},
+    async def test_streaming_response_get_wallet_by_address(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response.get_wallet_by_address(
+            address="0xF1DBff66C993EE895C8cb176c30b07A559d76496",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             wallet = await response.parse()
-            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+            assert_matches_type(Wallet, wallet, path=["response"])
 
         assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_path_params_rpc_overload_1(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            await async_client.wallets.with_raw_response.rpc(
-                wallet_id="",
-                method="eth_signTransaction",
-                params={"transaction": {}},
-            )
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_overload_2(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            caip2="-l-f12-k:_--l__36_",
-            method="eth_sendTransaction",
-            params={"transaction": {}},
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_with_all_params_overload_2(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            caip2="-l-f12-k:_--l__36_",
-            method="eth_sendTransaction",
-            params={
-                "transaction": {
-                    "chain_id": "string",
-                    "data": "data",
-                    "from": "from",
-                    "gas_limit": "string",
-                    "gas_price": "string",
-                    "max_fee_per_gas": "string",
-                    "max_priority_fee_per_gas": "string",
-                    "nonce": "string",
-                    "to": "to",
-                    "type": 0,
-                    "value": "string",
-                }
-            },
-            address="address",
-            chain_type="ethereum",
-            privy_authorization_signature="privy-authorization-signature",
-            privy_idempotency_key="privy-idempotency-key",
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_rpc_overload_2(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
-            caip2="-l-f12-k:_--l__36_",
-            method="eth_sendTransaction",
-            params={"transaction": {}},
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = await response.parse()
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_rpc_overload_2(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
-            caip2="-l-f12-k:_--l__36_",
-            method="eth_sendTransaction",
-            params={"transaction": {}},
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            wallet = await response.parse()
-            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_path_params_rpc_overload_2(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            await async_client.wallets.with_raw_response.rpc(
-                wallet_id="",
-                caip2="-l-f12-k:_--l__36_",
-                method="eth_sendTransaction",
-                params={"transaction": {}},
-            )
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_overload_3(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="personal_sign",
-            params={
-                "encoding": "utf-8",
-                "message": "message",
-            },
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_with_all_params_overload_3(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="personal_sign",
-            params={
-                "encoding": "utf-8",
-                "message": "message",
-            },
-            address="address",
-            chain_type="ethereum",
-            privy_authorization_signature="privy-authorization-signature",
-            privy_idempotency_key="privy-idempotency-key",
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_rpc_overload_3(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
-            method="personal_sign",
-            params={
-                "encoding": "utf-8",
-                "message": "message",
-            },
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = await response.parse()
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_rpc_overload_3(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
-            method="personal_sign",
-            params={
-                "encoding": "utf-8",
-                "message": "message",
-            },
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            wallet = await response.parse()
-            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_path_params_rpc_overload_3(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            await async_client.wallets.with_raw_response.rpc(
-                wallet_id="",
-                method="personal_sign",
-                params={
-                    "encoding": "utf-8",
-                    "message": "message",
-                },
-            )
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_overload_4(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="eth_signTypedData_v4",
-            params={
-                "typed_data": {
-                    "domain": {"foo": "bar"},
-                    "message": {"foo": "bar"},
-                    "primary_type": "primary_type",
-                    "types": {
-                        "foo": [
-                            {
-                                "name": "name",
-                                "type": "type",
-                            }
-                        ]
-                    },
-                }
-            },
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_with_all_params_overload_4(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="eth_signTypedData_v4",
-            params={
-                "typed_data": {
-                    "domain": {"foo": "bar"},
-                    "message": {"foo": "bar"},
-                    "primary_type": "primary_type",
-                    "types": {
-                        "foo": [
-                            {
-                                "name": "name",
-                                "type": "type",
-                            }
-                        ]
-                    },
-                }
-            },
-            address="address",
-            chain_type="ethereum",
-            privy_authorization_signature="privy-authorization-signature",
-            privy_idempotency_key="privy-idempotency-key",
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_rpc_overload_4(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
-            method="eth_signTypedData_v4",
-            params={
-                "typed_data": {
-                    "domain": {"foo": "bar"},
-                    "message": {"foo": "bar"},
-                    "primary_type": "primary_type",
-                    "types": {
-                        "foo": [
-                            {
-                                "name": "name",
-                                "type": "type",
-                            }
-                        ]
-                    },
-                }
-            },
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = await response.parse()
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_rpc_overload_4(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
-            method="eth_signTypedData_v4",
-            params={
-                "typed_data": {
-                    "domain": {"foo": "bar"},
-                    "message": {"foo": "bar"},
-                    "primary_type": "primary_type",
-                    "types": {
-                        "foo": [
-                            {
-                                "name": "name",
-                                "type": "type",
-                            }
-                        ]
-                    },
-                }
-            },
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            wallet = await response.parse()
-            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_path_params_rpc_overload_4(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            await async_client.wallets.with_raw_response.rpc(
-                wallet_id="",
-                method="eth_signTypedData_v4",
-                params={
-                    "typed_data": {
-                        "domain": {"foo": "bar"},
-                        "message": {"foo": "bar"},
-                        "primary_type": "primary_type",
-                        "types": {
-                            "foo": [
-                                {
-                                    "name": "name",
-                                    "type": "type",
-                                }
-                            ]
-                        },
-                    }
-                },
-            )
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_overload_5(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="eth_sign7702Authorization",
-            params={
-                "chain_id": "string",
-                "contract": "contract",
-            },
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_with_all_params_overload_5(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="eth_sign7702Authorization",
-            params={
-                "chain_id": "string",
-                "contract": "contract",
-                "nonce": "string",
-            },
-            address="address",
-            chain_type="ethereum",
-            privy_authorization_signature="privy-authorization-signature",
-            privy_idempotency_key="privy-idempotency-key",
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_rpc_overload_5(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
-            method="eth_sign7702Authorization",
-            params={
-                "chain_id": "string",
-                "contract": "contract",
-            },
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = await response.parse()
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_rpc_overload_5(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
-            method="eth_sign7702Authorization",
-            params={
-                "chain_id": "string",
-                "contract": "contract",
-            },
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            wallet = await response.parse()
-            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_path_params_rpc_overload_5(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            await async_client.wallets.with_raw_response.rpc(
-                wallet_id="",
-                method="eth_sign7702Authorization",
-                params={
-                    "chain_id": "string",
-                    "contract": "contract",
-                },
-            )
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_overload_6(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="secp256k1_sign",
-            params={"hash": "hash"},
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_with_all_params_overload_6(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="secp256k1_sign",
-            params={"hash": "hash"},
-            address="address",
-            chain_type="ethereum",
-            privy_authorization_signature="privy-authorization-signature",
-            privy_idempotency_key="privy-idempotency-key",
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_rpc_overload_6(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
-            method="secp256k1_sign",
-            params={"hash": "hash"},
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = await response.parse()
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_rpc_overload_6(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
-            method="secp256k1_sign",
-            params={"hash": "hash"},
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            wallet = await response.parse()
-            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_path_params_rpc_overload_6(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            await async_client.wallets.with_raw_response.rpc(
-                wallet_id="",
-                method="secp256k1_sign",
-                params={"hash": "hash"},
-            )
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_overload_7(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="signTransaction",
-            params={
-                "encoding": "base64",
-                "transaction": "transaction",
-            },
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_with_all_params_overload_7(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="signTransaction",
-            params={
-                "encoding": "base64",
-                "transaction": "transaction",
-            },
-            address="address",
-            chain_type="solana",
-            privy_authorization_signature="privy-authorization-signature",
-            privy_idempotency_key="privy-idempotency-key",
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_rpc_overload_7(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
-            method="signTransaction",
-            params={
-                "encoding": "base64",
-                "transaction": "transaction",
-            },
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = await response.parse()
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_rpc_overload_7(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
-            method="signTransaction",
-            params={
-                "encoding": "base64",
-                "transaction": "transaction",
-            },
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            wallet = await response.parse()
-            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_path_params_rpc_overload_7(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            await async_client.wallets.with_raw_response.rpc(
-                wallet_id="",
-                method="signTransaction",
-                params={
-                    "encoding": "base64",
-                    "transaction": "transaction",
-                },
-            )
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_overload_8(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            caip2="-l-f12-k:_--l__36_",
-            method="signAndSendTransaction",
-            params={
-                "encoding": "base64",
-                "transaction": "transaction",
-            },
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_with_all_params_overload_8(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            caip2="-l-f12-k:_--l__36_",
-            method="signAndSendTransaction",
-            params={
-                "encoding": "base64",
-                "transaction": "transaction",
-            },
-            address="address",
-            chain_type="solana",
-            privy_authorization_signature="privy-authorization-signature",
-            privy_idempotency_key="privy-idempotency-key",
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_rpc_overload_8(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
-            caip2="-l-f12-k:_--l__36_",
-            method="signAndSendTransaction",
-            params={
-                "encoding": "base64",
-                "transaction": "transaction",
-            },
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = await response.parse()
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_rpc_overload_8(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
-            caip2="-l-f12-k:_--l__36_",
-            method="signAndSendTransaction",
-            params={
-                "encoding": "base64",
-                "transaction": "transaction",
-            },
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            wallet = await response.parse()
-            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_path_params_rpc_overload_8(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            await async_client.wallets.with_raw_response.rpc(
-                wallet_id="",
-                caip2="-l-f12-k:_--l__36_",
-                method="signAndSendTransaction",
-                params={
-                    "encoding": "base64",
-                    "transaction": "transaction",
-                },
-            )
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_overload_9(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="signMessage",
-            params={
-                "encoding": "base64",
-                "message": "message",
-            },
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_method_rpc_with_all_params_overload_9(self, async_client: AsyncPrivyAPI) -> None:
-        wallet = await async_client.wallets.rpc(
-            wallet_id="wallet_id",
-            method="signMessage",
-            params={
-                "encoding": "base64",
-                "message": "message",
-            },
-            address="address",
-            chain_type="solana",
-            privy_authorization_signature="privy-authorization-signature",
-            privy_idempotency_key="privy-idempotency-key",
-        )
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_raw_response_rpc_overload_9(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.wallets.with_raw_response.rpc(
-            wallet_id="wallet_id",
-            method="signMessage",
-            params={
-                "encoding": "base64",
-                "message": "message",
-            },
-        )
-
-        assert response.is_closed is True
-        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-        wallet = await response.parse()
-        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_streaming_response_rpc_overload_9(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.wallets.with_streaming_response.rpc(
-            wallet_id="wallet_id",
-            method="signMessage",
-            params={
-                "encoding": "base64",
-                "message": "message",
-            },
-        ) as response:
-            assert not response.is_closed
-            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
-
-            wallet = await response.parse()
-            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
-
-        assert cast(Any, response.is_closed) is True
-
-    @pytest.mark.skip()
-    @parametrize
-    async def test_path_params_rpc_overload_9(self, async_client: AsyncPrivyAPI) -> None:
-        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
-            await async_client.wallets.with_raw_response.rpc(
-                wallet_id="",
-                method="signMessage",
-                params={
-                    "encoding": "base64",
-                    "message": "message",
-                },
-            )

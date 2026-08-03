@@ -1,10 +1,9 @@
-# Privy API Python library
+# Privy API Python API library
 
-> **⚠️ This SDK is not currently maintained.** It may contain bugs and will not receive updates at this time. A fully supported version is planned — check back soon. In the meantime, you can use the [REST API](https://docs.privy.io) directly.
+<!-- prettier-ignore -->
+[![PyPI version](https://img.shields.io/pypi/v/privy-client.svg?label=pypi%20(stable))](https://pypi.org/project/privy-client/)
 
-[![PyPI version](<https://img.shields.io/pypi/v/privy-client.svg?label=pypi%20(stable)>)](https://pypi.org/project/privy-client/)
-
-The Privy API Python library provides convenient access to the Privy REST API from any Python 3.8+
+The Privy API Python library provides convenient access to the Privy API REST API from any Python 3.9+
 application. The library includes type definitions for all request params and response fields,
 and offers both synchronous and asynchronous clients powered by [httpx](https://github.com/encode/httpx).
 
@@ -37,7 +36,7 @@ client = PrivyAPI(
 )
 
 wallet = client.wallets.get(
-    "wallet_id",
+    wallet_id="wallet_id",
 )
 print(wallet.id)
 ```
@@ -66,7 +65,7 @@ client = AsyncPrivyAPI(
 
 async def main() -> None:
     wallet = await client.wallets.get(
-        "wallet_id",
+        wallet_id="wallet_id",
     )
     print(wallet.id)
 
@@ -103,7 +102,7 @@ async def main() -> None:
         http_client=DefaultAioHttpClient(),
     ) as client:
         wallet = await client.wallets.get(
-            "wallet_id",
+            wallet_id="wallet_id",
         )
         print(wallet.id)
 
@@ -120,6 +119,69 @@ Nested request parameters are [TypedDicts](https://docs.python.org/3/library/typ
 
 Typed requests and responses provide autocomplete and documentation within your editor. If you would like to see type errors in VS Code to help catch bugs earlier, set `python.analysis.typeCheckingMode` to `basic`.
 
+## Pagination
+
+List methods in the Privy API API are paginated.
+
+This library provides auto-paginating iterators with each list response, so you do not have to request successive pages manually:
+
+```python
+from privy import PrivyAPI
+
+client = PrivyAPI()
+
+all_wallets = []
+# Automatically fetches more pages as needed.
+for wallet in client.wallets.list():
+    # Do something with wallet here
+    all_wallets.append(wallet)
+print(all_wallets)
+```
+
+Or, asynchronously:
+
+```python
+import asyncio
+from privy import AsyncPrivyAPI
+
+client = AsyncPrivyAPI()
+
+
+async def main() -> None:
+    all_wallets = []
+    # Iterate through items across all pages, issuing requests as needed.
+    async for wallet in client.wallets.list():
+        all_wallets.append(wallet)
+    print(all_wallets)
+
+
+asyncio.run(main())
+```
+
+Alternatively, you can use the `.has_next_page()`, `.next_page_info()`, or `.get_next_page()` methods for more granular control working with pages:
+
+```python
+first_page = await client.wallets.list()
+if first_page.has_next_page():
+    print(f"will fetch next page using these details: {first_page.next_page_info()}")
+    next_page = await first_page.get_next_page()
+    print(f"number of items we just fetched: {len(next_page.data)}")
+
+# Remove `await` for non-async usage.
+```
+
+Or just work directly with the returned data:
+
+```python
+first_page = await client.wallets.list()
+
+print(f"next page cursor: {first_page.next_cursor}")  # => "next page cursor: ..."
+for wallet in first_page.data:
+    print(wallet.id)
+
+# Remove `await` for non-async usage.
+```
+
 ## Nested params
 
 Nested parameters are dictionaries, typed using `TypedDict`, for example:
@@ -129,11 +191,14 @@ from privy import PrivyAPI
 
 client = PrivyAPI()
 
-wallet = client.wallets.update(
-    wallet_id="wallet_id",
-    owner={"public_key": "public_key"},
+wallet = client.wallets.create(
+    chain_type="ethereum",
+    entity={
+        "id": "x",
+        "type": "user",
+    },
 )
-print(wallet.owner)
+print(wallet.entity)
 ```
 
 ## Handling errors
@@ -153,7 +218,7 @@ client = PrivyAPI()
 
 try:
     client.wallets.get(
-        "wallet_id",
+        wallet_id="wallet_id",
     )
 except privy.APIConnectionError as e:
     print("The server could not be reached")
@@ -198,7 +263,7 @@ client = PrivyAPI(
 
 # Or, configure per-request:
 client.with_options(max_retries=5).wallets.get(
-    "wallet_id",
+    wallet_id="wallet_id",
 )
 ```
 
@@ -223,7 +288,7 @@ client = PrivyAPI(
 
 # Override per-request:
 client.with_options(timeout=5.0).wallets.get(
-    "wallet_id",
+    wallet_id="wallet_id",
 )
 ```
 
@@ -266,7 +331,7 @@ from privy import PrivyAPI
 
 client = PrivyAPI()
 response = client.wallets.with_raw_response.get(
-    "wallet_id",
+    wallet_id="wallet_id",
 )
 print(response.headers.get('X-My-Header'))
 
@@ -286,7 +351,7 @@ To stream the response body, use `.with_streaming_response` instead, which requi
 
 ```python
 with client.wallets.with_streaming_response.get(
-    "wallet_id",
+    wallet_id="wallet_id",
 ) as response:
     print(response.headers.get("X-My-Header"))
 
@@ -397,7 +462,7 @@ print(privy.__version__)
 
 ## Requirements
 
-Python 3.8 or higher.
+Python 3.9 or higher.
 
 ## Contributing
 

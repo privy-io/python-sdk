@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal
-
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._utils import maybe_transform, async_maybe_transform
+from ...types import FiatCurrency, OnrampProvider
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -18,6 +17,8 @@ from ..._response import (
 )
 from ...types.fiat import account_get_params, account_create_params
 from ..._base_client import make_request_options
+from ...types.fiat_currency import FiatCurrency
+from ...types.onramp_provider import OnrampProvider
 from ...types.fiat.account_get_response import AccountGetResponse
 from ...types.fiat.account_create_response import AccountCreateResponse
 
@@ -25,6 +26,8 @@ __all__ = ["AccountsResource", "AsyncAccountsResource"]
 
 
 class AccountsResource(SyncAPIResource):
+    """Operations related to fiat onramping and offramping"""
+
     @cached_property
     def with_raw_response(self) -> AccountsResourceWithRawResponse:
         """
@@ -49,21 +52,21 @@ class AccountsResource(SyncAPIResource):
         user_id: str,
         *,
         account_owner_name: str,
-        currency: Literal["usd", "eur"],
-        provider: Literal["bridge", "bridge-sandbox"],
-        account: account_create_params.Account | NotGiven = NOT_GIVEN,
-        address: account_create_params.Address | NotGiven = NOT_GIVEN,
-        bank_name: str | NotGiven = NOT_GIVEN,
-        first_name: str | NotGiven = NOT_GIVEN,
-        iban: account_create_params.Iban | NotGiven = NOT_GIVEN,
-        last_name: str | NotGiven = NOT_GIVEN,
-        swift: account_create_params.Swift | NotGiven = NOT_GIVEN,
+        currency: FiatCurrency,
+        provider: OnrampProvider,
+        account: account_create_params.Account | Omit = omit,
+        address: account_create_params.Address | Omit = omit,
+        bank_name: str | Omit = omit,
+        first_name: str | Omit = omit,
+        iban: account_create_params.Iban | Omit = omit,
+        last_name: str | Omit = omit,
+        swift: account_create_params.Swift | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AccountCreateResponse:
         """
         Sets up external bank account object for the user through the configured default
@@ -71,6 +74,10 @@ class AccountsResource(SyncAPIResource):
 
         Args:
           user_id: The ID of the user to create the fiat account for
+
+          currency: Supported fiat currencies.
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -83,7 +90,7 @@ class AccountsResource(SyncAPIResource):
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return self._post(
-            f"/v1/users/{user_id}/fiat/accounts",
+            path_template("/v1/users/{user_id}/fiat/accounts", user_id=user_id),
             body=maybe_transform(
                 {
                     "account_owner_name": account_owner_name,
@@ -109,19 +116,21 @@ class AccountsResource(SyncAPIResource):
         self,
         user_id: str,
         *,
-        provider: Literal["bridge", "bridge-sandbox"],
+        provider: OnrampProvider,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AccountGetResponse:
         """
         Returns the IDs of all external fiat accounts (used for offramping) for the user
 
         Args:
           user_id: The ID of the user to get fiat accounts for
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -134,7 +143,7 @@ class AccountsResource(SyncAPIResource):
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return self._get(
-            f"/v1/users/{user_id}/fiat/accounts",
+            path_template("/v1/users/{user_id}/fiat/accounts", user_id=user_id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -147,6 +156,8 @@ class AccountsResource(SyncAPIResource):
 
 
 class AsyncAccountsResource(AsyncAPIResource):
+    """Operations related to fiat onramping and offramping"""
+
     @cached_property
     def with_raw_response(self) -> AsyncAccountsResourceWithRawResponse:
         """
@@ -171,21 +182,21 @@ class AsyncAccountsResource(AsyncAPIResource):
         user_id: str,
         *,
         account_owner_name: str,
-        currency: Literal["usd", "eur"],
-        provider: Literal["bridge", "bridge-sandbox"],
-        account: account_create_params.Account | NotGiven = NOT_GIVEN,
-        address: account_create_params.Address | NotGiven = NOT_GIVEN,
-        bank_name: str | NotGiven = NOT_GIVEN,
-        first_name: str | NotGiven = NOT_GIVEN,
-        iban: account_create_params.Iban | NotGiven = NOT_GIVEN,
-        last_name: str | NotGiven = NOT_GIVEN,
-        swift: account_create_params.Swift | NotGiven = NOT_GIVEN,
+        currency: FiatCurrency,
+        provider: OnrampProvider,
+        account: account_create_params.Account | Omit = omit,
+        address: account_create_params.Address | Omit = omit,
+        bank_name: str | Omit = omit,
+        first_name: str | Omit = omit,
+        iban: account_create_params.Iban | Omit = omit,
+        last_name: str | Omit = omit,
+        swift: account_create_params.Swift | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AccountCreateResponse:
         """
         Sets up external bank account object for the user through the configured default
@@ -193,6 +204,10 @@ class AsyncAccountsResource(AsyncAPIResource):
 
         Args:
           user_id: The ID of the user to create the fiat account for
+
+          currency: Supported fiat currencies.
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -205,7 +220,7 @@ class AsyncAccountsResource(AsyncAPIResource):
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return await self._post(
-            f"/v1/users/{user_id}/fiat/accounts",
+            path_template("/v1/users/{user_id}/fiat/accounts", user_id=user_id),
             body=await async_maybe_transform(
                 {
                     "account_owner_name": account_owner_name,
@@ -231,19 +246,21 @@ class AsyncAccountsResource(AsyncAPIResource):
         self,
         user_id: str,
         *,
-        provider: Literal["bridge", "bridge-sandbox"],
+        provider: OnrampProvider,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> AccountGetResponse:
         """
         Returns the IDs of all external fiat accounts (used for offramping) for the user
 
         Args:
           user_id: The ID of the user to get fiat accounts for
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -256,7 +273,7 @@ class AsyncAccountsResource(AsyncAPIResource):
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return await self._get(
-            f"/v1/users/{user_id}/fiat/accounts",
+            path_template("/v1/users/{user_id}/fiat/accounts", user_id=user_id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,

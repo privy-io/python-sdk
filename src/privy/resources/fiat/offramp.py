@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal
-
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._utils import maybe_transform, async_maybe_transform
+from ...types import OnrampProvider
+from ..._types import Body, Query, Headers, NotGiven, not_given
+from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -18,12 +17,15 @@ from ..._response import (
 )
 from ...types.fiat import offramp_create_params
 from ..._base_client import make_request_options
-from ...types.fiat.offramp_create_response import OfframpCreateResponse
+from ...types.onramp_provider import OnrampProvider
+from ...types.offramp_response import OfframpResponse
 
 __all__ = ["OfframpResource", "AsyncOfframpResource"]
 
 
 class OfframpResource(SyncAPIResource):
+    """Operations related to fiat onramping and offramping"""
+
     @cached_property
     def with_raw_response(self) -> OfframpResourceWithRawResponse:
         """
@@ -49,20 +51,22 @@ class OfframpResource(SyncAPIResource):
         *,
         amount: str,
         destination: offramp_create_params.Destination,
-        provider: Literal["bridge", "bridge-sandbox"],
+        provider: OnrampProvider,
         source: offramp_create_params.Source,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> OfframpCreateResponse:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> OfframpResponse:
         """
         Triggers the offramp flow and gets the on-chain address to send funds to
 
         Args:
           user_id: The ID of the user initiating the offramp
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -75,7 +79,7 @@ class OfframpResource(SyncAPIResource):
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return self._post(
-            f"/v1/users/{user_id}/fiat/offramp",
+            path_template("/v1/users/{user_id}/fiat/offramp", user_id=user_id),
             body=maybe_transform(
                 {
                     "amount": amount,
@@ -88,11 +92,13 @@ class OfframpResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=OfframpCreateResponse,
+            cast_to=OfframpResponse,
         )
 
 
 class AsyncOfframpResource(AsyncAPIResource):
+    """Operations related to fiat onramping and offramping"""
+
     @cached_property
     def with_raw_response(self) -> AsyncOfframpResourceWithRawResponse:
         """
@@ -118,20 +124,22 @@ class AsyncOfframpResource(AsyncAPIResource):
         *,
         amount: str,
         destination: offramp_create_params.Destination,
-        provider: Literal["bridge", "bridge-sandbox"],
+        provider: OnrampProvider,
         source: offramp_create_params.Source,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> OfframpCreateResponse:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> OfframpResponse:
         """
         Triggers the offramp flow and gets the on-chain address to send funds to
 
         Args:
           user_id: The ID of the user initiating the offramp
+
+          provider: Valid set of onramp providers
 
           extra_headers: Send extra headers
 
@@ -144,7 +152,7 @@ class AsyncOfframpResource(AsyncAPIResource):
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
         return await self._post(
-            f"/v1/users/{user_id}/fiat/offramp",
+            path_template("/v1/users/{user_id}/fiat/offramp", user_id=user_id),
             body=await async_maybe_transform(
                 {
                     "amount": amount,
@@ -157,7 +165,7 @@ class AsyncOfframpResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=OfframpCreateResponse,
+            cast_to=OfframpResponse,
         )
 
 

@@ -1,17 +1,21 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import Dict, List
+from typing import Dict, List, Union
 from typing_extensions import Literal
 
 from ..._models import BaseModel
+from ..wallet_asset_chain_name_input import WalletAssetChainNameInput
 
 __all__ = ["BalanceGetResponse", "Balance"]
 
 
 class Balance(BaseModel):
-    asset: Literal["usdc", "eth", "pol", "sol"]
+    asset: Union[
+        Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "pathusd", "sol", "trx"], str
+    ]
 
-    chain: Literal["ethereum", "arbitrum", "base", "linea", "optimism", "polygon", "solana", "zksync_era"]
+    chain: WalletAssetChainNameInput
+    """Supported blockchain network names for wallet balance and transaction queries."""
 
     display_values: Dict[str, str]
 

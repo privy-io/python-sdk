@@ -4,47 +4,20 @@ from typing import List, Union, Optional
 from typing_extensions import Literal, TypeAlias
 
 from .._models import BaseModel
+from .onramp_transfer_status import OnrampTransferStatus
+from .onramp_deposit_instructions import OnrampDepositInstructions
+from .offramp_deposit_instructions import OfframpDepositInstructions
 
 __all__ = [
     "FiatGetStatusResponse",
     "Transaction",
     "TransactionUnionMember0",
-    "TransactionUnionMember0DepositInstructions",
     "TransactionUnionMember0Destination",
     "TransactionUnionMember0Receipt",
     "TransactionUnionMember1",
-    "TransactionUnionMember1DepositInstructions",
     "TransactionUnionMember1Destination",
     "TransactionUnionMember1Receipt",
 ]
-
-
-class TransactionUnionMember0DepositInstructions(BaseModel):
-    amount: str
-
-    currency: Literal["usd", "eur"]
-
-    payment_rail: Literal["sepa", "ach_push", "wire"]
-
-    account_holder_name: Optional[str] = None
-
-    bank_account_number: Optional[str] = None
-
-    bank_address: Optional[str] = None
-
-    bank_beneficiary_address: Optional[str] = None
-
-    bank_beneficiary_name: Optional[str] = None
-
-    bank_name: Optional[str] = None
-
-    bank_routing_number: Optional[str] = None
-
-    bic: Optional[str] = None
-
-    deposit_message: Optional[str] = None
-
-    iban: Optional[str] = None
 
 
 class TransactionUnionMember0Destination(BaseModel):
@@ -68,40 +41,19 @@ class TransactionUnionMember0(BaseModel):
 
     created_at: str
 
-    deposit_instructions: TransactionUnionMember0DepositInstructions
+    deposit_instructions: OnrampDepositInstructions
+    """Bank deposit instructions for an onramp transfer."""
 
     destination: TransactionUnionMember0Destination
 
     is_sandbox: bool
 
-    status: Literal[
-        "awaiting_funds",
-        "in_review",
-        "funds_received",
-        "payment_submitted",
-        "payment_processed",
-        "canceled",
-        "error",
-        "undeliverable",
-        "returned",
-        "refunded",
-    ]
+    status: OnrampTransferStatus
+    """Status of an onramp or offramp transfer."""
 
     type: Literal["onramp"]
 
     receipt: Optional[TransactionUnionMember0Receipt] = None
-
-
-class TransactionUnionMember1DepositInstructions(BaseModel):
-    amount: str
-
-    chain: Literal["ethereum", "base", "arbitrum", "polygon", "optimism"]
-
-    currency: Literal["usdc"]
-
-    from_address: str
-
-    to_address: str
 
 
 class TransactionUnionMember1Destination(BaseModel):
@@ -123,24 +75,15 @@ class TransactionUnionMember1(BaseModel):
 
     created_at: str
 
-    deposit_instructions: TransactionUnionMember1DepositInstructions
+    deposit_instructions: OfframpDepositInstructions
+    """Deposit instructions for an offramp transfer."""
 
     destination: TransactionUnionMember1Destination
 
     is_sandbox: bool
 
-    status: Literal[
-        "awaiting_funds",
-        "in_review",
-        "funds_received",
-        "payment_submitted",
-        "payment_processed",
-        "canceled",
-        "error",
-        "undeliverable",
-        "returned",
-        "refunded",
-    ]
+    status: OnrampTransferStatus
+    """Status of an onramp or offramp transfer."""
 
     type: Literal["offramp"]
 

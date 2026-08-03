@@ -1,0 +1,31 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from typing_extensions import Literal, TypeAlias
+
+__all__ = ["WalletAssetChainNameInput"]
+
+WalletAssetChainNameInput: TypeAlias = Literal[
+    "ethereum",
+    "arbitrum",
+    "avalanche",
+    "base",
+    "tempo",
+    "linea",
+    "optimism",
+    "polygon",
+    "bsc",
+    "solana",
+    "tron",
+    "zksync_era",
+    "hoodi",
+    "sepolia",
+    "arbitrum_sepolia",
+    "avalanche_fuji",
+    "base_sepolia",
+    "linea_testnet",
+    "optimism_sepolia",
+    "polygon_amoy",
+    "solana_devnet",
+    "solana_testnet",
+    "tron_nile",
+]

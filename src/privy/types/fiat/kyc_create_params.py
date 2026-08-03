@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Iterable
+from typing import Union, Iterable
 from typing_extensions import Literal, Required, TypeAlias, TypedDict
+
+from ..._types import SequenceNotStr
 
 __all__ = [
     "KYCCreateParams",
@@ -65,7 +67,7 @@ class Variant0DataResidentialAddress(TypedDict, total=False):
 class Variant0DataDocument(TypedDict, total=False):
     file: Required[str]
 
-    purposes: Required[List[str]]
+    purposes: Required[SequenceNotStr[str]]
 
     description: str
 
@@ -123,9 +125,11 @@ class Variant0Data(TypedDict, total=False):
 
     employment_status: str
 
-    endorsements: List[str]
+    endorsements: SequenceNotStr[str]
 
     expected_monthly_payments_usd: str
+
+    has_accepted_terms_of_service: bool
 
     has_signed_terms_of_service: bool
 
@@ -195,7 +199,7 @@ class Variant1DataResidentialAddress(TypedDict, total=False):
 class Variant1DataDocument(TypedDict, total=False):
     file: Required[str]
 
-    purposes: Required[List[str]]
+    purposes: Required[SequenceNotStr[str]]
 
     description: str
 
@@ -253,9 +257,11 @@ class Variant1Data(TypedDict, total=False):
 
     employment_status: str
 
-    endorsements: List[str]
+    endorsements: SequenceNotStr[str]
 
     expected_monthly_payments_usd: str
+
+    has_accepted_terms_of_service: bool
 
     has_signed_terms_of_service: bool
 

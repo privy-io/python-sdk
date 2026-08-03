@@ -5,14 +5,38 @@ from __future__ import annotations
 from typing import List, Union, Optional
 from typing_extensions import Literal, Required, TypedDict
 
+from ..._types import SequenceNotStr
+from ..wallet_asset import WalletAsset
+from ..transaction_chain_name_input import TransactionChainNameInput
+from ..transaction_token_address_input import TransactionTokenAddressInput
+
 __all__ = ["TransactionGetParams"]
 
 
 class TransactionGetParams(TypedDict, total=False):
-    asset: Required[Union[Literal["usdc", "eth", "pol", "sol"], List[Literal["usdc", "eth", "pol", "sol"]]]]
+    chain: Required[TransactionChainNameInput]
+    """Chains supported for transaction history queries."""
 
-    chain: Required[Literal["base"]]
+    token: Union[TransactionTokenAddressInput, SequenceNotStr[TransactionTokenAddressInput]]
+    """Exactly one of `token` or `asset` is required.
+
+    Cannot be used together with `asset`.
+    """
+
+    asset: Union[
+        Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "pathusd", "sol", "trx"],
+        List[WalletAsset],
+    ]
+    """Exactly one of `asset` or `token` is required.
+
+    Cannot be used together with `token`.
+    """
 
     cursor: str
 
+    include_archived: bool
+    """Include archived wallets in lookup. Defaults to false."""
+
     limit: Optional[float]
+
+    tx_hash: str

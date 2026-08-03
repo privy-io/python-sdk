@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal, Required, TypedDict
+from typing_extensions import Required, TypedDict
+
+from ..onramp_provider import OnrampProvider
 
 __all__ = ["KYCGetParams"]
 
 
 class KYCGetParams(TypedDict, total=False):
-    provider: Required[Literal["bridge", "bridge-sandbox"]]
+    provider: Required[OnrampProvider]
+    """Valid set of onramp providers"""

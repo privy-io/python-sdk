@@ -7,9 +7,18 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import policy_create_params, policy_update_params
-from .._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from .._utils import maybe_transform, strip_not_given, async_maybe_transform
+from ..types import (
+    OwnerIDInput,
+    PolicyAction,
+    PolicyMethod,
+    WalletChainType,
+    policy_create_params,
+    policy_update_params,
+    policy_create_rule_params,
+    policy_update_rule_params,
+)
+from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from .._utils import path_template, maybe_transform, strip_not_given, async_maybe_transform
 from .._compat import cached_property
 from .._resource import SyncAPIResource, AsyncAPIResource
 from .._response import (
@@ -20,12 +29,22 @@ from .._response import (
 )
 from .._base_client import make_request_options
 from ..types.policy import Policy
-from ..types.policy_delete_response import PolicyDeleteResponse
+from ..types.policy_action import PolicyAction
+from ..types.policy_method import PolicyMethod
+from ..types.owner_id_input import OwnerIDInput
+from ..types.success_response import SuccessResponse
+from ..types.owner_input_param import OwnerInputParam
+from ..types.wallet_chain_type import WalletChainType
+from ..types.policy_rule_response import PolicyRuleResponse
+from ..types.policy_condition_param import PolicyConditionParam
+from ..types.policy_rule_request_body_param import PolicyRuleRequestBodyParam
 
 __all__ = ["PoliciesResource", "AsyncPoliciesResource"]
 
 
 class PoliciesResource(SyncAPIResource):
+    """Operations related to policies"""
+
     @cached_property
     def with_raw_response(self) -> PoliciesResourceWithRawResponse:
         """
@@ -48,40 +67,38 @@ class PoliciesResource(SyncAPIResource):
     def create(
         self,
         *,
-        chain_type: Literal["ethereum", "solana"],
+        chain_type: WalletChainType,
         name: str,
         rules: Iterable[policy_create_params.Rule],
         version: Literal["1.0"],
-        owner: Optional[policy_create_params.Owner] | NotGiven = NOT_GIVEN,
-        owner_id: Optional[str] | NotGiven = NOT_GIVEN,
-        privy_authorization_signature: str | NotGiven = NOT_GIVEN,
+        owner: Optional[OwnerInputParam] | Omit = omit,
+        owner_id: Optional[OwnerIDInput] | Omit = omit,
+        privy_idempotency_key: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Policy:
         """
         Create a new policy.
 
         Args:
-          chain_type: Chain type the policy applies to.
+          chain_type: The wallet chain types.
 
           name: Name to assign to policy.
 
-          rules: The rules that apply to each method the policy covers.
-
           version: Version of the policy. Currently, 1.0 is the only version.
 
-          owner: The pem-formatted, P-256 public key of the owner of the policy. If you provide
-              this, do not specify an owner_id as it will be generated automatically.
+          owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+              null to remove the current owner.
 
-          owner_id: The key quorum ID to set as the owner of the policy. If you provide this, do not
-              specify an owner.
+          owner_id: The key quorum ID to set as the owner of the resource. If you provide this, do
+              not specify an owner.
 
-          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
-              should be comma separated.
+          privy_idempotency_key: Idempotency keys ensure API requests are executed only once within a 24-hour
+              window.
 
           extra_headers: Send extra headers
 
@@ -91,10 +108,7 @@ class PoliciesResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {
-            **strip_not_given({"privy-authorization-signature": privy_authorization_signature}),
-            **(extra_headers or {}),
-        }
+        extra_headers = {**strip_not_given({"privy-idempotency-key": privy_idempotency_key}), **(extra_headers or {})}
         return self._post(
             "/v1/policies",
             body=maybe_transform(
@@ -114,38 +128,36 @@ class PoliciesResource(SyncAPIResource):
             cast_to=Policy,
         )
 
-    def update(
+    def _create_rule(
         self,
         policy_id: str,
         *,
-        name: str | NotGiven = NOT_GIVEN,
-        owner: Optional[policy_update_params.Owner] | NotGiven = NOT_GIVEN,
-        owner_id: Optional[str] | NotGiven = NOT_GIVEN,
-        rules: Iterable[policy_update_params.Rule] | NotGiven = NOT_GIVEN,
-        privy_authorization_signature: str | NotGiven = NOT_GIVEN,
+        action: PolicyAction,
+        conditions: Iterable[PolicyConditionParam],
+        method: PolicyMethod,
+        name: str,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Policy:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> PolicyRuleResponse:
         """
-        Update a policy by policy ID.
+        Create a new rule for a policy.
 
         Args:
-          name: Name to assign to policy.
+          action: The action to take when a policy rule matches.
 
-          owner: The P-256 public key of the owner of the policy. If you provide this, do not
-              specify an owner_id as it will be generated automatically.
-
-          owner_id: The key quorum ID to set as the owner of the policy. If you provide this, do not
-              specify an owner.
-
-          rules: The rules that apply to each method the policy covers.
+          method: Method the rule applies to.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
 
           extra_headers: Send extra headers
 
@@ -158,11 +170,190 @@ class PoliciesResource(SyncAPIResource):
         if not policy_id:
             raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
         extra_headers = {
-            **strip_not_given({"privy-authorization-signature": privy_authorization_signature}),
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
+            **(extra_headers or {}),
+        }
+        return self._post(
+            path_template("/v1/policies/{policy_id}/rules", policy_id=policy_id),
+            body=maybe_transform(
+                {
+                    "action": action,
+                    "conditions": conditions,
+                    "method": method,
+                    "name": name,
+                },
+                policy_create_rule_params.PolicyCreateRuleParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=PolicyRuleResponse,
+        )
+
+    def _delete(
+        self,
+        policy_id: str,
+        *,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
+        """
+        Delete a policy by policy ID.
+
+        Args:
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not policy_id:
+            raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
+            **(extra_headers or {}),
+        }
+        return self._delete(
+            path_template("/v1/policies/{policy_id}", policy_id=policy_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SuccessResponse,
+        )
+
+    def _delete_rule(
+        self,
+        rule_id: str,
+        *,
+        policy_id: str,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
+        """
+        Delete a rule by policy ID and rule ID.
+
+        Args:
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not policy_id:
+            raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        if not rule_id:
+            raise ValueError(f"Expected a non-empty value for `rule_id` but received {rule_id!r}")
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
+            **(extra_headers or {}),
+        }
+        return self._delete(
+            path_template("/v1/policies/{policy_id}/rules/{rule_id}", policy_id=policy_id, rule_id=rule_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SuccessResponse,
+        )
+
+    def _update(
+        self,
+        policy_id: str,
+        *,
+        name: str | Omit = omit,
+        owner: Optional[OwnerInputParam] | Omit = omit,
+        owner_id: Optional[OwnerIDInput] | Omit = omit,
+        rules: Iterable[PolicyRuleRequestBodyParam] | Omit = omit,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Policy:
+        """
+        Update a policy by policy ID.
+
+        Args:
+          name: Name to assign to policy.
+
+          owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+              null to remove the current owner.
+
+          owner_id: The key quorum ID to set as the owner of the resource. If you provide this, do
+              not specify an owner.
+
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not policy_id:
+            raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
             **(extra_headers or {}),
         }
         return self._patch(
-            f"/v1/policies/{policy_id}",
+            path_template("/v1/policies/{policy_id}", policy_id=policy_id),
             body=maybe_transform(
                 {
                     "name": name,
@@ -178,24 +369,37 @@ class PoliciesResource(SyncAPIResource):
             cast_to=Policy,
         )
 
-    def delete(
+    def _update_rule(
         self,
-        policy_id: str,
+        rule_id: str,
         *,
-        privy_authorization_signature: str | NotGiven = NOT_GIVEN,
+        policy_id: str,
+        action: PolicyAction,
+        conditions: Iterable[PolicyConditionParam],
+        method: PolicyMethod,
+        name: str,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PolicyDeleteResponse:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> PolicyRuleResponse:
         """
-        Delete a policy by policy ID.
+        Update a rule by policy ID and rule ID.
 
         Args:
+          action: The action to take when a policy rule matches.
+
+          method: Method the rule applies to.
+
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
 
           extra_headers: Send extra headers
 
@@ -207,16 +411,32 @@ class PoliciesResource(SyncAPIResource):
         """
         if not policy_id:
             raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        if not rule_id:
+            raise ValueError(f"Expected a non-empty value for `rule_id` but received {rule_id!r}")
         extra_headers = {
-            **strip_not_given({"privy-authorization-signature": privy_authorization_signature}),
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
             **(extra_headers or {}),
         }
-        return self._delete(
-            f"/v1/policies/{policy_id}",
+        return self._patch(
+            path_template("/v1/policies/{policy_id}/rules/{rule_id}", policy_id=policy_id, rule_id=rule_id),
+            body=maybe_transform(
+                {
+                    "action": action,
+                    "conditions": conditions,
+                    "method": method,
+                    "name": name,
+                },
+                policy_update_rule_params.PolicyUpdateRuleParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PolicyDeleteResponse,
+            cast_to=PolicyRuleResponse,
         )
 
     def get(
@@ -228,7 +448,7 @@ class PoliciesResource(SyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Policy:
         """
         Get a policy by policy ID.
@@ -245,15 +465,53 @@ class PoliciesResource(SyncAPIResource):
         if not policy_id:
             raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
         return self._get(
-            f"/v1/policies/{policy_id}",
+            path_template("/v1/policies/{policy_id}", policy_id=policy_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=Policy,
         )
 
+    def get_rule(
+        self,
+        rule_id: str,
+        *,
+        policy_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> PolicyRuleResponse:
+        """
+        Get a rule by policy ID and rule ID.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not policy_id:
+            raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        if not rule_id:
+            raise ValueError(f"Expected a non-empty value for `rule_id` but received {rule_id!r}")
+        return self._get(
+            path_template("/v1/policies/{policy_id}/rules/{rule_id}", policy_id=policy_id, rule_id=rule_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=PolicyRuleResponse,
+        )
+
 
 class AsyncPoliciesResource(AsyncAPIResource):
+    """Operations related to policies"""
+
     @cached_property
     def with_raw_response(self) -> AsyncPoliciesResourceWithRawResponse:
         """
@@ -276,40 +534,38 @@ class AsyncPoliciesResource(AsyncAPIResource):
     async def create(
         self,
         *,
-        chain_type: Literal["ethereum", "solana"],
+        chain_type: WalletChainType,
         name: str,
         rules: Iterable[policy_create_params.Rule],
         version: Literal["1.0"],
-        owner: Optional[policy_create_params.Owner] | NotGiven = NOT_GIVEN,
-        owner_id: Optional[str] | NotGiven = NOT_GIVEN,
-        privy_authorization_signature: str | NotGiven = NOT_GIVEN,
+        owner: Optional[OwnerInputParam] | Omit = omit,
+        owner_id: Optional[OwnerIDInput] | Omit = omit,
+        privy_idempotency_key: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Policy:
         """
         Create a new policy.
 
         Args:
-          chain_type: Chain type the policy applies to.
+          chain_type: The wallet chain types.
 
           name: Name to assign to policy.
 
-          rules: The rules that apply to each method the policy covers.
-
           version: Version of the policy. Currently, 1.0 is the only version.
 
-          owner: The pem-formatted, P-256 public key of the owner of the policy. If you provide
-              this, do not specify an owner_id as it will be generated automatically.
+          owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+              null to remove the current owner.
 
-          owner_id: The key quorum ID to set as the owner of the policy. If you provide this, do not
-              specify an owner.
+          owner_id: The key quorum ID to set as the owner of the resource. If you provide this, do
+              not specify an owner.
 
-          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
-              should be comma separated.
+          privy_idempotency_key: Idempotency keys ensure API requests are executed only once within a 24-hour
+              window.
 
           extra_headers: Send extra headers
 
@@ -319,10 +575,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
-        extra_headers = {
-            **strip_not_given({"privy-authorization-signature": privy_authorization_signature}),
-            **(extra_headers or {}),
-        }
+        extra_headers = {**strip_not_given({"privy-idempotency-key": privy_idempotency_key}), **(extra_headers or {})}
         return await self._post(
             "/v1/policies",
             body=await async_maybe_transform(
@@ -342,38 +595,36 @@ class AsyncPoliciesResource(AsyncAPIResource):
             cast_to=Policy,
         )
 
-    async def update(
+    async def _create_rule(
         self,
         policy_id: str,
         *,
-        name: str | NotGiven = NOT_GIVEN,
-        owner: Optional[policy_update_params.Owner] | NotGiven = NOT_GIVEN,
-        owner_id: Optional[str] | NotGiven = NOT_GIVEN,
-        rules: Iterable[policy_update_params.Rule] | NotGiven = NOT_GIVEN,
-        privy_authorization_signature: str | NotGiven = NOT_GIVEN,
+        action: PolicyAction,
+        conditions: Iterable[PolicyConditionParam],
+        method: PolicyMethod,
+        name: str,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> Policy:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> PolicyRuleResponse:
         """
-        Update a policy by policy ID.
+        Create a new rule for a policy.
 
         Args:
-          name: Name to assign to policy.
+          action: The action to take when a policy rule matches.
 
-          owner: The P-256 public key of the owner of the policy. If you provide this, do not
-              specify an owner_id as it will be generated automatically.
-
-          owner_id: The key quorum ID to set as the owner of the policy. If you provide this, do not
-              specify an owner.
-
-          rules: The rules that apply to each method the policy covers.
+          method: Method the rule applies to.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
 
           extra_headers: Send extra headers
 
@@ -386,11 +637,190 @@ class AsyncPoliciesResource(AsyncAPIResource):
         if not policy_id:
             raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
         extra_headers = {
-            **strip_not_given({"privy-authorization-signature": privy_authorization_signature}),
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
+            **(extra_headers or {}),
+        }
+        return await self._post(
+            path_template("/v1/policies/{policy_id}/rules", policy_id=policy_id),
+            body=await async_maybe_transform(
+                {
+                    "action": action,
+                    "conditions": conditions,
+                    "method": method,
+                    "name": name,
+                },
+                policy_create_rule_params.PolicyCreateRuleParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=PolicyRuleResponse,
+        )
+
+    async def _delete(
+        self,
+        policy_id: str,
+        *,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
+        """
+        Delete a policy by policy ID.
+
+        Args:
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not policy_id:
+            raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
+            **(extra_headers or {}),
+        }
+        return await self._delete(
+            path_template("/v1/policies/{policy_id}", policy_id=policy_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SuccessResponse,
+        )
+
+    async def _delete_rule(
+        self,
+        rule_id: str,
+        *,
+        policy_id: str,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
+        """
+        Delete a rule by policy ID and rule ID.
+
+        Args:
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not policy_id:
+            raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        if not rule_id:
+            raise ValueError(f"Expected a non-empty value for `rule_id` but received {rule_id!r}")
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
+            **(extra_headers or {}),
+        }
+        return await self._delete(
+            path_template("/v1/policies/{policy_id}/rules/{rule_id}", policy_id=policy_id, rule_id=rule_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SuccessResponse,
+        )
+
+    async def _update(
+        self,
+        policy_id: str,
+        *,
+        name: str | Omit = omit,
+        owner: Optional[OwnerInputParam] | Omit = omit,
+        owner_id: Optional[OwnerIDInput] | Omit = omit,
+        rules: Iterable[PolicyRuleRequestBodyParam] | Omit = omit,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> Policy:
+        """
+        Update a policy by policy ID.
+
+        Args:
+          name: Name to assign to policy.
+
+          owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
+              null to remove the current owner.
+
+          owner_id: The key quorum ID to set as the owner of the resource. If you provide this, do
+              not specify an owner.
+
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not policy_id:
+            raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        extra_headers = {
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
             **(extra_headers or {}),
         }
         return await self._patch(
-            f"/v1/policies/{policy_id}",
+            path_template("/v1/policies/{policy_id}", policy_id=policy_id),
             body=await async_maybe_transform(
                 {
                     "name": name,
@@ -406,24 +836,37 @@ class AsyncPoliciesResource(AsyncAPIResource):
             cast_to=Policy,
         )
 
-    async def delete(
+    async def _update_rule(
         self,
-        policy_id: str,
+        rule_id: str,
         *,
-        privy_authorization_signature: str | NotGiven = NOT_GIVEN,
+        policy_id: str,
+        action: PolicyAction,
+        conditions: Iterable[PolicyConditionParam],
+        method: PolicyMethod,
+        name: str,
+        privy_authorization_signature: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
-    ) -> PolicyDeleteResponse:
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> PolicyRuleResponse:
         """
-        Delete a policy by policy ID.
+        Update a rule by policy ID and rule ID.
 
         Args:
+          action: The action to take when a policy rule matches.
+
+          method: Method the rule applies to.
+
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
 
           extra_headers: Send extra headers
 
@@ -435,16 +878,32 @@ class AsyncPoliciesResource(AsyncAPIResource):
         """
         if not policy_id:
             raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        if not rule_id:
+            raise ValueError(f"Expected a non-empty value for `rule_id` but received {rule_id!r}")
         extra_headers = {
-            **strip_not_given({"privy-authorization-signature": privy_authorization_signature}),
+            **strip_not_given(
+                {
+                    "privy-authorization-signature": privy_authorization_signature,
+                    "privy-request-expiry": privy_request_expiry,
+                }
+            ),
             **(extra_headers or {}),
         }
-        return await self._delete(
-            f"/v1/policies/{policy_id}",
+        return await self._patch(
+            path_template("/v1/policies/{policy_id}/rules/{rule_id}", policy_id=policy_id, rule_id=rule_id),
+            body=await async_maybe_transform(
+                {
+                    "action": action,
+                    "conditions": conditions,
+                    "method": method,
+                    "name": name,
+                },
+                policy_update_rule_params.PolicyUpdateRuleParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PolicyDeleteResponse,
+            cast_to=PolicyRuleResponse,
         )
 
     async def get(
@@ -456,7 +915,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> Policy:
         """
         Get a policy by policy ID.
@@ -473,11 +932,47 @@ class AsyncPoliciesResource(AsyncAPIResource):
         if not policy_id:
             raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
         return await self._get(
-            f"/v1/policies/{policy_id}",
+            path_template("/v1/policies/{policy_id}", policy_id=policy_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=Policy,
+        )
+
+    async def get_rule(
+        self,
+        rule_id: str,
+        *,
+        policy_id: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> PolicyRuleResponse:
+        """
+        Get a rule by policy ID and rule ID.
+
+        Args:
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not policy_id:
+            raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        if not rule_id:
+            raise ValueError(f"Expected a non-empty value for `rule_id` but received {rule_id!r}")
+        return await self._get(
+            path_template("/v1/policies/{policy_id}/rules/{rule_id}", policy_id=policy_id, rule_id=rule_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=PolicyRuleResponse,
         )
 
 
@@ -488,14 +983,26 @@ class PoliciesResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             policies.create,
         )
-        self.update = to_raw_response_wrapper(
-            policies.update,
+        self._create_rule = to_raw_response_wrapper(
+            policies._create_rule,
         )
-        self.delete = to_raw_response_wrapper(
-            policies.delete,
+        self._delete = to_raw_response_wrapper(
+            policies._delete,
+        )
+        self._delete_rule = to_raw_response_wrapper(
+            policies._delete_rule,
+        )
+        self._update = to_raw_response_wrapper(
+            policies._update,
+        )
+        self._update_rule = to_raw_response_wrapper(
+            policies._update_rule,
         )
         self.get = to_raw_response_wrapper(
             policies.get,
+        )
+        self.get_rule = to_raw_response_wrapper(
+            policies.get_rule,
         )
 
 
@@ -506,14 +1013,26 @@ class AsyncPoliciesResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             policies.create,
         )
-        self.update = async_to_raw_response_wrapper(
-            policies.update,
+        self._create_rule = async_to_raw_response_wrapper(
+            policies._create_rule,
         )
-        self.delete = async_to_raw_response_wrapper(
-            policies.delete,
+        self._delete = async_to_raw_response_wrapper(
+            policies._delete,
+        )
+        self._delete_rule = async_to_raw_response_wrapper(
+            policies._delete_rule,
+        )
+        self._update = async_to_raw_response_wrapper(
+            policies._update,
+        )
+        self._update_rule = async_to_raw_response_wrapper(
+            policies._update_rule,
         )
         self.get = async_to_raw_response_wrapper(
             policies.get,
+        )
+        self.get_rule = async_to_raw_response_wrapper(
+            policies.get_rule,
         )
 
 
@@ -524,14 +1043,26 @@ class PoliciesResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             policies.create,
         )
-        self.update = to_streamed_response_wrapper(
-            policies.update,
+        self._create_rule = to_streamed_response_wrapper(
+            policies._create_rule,
         )
-        self.delete = to_streamed_response_wrapper(
-            policies.delete,
+        self._delete = to_streamed_response_wrapper(
+            policies._delete,
+        )
+        self._delete_rule = to_streamed_response_wrapper(
+            policies._delete_rule,
+        )
+        self._update = to_streamed_response_wrapper(
+            policies._update,
+        )
+        self._update_rule = to_streamed_response_wrapper(
+            policies._update_rule,
         )
         self.get = to_streamed_response_wrapper(
             policies.get,
+        )
+        self.get_rule = to_streamed_response_wrapper(
+            policies.get_rule,
         )
 
 
@@ -542,12 +1073,24 @@ class AsyncPoliciesResourceWithStreamingResponse:
         self.create = async_to_streamed_response_wrapper(
             policies.create,
         )
-        self.update = async_to_streamed_response_wrapper(
-            policies.update,
+        self._create_rule = async_to_streamed_response_wrapper(
+            policies._create_rule,
         )
-        self.delete = async_to_streamed_response_wrapper(
-            policies.delete,
+        self._delete = async_to_streamed_response_wrapper(
+            policies._delete,
+        )
+        self._delete_rule = async_to_streamed_response_wrapper(
+            policies._delete_rule,
+        )
+        self._update = async_to_streamed_response_wrapper(
+            policies._update,
+        )
+        self._update_rule = async_to_streamed_response_wrapper(
+            policies._update_rule,
         )
         self.get = async_to_streamed_response_wrapper(
             policies.get,
+        )
+        self.get_rule = async_to_streamed_response_wrapper(
+            policies.get_rule,
         )

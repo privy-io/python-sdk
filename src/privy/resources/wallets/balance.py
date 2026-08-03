@@ -7,8 +7,8 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..._types import NOT_GIVEN, Body, Query, Headers, NotGiven
-from ..._utils import maybe_transform, async_maybe_transform
+from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
+from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
@@ -19,12 +19,16 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.wallets import balance_get_params
+from ...types.wallet_asset import WalletAsset
 from ...types.wallets.balance_get_response import BalanceGetResponse
+from ...types.wallet_asset_chain_name_input import WalletAssetChainNameInput
 
 __all__ = ["BalanceResource", "AsyncBalanceResource"]
 
 
 class BalanceResource(SyncAPIResource):
+    """Operations related to wallets"""
+
     @cached_property
     def with_raw_response(self) -> BalanceResourceWithRawResponse:
         """
@@ -48,24 +52,43 @@ class BalanceResource(SyncAPIResource):
         self,
         wallet_id: str,
         *,
-        asset: Union[Literal["usdc", "eth", "pol", "sol"], List[Literal["usdc", "eth", "pol", "sol"]]],
-        chain: Union[
-            Literal["ethereum", "arbitrum", "base", "linea", "optimism", "polygon", "solana", "zksync_era"],
-            List[Literal["ethereum", "arbitrum", "base", "linea", "optimism", "polygon", "solana", "zksync_era"]],
-        ],
-        include_currency: Literal["usd"] | NotGiven = NOT_GIVEN,
+        token: Union[str, SequenceNotStr[str]] | Omit = omit,
+        asset: Union[
+            Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "pathusd", "sol", "trx"],
+            List[WalletAsset],
+        ]
+        | Omit = omit,
+        chain: Union[WalletAssetChainNameInput, List[WalletAssetChainNameInput]] | Omit = omit,
+        include_archived: bool | Omit = omit,
+        include_currency: Literal["usd", "eur"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BalanceGetResponse:
         """
         Get the balance of a wallet by wallet ID.
 
         Args:
           wallet_id: ID of the wallet.
+
+          token: The token contract address(es) to query in format "chain:address" (e.g.,
+              "tempo:0x20c000000000000000000000b9537d11c60e8b50" or
+              "solana:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"). Cannot be used together
+              with `asset`/`chain` or with `include_currency`.
+
+          asset: Named asset(s) to query (e.g. `eth`, `usdc`). Use together with `chain` to scope
+              the query. Cannot be used with `token`.
+
+          chain: Chain(s) to query named assets on (e.g. `tempo`, `base`). Use together with
+              `asset`. Cannot be used with `token`.
+
+          include_archived: Include archived wallets in lookup. Defaults to false.
+
+          include_currency: If set, balances are converted to the specified fiat currency. Not supported
+              when `token` is provided.
 
           extra_headers: Send extra headers
 
@@ -78,7 +101,7 @@ class BalanceResource(SyncAPIResource):
         if not wallet_id:
             raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
         return self._get(
-            f"/v1/wallets/{wallet_id}/balance",
+            path_template("/v1/wallets/{wallet_id}/balance", wallet_id=wallet_id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -86,8 +109,10 @@ class BalanceResource(SyncAPIResource):
                 timeout=timeout,
                 query=maybe_transform(
                     {
+                        "token": token,
                         "asset": asset,
                         "chain": chain,
+                        "include_archived": include_archived,
                         "include_currency": include_currency,
                     },
                     balance_get_params.BalanceGetParams,
@@ -98,6 +123,8 @@ class BalanceResource(SyncAPIResource):
 
 
 class AsyncBalanceResource(AsyncAPIResource):
+    """Operations related to wallets"""
+
     @cached_property
     def with_raw_response(self) -> AsyncBalanceResourceWithRawResponse:
         """
@@ -121,24 +148,43 @@ class AsyncBalanceResource(AsyncAPIResource):
         self,
         wallet_id: str,
         *,
-        asset: Union[Literal["usdc", "eth", "pol", "sol"], List[Literal["usdc", "eth", "pol", "sol"]]],
-        chain: Union[
-            Literal["ethereum", "arbitrum", "base", "linea", "optimism", "polygon", "solana", "zksync_era"],
-            List[Literal["ethereum", "arbitrum", "base", "linea", "optimism", "polygon", "solana", "zksync_era"]],
-        ],
-        include_currency: Literal["usd"] | NotGiven = NOT_GIVEN,
+        token: Union[str, SequenceNotStr[str]] | Omit = omit,
+        asset: Union[
+            Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "pathusd", "sol", "trx"],
+            List[WalletAsset],
+        ]
+        | Omit = omit,
+        chain: Union[WalletAssetChainNameInput, List[WalletAssetChainNameInput]] | Omit = omit,
+        include_archived: bool | Omit = omit,
+        include_currency: Literal["usd", "eur"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
         extra_query: Query | None = None,
         extra_body: Body | None = None,
-        timeout: float | httpx.Timeout | None | NotGiven = NOT_GIVEN,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> BalanceGetResponse:
         """
         Get the balance of a wallet by wallet ID.
 
         Args:
           wallet_id: ID of the wallet.
+
+          token: The token contract address(es) to query in format "chain:address" (e.g.,
+              "tempo:0x20c000000000000000000000b9537d11c60e8b50" or
+              "solana:EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v"). Cannot be used together
+              with `asset`/`chain` or with `include_currency`.
+
+          asset: Named asset(s) to query (e.g. `eth`, `usdc`). Use together with `chain` to scope
+              the query. Cannot be used with `token`.
+
+          chain: Chain(s) to query named assets on (e.g. `tempo`, `base`). Use together with
+              `asset`. Cannot be used with `token`.
+
+          include_archived: Include archived wallets in lookup. Defaults to false.
+
+          include_currency: If set, balances are converted to the specified fiat currency. Not supported
+              when `token` is provided.
 
           extra_headers: Send extra headers
 
@@ -151,7 +197,7 @@ class AsyncBalanceResource(AsyncAPIResource):
         if not wallet_id:
             raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
         return await self._get(
-            f"/v1/wallets/{wallet_id}/balance",
+            path_template("/v1/wallets/{wallet_id}/balance", wallet_id=wallet_id),
             options=make_request_options(
                 extra_headers=extra_headers,
                 extra_query=extra_query,
@@ -159,8 +205,10 @@ class AsyncBalanceResource(AsyncAPIResource):
                 timeout=timeout,
                 query=await async_maybe_transform(
                     {
+                        "token": token,
                         "asset": asset,
                         "chain": chain,
+                        "include_archived": include_archived,
                         "include_currency": include_currency,
                     },
                     balance_get_params.BalanceGetParams,

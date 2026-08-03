@@ -1,0 +1,73 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from typing import List, Optional
+from datetime import datetime
+from typing_extensions import Literal
+
+from ..._models import BaseModel
+from .failure_reason import FailureReason
+from .wallet_action_step import WalletActionStep
+from .wallet_action_status import WalletActionStatus
+
+__all__ = ["EarnDepositActionResponse"]
+
+
+class EarnDepositActionResponse(BaseModel):
+    """Response for an earn deposit action."""
+
+    id: str
+    """The ID of the wallet action."""
+
+    asset_address: str
+    """Underlying asset token address."""
+
+    caip2: str
+    """CAIP-2 chain identifier."""
+
+    created_at: datetime
+    """ISO 8601 timestamp of when the wallet action was created."""
+
+    raw_amount: str
+    """Base-unit amount of asset deposited (e.g. "1500000")."""
+
+    share_amount: Optional[str] = None
+    """Vault shares received in base units. Populated after on-chain confirmation."""
+
+    status: WalletActionStatus
+    """Status of a wallet action."""
+
+    type: Literal["earn_deposit"]
+
+    vault_address: str
+    """ERC-4626 vault contract address."""
+
+    vault_id: str
+    """The vault ID."""
+
+    wallet_id: str
+    """The ID of the wallet involved in the action."""
+
+    amount: Optional[str] = None
+    """Human-readable decimal amount of asset deposited (e.g.
+
+    "1.5"). Only present when the token is known in the asset registry.
+    """
+
+    asset: Optional[str] = None
+    """Asset identifier (e.g.
+
+    "usdc", "eth"). Only present when the token is known in the asset registry.
+    """
+
+    decimals: Optional[int] = None
+    """Number of decimals for the underlying asset (e.g.
+
+    6 for USDC, 18 for ETH). Only present when the token is known in the asset
+    registry.
+    """
+
+    failure_reason: Optional[FailureReason] = None
+    """A description of why a wallet action (or a step within a wallet action) failed."""
+
+    steps: Optional[List[WalletActionStep]] = None
+    """The steps of the wallet action. Only returned if `?include=steps` is provided."""
