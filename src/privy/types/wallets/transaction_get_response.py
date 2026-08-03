@@ -1,6 +1,7 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from typing import List, Optional
+from typing_extensions import TypeAlias
 
 from ..._models import BaseModel
 from ..transaction_detail import TransactionDetail
@@ -9,10 +10,8 @@ from ..blockchain_transaction_status import BlockchainTransactionStatus
 __all__ = ["TransactionGetResponse", "Transaction", "TransactionDetails"]
 
 
-class TransactionDetails(TransactionDetail):
-    """Details of a wallet transaction, varying by transaction type."""
-
-    pass
+TransactionDetails: TypeAlias = TransactionDetail
+"""Details of a wallet transaction, varying by transaction type."""
 
 
 class Transaction(BaseModel):

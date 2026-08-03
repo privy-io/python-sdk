@@ -195,7 +195,7 @@ class PoliciesResource(SyncAPIResource):
             cast_to=PolicyRuleResponse,
         )
 
-    def _delete(
+    def _delete(  # type: ignore[override]
         self,
         policy_id: str,
         *,
@@ -237,7 +237,7 @@ class PoliciesResource(SyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return self._delete(
+        return self._client.delete(
             path_template("/v1/policies/{policy_id}", policy_id=policy_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -290,7 +290,7 @@ class PoliciesResource(SyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return self._delete(
+        return self._client.delete(
             path_template("/v1/policies/{policy_id}/rules/{rule_id}", policy_id=policy_id, rule_id=rule_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -662,7 +662,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
             cast_to=PolicyRuleResponse,
         )
 
-    async def _delete(
+    async def _delete(  # type: ignore[override]
         self,
         policy_id: str,
         *,
@@ -704,7 +704,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return await self._delete(
+        return await self._client.delete(
             path_template("/v1/policies/{policy_id}", policy_id=policy_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -757,7 +757,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return await self._delete(
+        return await self._client.delete(
             path_template("/v1/policies/{policy_id}/rules/{rule_id}", policy_id=policy_id, rule_id=rule_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout

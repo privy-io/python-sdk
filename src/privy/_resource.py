@@ -20,7 +20,8 @@ class SyncAPIResource:
         self._post = client.post
         self._patch = client.patch
         self._put = client.put
-        self._delete = client.delete
+        if "_delete" not in type(self).__dict__:
+            self._delete = client.delete
         self._get_api_list = client.get_api_list
 
     def _sleep(self, seconds: float) -> None:
@@ -36,7 +37,8 @@ class AsyncAPIResource:
         self._post = client.post
         self._patch = client.patch
         self._put = client.put
-        self._delete = client.delete
+        if "_delete" not in type(self).__dict__:
+            self._delete = client.delete
         self._get_api_list = client.get_api_list
 
     async def _sleep(self, seconds: float) -> None:

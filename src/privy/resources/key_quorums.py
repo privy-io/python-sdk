@@ -105,7 +105,7 @@ class KeyQuorumsResource(SyncAPIResource):
             cast_to=KeyQuorum,
         )
 
-    def _delete(
+    def _delete(  # type: ignore[override]
         self,
         key_quorum_id: KeyQuorumID,
         *,
@@ -149,7 +149,7 @@ class KeyQuorumsResource(SyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return self._delete(
+        return self._client.delete(
             path_template("/v1/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -354,7 +354,7 @@ class AsyncKeyQuorumsResource(AsyncAPIResource):
             cast_to=KeyQuorum,
         )
 
-    async def _delete(
+    async def _delete(  # type: ignore[override]
         self,
         key_quorum_id: KeyQuorumID,
         *,
@@ -398,7 +398,7 @@ class AsyncKeyQuorumsResource(AsyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return await self._delete(
+        return await self._client.delete(
             path_template("/v1/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
