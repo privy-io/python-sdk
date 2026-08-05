@@ -46,3 +46,6 @@ class LinkedAccountCurveSigningEmbeddedWallet(BaseModel):
     wallet_client_type: Literal["privy"]
 
     wallet_index: float
+
+    user_can_sign: Optional[bool] = None
+    """Whether the user can unilaterally sign with this wallet."""

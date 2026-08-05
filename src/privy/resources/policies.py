@@ -195,7 +195,7 @@ class PoliciesResource(SyncAPIResource):
             cast_to=PolicyRuleResponse,
         )
 
-    def _delete(  # type: ignore[override]
+    def _delete_policy(
         self,
         policy_id: str,
         *,
@@ -237,7 +237,7 @@ class PoliciesResource(SyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return self._client.delete(
+        return self._delete(
             path_template("/v1/policies/{policy_id}", policy_id=policy_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -290,7 +290,7 @@ class PoliciesResource(SyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return self._client.delete(
+        return self._delete(
             path_template("/v1/policies/{policy_id}/rules/{rule_id}", policy_id=policy_id, rule_id=rule_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -662,7 +662,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
             cast_to=PolicyRuleResponse,
         )
 
-    async def _delete(  # type: ignore[override]
+    async def _delete_policy(
         self,
         policy_id: str,
         *,
@@ -704,7 +704,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return await self._client.delete(
+        return await self._delete(
             path_template("/v1/policies/{policy_id}", policy_id=policy_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -757,7 +757,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return await self._client.delete(
+        return await self._delete(
             path_template("/v1/policies/{policy_id}/rules/{rule_id}", policy_id=policy_id, rule_id=rule_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -986,8 +986,8 @@ class PoliciesResourceWithRawResponse:
         self._create_rule = to_raw_response_wrapper(
             policies._create_rule,
         )
-        self._delete = to_raw_response_wrapper(
-            policies._delete,
+        self._delete_policy = to_raw_response_wrapper(
+            policies._delete_policy,
         )
         self._delete_rule = to_raw_response_wrapper(
             policies._delete_rule,
@@ -1016,8 +1016,8 @@ class AsyncPoliciesResourceWithRawResponse:
         self._create_rule = async_to_raw_response_wrapper(
             policies._create_rule,
         )
-        self._delete = async_to_raw_response_wrapper(
-            policies._delete,
+        self._delete_policy = async_to_raw_response_wrapper(
+            policies._delete_policy,
         )
         self._delete_rule = async_to_raw_response_wrapper(
             policies._delete_rule,
@@ -1046,8 +1046,8 @@ class PoliciesResourceWithStreamingResponse:
         self._create_rule = to_streamed_response_wrapper(
             policies._create_rule,
         )
-        self._delete = to_streamed_response_wrapper(
-            policies._delete,
+        self._delete_policy = to_streamed_response_wrapper(
+            policies._delete_policy,
         )
         self._delete_rule = to_streamed_response_wrapper(
             policies._delete_rule,
@@ -1076,8 +1076,8 @@ class AsyncPoliciesResourceWithStreamingResponse:
         self._create_rule = async_to_streamed_response_wrapper(
             policies._create_rule,
         )
-        self._delete = async_to_streamed_response_wrapper(
-            policies._delete,
+        self._delete_policy = async_to_streamed_response_wrapper(
+            policies._delete_policy,
         )
         self._delete_rule = async_to_streamed_response_wrapper(
             policies._delete_rule,

@@ -544,7 +544,7 @@ Methods:
 
 - <code title="post /v1/policies">client.policies.<a href="./src/privy/resources/policies.py">create</a>(\*\*<a href="src/privy/types/policy_create_params.py">params</a>) -> <a href="./src/privy/types/policy.py">Policy</a></code>
 - <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/privy/resources/policies.py">\_create_rule</a>(policy_id, \*\*<a href="src/privy/types/policy_create_rule_params.py">params</a>) -> <a href="./src/privy/types/policy_rule_response.py">PolicyRuleResponse</a></code>
-- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/privy/resources/policies.py">\_delete</a>(policy_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
+- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/privy/resources/policies.py">\_delete_policy</a>(policy_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
 - <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/privy/resources/policies.py">\_delete_rule</a>(rule_id, \*, policy_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
 - <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/privy/resources/policies.py">\_update</a>(policy_id, \*\*<a href="src/privy/types/policy_update_params.py">params</a>) -> <a href="./src/privy/types/policy.py">Policy</a></code>
 - <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/privy/resources/policies.py">\_update_rule</a>(rule_id, \*, policy_id, \*\*<a href="src/privy/types/policy_update_rule_params.py">params</a>) -> <a href="./src/privy/types/policy_rule_response.py">PolicyRuleResponse</a></code>
@@ -600,7 +600,7 @@ from privy.types import (
 Methods:
 
 - <code title="post /v1/key_quorums">client.key_quorums.<a href="./src/privy/resources/key_quorums.py">create</a>(\*\*<a href="src/privy/types/key_quorum_create_params.py">params</a>) -> <a href="./src/privy/types/key_quorum.py">KeyQuorum</a></code>
-- <code title="delete /v1/key_quorums/{key_quorum_id}">client.key_quorums.<a href="./src/privy/resources/key_quorums.py">\_delete</a>(key_quorum_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
+- <code title="delete /v1/key_quorums/{key_quorum_id}">client.key_quorums.<a href="./src/privy/resources/key_quorums.py">\_delete_key_quorum</a>(key_quorum_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
 - <code title="patch /v1/key_quorums/{key_quorum_id}">client.key_quorums.<a href="./src/privy/resources/key_quorums.py">\_update</a>(key_quorum_id, \*\*<a href="src/privy/types/key_quorum_update_params.py">params</a>) -> <a href="./src/privy/types/key_quorum.py">KeyQuorum</a></code>
 - <code title="get /v1/key_quorums/{key_quorum_id}">client.key_quorums.<a href="./src/privy/resources/key_quorums.py">get</a>(key_quorum_id) -> <a href="./src/privy/types/key_quorum.py">KeyQuorum</a></code>
 
@@ -714,73 +714,6 @@ Methods:
 - <code title="post /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/privy/resources/apps/allowlist.py">create</a>(app_id, \*\*<a href="src/privy/types/apps/allowlist_create_params.py">params</a>) -> <a href="./src/privy/types/allowlist_entry.py">AllowlistEntry</a></code>
 - <code title="get /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/privy/resources/apps/allowlist.py">list</a>(app_id) -> <a href="./src/privy/types/apps/allowlist_list_response.py">AllowlistListResponse</a></code>
 - <code title="delete /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/privy/resources/apps/allowlist.py">delete</a>(app_id, \*\*<a href="src/privy/types/apps/allowlist_delete_params.py">params</a>) -> <a href="./src/privy/types/allowlist_deletion_response.py">AllowlistDeletionResponse</a></code>
-
-# Fiat
-
-Types:
-
-```python
-from privy.types import (
-    FiatCurrency,
-    FiatPaymentRail,
-    OfframpDepositInstructions,
-    OfframpResponse,
-    OnrampAsset,
-    OnrampChain,
-    OnrampDepositInstructions,
-    OnrampKYCResponse,
-    OnrampKYCStatus,
-    OnrampResponse,
-    OnrampTransferStatus,
-    FiatGetKYCLinkResponse,
-    FiatGetStatusResponse,
-)
-```
-
-Methods:
-
-- <code title="post /v1/apps/{app_id}/fiat">client.fiat.<a href="./src/privy/resources/fiat/fiat.py">configure_app</a>(app_id, \*\*<a href="src/privy/types/fiat_configure_app_params.py">params</a>) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
-- <code title="post /v1/users/{user_id}/fiat/kyc_link">client.fiat.<a href="./src/privy/resources/fiat/fiat.py">get_kyc_link</a>(user_id, \*\*<a href="src/privy/types/fiat_get_kyc_link_params.py">params</a>) -> <a href="./src/privy/types/fiat_get_kyc_link_response.py">FiatGetKYCLinkResponse</a></code>
-- <code title="post /v1/users/{user_id}/fiat/status">client.fiat.<a href="./src/privy/resources/fiat/fiat.py">get_status</a>(user_id, \*\*<a href="src/privy/types/fiat_get_status_params.py">params</a>) -> <a href="./src/privy/types/fiat_get_status_response.py">FiatGetStatusResponse</a></code>
-
-## Accounts
-
-Types:
-
-```python
-from privy.types.fiat import AccountCreateResponse, AccountGetResponse
-```
-
-Methods:
-
-- <code title="post /v1/users/{user_id}/fiat/accounts">client.fiat.accounts.<a href="./src/privy/resources/fiat/accounts.py">create</a>(user_id, \*\*<a href="src/privy/types/fiat/account_create_params.py">params</a>) -> <a href="./src/privy/types/fiat/account_create_response.py">AccountCreateResponse</a></code>
-- <code title="get /v1/users/{user_id}/fiat/accounts">client.fiat.accounts.<a href="./src/privy/resources/fiat/accounts.py">get</a>(user_id, \*\*<a href="src/privy/types/fiat/account_get_params.py">params</a>) -> <a href="./src/privy/types/fiat/account_get_response.py">AccountGetResponse</a></code>
-
-## KYC
-
-Types:
-
-```python
-from privy.types.fiat import KYCGetResponse
-```
-
-Methods:
-
-- <code title="post /v1/users/{user_id}/fiat/kyc">client.fiat.kyc.<a href="./src/privy/resources/fiat/kyc.py">create</a>(user_id, \*\*<a href="src/privy/types/fiat/kyc_create_params.py">params</a>) -> <a href="./src/privy/types/onramp_kyc_response.py">OnrampKYCResponse</a></code>
-- <code title="patch /v1/users/{user_id}/fiat/kyc">client.fiat.kyc.<a href="./src/privy/resources/fiat/kyc.py">update</a>(user_id, \*\*<a href="src/privy/types/fiat/kyc_update_params.py">params</a>) -> <a href="./src/privy/types/onramp_kyc_response.py">OnrampKYCResponse</a></code>
-- <code title="get /v1/users/{user_id}/fiat/kyc">client.fiat.kyc.<a href="./src/privy/resources/fiat/kyc.py">get</a>(user_id, \*\*<a href="src/privy/types/fiat/kyc_get_params.py">params</a>) -> <a href="./src/privy/types/fiat/kyc_get_response.py">KYCGetResponse</a></code>
-
-## Onramp
-
-Methods:
-
-- <code title="post /v1/users/{user_id}/fiat/onramp">client.fiat.onramp.<a href="./src/privy/resources/fiat/onramp.py">create</a>(user_id, \*\*<a href="src/privy/types/fiat/onramp_create_params.py">params</a>) -> <a href="./src/privy/types/onramp_response.py">OnrampResponse</a></code>
-
-## Offramp
-
-Methods:
-
-- <code title="post /v1/users/{user_id}/fiat/offramp">client.fiat.offramp.<a href="./src/privy/resources/fiat/offramp.py">create</a>(user_id, \*\*<a href="src/privy/types/fiat/offramp_create_params.py">params</a>) -> <a href="./src/privy/types/offramp_response.py">OfframpResponse</a></code>
 
 # Webhooks
 
@@ -1315,6 +1248,26 @@ from privy.types import (
     EvmCaip2ChainID,
     VaultAsset,
     YieldAuthorizationHeaders,
+)
+```
+
+# Fiat
+
+Types:
+
+```python
+from privy.types import (
+    FiatCurrency,
+    FiatPaymentRail,
+    OfframpDepositInstructions,
+    OfframpResponse,
+    OnrampAsset,
+    OnrampChain,
+    OnrampDepositInstructions,
+    OnrampKYCResponse,
+    OnrampKYCStatus,
+    OnrampResponse,
+    OnrampTransferStatus,
 )
 ```
 

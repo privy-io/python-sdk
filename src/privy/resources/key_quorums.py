@@ -105,7 +105,7 @@ class KeyQuorumsResource(SyncAPIResource):
             cast_to=KeyQuorum,
         )
 
-    def _delete(  # type: ignore[override]
+    def _delete_key_quorum(
         self,
         key_quorum_id: KeyQuorumID,
         *,
@@ -149,7 +149,7 @@ class KeyQuorumsResource(SyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return self._client.delete(
+        return self._delete(
             path_template("/v1/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -354,7 +354,7 @@ class AsyncKeyQuorumsResource(AsyncAPIResource):
             cast_to=KeyQuorum,
         )
 
-    async def _delete(  # type: ignore[override]
+    async def _delete_key_quorum(
         self,
         key_quorum_id: KeyQuorumID,
         *,
@@ -398,7 +398,7 @@ class AsyncKeyQuorumsResource(AsyncAPIResource):
             ),
             **(extra_headers or {}),
         }
-        return await self._client.delete(
+        return await self._delete(
             path_template("/v1/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
@@ -528,8 +528,8 @@ class KeyQuorumsResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             key_quorums.create,
         )
-        self._delete = to_raw_response_wrapper(
-            key_quorums._delete,
+        self._delete_key_quorum = to_raw_response_wrapper(
+            key_quorums._delete_key_quorum,
         )
         self._update = to_raw_response_wrapper(
             key_quorums._update,
@@ -546,8 +546,8 @@ class AsyncKeyQuorumsResourceWithRawResponse:
         self.create = async_to_raw_response_wrapper(
             key_quorums.create,
         )
-        self._delete = async_to_raw_response_wrapper(
-            key_quorums._delete,
+        self._delete_key_quorum = async_to_raw_response_wrapper(
+            key_quorums._delete_key_quorum,
         )
         self._update = async_to_raw_response_wrapper(
             key_quorums._update,
@@ -564,8 +564,8 @@ class KeyQuorumsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             key_quorums.create,
         )
-        self._delete = to_streamed_response_wrapper(
-            key_quorums._delete,
+        self._delete_key_quorum = to_streamed_response_wrapper(
+            key_quorums._delete_key_quorum,
         )
         self._update = to_streamed_response_wrapper(
             key_quorums._update,
@@ -582,8 +582,8 @@ class AsyncKeyQuorumsResourceWithStreamingResponse:
         self.create = async_to_streamed_response_wrapper(
             key_quorums.create,
         )
-        self._delete = async_to_streamed_response_wrapper(
-            key_quorums._delete,
+        self._delete_key_quorum = async_to_streamed_response_wrapper(
+            key_quorums._delete_key_quorum,
         )
         self._update = async_to_streamed_response_wrapper(
             key_quorums._update,

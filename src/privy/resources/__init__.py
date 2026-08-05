@@ -8,14 +8,6 @@ from .apps import (
     AppsResourceWithStreamingResponse,
     AsyncAppsResourceWithStreamingResponse,
 )
-from .fiat import (
-    FiatResource,
-    AsyncFiatResource,
-    FiatResourceWithRawResponse,
-    AsyncFiatResourceWithRawResponse,
-    FiatResourceWithStreamingResponse,
-    AsyncFiatResourceWithStreamingResponse,
-)
 from .users import (
     UsersResource,
     AsyncUsersResource,
@@ -109,12 +101,6 @@ __all__ = [
     "AsyncAppsResourceWithRawResponse",
     "AppsResourceWithStreamingResponse",
     "AsyncAppsResourceWithStreamingResponse",
-    "FiatResource",
-    "AsyncFiatResource",
-    "FiatResourceWithRawResponse",
-    "AsyncFiatResourceWithRawResponse",
-    "FiatResourceWithStreamingResponse",
-    "AsyncFiatResourceWithStreamingResponse",
     "WebhooksResource",
     "AsyncWebhooksResource",
 ]

@@ -62,16 +62,16 @@ class TestKeyQuorums:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_delete(self, client: PrivyAPI) -> None:
-        key_quorum = client.key_quorums._delete(
+    def test_method_delete_key_quorum(self, client: PrivyAPI) -> None:
+        key_quorum = client.key_quorums._delete_key_quorum(
             key_quorum_id="string",
         )
         assert_matches_type(SuccessResponse, key_quorum, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_delete_with_all_params(self, client: PrivyAPI) -> None:
-        key_quorum = client.key_quorums._delete(
+    def test_method_delete_key_quorum_with_all_params(self, client: PrivyAPI) -> None:
+        key_quorum = client.key_quorums._delete_key_quorum(
             key_quorum_id="string",
             privy_authorization_signature="privy-authorization-signature",
             privy_request_expiry="privy-request-expiry",
@@ -80,8 +80,8 @@ class TestKeyQuorums:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_delete(self, client: PrivyAPI) -> None:
-        response = client.key_quorums.with_raw_response._delete(
+    def test_raw_response_delete_key_quorum(self, client: PrivyAPI) -> None:
+        response = client.key_quorums.with_raw_response._delete_key_quorum(
             key_quorum_id="string",
         )
 
@@ -92,8 +92,8 @@ class TestKeyQuorums:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_delete(self, client: PrivyAPI) -> None:
-        with client.key_quorums.with_streaming_response._delete(
+    def test_streaming_response_delete_key_quorum(self, client: PrivyAPI) -> None:
+        with client.key_quorums.with_streaming_response._delete_key_quorum(
             key_quorum_id="string",
         ) as response:
             assert not response.is_closed
@@ -106,9 +106,9 @@ class TestKeyQuorums:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_delete(self, client: PrivyAPI) -> None:
+    def test_path_params_delete_key_quorum(self, client: PrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `key_quorum_id` but received ''"):
-            client.key_quorums.with_raw_response._delete(
+            client.key_quorums.with_raw_response._delete_key_quorum(
                 key_quorum_id="",
             )
 
@@ -264,16 +264,16 @@ class TestAsyncKeyQuorums:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_delete(self, async_client: AsyncPrivyAPI) -> None:
-        key_quorum = await async_client.key_quorums._delete(
+    async def test_method_delete_key_quorum(self, async_client: AsyncPrivyAPI) -> None:
+        key_quorum = await async_client.key_quorums._delete_key_quorum(
             key_quorum_id="string",
         )
         assert_matches_type(SuccessResponse, key_quorum, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_delete_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
-        key_quorum = await async_client.key_quorums._delete(
+    async def test_method_delete_key_quorum_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        key_quorum = await async_client.key_quorums._delete_key_quorum(
             key_quorum_id="string",
             privy_authorization_signature="privy-authorization-signature",
             privy_request_expiry="privy-request-expiry",
@@ -282,8 +282,8 @@ class TestAsyncKeyQuorums:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_raw_response_delete(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.key_quorums.with_raw_response._delete(
+    async def test_raw_response_delete_key_quorum(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.key_quorums.with_raw_response._delete_key_quorum(
             key_quorum_id="string",
         )
 
@@ -294,8 +294,8 @@ class TestAsyncKeyQuorums:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_streaming_response_delete(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.key_quorums.with_streaming_response._delete(
+    async def test_streaming_response_delete_key_quorum(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.key_quorums.with_streaming_response._delete_key_quorum(
             key_quorum_id="string",
         ) as response:
             assert not response.is_closed
@@ -308,9 +308,9 @@ class TestAsyncKeyQuorums:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_path_params_delete(self, async_client: AsyncPrivyAPI) -> None:
+    async def test_path_params_delete_key_quorum(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `key_quorum_id` but received ''"):
-            await async_client.key_quorums.with_raw_response._delete(
+            await async_client.key_quorums.with_raw_response._delete_key_quorum(
                 key_quorum_id="",
             )
 

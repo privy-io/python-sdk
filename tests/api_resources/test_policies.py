@@ -244,16 +244,16 @@ class TestPolicies:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_delete(self, client: PrivyAPI) -> None:
-        policy = client.policies._delete(
+    def test_method_delete_policy(self, client: PrivyAPI) -> None:
+        policy = client.policies._delete_policy(
             policy_id="xxxxxxxxxxxxxxxxxxxxxxxx",
         )
         assert_matches_type(SuccessResponse, policy, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_method_delete_with_all_params(self, client: PrivyAPI) -> None:
-        policy = client.policies._delete(
+    def test_method_delete_policy_with_all_params(self, client: PrivyAPI) -> None:
+        policy = client.policies._delete_policy(
             policy_id="xxxxxxxxxxxxxxxxxxxxxxxx",
             privy_authorization_signature="privy-authorization-signature",
             privy_request_expiry="privy-request-expiry",
@@ -262,8 +262,8 @@ class TestPolicies:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_raw_response_delete(self, client: PrivyAPI) -> None:
-        response = client.policies.with_raw_response._delete(
+    def test_raw_response_delete_policy(self, client: PrivyAPI) -> None:
+        response = client.policies.with_raw_response._delete_policy(
             policy_id="xxxxxxxxxxxxxxxxxxxxxxxx",
         )
 
@@ -274,8 +274,8 @@ class TestPolicies:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_streaming_response_delete(self, client: PrivyAPI) -> None:
-        with client.policies.with_streaming_response._delete(
+    def test_streaming_response_delete_policy(self, client: PrivyAPI) -> None:
+        with client.policies.with_streaming_response._delete_policy(
             policy_id="xxxxxxxxxxxxxxxxxxxxxxxx",
         ) as response:
             assert not response.is_closed
@@ -288,9 +288,9 @@ class TestPolicies:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_delete(self, client: PrivyAPI) -> None:
+    def test_path_params_delete_policy(self, client: PrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `policy_id` but received ''"):
-            client.policies.with_raw_response._delete(
+            client.policies.with_raw_response._delete_policy(
                 policy_id="",
             )
 
@@ -879,16 +879,16 @@ class TestAsyncPolicies:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_delete(self, async_client: AsyncPrivyAPI) -> None:
-        policy = await async_client.policies._delete(
+    async def test_method_delete_policy(self, async_client: AsyncPrivyAPI) -> None:
+        policy = await async_client.policies._delete_policy(
             policy_id="xxxxxxxxxxxxxxxxxxxxxxxx",
         )
         assert_matches_type(SuccessResponse, policy, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_method_delete_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
-        policy = await async_client.policies._delete(
+    async def test_method_delete_policy_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        policy = await async_client.policies._delete_policy(
             policy_id="xxxxxxxxxxxxxxxxxxxxxxxx",
             privy_authorization_signature="privy-authorization-signature",
             privy_request_expiry="privy-request-expiry",
@@ -897,8 +897,8 @@ class TestAsyncPolicies:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_raw_response_delete(self, async_client: AsyncPrivyAPI) -> None:
-        response = await async_client.policies.with_raw_response._delete(
+    async def test_raw_response_delete_policy(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.policies.with_raw_response._delete_policy(
             policy_id="xxxxxxxxxxxxxxxxxxxxxxxx",
         )
 
@@ -909,8 +909,8 @@ class TestAsyncPolicies:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_streaming_response_delete(self, async_client: AsyncPrivyAPI) -> None:
-        async with async_client.policies.with_streaming_response._delete(
+    async def test_streaming_response_delete_policy(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.policies.with_streaming_response._delete_policy(
             policy_id="xxxxxxxxxxxxxxxxxxxxxxxx",
         ) as response:
             assert not response.is_closed
@@ -923,9 +923,9 @@ class TestAsyncPolicies:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_path_params_delete(self, async_client: AsyncPrivyAPI) -> None:
+    async def test_path_params_delete_policy(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `policy_id` but received ''"):
-            await async_client.policies.with_raw_response._delete(
+            await async_client.policies.with_raw_response._delete_policy(
                 policy_id="",
             )
 

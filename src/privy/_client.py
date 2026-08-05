@@ -36,13 +36,12 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import apps, fiat, users, intents, wallets, policies, key_quorums, transactions
+    from .resources import apps, users, intents, wallets, policies, key_quorums, transactions
     from .resources.users import UsersResource, AsyncUsersResource
     from .resources.intents import IntentsResource, AsyncIntentsResource
     from .resources.policies import PoliciesResource, AsyncPoliciesResource
     from .resources.webhooks import WebhooksResource, AsyncWebhooksResource
     from .resources.apps.apps import AppsResource, AsyncAppsResource
-    from .resources.fiat.fiat import FiatResource, AsyncFiatResource
     from .resources.key_quorums import KeyQuorumsResource, AsyncKeyQuorumsResource
     from .resources.transactions import TransactionsResource, AsyncTransactionsResource
     from .resources.wallets.wallets import WalletsResource, AsyncWalletsResource
@@ -212,13 +211,6 @@ class PrivyAPI(SyncAPIClient):
         from .resources.apps import AppsResource
 
         return AppsResource(self)
-
-    @cached_property
-    def fiat(self) -> FiatResource:
-        """Operations related to fiat onramping and offramping"""
-        from .resources.fiat import FiatResource
-
-        return FiatResource(self)
 
     @cached_property
     def webhooks(self) -> WebhooksResource:
@@ -494,13 +486,6 @@ class AsyncPrivyAPI(AsyncAPIClient):
         return AsyncAppsResource(self)
 
     @cached_property
-    def fiat(self) -> AsyncFiatResource:
-        """Operations related to fiat onramping and offramping"""
-        from .resources.fiat import AsyncFiatResource
-
-        return AsyncFiatResource(self)
-
-    @cached_property
     def webhooks(self) -> AsyncWebhooksResource:
         from .resources.webhooks import AsyncWebhooksResource
 
@@ -679,13 +664,6 @@ class PrivyAPIWithRawResponse:
 
         return AppsResourceWithRawResponse(self._client.apps)
 
-    @cached_property
-    def fiat(self) -> fiat.FiatResourceWithRawResponse:
-        """Operations related to fiat onramping and offramping"""
-        from .resources.fiat import FiatResourceWithRawResponse
-
-        return FiatResourceWithRawResponse(self._client.fiat)
-
 
 class AsyncPrivyAPIWithRawResponse:
     _client: AsyncPrivyAPI
@@ -740,13 +718,6 @@ class AsyncPrivyAPIWithRawResponse:
         from .resources.apps import AsyncAppsResourceWithRawResponse
 
         return AsyncAppsResourceWithRawResponse(self._client.apps)
-
-    @cached_property
-    def fiat(self) -> fiat.AsyncFiatResourceWithRawResponse:
-        """Operations related to fiat onramping and offramping"""
-        from .resources.fiat import AsyncFiatResourceWithRawResponse
-
-        return AsyncFiatResourceWithRawResponse(self._client.fiat)
 
 
 class PrivyAPIWithStreamedResponse:
@@ -803,13 +774,6 @@ class PrivyAPIWithStreamedResponse:
 
         return AppsResourceWithStreamingResponse(self._client.apps)
 
-    @cached_property
-    def fiat(self) -> fiat.FiatResourceWithStreamingResponse:
-        """Operations related to fiat onramping and offramping"""
-        from .resources.fiat import FiatResourceWithStreamingResponse
-
-        return FiatResourceWithStreamingResponse(self._client.fiat)
-
 
 class AsyncPrivyAPIWithStreamedResponse:
     _client: AsyncPrivyAPI
@@ -864,13 +828,6 @@ class AsyncPrivyAPIWithStreamedResponse:
         from .resources.apps import AsyncAppsResourceWithStreamingResponse
 
         return AsyncAppsResourceWithStreamingResponse(self._client.apps)
-
-    @cached_property
-    def fiat(self) -> fiat.AsyncFiatResourceWithStreamingResponse:
-        """Operations related to fiat onramping and offramping"""
-        from .resources.fiat import AsyncFiatResourceWithStreamingResponse
-
-        return AsyncFiatResourceWithStreamingResponse(self._client.fiat)
 
 
 Client = PrivyAPI
