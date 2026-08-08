@@ -378,6 +378,31 @@ Methods:
 - <code title="post /v1/wallets/{wallet_id}/swap">client.wallets.swap.<a href="./src/privy/resources/wallets/swap.py">execute</a>(wallet_id, \*\*<a href="src/privy/types/wallets/swap_execute_params.py">params</a>) -> <a href="./src/privy/types/wallets/swap_action_response.py">SwapActionResponse</a></code>
 - <code title="post /v1/wallets/{wallet_id}/swap/quote">client.wallets.swap.<a href="./src/privy/resources/wallets/swap.py">quote</a>(wallet_id, \*\*<a href="src/privy/types/wallets/swap_quote_params.py">params</a>) -> <a href="./src/privy/types/swap_quote_response.py">SwapQuoteResponse</a></code>
 
+# Cards
+
+Types:
+
+```python
+from privy.types import (
+    CardIssuingCardResponse,
+    CardIssuingCardsResponse,
+    CardIssuingCreateCardInput,
+    CardIssuingCustomerInput,
+    CardIssuingCustomerKYCRequiredResponse,
+    CardIssuingCustomerNotCreatedResponse,
+    CardIssuingCustomerPendingResponse,
+    CardIssuingCustomerReadyResponse,
+    CardIssuingCustomerResponse,
+    CardIssuingCustomerTermsRequiredResponse,
+    CardIssuingListCardsInput,
+    CardIssuingListTransactionsInput,
+    CardIssuingMerchant,
+    CardIssuingTransactionResponse,
+    CardIssuingTransactionStatus,
+    CardIssuingTransactionsResponse,
+)
+```
+
 # Users
 
 Types:
@@ -648,6 +673,7 @@ Methods:
 - <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/privy/resources/intents.py">create_policy_rule</a>(policy_id, \*\*<a href="src/privy/types/intent_create_policy_rule_params.py">params</a>) -> <a href="./src/privy/types/rule_mutate_intent_response.py">RuleMutateIntentResponse</a></code>
 - <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/privy/resources/intents.py">delete_policy_rule</a>(rule_id, \*, policy_id) -> <a href="./src/privy/types/rule_delete_intent_response.py">RuleDeleteIntentResponse</a></code>
 - <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/privy/resources/intents.py">get</a>(intent_id) -> <a href="./src/privy/types/intent_response.py">IntentResponse</a></code>
+- <code title="post /v1/intents/{intent_id}/reject">client.intents.<a href="./src/privy/resources/intents.py">reject</a>(intent_id) -> <a href="./src/privy/types/intent_response.py">IntentResponse</a></code>
 - <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/privy/resources/intents.py">rpc</a>(path_wallet_id, \*\*<a href="src/privy/types/intent_rpc_params.py">params</a>) -> <a href="./src/privy/types/rpc_intent_response.py">RpcIntentResponse</a></code>
 - <code title="post /v1/intents/wallets/{wallet_id}/transfer">client.intents.<a href="./src/privy/resources/intents.py">transfer</a>(wallet_id, \*\*<a href="src/privy/types/intent_transfer_params.py">params</a>) -> <a href="./src/privy/types/transfer_intent_response.py">TransferIntentResponse</a></code>
 - <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/privy/resources/intents.py">update_key_quorum</a>(key_quorum_id, \*\*<a href="src/privy/types/intent_update_key_quorum_params.py">params</a>) -> <a href="./src/privy/types/key_quorum_intent_response.py">KeyQuorumIntentResponse</a></code>
@@ -1080,6 +1106,7 @@ Types:
 from privy.types import (
     BitcoinAddress,
     CurrencyAmount,
+    Environment,
     EvmAddress,
     EvmChecksumAddress,
     HyperliquidTokenAddress,

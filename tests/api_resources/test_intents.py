@@ -283,6 +283,48 @@ class TestIntents:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
+    def test_method_reject(self, client: PrivyAPI) -> None:
+        intent = client.intents.reject(
+            "intent_id",
+        )
+        assert_matches_type(IntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_reject(self, client: PrivyAPI) -> None:
+        response = client.intents.with_raw_response.reject(
+            "intent_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        intent = response.parse()
+        assert_matches_type(IntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_reject(self, client: PrivyAPI) -> None:
+        with client.intents.with_streaming_response.reject(
+            "intent_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            intent = response.parse()
+            assert_matches_type(IntentResponse, intent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_reject(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `intent_id` but received ''"):
+            client.intents.with_raw_response.reject(
+                "",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
     def test_method_rpc_overload_1(self, client: PrivyAPI) -> None:
         intent = client.intents.rpc(
             path_wallet_id="wallet_id",
@@ -3181,6 +3223,48 @@ class TestAsyncIntents:
     async def test_path_params_get(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `intent_id` but received ''"):
             await async_client.intents.with_raw_response.get(
+                "",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_reject(self, async_client: AsyncPrivyAPI) -> None:
+        intent = await async_client.intents.reject(
+            "intent_id",
+        )
+        assert_matches_type(IntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_reject(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.intents.with_raw_response.reject(
+            "intent_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        intent = await response.parse()
+        assert_matches_type(IntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_reject(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.intents.with_streaming_response.reject(
+            "intent_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            intent = await response.parse()
+            assert_matches_type(IntentResponse, intent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_reject(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `intent_id` but received ''"):
+            await async_client.intents.with_raw_response.reject(
                 "",
             )
 

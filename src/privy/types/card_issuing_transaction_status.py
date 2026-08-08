@@ -2,6 +2,6 @@
 
 from typing_extensions import Literal, TypeAlias
 
-__all__ = ["EthereumEarnProvider"]
+__all__ = ["CardIssuingTransactionStatus"]
 
-EthereumEarnProvider: TypeAlias = Literal["morpho", "aave", "veda", "tempo"]
+CardIssuingTransactionStatus: TypeAlias = Literal["pending", "posted"]

@@ -20,6 +20,7 @@ from .key_quorum import KeyQuorum as KeyQuorum
 from .mfa_method import MfaMethod as MfaMethod
 from .tempo_call import TempoCall as TempoCall
 from .amount_type import AmountType as AmountType
+from .environment import Environment as Environment
 from .evm_address import EvmAddress as EvmAddress
 from .export_type import ExportType as ExportType
 from .fiat_amount import FiatAmount as FiatAmount
@@ -379,6 +380,7 @@ from .typed_data_domain_input_params import TypedDataDomainInputParams as TypedD
 from .wallet_import_supported_chains import WalletImportSupportedChains as WalletImportSupportedChains
 from .bridge_crypto_transfer_metadata import BridgeCryptoTransferMetadata as BridgeCryptoTransferMetadata
 from .bridge_transfer_refund_metadata import BridgeTransferRefundMetadata as BridgeTransferRefundMetadata
+from .card_issuing_transaction_status import CardIssuingTransactionStatus as CardIssuingTransactionStatus
 from .email_domain_invite_input_param import EmailDomainInviteInputParam as EmailDomainInviteInputParam
 from .embedded_wallet_create_on_login import EmbeddedWalletCreateOnLogin as EmbeddedWalletCreateOnLogin
 from .embedded_wallet_recovery_method import EmbeddedWalletRecoveryMethod as EmbeddedWalletRecoveryMethod

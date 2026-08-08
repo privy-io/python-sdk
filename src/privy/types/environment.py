@@ -2,6 +2,6 @@
 
 from typing_extensions import Literal, TypeAlias
 
-__all__ = ["EthereumEarnProvider"]
+__all__ = ["Environment"]
 
-EthereumEarnProvider: TypeAlias = Literal["morpho", "aave", "veda", "tempo"]
+Environment: TypeAlias = Literal["sandbox", "production"]

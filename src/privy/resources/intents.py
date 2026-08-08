@@ -331,6 +331,46 @@ class IntentsResource(SyncAPIResource):
             ),
         )
 
+    def reject(
+        self,
+        intent_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> IntentResponse:
+        """Reject a pending intent, preventing it from being executed.
+
+        Can be called by the
+        intent creator (via user token) or with the app secret.
+
+        Args:
+          intent_id: ID of the intent.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not intent_id:
+            raise ValueError(f"Expected a non-empty value for `intent_id` but received {intent_id!r}")
+        return cast(
+            IntentResponse,
+            self._post(
+                path_template("/v1/intents/{intent_id}/reject", intent_id=intent_id),
+                options=make_request_options(
+                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                ),
+                cast_to=cast(Any, IntentResponse),  # Union types cannot be passed in as arguments in the type system
+            ),
+        )
+
     @overload
     def rpc(
         self,
@@ -2111,6 +2151,46 @@ class AsyncIntentsResource(AsyncAPIResource):
             ),
         )
 
+    async def reject(
+        self,
+        intent_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> IntentResponse:
+        """Reject a pending intent, preventing it from being executed.
+
+        Can be called by the
+        intent creator (via user token) or with the app secret.
+
+        Args:
+          intent_id: ID of the intent.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not intent_id:
+            raise ValueError(f"Expected a non-empty value for `intent_id` but received {intent_id!r}")
+        return cast(
+            IntentResponse,
+            await self._post(
+                path_template("/v1/intents/{intent_id}/reject", intent_id=intent_id),
+                options=make_request_options(
+                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                ),
+                cast_to=cast(Any, IntentResponse),  # Union types cannot be passed in as arguments in the type system
+            ),
+        )
+
     @overload
     async def rpc(
         self,
@@ -3676,6 +3756,9 @@ class IntentsResourceWithRawResponse:
         self.get = to_raw_response_wrapper(
             intents.get,
         )
+        self.reject = to_raw_response_wrapper(
+            intents.reject,
+        )
         self.rpc = to_raw_response_wrapper(
             intents.rpc,
         )
@@ -3711,6 +3794,9 @@ class AsyncIntentsResourceWithRawResponse:
         )
         self.get = async_to_raw_response_wrapper(
             intents.get,
+        )
+        self.reject = async_to_raw_response_wrapper(
+            intents.reject,
         )
         self.rpc = async_to_raw_response_wrapper(
             intents.rpc,
@@ -3748,6 +3834,9 @@ class IntentsResourceWithStreamingResponse:
         self.get = to_streamed_response_wrapper(
             intents.get,
         )
+        self.reject = to_streamed_response_wrapper(
+            intents.reject,
+        )
         self.rpc = to_streamed_response_wrapper(
             intents.rpc,
         )
@@ -3783,6 +3872,9 @@ class AsyncIntentsResourceWithStreamingResponse:
         )
         self.get = async_to_streamed_response_wrapper(
             intents.get,
+        )
+        self.reject = async_to_streamed_response_wrapper(
+            intents.reject,
         )
         self.rpc = async_to_streamed_response_wrapper(
             intents.rpc,
