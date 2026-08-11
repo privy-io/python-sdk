@@ -787,6 +787,7 @@ from privy.types import (
     TransactionStillPendingWebhookPayload,
     UserAuthenticatedWebhookPayload,
     UserCreatedWebhookPayload,
+    UserDeletedWebhookPayload,
     UserLinkedAccountWebhookPayload,
     UserOperationCompletedWebhookPayload,
     UserReference,

@@ -7,6 +7,7 @@ from .._utils import PropertyInfo
 from .mfa_enabled_webhook_payload import MfaEnabledWebhookPayload
 from .mfa_disabled_webhook_payload import MfaDisabledWebhookPayload
 from .user_created_webhook_payload import UserCreatedWebhookPayload
+from .user_deleted_webhook_payload import UserDeletedWebhookPayload
 from .intent_failed_webhook_payload import IntentFailedWebhookPayload
 from .intent_created_webhook_payload import IntentCreatedWebhookPayload
 from .funds_deposited_webhook_payload import FundsDepositedWebhookPayload
@@ -89,6 +90,7 @@ UnsafeUnwrapWebhookEvent: TypeAlias = Annotated[
         TransactionStillPendingWebhookPayload,
         UserAuthenticatedWebhookPayload,
         UserCreatedWebhookPayload,
+        UserDeletedWebhookPayload,
         UserLinkedAccountWebhookPayload,
         UserTransferredAccountWebhookPayload,
         UserUnlinkedAccountWebhookPayload,
