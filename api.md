@@ -394,6 +394,8 @@ from privy.types import (
     CardIssuingCustomerReadyResponse,
     CardIssuingCustomerResponse,
     CardIssuingCustomerTermsRequiredResponse,
+    CardIssuingDispute,
+    CardIssuingDisputeStatus,
     CardIssuingListCardsInput,
     CardIssuingListTransactionsInput,
     CardIssuingMerchant,

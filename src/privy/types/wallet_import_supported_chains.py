@@ -4,4 +4,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["WalletImportSupportedChains"]
 
-WalletImportSupportedChains: TypeAlias = Literal["ethereum", "solana", "stellar", "tron", "sui", "aptos"]
+WalletImportSupportedChains: TypeAlias = Literal["ethereum", "solana", "stellar", "tron", "sui", "aptos", "xrpl"]

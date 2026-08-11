@@ -18,7 +18,7 @@ class HDInitInput(TypedDict, total=False):
     chain_type: Required[WalletImportSupportedChains]
     """The chain type of the wallet to import.
 
-    Supports `ethereum`, `solana`, `stellar`, `tron`, `sui`, and `aptos`.
+    Supports `ethereum`, `solana`, `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
     """
 
     encryption_type: Required[HpkeEncryption]
@@ -38,7 +38,7 @@ class PrivateKeyInitInput(TypedDict, total=False):
     chain_type: Required[WalletImportSupportedChains]
     """The chain type of the wallet to import.
 
-    Supports `ethereum`, `solana`, `stellar`, `tron`, `sui`, and `aptos`.
+    Supports `ethereum`, `solana`, `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
     """
 
     encryption_type: Required[HpkeEncryption]

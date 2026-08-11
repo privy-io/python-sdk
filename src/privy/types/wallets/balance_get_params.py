@@ -7,7 +7,7 @@ from typing_extensions import Literal, TypedDict
 
 from ..._types import SequenceNotStr
 from ..wallet_asset import WalletAsset
-from ..wallet_asset_chain_name_input import WalletAssetChainNameInput
+from ..wallet_asset_chain_name_input_param import WalletAssetChainNameInputParam
 
 __all__ = ["BalanceGetParams"]
 
@@ -31,7 +31,35 @@ class BalanceGetParams(TypedDict, total=False):
     with `token`.
     """
 
-    chain: Union[WalletAssetChainNameInput, List[WalletAssetChainNameInput]]
+    chain: Union[
+        Literal[
+            "ethereum",
+            "arbitrum",
+            "avalanche",
+            "base",
+            "tempo",
+            "linea",
+            "optimism",
+            "polygon",
+            "bsc",
+            "solana",
+            "tron",
+            "zksync_era",
+            "hoodi",
+            "sepolia",
+            "arbitrum_sepolia",
+            "avalanche_fuji",
+            "base_sepolia",
+            "linea_testnet",
+            "optimism_sepolia",
+            "polygon_amoy",
+            "solana_devnet",
+            "solana_testnet",
+            "tron_nile",
+        ],
+        str,
+        List[WalletAssetChainNameInputParam],
+    ]
     """Chain(s) to query named assets on (e.g.
 
     `tempo`, `base`). Use together with `asset`. Cannot be used with `token`.

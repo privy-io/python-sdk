@@ -439,7 +439,7 @@ class WalletsResource(SyncAPIResource):
           address: The address of the wallet to import.
 
           chain_type: The chain type of the wallet to import. Supports `ethereum`, `solana`,
-              `stellar`, `tron`, `sui`, and `aptos`.
+              `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
 
           encryption_type: The encryption type of the wallet to import. Currently only supports `HPKE`.
 
@@ -480,7 +480,7 @@ class WalletsResource(SyncAPIResource):
           address: The address of the wallet to import.
 
           chain_type: The chain type of the wallet to import. Supports `ethereum`, `solana`,
-              `stellar`, `tron`, `sui`, and `aptos`.
+              `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
 
           encryption_type: The encryption type of the wallet to import. Currently only supports `HPKE`.
 
@@ -2756,7 +2756,7 @@ class AsyncWalletsResource(AsyncAPIResource):
           address: The address of the wallet to import.
 
           chain_type: The chain type of the wallet to import. Supports `ethereum`, `solana`,
-              `stellar`, `tron`, `sui`, and `aptos`.
+              `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
 
           encryption_type: The encryption type of the wallet to import. Currently only supports `HPKE`.
 
@@ -2797,7 +2797,7 @@ class AsyncWalletsResource(AsyncAPIResource):
           address: The address of the wallet to import.
 
           chain_type: The chain type of the wallet to import. Supports `ethereum`, `solana`,
-              `stellar`, `tron`, `sui`, and `aptos`.
+              `stellar`, `tron`, `sui`, `aptos`, and `xrpl`.
 
           encryption_type: The encryption type of the wallet to import. Currently only supports `HPKE`.
 

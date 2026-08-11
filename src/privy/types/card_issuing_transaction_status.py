@@ -4,4 +4,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["CardIssuingTransactionStatus"]
 
-CardIssuingTransactionStatus: TypeAlias = Literal["pending", "posted"]
+CardIssuingTransactionStatus: TypeAlias = Literal["pending", "posted", "declined", "expired", "reversed"]

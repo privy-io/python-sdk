@@ -19,5 +19,6 @@ WalletChainType: TypeAlias = Literal[
     "near",
     "ton",
     "starknet",
+    "xrpl",
     "spark",
 ]

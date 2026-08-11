@@ -21,7 +21,7 @@ from ..._base_client import make_request_options
 from ...types.wallets import balance_get_params
 from ...types.wallet_asset import WalletAsset
 from ...types.wallets.balance_get_response import BalanceGetResponse
-from ...types.wallet_asset_chain_name_input import WalletAssetChainNameInput
+from ...types.wallet_asset_chain_name_input_param import WalletAssetChainNameInputParam
 
 __all__ = ["BalanceResource", "AsyncBalanceResource"]
 
@@ -58,7 +58,36 @@ class BalanceResource(SyncAPIResource):
             List[WalletAsset],
         ]
         | Omit = omit,
-        chain: Union[WalletAssetChainNameInput, List[WalletAssetChainNameInput]] | Omit = omit,
+        chain: Union[
+            Literal[
+                "ethereum",
+                "arbitrum",
+                "avalanche",
+                "base",
+                "tempo",
+                "linea",
+                "optimism",
+                "polygon",
+                "bsc",
+                "solana",
+                "tron",
+                "zksync_era",
+                "hoodi",
+                "sepolia",
+                "arbitrum_sepolia",
+                "avalanche_fuji",
+                "base_sepolia",
+                "linea_testnet",
+                "optimism_sepolia",
+                "polygon_amoy",
+                "solana_devnet",
+                "solana_testnet",
+                "tron_nile",
+            ],
+            str,
+            List[WalletAssetChainNameInputParam],
+        ]
+        | Omit = omit,
         include_archived: bool | Omit = omit,
         include_currency: Literal["usd", "eur"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -154,7 +183,36 @@ class AsyncBalanceResource(AsyncAPIResource):
             List[WalletAsset],
         ]
         | Omit = omit,
-        chain: Union[WalletAssetChainNameInput, List[WalletAssetChainNameInput]] | Omit = omit,
+        chain: Union[
+            Literal[
+                "ethereum",
+                "arbitrum",
+                "avalanche",
+                "base",
+                "tempo",
+                "linea",
+                "optimism",
+                "polygon",
+                "bsc",
+                "solana",
+                "tron",
+                "zksync_era",
+                "hoodi",
+                "sepolia",
+                "arbitrum_sepolia",
+                "avalanche_fuji",
+                "base_sepolia",
+                "linea_testnet",
+                "optimism_sepolia",
+                "polygon_amoy",
+                "solana_devnet",
+                "solana_testnet",
+                "tron_nile",
+            ],
+            str,
+            List[WalletAssetChainNameInputParam],
+        ]
+        | Omit = omit,
         include_archived: bool | Omit = omit,
         include_currency: Literal["usd", "eur"] | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.

@@ -7,7 +7,6 @@ from typing_extensions import Literal
 
 import httpx
 
-from ...types import TransactionChainNameInput
 from ..._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
@@ -21,9 +20,9 @@ from ..._response import (
 from ..._base_client import make_request_options
 from ...types.wallets import transaction_get_params
 from ...types.wallet_asset import WalletAsset
-from ...types.transaction_chain_name_input import TransactionChainNameInput
 from ...types.transaction_token_address_input import TransactionTokenAddressInput
 from ...types.wallets.transaction_get_response import TransactionGetResponse
+from ...types.transaction_chain_name_input_param import TransactionChainNameInputParam
 
 __all__ = ["TransactionsResource", "AsyncTransactionsResource"]
 
@@ -54,7 +53,7 @@ class TransactionsResource(SyncAPIResource):
         self,
         wallet_id: str,
         *,
-        chain: TransactionChainNameInput,
+        chain: TransactionChainNameInputParam,
         token: Union[TransactionTokenAddressInput, SequenceNotStr[TransactionTokenAddressInput]] | Omit = omit,
         asset: Union[
             Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "pathusd", "sol", "trx"],
@@ -148,7 +147,7 @@ class AsyncTransactionsResource(AsyncAPIResource):
         self,
         wallet_id: str,
         *,
-        chain: TransactionChainNameInput,
+        chain: TransactionChainNameInputParam,
         token: Union[TransactionTokenAddressInput, SequenceNotStr[TransactionTokenAddressInput]] | Omit = omit,
         asset: Union[
             Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "pathusd", "sol", "trx"],
