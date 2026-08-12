@@ -384,7 +384,9 @@ Types:
 
 ```python
 from privy.types import (
+    CardIssuingCancellationReason,
     CardIssuingCardResponse,
+    CardIssuingCardStatus,
     CardIssuingCardsResponse,
     CardIssuingCreateCardInput,
     CardIssuingCustomerInput,
@@ -399,9 +401,11 @@ from privy.types import (
     CardIssuingListCardsInput,
     CardIssuingListTransactionsInput,
     CardIssuingMerchant,
+    CardIssuingStatementQueryParams,
     CardIssuingTransactionResponse,
     CardIssuingTransactionStatus,
     CardIssuingTransactionsResponse,
+    CardIssuingUpdateCardInput,
 )
 ```
 
@@ -1164,6 +1168,8 @@ from privy.types import (
     GetFiatOnrampURLInput,
     GetFiatOnrampURLResponse,
     GetStripeCryptoCustomerResponse,
+    GetStripeOnrampTransactionLimitsQueryParams,
+    GetStripeOnrampTransactionLimitsResponse,
     LinkAuthIntentCreated,
     LinkAuthIntentNoAccount,
     ListStripeConsumerWalletsResponse,
@@ -1179,6 +1185,7 @@ from privy.types import (
     StripeKYCTier,
     StripeOnrampCheckoutResponse,
     StripeOnrampSessionStatus,
+    StripeOnrampTransactionLimit,
     StripePaymentToken,
     StripeTransactionDetails,
     StripeVerification,
