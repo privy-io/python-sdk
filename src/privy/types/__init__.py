@@ -189,6 +189,7 @@ from .linked_account_passkey import LinkedAccountPasskey as LinkedAccountPasskey
 from .moonpay_payment_method import MoonpayPaymentMethod as MoonpayPaymentMethod
 from .oauth_token_grant_type import OAuthTokenGrantType as OAuthTokenGrantType
 from .onramp_transfer_status import OnrampTransferStatus as OnrampTransferStatus
+from .orchestration_provider import OrchestrationProvider as OrchestrationProvider
 from .owner_input_public_key import OwnerInputPublicKey as OwnerInputPublicKey
 from .owner_input_user_param import OwnerInputUserParam as OwnerInputUserParam
 from .policy_condition_param import PolicyConditionParam as PolicyConditionParam

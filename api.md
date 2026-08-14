@@ -1126,6 +1126,7 @@ from privy.types import (
     EvmChecksumAddress,
     HyperliquidTokenAddress,
     KeyQuorumID,
+    OrchestrationProvider,
     OwnerIDInput,
     OwnerInput,
     OwnerInputPublicKey,

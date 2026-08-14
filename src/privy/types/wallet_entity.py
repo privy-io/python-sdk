@@ -11,6 +11,6 @@ class WalletEntity(BaseModel):
     """The entity a wallet is attributed to."""
 
     id: str
-    """The Privy DID of the entity."""
+    """The Privy entity ID."""
 
-    type: Literal["user"]
+    type: Literal["user", "organization"]

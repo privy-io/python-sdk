@@ -62,4 +62,4 @@ class Entity(TypedDict, total=False):
 
     id: Required[str]
 
-    type: Required[Literal["user"]]
+    type: Required[Literal["user", "organization"]]
