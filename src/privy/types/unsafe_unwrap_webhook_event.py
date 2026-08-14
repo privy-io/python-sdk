@@ -42,6 +42,8 @@ from .wallet_action_swap_rejected_webhook_payload import WalletActionSwapRejecte
 from .wallet_action_swap_succeeded_webhook_payload import WalletActionSwapSucceededWebhookPayload
 from .wallet_action_transfer_failed_webhook_payload import WalletActionTransferFailedWebhookPayload
 from .transaction_execution_reverted_webhook_payload import TransactionExecutionRevertedWebhookPayload
+from .usage_cross_chain_fee_recorded_webhook_payload import UsageCrossChainFeeRecordedWebhookPayload
+from .usage_gas_sponsorship_recorded_webhook_payload import UsageGasSponsorshipRecordedWebhookPayload
 from .wallet_action_transfer_created_webhook_payload import WalletActionTransferCreatedWebhookPayload
 from .wallet_action_transfer_rejected_webhook_payload import WalletActionTransferRejectedWebhookPayload
 from .wallet_action_transfer_succeeded_webhook_payload import WalletActionTransferSucceededWebhookPayload
@@ -88,6 +90,8 @@ UnsafeUnwrapWebhookEvent: TypeAlias = Annotated[
         TransactionProviderErrorWebhookPayload,
         TransactionReplacedWebhookPayload,
         TransactionStillPendingWebhookPayload,
+        UsageCrossChainFeeRecordedWebhookPayload,
+        UsageGasSponsorshipRecordedWebhookPayload,
         UserAuthenticatedWebhookPayload,
         UserCreatedWebhookPayload,
         UserDeletedWebhookPayload,

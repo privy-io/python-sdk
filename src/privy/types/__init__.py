@@ -105,6 +105,7 @@ from .smart_wallet_type import SmartWalletType as SmartWalletType
 from .spark_wallet_leaf import SparkWalletLeaf as SparkWalletLeaf
 from .stripe_kyc_region import StripeKYCRegion as StripeKYCRegion
 from .swap_source_param import SwapSourceParam as SwapSourceParam
+from .usage_source_type import UsageSourceType as UsageSourceType
 from .wallet_chain_type import WalletChainType as WalletChainType
 from .wallet_get_params import WalletGetParams as WalletGetParams
 from .wallet_rpc_params import WalletRpcParams as WalletRpcParams
@@ -865,6 +866,12 @@ from .spark_sign_message_with_identity_key_rpc_input import (
 )
 from .transaction_execution_reverted_webhook_payload import (
     TransactionExecutionRevertedWebhookPayload as TransactionExecutionRevertedWebhookPayload,
+)
+from .usage_cross_chain_fee_recorded_webhook_payload import (
+    UsageCrossChainFeeRecordedWebhookPayload as UsageCrossChainFeeRecordedWebhookPayload,
+)
+from .usage_gas_sponsorship_recorded_webhook_payload import (
+    UsageGasSponsorshipRecordedWebhookPayload as UsageGasSponsorshipRecordedWebhookPayload,
 )
 from .wallet_action_transfer_created_webhook_payload import (
     WalletActionTransferCreatedWebhookPayload as WalletActionTransferCreatedWebhookPayload,
