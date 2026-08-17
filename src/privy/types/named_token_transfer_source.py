@@ -16,8 +16,8 @@ class NamedTokenTransferSource(BaseModel):
     asset: str
     """The asset to transfer.
 
-    Supported: 'usdc', 'usdb', 'usdt', 'pathusd' (stablecoins), 'eth' (native
-    Ethereum), 'sol' (native Solana).
+    Supported: 'usdc', 'usdb', 'usdt', 'eurc', 'ousd', 'pathusd' (stablecoins),
+    'eth' (native Ethereum), 'sol' (native Solana).
     """
 
     chain: str

@@ -56,7 +56,9 @@ class TransactionsResource(SyncAPIResource):
         chain: TransactionChainNameInputParam,
         token: Union[TransactionTokenAddressInput, SequenceNotStr[TransactionTokenAddressInput]] | Omit = omit,
         asset: Union[
-            Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "pathusd", "sol", "trx"],
+            Literal[
+                "usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "ousd", "pathusd", "sol", "trx"
+            ],
             List[WalletAsset],
         ]
         | Omit = omit,
@@ -150,7 +152,9 @@ class AsyncTransactionsResource(AsyncAPIResource):
         chain: TransactionChainNameInputParam,
         token: Union[TransactionTokenAddressInput, SequenceNotStr[TransactionTokenAddressInput]] | Omit = omit,
         asset: Union[
-            Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "pathusd", "sol", "trx"],
+            Literal[
+                "usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "ousd", "pathusd", "sol", "trx"
+            ],
             List[WalletAsset],
         ]
         | Omit = omit,

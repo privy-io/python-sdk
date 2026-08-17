@@ -4,4 +4,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["WalletSolanaAsset"]
 
-WalletSolanaAsset: TypeAlias = Literal["sol", "usdc", "eurc", "usdb"]
+WalletSolanaAsset: TypeAlias = Literal["sol", "usdc", "eurc", "usdb", "ousd"]

@@ -16,8 +16,8 @@ class NamedTokenTransferSourceParam(TypedDict, total=False):
     asset: Required[str]
     """The asset to transfer.
 
-    Supported: 'usdc', 'usdb', 'usdt', 'pathusd' (stablecoins), 'eth' (native
-    Ethereum), 'sol' (native Solana).
+    Supported: 'usdc', 'usdb', 'usdt', 'eurc', 'ousd', 'pathusd' (stablecoins),
+    'eth' (native Ethereum), 'sol' (native Solana).
     """
 
     chain: Required[str]

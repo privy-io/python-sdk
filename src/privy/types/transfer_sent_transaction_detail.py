@@ -13,7 +13,8 @@ class TransferSentTransactionDetail(BaseModel):
     """Details for a sent transfer transaction."""
 
     asset: Union[
-        Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "pathusd", "sol", "trx"], str
+        Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "ousd", "pathusd", "sol", "trx"],
+        str,
     ]
 
     chain: WalletAssetChainNameInput
