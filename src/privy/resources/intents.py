@@ -73,6 +73,7 @@ from ..types.solana_sign_message_rpc_input_params_param import SolanaSignMessage
 from ..types.spark_transfer_tokens_rpc_input_params_param import SparkTransferTokensRpcInputParamsParam
 from ..types.tron_send_transaction_rpc_input_params_param import TronSendTransactionRpcInputParamsParam
 from ..types.tron_sign_transaction_rpc_input_params_param import TronSignTransactionRpcInputParamsParam
+from ..types.xrpl_sign_transaction_rpc_input_params_param import XrplSignTransactionRpcInputParamsParam
 from ..types.ethereum_personal_sign_rpc_input_params_param import EthereumPersonalSignRpcInputParamsParam
 from ..types.solana_sign_transaction_rpc_input_params_param import SolanaSignTransactionRpcInputParamsParam
 from ..types.ethereum_sign_typed_data_rpc_input_params_param import EthereumSignTypedDataRpcInputParamsParam
@@ -1400,6 +1401,44 @@ class IntentsResource(SyncAPIResource):
         self,
         path_wallet_id: str,
         *,
+        method: Literal["xrpl_signTransaction"],
+        params: XrplSignTransactionRpcInputParamsParam,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> RpcIntentResponse:
+        """Create an intent to execute an RPC method on a wallet.
+
+        The intent must be
+        authorized by either the wallet owner or signers before it can be executed.
+
+        Args:
+          path_wallet_id: ID of the wallet.
+
+          params: Parameters for the XRPL `xrpl_signTransaction` RPC.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        ...
+
+    @overload
+    def rpc(
+        self,
+        path_wallet_id: str,
+        *,
         address: str,
         method: Literal["exportPrivateKey"],
         params: PrivateKeyExportInputParam,
@@ -1502,6 +1541,7 @@ class IntentsResource(SyncAPIResource):
         | Literal["getWithdrawalFeeQuote"]
         | Literal["tron_signTransaction"]
         | Literal["tron_sendTransaction"]
+        | Literal["xrpl_signTransaction"]
         | Literal["exportPrivateKey"]
         | Literal["exportSeedPhrase"],
         params: EthereumSignTransactionRpcInputParamsParam
@@ -1526,6 +1566,7 @@ class IntentsResource(SyncAPIResource):
         | SparkGetWithdrawalFeeQuoteRpcInputParamsParam
         | TronSignTransactionRpcInputParamsParam
         | TronSendTransactionRpcInputParamsParam
+        | XrplSignTransactionRpcInputParamsParam
         | PrivateKeyExportInputParam
         | SeedPhraseExportInputParam
         | Omit = omit,
@@ -3220,6 +3261,44 @@ class AsyncIntentsResource(AsyncAPIResource):
         self,
         path_wallet_id: str,
         *,
+        method: Literal["xrpl_signTransaction"],
+        params: XrplSignTransactionRpcInputParamsParam,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> RpcIntentResponse:
+        """Create an intent to execute an RPC method on a wallet.
+
+        The intent must be
+        authorized by either the wallet owner or signers before it can be executed.
+
+        Args:
+          path_wallet_id: ID of the wallet.
+
+          params: Parameters for the XRPL `xrpl_signTransaction` RPC.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        ...
+
+    @overload
+    async def rpc(
+        self,
+        path_wallet_id: str,
+        *,
         address: str,
         method: Literal["exportPrivateKey"],
         params: PrivateKeyExportInputParam,
@@ -3322,6 +3401,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         | Literal["getWithdrawalFeeQuote"]
         | Literal["tron_signTransaction"]
         | Literal["tron_sendTransaction"]
+        | Literal["xrpl_signTransaction"]
         | Literal["exportPrivateKey"]
         | Literal["exportSeedPhrase"],
         params: EthereumSignTransactionRpcInputParamsParam
@@ -3346,6 +3426,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         | SparkGetWithdrawalFeeQuoteRpcInputParamsParam
         | TronSignTransactionRpcInputParamsParam
         | TronSendTransactionRpcInputParamsParam
+        | XrplSignTransactionRpcInputParamsParam
         | PrivateKeyExportInputParam
         | SeedPhraseExportInputParam
         | Omit = omit,

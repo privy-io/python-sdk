@@ -123,6 +123,7 @@ from ...types.spark_transfer_tokens_rpc_input_params_param import SparkTransferT
 from ...types.tron_send_transaction_rpc_input_params_param import TronSendTransactionRpcInputParamsParam
 from ...types.tron_sign_transaction_rpc_input_params_param import TronSignTransactionRpcInputParamsParam
 from ...types.wallet_create_wallets_with_recovery_response import WalletCreateWalletsWithRecoveryResponse
+from ...types.xrpl_sign_transaction_rpc_input_params_param import XrplSignTransactionRpcInputParamsParam
 from ...types.ethereum_personal_sign_rpc_input_params_param import EthereumPersonalSignRpcInputParamsParam
 from ...types.solana_sign_transaction_rpc_input_params_param import SolanaSignTransactionRpcInputParamsParam
 from ...types.ethereum_sign_typed_data_rpc_input_params_param import EthereumSignTypedDataRpcInputParamsParam
@@ -1765,6 +1766,50 @@ class WalletsResource(SyncAPIResource):
         self,
         path_wallet_id: str,
         *,
+        method: Literal["xrpl_signTransaction"],
+        params: XrplSignTransactionRpcInputParamsParam,
+        privy_authorization_signature: str | Omit = omit,
+        privy_idempotency_key: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> WalletRpcResponse:
+        """
+        Sign a message or transaction with a wallet by wallet ID.
+
+        Args:
+          path_wallet_id: ID of the wallet.
+
+          params: Parameters for the XRPL `xrpl_signTransaction` RPC.
+
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_idempotency_key: Idempotency keys ensure API requests are executed only once within a 24-hour
+              window.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        ...
+
+    @overload
+    def _rpc(
+        self,
+        path_wallet_id: str,
+        *,
         address: str,
         method: Literal["exportPrivateKey"],
         params: PrivateKeyExportInputParam,
@@ -1879,6 +1924,7 @@ class WalletsResource(SyncAPIResource):
         | Literal["getWithdrawalFeeQuote"]
         | Literal["tron_signTransaction"]
         | Literal["tron_sendTransaction"]
+        | Literal["xrpl_signTransaction"]
         | Literal["exportPrivateKey"]
         | Literal["exportSeedPhrase"],
         params: EthereumSignTransactionRpcInputParamsParam
@@ -1903,6 +1949,7 @@ class WalletsResource(SyncAPIResource):
         | SparkGetWithdrawalFeeQuoteRpcInputParamsParam
         | TronSignTransactionRpcInputParamsParam
         | TronSendTransactionRpcInputParamsParam
+        | XrplSignTransactionRpcInputParamsParam
         | PrivateKeyExportInputParam
         | SeedPhraseExportInputParam
         | Omit = omit,
@@ -4082,6 +4129,50 @@ class AsyncWalletsResource(AsyncAPIResource):
         self,
         path_wallet_id: str,
         *,
+        method: Literal["xrpl_signTransaction"],
+        params: XrplSignTransactionRpcInputParamsParam,
+        privy_authorization_signature: str | Omit = omit,
+        privy_idempotency_key: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> WalletRpcResponse:
+        """
+        Sign a message or transaction with a wallet by wallet ID.
+
+        Args:
+          path_wallet_id: ID of the wallet.
+
+          params: Parameters for the XRPL `xrpl_signTransaction` RPC.
+
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_idempotency_key: Idempotency keys ensure API requests are executed only once within a 24-hour
+              window.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        ...
+
+    @overload
+    async def _rpc(
+        self,
+        path_wallet_id: str,
+        *,
         address: str,
         method: Literal["exportPrivateKey"],
         params: PrivateKeyExportInputParam,
@@ -4196,6 +4287,7 @@ class AsyncWalletsResource(AsyncAPIResource):
         | Literal["getWithdrawalFeeQuote"]
         | Literal["tron_signTransaction"]
         | Literal["tron_sendTransaction"]
+        | Literal["xrpl_signTransaction"]
         | Literal["exportPrivateKey"]
         | Literal["exportSeedPhrase"],
         params: EthereumSignTransactionRpcInputParamsParam
@@ -4220,6 +4312,7 @@ class AsyncWalletsResource(AsyncAPIResource):
         | SparkGetWithdrawalFeeQuoteRpcInputParamsParam
         | TronSignTransactionRpcInputParamsParam
         | TronSendTransactionRpcInputParamsParam
+        | XrplSignTransactionRpcInputParamsParam
         | PrivateKeyExportInputParam
         | SeedPhraseExportInputParam
         | Omit = omit,

@@ -2490,11 +2490,10 @@ class TestWallets:
     def test_method_rpc_overload_25(self, client: PrivyAPI) -> None:
         wallet = client.wallets._rpc(
             path_wallet_id="wallet_id",
-            address="address",
-            method="exportPrivateKey",
+            method="xrpl_signTransaction",
             params={
-                "encryption_type": "HPKE",
-                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "encoding": "hex",
+                "transaction": "transaction",
             },
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
@@ -2504,13 +2503,10 @@ class TestWallets:
     def test_method_rpc_with_all_params_overload_25(self, client: PrivyAPI) -> None:
         wallet = client.wallets._rpc(
             path_wallet_id="wallet_id",
-            address="address",
-            method="exportPrivateKey",
+            method="xrpl_signTransaction",
             params={
-                "encryption_type": "HPKE",
-                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
-                "export_seed_phrase": True,
-                "export_type": "display",
+                "encoding": "hex",
+                "transaction": "transaction",
             },
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
@@ -2523,11 +2519,10 @@ class TestWallets:
     def test_raw_response_rpc_overload_25(self, client: PrivyAPI) -> None:
         response = client.wallets.with_raw_response._rpc(
             path_wallet_id="wallet_id",
-            address="address",
-            method="exportPrivateKey",
+            method="xrpl_signTransaction",
             params={
-                "encryption_type": "HPKE",
-                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "encoding": "hex",
+                "transaction": "transaction",
             },
         )
 
@@ -2541,11 +2536,10 @@ class TestWallets:
     def test_streaming_response_rpc_overload_25(self, client: PrivyAPI) -> None:
         with client.wallets.with_streaming_response._rpc(
             path_wallet_id="wallet_id",
-            address="address",
-            method="exportPrivateKey",
+            method="xrpl_signTransaction",
             params={
-                "encryption_type": "HPKE",
-                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "encoding": "hex",
+                "transaction": "transaction",
             },
         ) as response:
             assert not response.is_closed
@@ -2562,11 +2556,10 @@ class TestWallets:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
             client.wallets.with_raw_response._rpc(
                 path_wallet_id="",
-                address="address",
-                method="exportPrivateKey",
+                method="xrpl_signTransaction",
                 params={
-                    "encryption_type": "HPKE",
-                    "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                    "encoding": "hex",
+                    "transaction": "transaction",
                 },
             )
 
@@ -2576,7 +2569,7 @@ class TestWallets:
         wallet = client.wallets._rpc(
             path_wallet_id="wallet_id",
             address="address",
-            method="exportSeedPhrase",
+            method="exportPrivateKey",
             params={
                 "encryption_type": "HPKE",
                 "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
@@ -2590,7 +2583,7 @@ class TestWallets:
         wallet = client.wallets._rpc(
             path_wallet_id="wallet_id",
             address="address",
-            method="exportSeedPhrase",
+            method="exportPrivateKey",
             params={
                 "encryption_type": "HPKE",
                 "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
@@ -2609,7 +2602,7 @@ class TestWallets:
         response = client.wallets.with_raw_response._rpc(
             path_wallet_id="wallet_id",
             address="address",
-            method="exportSeedPhrase",
+            method="exportPrivateKey",
             params={
                 "encryption_type": "HPKE",
                 "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
@@ -2624,6 +2617,91 @@ class TestWallets:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     def test_streaming_response_rpc_overload_26(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportPrivateKey",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_rpc_overload_26(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                address="address",
+                method="exportPrivateKey",
+                params={
+                    "encryption_type": "HPKE",
+                    "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_overload_27(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_rpc_with_all_params_overload_27(self, client: PrivyAPI) -> None:
+        wallet = client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "export_seed_phrase": True,
+                "export_type": "display",
+            },
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_rpc_overload_27(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_rpc_overload_27(self, client: PrivyAPI) -> None:
         with client.wallets.with_streaming_response._rpc(
             path_wallet_id="wallet_id",
             address="address",
@@ -2643,7 +2721,7 @@ class TestWallets:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    def test_path_params_rpc_overload_26(self, client: PrivyAPI) -> None:
+    def test_path_params_rpc_overload_27(self, client: PrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
             client.wallets.with_raw_response._rpc(
                 path_wallet_id="",
@@ -5634,11 +5712,10 @@ class TestAsyncWallets:
     async def test_method_rpc_overload_25(self, async_client: AsyncPrivyAPI) -> None:
         wallet = await async_client.wallets._rpc(
             path_wallet_id="wallet_id",
-            address="address",
-            method="exportPrivateKey",
+            method="xrpl_signTransaction",
             params={
-                "encryption_type": "HPKE",
-                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "encoding": "hex",
+                "transaction": "transaction",
             },
         )
         assert_matches_type(WalletRpcResponse, wallet, path=["response"])
@@ -5648,13 +5725,10 @@ class TestAsyncWallets:
     async def test_method_rpc_with_all_params_overload_25(self, async_client: AsyncPrivyAPI) -> None:
         wallet = await async_client.wallets._rpc(
             path_wallet_id="wallet_id",
-            address="address",
-            method="exportPrivateKey",
+            method="xrpl_signTransaction",
             params={
-                "encryption_type": "HPKE",
-                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
-                "export_seed_phrase": True,
-                "export_type": "display",
+                "encoding": "hex",
+                "transaction": "transaction",
             },
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
@@ -5667,11 +5741,10 @@ class TestAsyncWallets:
     async def test_raw_response_rpc_overload_25(self, async_client: AsyncPrivyAPI) -> None:
         response = await async_client.wallets.with_raw_response._rpc(
             path_wallet_id="wallet_id",
-            address="address",
-            method="exportPrivateKey",
+            method="xrpl_signTransaction",
             params={
-                "encryption_type": "HPKE",
-                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "encoding": "hex",
+                "transaction": "transaction",
             },
         )
 
@@ -5685,11 +5758,10 @@ class TestAsyncWallets:
     async def test_streaming_response_rpc_overload_25(self, async_client: AsyncPrivyAPI) -> None:
         async with async_client.wallets.with_streaming_response._rpc(
             path_wallet_id="wallet_id",
-            address="address",
-            method="exportPrivateKey",
+            method="xrpl_signTransaction",
             params={
-                "encryption_type": "HPKE",
-                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "encoding": "hex",
+                "transaction": "transaction",
             },
         ) as response:
             assert not response.is_closed
@@ -5706,11 +5778,10 @@ class TestAsyncWallets:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
             await async_client.wallets.with_raw_response._rpc(
                 path_wallet_id="",
-                address="address",
-                method="exportPrivateKey",
+                method="xrpl_signTransaction",
                 params={
-                    "encryption_type": "HPKE",
-                    "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                    "encoding": "hex",
+                    "transaction": "transaction",
                 },
             )
 
@@ -5720,7 +5791,7 @@ class TestAsyncWallets:
         wallet = await async_client.wallets._rpc(
             path_wallet_id="wallet_id",
             address="address",
-            method="exportSeedPhrase",
+            method="exportPrivateKey",
             params={
                 "encryption_type": "HPKE",
                 "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
@@ -5734,7 +5805,7 @@ class TestAsyncWallets:
         wallet = await async_client.wallets._rpc(
             path_wallet_id="wallet_id",
             address="address",
-            method="exportSeedPhrase",
+            method="exportPrivateKey",
             params={
                 "encryption_type": "HPKE",
                 "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
@@ -5753,7 +5824,7 @@ class TestAsyncWallets:
         response = await async_client.wallets.with_raw_response._rpc(
             path_wallet_id="wallet_id",
             address="address",
-            method="exportSeedPhrase",
+            method="exportPrivateKey",
             params={
                 "encryption_type": "HPKE",
                 "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
@@ -5768,6 +5839,91 @@ class TestAsyncWallets:
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
     async def test_streaming_response_rpc_overload_26(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportPrivateKey",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_rpc_overload_26(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response._rpc(
+                path_wallet_id="",
+                address="address",
+                method="exportPrivateKey",
+                params={
+                    "encryption_type": "HPKE",
+                    "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                },
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_overload_27(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_rpc_with_all_params_overload_27(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+                "export_seed_phrase": True,
+                "export_type": "display",
+            },
+            privy_authorization_signature="privy-authorization-signature",
+            privy_idempotency_key="privy-idempotency-key",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_rpc_overload_27(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response._rpc(
+            path_wallet_id="wallet_id",
+            address="address",
+            method="exportSeedPhrase",
+            params={
+                "encryption_type": "HPKE",
+                "recipient_public_key": "-----BEGIN PUBLIC KEY-----\nSq++/W\nLz/==-----END PUBLIC KEY-----\n",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletRpcResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_rpc_overload_27(self, async_client: AsyncPrivyAPI) -> None:
         async with async_client.wallets.with_streaming_response._rpc(
             path_wallet_id="wallet_id",
             address="address",
@@ -5787,7 +5943,7 @@ class TestAsyncWallets:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
-    async def test_path_params_rpc_overload_26(self, async_client: AsyncPrivyAPI) -> None:
+    async def test_path_params_rpc_overload_27(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `path_wallet_id` but received ''"):
             await async_client.wallets.with_raw_response._rpc(
                 path_wallet_id="",

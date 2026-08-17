@@ -14,6 +14,7 @@ from .solana_sign_message_rpc_response import SolanaSignMessageRpcResponse
 from .spark_transfer_tokens_rpc_response import SparkTransferTokensRpcResponse
 from .tron_send_transaction_rpc_response import TronSendTransactionRpcResponse
 from .tron_sign_transaction_rpc_response import TronSignTransactionRpcResponse
+from .xrpl_sign_transaction_rpc_response import XrplSignTransactionRpcResponse
 from .ethereum_personal_sign_rpc_response import EthereumPersonalSignRpcResponse
 from .solana_sign_transaction_rpc_response import SolanaSignTransactionRpcResponse
 from .ethereum_sign_typed_data_rpc_response import EthereumSignTypedDataRpcResponse
@@ -59,6 +60,7 @@ WalletRpcResponse: TypeAlias = Annotated[
         SparkGetWithdrawalFeeQuoteRpcResponse,
         TronSignTransactionRpcResponse,
         TronSendTransactionRpcResponse,
+        XrplSignTransactionRpcResponse,
         ExportPrivateKeyRpcResponse,
         ExportSeedPhraseRpcResponse,
     ],

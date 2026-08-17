@@ -14,6 +14,7 @@ from .solana_sign_message_rpc_input import SolanaSignMessageRpcInput
 from .spark_transfer_tokens_rpc_input import SparkTransferTokensRpcInput
 from .tron_send_transaction_rpc_input import TronSendTransactionRpcInput
 from .tron_sign_transaction_rpc_input import TronSignTransactionRpcInput
+from .xrpl_sign_transaction_rpc_input import XrplSignTransactionRpcInput
 from .ethereum_personal_sign_rpc_input import EthereumPersonalSignRpcInput
 from .solana_sign_transaction_rpc_input import SolanaSignTransactionRpcInput
 from .ethereum_sign_typed_data_rpc_input import EthereumSignTypedDataRpcInput
@@ -59,6 +60,7 @@ WalletRpcRequestBody: TypeAlias = Annotated[
         SparkGetWithdrawalFeeQuoteRpcInput,
         TronSignTransactionRpcInput,
         TronSendTransactionRpcInput,
+        XrplSignTransactionRpcInput,
         ExportPrivateKeyRpcInput,
         ExportSeedPhraseRpcInput,
     ],

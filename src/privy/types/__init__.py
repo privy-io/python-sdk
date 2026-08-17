@@ -419,6 +419,7 @@ from .user_set_custom_metadata_params import UserSetCustomMetadataParams as User
 from .wallet_archived_webhook_payload import WalletArchivedWebhookPayload as WalletArchivedWebhookPayload
 from .wallet_funds_native_token_asset import WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset
 from .wallet_restored_webhook_payload import WalletRestoredWebhookPayload as WalletRestoredWebhookPayload
+from .xrpl_sign_transaction_rpc_input import XrplSignTransactionRpcInput as XrplSignTransactionRpcInput
 from .card_issuing_cancellation_reason import CardIssuingCancellationReason as CardIssuingCancellationReason
 from .ethereum_personal_sign_rpc_input import EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput
 from .ethereum_send_calls_rpc_response import EthereumSendCallsRpcResponse as EthereumSendCallsRpcResponse
@@ -483,6 +484,7 @@ from .tron_sign_transaction_rpc_response import TronSignTransactionRpcResponse a
 from .user_authenticated_webhook_payload import UserAuthenticatedWebhookPayload as UserAuthenticatedWebhookPayload
 from .user_get_by_github_username_params import UserGetByGitHubUsernameParams as UserGetByGitHubUsernameParams
 from .user_get_by_twitter_subject_params import UserGetByTwitterSubjectParams as UserGetByTwitterSubjectParams
+from .xrpl_sign_transaction_rpc_response import XrplSignTransactionRpcResponse as XrplSignTransactionRpcResponse
 from .action_request_body_condition_param import ActionRequestBodyConditionParam as ActionRequestBodyConditionParam
 from .bridge_static_memo_deposit_metadata import BridgeStaticMemoDepositMetadata as BridgeStaticMemoDepositMetadata
 from .ethereum_personal_sign_rpc_response import EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse
@@ -558,6 +560,7 @@ from .wallet_import_supported_entropy_types import (
 from .wallet_recovery_setup_webhook_payload import (
     WalletRecoverySetupWebhookPayload as WalletRecoverySetupWebhookPayload,
 )
+from .xrpl_sign_transaction_rpc_input_param import XrplSignTransactionRpcInputParam as XrplSignTransactionRpcInputParam
 from .yield_claim_confirmed_webhook_payload import (
     YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
 )
@@ -601,6 +604,9 @@ from .tron_sign_transaction_rpc_input_params import (
 from .unsigned_standard_ethereum_transaction import (
     UnsignedStandardEthereumTransaction as UnsignedStandardEthereumTransaction,
 )
+from .xrpl_sign_transaction_rpc_input_params import (
+    XrplSignTransactionRpcInputParams as XrplSignTransactionRpcInputParams,
+)
 from .ethereum_personal_sign_rpc_input_params import (
     EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
 )
@@ -630,6 +636,9 @@ from .tron_sign_transaction_rpc_response_data import (
 )
 from .user_get_by_smart_wallet_address_params import (
     UserGetBySmartWalletAddressParams as UserGetBySmartWalletAddressParams,
+)
+from .xrpl_sign_transaction_rpc_response_data import (
+    XrplSignTransactionRpcResponseData as XrplSignTransactionRpcResponseData,
 )
 from .yield_deposit_confirmed_webhook_payload import (
     YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
@@ -816,6 +825,9 @@ from .wallet_create_wallets_with_recovery_response import (
 )
 from .wallet_creation_additional_signer_item_param import (
     WalletCreationAdditionalSignerItemParam as WalletCreationAdditionalSignerItemParam,
+)
+from .xrpl_sign_transaction_rpc_input_params_param import (
+    XrplSignTransactionRpcInputParamsParam as XrplSignTransactionRpcInputParamsParam,
 )
 from .ethereum_personal_sign_rpc_input_params_param import (
     EthereumPersonalSignRpcInputParamsParam as EthereumPersonalSignRpcInputParamsParam,

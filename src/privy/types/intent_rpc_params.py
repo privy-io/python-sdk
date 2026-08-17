@@ -20,6 +20,7 @@ from .solana_sign_message_rpc_input_params_param import SolanaSignMessageRpcInpu
 from .spark_transfer_tokens_rpc_input_params_param import SparkTransferTokensRpcInputParamsParam
 from .tron_send_transaction_rpc_input_params_param import TronSendTransactionRpcInputParamsParam
 from .tron_sign_transaction_rpc_input_params_param import TronSignTransactionRpcInputParamsParam
+from .xrpl_sign_transaction_rpc_input_params_param import XrplSignTransactionRpcInputParamsParam
 from .ethereum_personal_sign_rpc_input_params_param import EthereumPersonalSignRpcInputParamsParam
 from .solana_sign_transaction_rpc_input_params_param import SolanaSignTransactionRpcInputParamsParam
 from .ethereum_sign_typed_data_rpc_input_params_param import EthereumSignTypedDataRpcInputParamsParam
@@ -66,6 +67,7 @@ __all__ = [
     "SparkGetWithdrawalFeeQuoteRpcInput",
     "TronSignTransactionRpcInput",
     "TronSendTransactionRpcInput",
+    "XrplSignTransactionRpcInput",
     "ExportPrivateKeyRpcInput",
     "ExportSeedPhraseRpcInput",
 ]
@@ -593,6 +595,20 @@ class TronSendTransactionRpcInput(TypedDict, total=False):
     """
 
 
+class XrplSignTransactionRpcInput(TypedDict, total=False):
+    method: Required[Literal["xrpl_signTransaction"]]
+
+    params: Required[XrplSignTransactionRpcInputParamsParam]
+    """Parameters for the XRPL `xrpl_signTransaction` RPC."""
+
+    privy_request_expiry: Annotated[str, PropertyInfo(alias="privy-request-expiry")]
+    """Request expiry.
+
+    Value is a Unix timestamp in milliseconds representing the deadline by which the
+    request must be processed.
+    """
+
+
 class ExportPrivateKeyRpcInput(TypedDict, total=False):
     address: Required[str]
 
@@ -650,6 +666,7 @@ IntentRpcParams: TypeAlias = Union[
     SparkGetWithdrawalFeeQuoteRpcInput,
     TronSignTransactionRpcInput,
     TronSendTransactionRpcInput,
+    XrplSignTransactionRpcInput,
     ExportPrivateKeyRpcInput,
     ExportSeedPhraseRpcInput,
 ]
