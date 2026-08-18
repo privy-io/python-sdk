@@ -21,6 +21,7 @@ PolicyMethod: TypeAlias = Literal[
     "signRawMessageBytes",
     "tron_sendTransaction",
     "tron_signTransaction",
+    "xrpl_signTransaction",
     "earn_deposit",
     "earn_withdraw",
     "transfer",

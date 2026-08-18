@@ -10,6 +10,7 @@ from .aggregation_condition_param import AggregationConditionParam
 from .tron_calldata_condition_param import TronCalldataConditionParam
 from .message_signing_condition_param import MessageSigningConditionParam
 from .tron_transaction_condition_param import TronTransactionConditionParam
+from .xrpl_transaction_condition_param import XrplTransactionConditionParam
 from .ethereum_calldata_condition_param import EthereumCalldataConditionParam
 from .tempo_transaction_condition_param import TempoTransactionConditionParam
 from .action_request_body_condition_param import ActionRequestBodyConditionParam
@@ -38,6 +39,7 @@ PolicyConditionParam: TypeAlias = Union[
     SystemConditionParam,
     TronTransactionConditionParam,
     TronCalldataConditionParam,
+    XrplTransactionConditionParam,
     SuiTransactionCommandConditionParam,
     SuiTransferObjectsCommandConditionParam,
     ActionRequestBodyConditionParam,

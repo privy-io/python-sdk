@@ -9,6 +9,7 @@ from .aggregation_condition import AggregationCondition
 from .tron_calldata_condition import TronCalldataCondition
 from .message_signing_condition import MessageSigningCondition
 from .tron_transaction_condition import TronTransactionCondition
+from .xrpl_transaction_condition import XrplTransactionCondition
 from .ethereum_calldata_condition import EthereumCalldataCondition
 from .tempo_transaction_condition import TempoTransactionCondition
 from .action_request_body_condition import ActionRequestBodyCondition
@@ -38,6 +39,7 @@ PolicyCondition: TypeAlias = Annotated[
         SystemCondition,
         TronTransactionCondition,
         TronCalldataCondition,
+        XrplTransactionCondition,
         SuiTransactionCommandCondition,
         SuiTransferObjectsCommandCondition,
         ActionRequestBodyCondition,

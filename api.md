@@ -583,6 +583,8 @@ from privy.types import (
     TronTransactionConditionField,
     TypedDataInput,
     UpdateConditionSetRequestBody,
+    XrplTransactionCondition,
+    XrplTransactionConditionField,
 )
 ```
 
