@@ -2674,6 +2674,7 @@ class TestIntents:
                 "type": "total_fee_bps",
                 "value": 50,
             },
+            nonce="xxxxxxxxxxxxxxxxxxxxxxxx",
             slippage_bps=0,
             privy_request_expiry="privy-request-expiry",
         )
@@ -5695,6 +5696,7 @@ class TestAsyncIntents:
                 "type": "total_fee_bps",
                 "value": 50,
             },
+            nonce="xxxxxxxxxxxxxxxxxxxxxxxx",
             slippage_bps=0,
             privy_request_expiry="privy-request-expiry",
         )

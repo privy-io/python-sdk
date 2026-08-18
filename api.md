@@ -220,6 +220,7 @@ from privy.types import (
     UserOperationInput,
     UserSigningKeyBinding,
     Wallet,
+    WalletActionNonce,
     WalletAdditionalSigner,
     WalletAdditionalSignerItem,
     WalletAPIRegisterAuthorizationKeyInput,

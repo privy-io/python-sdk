@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import httpx
 
+from .....types import WalletActionNonce
 from ....._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ....._utils import path_template, maybe_transform, strip_not_given, async_maybe_transform
 from ....._compat import cached_property
@@ -15,6 +16,7 @@ from ....._response import (
     async_to_streamed_response_wrapper,
 )
 from ....._base_client import make_request_options
+from .....types.wallet_action_nonce import WalletActionNonce
 from .....types.wallets.earn.ethereum import incentive_claim_params
 from .....types.wallets.earn_incentive_claim_action_response import EarnIncentiveClaimActionResponse
 
@@ -48,6 +50,7 @@ class IncentiveResource(SyncAPIResource):
         wallet_id: str,
         *,
         chain: str,
+        nonce: WalletActionNonce | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -67,6 +70,9 @@ class IncentiveResource(SyncAPIResource):
           chain: The blockchain network on which to perform the incentive claim. Supported chains
               include: 'tempo', 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and more,
               along with their respective testnets.
+
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -99,7 +105,13 @@ class IncentiveResource(SyncAPIResource):
         }
         return self._post(
             path_template("/v1/wallets/{wallet_id}/earn/ethereum/incentive/claim", wallet_id=wallet_id),
-            body=maybe_transform({"chain": chain}, incentive_claim_params.IncentiveClaimParams),
+            body=maybe_transform(
+                {
+                    "chain": chain,
+                    "nonce": nonce,
+                },
+                incentive_claim_params.IncentiveClaimParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
@@ -134,6 +146,7 @@ class AsyncIncentiveResource(AsyncAPIResource):
         wallet_id: str,
         *,
         chain: str,
+        nonce: WalletActionNonce | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -153,6 +166,9 @@ class AsyncIncentiveResource(AsyncAPIResource):
           chain: The blockchain network on which to perform the incentive claim. Supported chains
               include: 'tempo', 'ethereum', 'base', 'arbitrum', 'polygon', 'solana', and more,
               along with their respective testnets.
+
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -185,7 +201,13 @@ class AsyncIncentiveResource(AsyncAPIResource):
         }
         return await self._post(
             path_template("/v1/wallets/{wallet_id}/earn/ethereum/incentive/claim", wallet_id=wallet_id),
-            body=await async_maybe_transform({"chain": chain}, incentive_claim_params.IncentiveClaimParams),
+            body=await async_maybe_transform(
+                {
+                    "chain": chain,
+                    "nonce": nonce,
+                },
+                incentive_claim_params.IncentiveClaimParams,
+            ),
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),

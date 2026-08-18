@@ -6,6 +6,7 @@ from typing_extensions import Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 from .amount_type import AmountType
+from .wallet_action_nonce import WalletActionNonce
 from .fee_configuration_param import FeeConfigurationParam
 from .token_transfer_source_param import TokenTransferSourceParam
 from .token_transfer_destination_param import TokenTransferDestinationParam
@@ -40,6 +41,12 @@ class WalletTransferParams(TypedDict, total=False):
 
     fee_configuration: FeeConfigurationParam
     """Total fees assessed on a transfer, in BPS"""
+
+    nonce: WalletActionNonce
+    """
+    Unique caller-generated nonce used to prevent replaying a signed wallet action
+    request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+    """
 
     slippage_bps: int
     """Maximum allowed slippage in basis points (1 bps = 0.01%).

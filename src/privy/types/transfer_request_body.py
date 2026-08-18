@@ -5,6 +5,7 @@ from typing import Optional
 from .._models import BaseModel
 from .amount_type import AmountType
 from .fee_configuration import FeeConfiguration
+from .wallet_action_nonce import WalletActionNonce
 from .token_transfer_source import TokenTransferSource
 from .token_transfer_destination import TokenTransferDestination
 
@@ -40,6 +41,12 @@ class TransferRequestBody(BaseModel):
 
     fee_configuration: Optional[FeeConfiguration] = None
     """Total fees assessed on a transfer, in BPS"""
+
+    nonce: Optional[WalletActionNonce] = None
+    """
+    Unique caller-generated nonce used to prevent replaying a signed wallet action
+    request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+    """
 
     slippage_bps: Optional[int] = None
     """Maximum allowed slippage in basis points (1 bps = 0.01%).

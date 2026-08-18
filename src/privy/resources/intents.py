@@ -17,6 +17,7 @@ from ..types import (
     PolicyAction,
     PolicyMethod,
     SparkNetwork,
+    WalletActionNonce,
     intent_rpc_params,
     intent_list_params,
     intent_transfer_params,
@@ -50,6 +51,7 @@ from ..types.owner_id_input import OwnerIDInput
 from ..types.intent_response import IntentResponse
 from ..types.owner_input_param import OwnerInputParam
 from ..types.rpc_intent_response import RpcIntentResponse
+from ..types.wallet_action_nonce import WalletActionNonce
 from ..types.policy_condition_param import PolicyConditionParam
 from ..types.policy_intent_response import PolicyIntentResponse
 from ..types.wallet_intent_response import WalletIntentResponse
@@ -1627,6 +1629,7 @@ class IntentsResource(SyncAPIResource):
         amount: str | Omit = omit,
         amount_type: AmountType | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
+        nonce: WalletActionNonce | Omit = omit,
         slippage_bps: int | Omit = omit,
         privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -1658,6 +1661,9 @@ class IntentsResource(SyncAPIResource):
 
           fee_configuration: Total fees assessed on a transfer, in BPS
 
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+
           slippage_bps: Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
               cross-chain or cross-asset transfers; omit to use the provider default.
 
@@ -1684,6 +1690,7 @@ class IntentsResource(SyncAPIResource):
                     "amount": amount,
                     "amount_type": amount_type,
                     "fee_configuration": fee_configuration,
+                    "nonce": nonce,
                     "slippage_bps": slippage_bps,
                 },
                 intent_transfer_params.IntentTransferParams,
@@ -3487,6 +3494,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         amount: str | Omit = omit,
         amount_type: AmountType | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
+        nonce: WalletActionNonce | Omit = omit,
         slippage_bps: int | Omit = omit,
         privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -3518,6 +3526,9 @@ class AsyncIntentsResource(AsyncAPIResource):
 
           fee_configuration: Total fees assessed on a transfer, in BPS
 
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+
           slippage_bps: Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
               cross-chain or cross-asset transfers; omit to use the provider default.
 
@@ -3544,6 +3555,7 @@ class AsyncIntentsResource(AsyncAPIResource):
                     "amount": amount,
                     "amount_type": amount_type,
                     "fee_configuration": fee_configuration,
+                    "nonce": nonce,
                     "slippage_bps": slippage_bps,
                 },
                 intent_transfer_params.IntentTransferParams,

@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing_extensions import Required, Annotated, TypedDict
 
 from ...._utils import PropertyInfo
+from ...wallet_action_nonce import WalletActionNonce
 
 __all__ = ["EthereumWithdrawParams"]
 
@@ -17,6 +18,12 @@ class EthereumWithdrawParams(TypedDict, total=False):
     """Human-readable decimal amount to withdraw (e.g.
 
     "1.5" for 1.5 USDC). Exactly one of `amount` or `raw_amount` must be provided.
+    """
+
+    nonce: WalletActionNonce
+    """
+    Unique caller-generated nonce used to prevent replaying a signed wallet action
+    request. Must be at least 24 characters (e.g. a cuid2 or UUID).
     """
 
     raw_amount: str

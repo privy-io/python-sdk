@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing_extensions import Required, Annotated, TypedDict
 
 from ....._utils import PropertyInfo
+from ....wallet_action_nonce import WalletActionNonce
 
 __all__ = ["IncentiveClaimParams"]
 
@@ -15,6 +16,12 @@ class IncentiveClaimParams(TypedDict, total=False):
 
     Supported chains include: 'tempo', 'ethereum', 'base', 'arbitrum', 'polygon',
     'solana', and more, along with their respective testnets.
+    """
+
+    nonce: WalletActionNonce
+    """
+    Unique caller-generated nonce used to prevent replaying a signed wallet action
+    request. Must be at least 24 characters (e.g. a cuid2 or UUID).
     """
 
     privy_authorization_signature: Annotated[str, PropertyInfo(alias="privy-authorization-signature")]

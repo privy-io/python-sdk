@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import httpx
 
+from .....types import WalletActionNonce
 from .incentive import (
     IncentiveResource,
     AsyncIncentiveResource,
@@ -24,6 +25,7 @@ from ....._response import (
 )
 from ....._base_client import make_request_options
 from .....types.wallets.earn import ethereum_deposit_params, ethereum_withdraw_params
+from .....types.wallet_action_nonce import WalletActionNonce
 from .....types.wallets.earn_deposit_action_response import EarnDepositActionResponse
 from .....types.wallets.earn_withdraw_action_response import EarnWithdrawActionResponse
 
@@ -63,6 +65,7 @@ class EthereumResource(SyncAPIResource):
         *,
         vault_id: str,
         amount: str | Omit = omit,
+        nonce: WalletActionNonce | Omit = omit,
         raw_amount: str | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
@@ -84,6 +87,9 @@ class EthereumResource(SyncAPIResource):
 
           amount: Human-readable decimal amount to deposit (e.g. "1.5" for 1.5 USDC). Exactly one
               of `amount` or `raw_amount` must be provided.
+
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
           raw_amount: Amount in smallest unit to deposit (e.g. "1500000" for 1.5 USDC with 6
               decimals). Exactly one of `amount` or `raw_amount` must be provided.
@@ -123,6 +129,7 @@ class EthereumResource(SyncAPIResource):
                 {
                     "vault_id": vault_id,
                     "amount": amount,
+                    "nonce": nonce,
                     "raw_amount": raw_amount,
                 },
                 ethereum_deposit_params.EthereumDepositParams,
@@ -139,6 +146,7 @@ class EthereumResource(SyncAPIResource):
         *,
         vault_id: str,
         amount: str | Omit = omit,
+        nonce: WalletActionNonce | Omit = omit,
         raw_amount: str | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
@@ -160,6 +168,9 @@ class EthereumResource(SyncAPIResource):
 
           amount: Human-readable decimal amount to withdraw (e.g. "1.5" for 1.5 USDC). Exactly one
               of `amount` or `raw_amount` must be provided.
+
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
           raw_amount: Amount in smallest unit to withdraw (e.g. "1500000" for 1.5 USDC with 6
               decimals). Exactly one of `amount` or `raw_amount` must be provided.
@@ -199,6 +210,7 @@ class EthereumResource(SyncAPIResource):
                 {
                     "vault_id": vault_id,
                     "amount": amount,
+                    "nonce": nonce,
                     "raw_amount": raw_amount,
                 },
                 ethereum_withdraw_params.EthereumWithdrawParams,
@@ -243,6 +255,7 @@ class AsyncEthereumResource(AsyncAPIResource):
         *,
         vault_id: str,
         amount: str | Omit = omit,
+        nonce: WalletActionNonce | Omit = omit,
         raw_amount: str | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
@@ -264,6 +277,9 @@ class AsyncEthereumResource(AsyncAPIResource):
 
           amount: Human-readable decimal amount to deposit (e.g. "1.5" for 1.5 USDC). Exactly one
               of `amount` or `raw_amount` must be provided.
+
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
           raw_amount: Amount in smallest unit to deposit (e.g. "1500000" for 1.5 USDC with 6
               decimals). Exactly one of `amount` or `raw_amount` must be provided.
@@ -303,6 +319,7 @@ class AsyncEthereumResource(AsyncAPIResource):
                 {
                     "vault_id": vault_id,
                     "amount": amount,
+                    "nonce": nonce,
                     "raw_amount": raw_amount,
                 },
                 ethereum_deposit_params.EthereumDepositParams,
@@ -319,6 +336,7 @@ class AsyncEthereumResource(AsyncAPIResource):
         *,
         vault_id: str,
         amount: str | Omit = omit,
+        nonce: WalletActionNonce | Omit = omit,
         raw_amount: str | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
@@ -340,6 +358,9 @@ class AsyncEthereumResource(AsyncAPIResource):
 
           amount: Human-readable decimal amount to withdraw (e.g. "1.5" for 1.5 USDC). Exactly one
               of `amount` or `raw_amount` must be provided.
+
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
           raw_amount: Amount in smallest unit to withdraw (e.g. "1500000" for 1.5 USDC with 6
               decimals). Exactly one of `amount` or `raw_amount` must be provided.
@@ -379,6 +400,7 @@ class AsyncEthereumResource(AsyncAPIResource):
                 {
                     "vault_id": vault_id,
                     "amount": amount,
+                    "nonce": nonce,
                     "raw_amount": raw_amount,
                 },
                 ethereum_withdraw_params.EthereumWithdrawParams,

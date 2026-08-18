@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ...types import AmountType
+from ...types import AmountType, WalletActionNonce
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import path_template, maybe_transform, strip_not_given, async_maybe_transform
 from ..._compat import cached_property
@@ -20,6 +20,7 @@ from ...types.wallets import swap_quote_params, swap_execute_params
 from ...types.amount_type import AmountType
 from ...types.swap_source_param import SwapSourceParam
 from ...types.swap_quote_response import SwapQuoteResponse
+from ...types.wallet_action_nonce import WalletActionNonce
 from ...types.swap_destination_param import SwapDestinationParam
 from ...types.fee_configuration_param import FeeConfigurationParam
 from ...types.swap_quote_destination_param import SwapQuoteDestinationParam
@@ -59,6 +60,7 @@ class SwapResource(SyncAPIResource):
         source: SwapSourceParam,
         amount_type: AmountType | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
+        nonce: WalletActionNonce | Omit = omit,
         slippage_bps: int | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
@@ -85,6 +87,9 @@ class SwapResource(SyncAPIResource):
           amount_type: Whether the amount refers to the input token or output token.
 
           fee_configuration: Total fees assessed on a transfer, in BPS
+
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
           slippage_bps: Maximum slippage tolerance in basis points (e.g., 50 for 0.5%).
 
@@ -126,6 +131,7 @@ class SwapResource(SyncAPIResource):
                     "source": source,
                     "amount_type": amount_type,
                     "fee_configuration": fee_configuration,
+                    "nonce": nonce,
                     "slippage_bps": slippage_bps,
                 },
                 swap_execute_params.SwapExecuteParams,
@@ -250,6 +256,7 @@ class AsyncSwapResource(AsyncAPIResource):
         source: SwapSourceParam,
         amount_type: AmountType | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
+        nonce: WalletActionNonce | Omit = omit,
         slippage_bps: int | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
@@ -276,6 +283,9 @@ class AsyncSwapResource(AsyncAPIResource):
           amount_type: Whether the amount refers to the input token or output token.
 
           fee_configuration: Total fees assessed on a transfer, in BPS
+
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
           slippage_bps: Maximum slippage tolerance in basis points (e.g., 50 for 0.5%).
 
@@ -317,6 +327,7 @@ class AsyncSwapResource(AsyncAPIResource):
                     "source": source,
                     "amount_type": amount_type,
                     "fee_configuration": fee_configuration,
+                    "nonce": nonce,
                     "slippage_bps": slippage_bps,
                 },
                 swap_execute_params.SwapExecuteParams,

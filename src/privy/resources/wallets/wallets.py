@@ -25,6 +25,7 @@ from ...types import (
     SparkNetwork,
     HpkeEncryption,
     WalletChainType,
+    WalletActionNonce,
     RawSignInputParams,
     WalletImportSupportedChains,
     wallet_get_params,
@@ -98,6 +99,7 @@ from ...types.owner_input_param import OwnerInputParam
 from ...types.raw_sign_response import RawSignResponse
 from ...types.wallet_chain_type import WalletChainType
 from ...types.policy_input_param import PolicyInputParam
+from ...types.wallet_action_nonce import WalletActionNonce
 from ...types.wallet_rpc_response import WalletRpcResponse
 from ...types.raw_sign_input_params import RawSignInputParams
 from ...types.fee_configuration_param import FeeConfigurationParam
@@ -2091,6 +2093,7 @@ class WalletsResource(SyncAPIResource):
         amount: str | Omit = omit,
         amount_type: AmountType | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
+        nonce: WalletActionNonce | Omit = omit,
         slippage_bps: int | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
@@ -2121,6 +2124,9 @@ class WalletsResource(SyncAPIResource):
           amount_type: Whether the amount refers to the input token or output token.
 
           fee_configuration: Total fees assessed on a transfer, in BPS
+
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
           slippage_bps: Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
               cross-chain or cross-asset transfers; omit to use the provider default.
@@ -2163,6 +2169,7 @@ class WalletsResource(SyncAPIResource):
                     "amount": amount,
                     "amount_type": amount_type,
                     "fee_configuration": fee_configuration,
+                    "nonce": nonce,
                     "slippage_bps": slippage_bps,
                 },
                 wallet_transfer_params.WalletTransferParams,
@@ -4454,6 +4461,7 @@ class AsyncWalletsResource(AsyncAPIResource):
         amount: str | Omit = omit,
         amount_type: AmountType | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
+        nonce: WalletActionNonce | Omit = omit,
         slippage_bps: int | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
@@ -4484,6 +4492,9 @@ class AsyncWalletsResource(AsyncAPIResource):
           amount_type: Whether the amount refers to the input token or output token.
 
           fee_configuration: Total fees assessed on a transfer, in BPS
+
+          nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
+              request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
           slippage_bps: Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
               cross-chain or cross-asset transfers; omit to use the provider default.
@@ -4526,6 +4537,7 @@ class AsyncWalletsResource(AsyncAPIResource):
                     "amount": amount,
                     "amount_type": amount_type,
                     "fee_configuration": fee_configuration,
+                    "nonce": nonce,
                     "slippage_bps": slippage_bps,
                 },
                 wallet_transfer_params.WalletTransferParams,

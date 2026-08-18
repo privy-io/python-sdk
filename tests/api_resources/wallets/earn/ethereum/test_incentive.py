@@ -32,6 +32,7 @@ class TestIncentive:
         incentive = client.wallets.earn.ethereum.incentive._claim(
             wallet_id="wallet_id",
             chain="base",
+            nonce="xxxxxxxxxxxxxxxxxxxxxxxx",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
             privy_request_expiry="privy-request-expiry",
@@ -96,6 +97,7 @@ class TestAsyncIncentive:
         incentive = await async_client.wallets.earn.ethereum.incentive._claim(
             wallet_id="wallet_id",
             chain="base",
+            nonce="xxxxxxxxxxxxxxxxxxxxxxxx",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
             privy_request_expiry="privy-request-expiry",
