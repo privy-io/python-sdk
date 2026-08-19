@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Optional
-from typing_extensions import Literal, Required, Annotated, TypedDict
+from typing_extensions import Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
 from .owner_id_input import OwnerIDInput
@@ -11,8 +11,9 @@ from .owner_input_param import OwnerInputParam
 from .wallet_chain_type import WalletChainType
 from .policy_input_param import PolicyInputParam
 from .additional_signer_input_param import AdditionalSignerInputParam
+from .wallet_entity_assignment_request_body_param import WalletEntityAssignmentRequestBodyParam
 
-__all__ = ["WalletCreateParams", "Entity"]
+__all__ = ["WalletCreateParams"]
 
 
 class WalletCreateParams(TypedDict, total=False):
@@ -25,8 +26,8 @@ class WalletCreateParams(TypedDict, total=False):
     display_name: str
     """A human-readable label for the wallet."""
 
-    entity: Entity
-    """The entity the wallet is attributed to."""
+    entity: WalletEntityAssignmentRequestBodyParam
+    """Request body for assigning an entity to a wallet."""
 
     external_id: str
     """A customer-provided identifier for mapping to external systems.
@@ -55,11 +56,3 @@ class WalletCreateParams(TypedDict, total=False):
     Idempotency keys ensure API requests are executed only once within a 24-hour
     window.
     """
-
-
-class Entity(TypedDict, total=False):
-    """The entity the wallet is attributed to."""
-
-    id: Required[str]
-
-    type: Required[Literal["user", "organization"]]

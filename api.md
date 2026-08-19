@@ -26,6 +26,7 @@ from privy.types import (
     EncryptedAuthorizationKey,
     EncryptedBoundAuthenticateResponse,
     EncryptedWalletAuthenticateResponse,
+    EntityID,
     EthereumPersonalSignRpcInput,
     EthereumPersonalSignRpcInputParams,
     EthereumPersonalSignRpcResponse,
@@ -242,6 +243,9 @@ from privy.types import (
     WalletCreateWalletsWithRecoveryResponse,
     WalletCustodian,
     WalletEntity,
+    WalletEntityAssignmentRequestBody,
+    WalletEntityAssignmentResponse,
+    WalletEntityType,
     WalletEntropyType,
     WalletEthereumAsset,
     WalletExportRequestBody,
@@ -277,6 +281,7 @@ Methods:
 - <code title="post /v1/wallets/{wallet_id}/transfer">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">\_transfer</a>(wallet_id, \*\*<a href="src/privy/types/wallet_transfer_params.py">params</a>) -> <a href="./src/privy/types/wallets/transfer_action_response.py">TransferActionResponse</a></code>
 - <code title="patch /v1/wallets/{wallet_id}">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">\_update</a>(wallet_id, \*\*<a href="src/privy/types/wallet_update_params.py">params</a>) -> <a href="./src/privy/types/wallet.py">Wallet</a></code>
 - <code title="post /v1/wallets/{wallet_id}/archive">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">archive</a>(wallet_id) -> <a href="./src/privy/types/wallet.py">Wallet</a></code>
+- <code title="post /v1/wallets/{wallet_id}/entity">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">assign_entity</a>(wallet_id, \*\*<a href="src/privy/types/wallet_assign_entity_params.py">params</a>) -> <a href="./src/privy/types/wallet_entity_assignment_response.py">WalletEntityAssignmentResponse</a></code>
 - <code title="post /v1/wallets/authenticate">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">authenticate_with_jwt</a>(\*\*<a href="src/privy/types/wallet_authenticate_with_jwt_params.py">params</a>) -> <a href="./src/privy/types/wallet_authenticate_with_jwt_response.py">WalletAuthenticateWithJwtResponse</a></code>
 - <code title="post /v1/wallets/batch">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">create_batch</a>(\*\*<a href="src/privy/types/wallet_create_batch_params.py">params</a>) -> <a href="./src/privy/types/wallet_batch_create_response.py">WalletBatchCreateResponse</a></code>
 - <code title="post /v1/wallets_with_recovery">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">create_wallets_with_recovery</a>(\*\*<a href="src/privy/types/wallet_create_wallets_with_recovery_params.py">params</a>) -> <a href="./src/privy/types/wallet_create_wallets_with_recovery_response.py">WalletCreateWalletsWithRecoveryResponse</a></code>
@@ -526,6 +531,32 @@ Methods:
 - <code title="post /v1/users/search">client.users.<a href="./src/privy/resources/users.py">search</a>(\*\*<a href="src/privy/types/user_search_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
 - <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/privy/resources/users.py">set_custom_metadata</a>(user_id, \*\*<a href="src/privy/types/user_set_custom_metadata_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
 - <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/privy/resources/users.py">unlink_linked_account</a>(user_id, \*\*<a href="src/privy/types/user_unlink_linked_account_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+
+# Organizations
+
+Types:
+
+```python
+from privy.types import (
+    CreateOrganizationSecretResponse,
+    Organization,
+    OrganizationCreateRequestBody,
+    OrganizationSecretIDInput,
+    OrganizationSecretView,
+    OrganizationSecretsListResponse,
+    OrganizationUpdateRequestBody,
+    OrganizationsListResponse,
+    UpdateOrganizationSecretSigningKeyInput,
+)
+```
+
+Methods:
+
+- <code title="post /v1/organizations">client.organizations.<a href="./src/privy/resources/organizations.py">create</a>(\*\*<a href="src/privy/types/organization_create_params.py">params</a>) -> <a href="./src/privy/types/organization.py">Organization</a></code>
+- <code title="patch /v1/organizations/{organization_id}">client.organizations.<a href="./src/privy/resources/organizations.py">update</a>(organization_id, \*\*<a href="src/privy/types/organization_update_params.py">params</a>) -> <a href="./src/privy/types/organization.py">Organization</a></code>
+- <code title="get /v1/organizations">client.organizations.<a href="./src/privy/resources/organizations.py">list</a>(\*\*<a href="src/privy/types/organization_list_params.py">params</a>) -> <a href="./src/privy/types/organization.py">SyncCursor[Organization]</a></code>
+- <code title="delete /v1/organizations/{organization_id}">client.organizations.<a href="./src/privy/resources/organizations.py">delete</a>(organization_id) -> None</code>
+- <code title="get /v1/organizations/{organization_id}">client.organizations.<a href="./src/privy/resources/organizations.py">get</a>(organization_id) -> <a href="./src/privy/types/organization.py">Organization</a></code>
 
 # Policies
 
@@ -1243,20 +1274,6 @@ from privy.types import (
     MoonpaySolanaCurrencyCode,
     MoonpayUiConfig,
     MoonpayUiTheme,
-)
-```
-
-# Organizations
-
-Types:
-
-```python
-from privy.types import (
-    CreateOrganizationSecretResponse,
-    OrganizationSecretIDInput,
-    OrganizationSecretView,
-    OrganizationSecretsListResponse,
-    UpdateOrganizationSecretSigningKeyInput,
 )
 ```
 

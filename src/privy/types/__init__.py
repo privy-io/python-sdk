@@ -12,6 +12,7 @@ from .address import Address as Address
 from .hd_path import HDPath as HDPath
 from .currency import Currency as Currency
 from .quantity import Quantity as Quantity
+from .entity_id import EntityID as EntityID
 from .privy_fee import PrivyFee as PrivyFee
 from .abi_schema import AbiSchema as AbiSchema
 from .block_info import BlockInfo as BlockInfo
@@ -32,6 +33,7 @@ from .app_response import AppResponse as AppResponse
 from .email_domain import EmailDomain as EmailDomain
 from .onramp_asset import OnrampAsset as OnrampAsset
 from .onramp_chain import OnrampChain as OnrampChain
+from .organization import Organization as Organization
 from .policy_input import PolicyInput as PolicyInput
 from .test_account import TestAccount as TestAccount
 from .token_output import TokenOutput as TokenOutput
@@ -124,6 +126,7 @@ from .token_output_param import TokenOutputParam as TokenOutputParam
 from .transaction_detail import TransactionDetail as TransactionDetail
 from .user_create_params import UserCreateParams as UserCreateParams
 from .user_search_params import UserSearchParams as UserSearchParams
+from .wallet_entity_type import WalletEntityType as WalletEntityType
 from .wallet_funds_asset import WalletFundsAsset as WalletFundsAsset
 from .wallet_list_params import WalletListParams as WalletListParams
 from .yield_claim_reward import YieldClaimReward as YieldClaimReward
@@ -242,6 +245,7 @@ from .key_quorum_create_params import KeyQuorumCreateParams as KeyQuorumCreatePa
 from .key_quorum_update_params import KeyQuorumUpdateParams as KeyQuorumUpdateParams
 from .linked_account_cross_app import LinkedAccountCrossApp as LinkedAccountCrossApp
 from .linked_account_farcaster import LinkedAccountFarcaster as LinkedAccountFarcaster
+from .organization_list_params import OrganizationListParams as OrganizationListParams
 from .phone_invite_input_param import PhoneInviteInputParam as PhoneInviteInputParam
 from .policy_rule_request_body import PolicyRuleRequestBody as PolicyRuleRequestBody
 from .private_key_export_input import PrivateKeyExportInput as PrivateKeyExportInput
@@ -278,6 +282,8 @@ from .kraken_embed_sorting_order import KrakenEmbedSortingOrder as KrakenEmbedSo
 from .linked_account_apple_oauth import LinkedAccountAppleOAuth as LinkedAccountAppleOAuth
 from .linked_account_base_wallet import LinkedAccountBaseWallet as LinkedAccountBaseWallet
 from .linked_account_input_param import LinkedAccountInputParam as LinkedAccountInputParam
+from .organization_create_params import OrganizationCreateParams as OrganizationCreateParams
+from .organization_update_params import OrganizationUpdateParams as OrganizationUpdateParams
 from .smart_wallet_configuration import SmartWalletConfiguration as SmartWalletConfiguration
 from .token_transfer_destination import TokenTransferDestination as TokenTransferDestination
 from .tron_transaction_condition import TronTransactionCondition as TronTransactionCondition
@@ -305,6 +311,7 @@ from .linked_account_tiktok_oauth import LinkedAccountTiktokOAuth as LinkedAccou
 from .linked_account_twitch_oauth import LinkedAccountTwitchOAuth as LinkedAccountTwitchOAuth
 from .mfa_enabled_webhook_payload import MfaEnabledWebhookPayload as MfaEnabledWebhookPayload
 from .named_token_transfer_source import NamedTokenTransferSource as NamedTokenTransferSource
+from .organizations_list_response import OrganizationsListResponse as OrganizationsListResponse
 from .rule_delete_intent_response import RuleDeleteIntentResponse as RuleDeleteIntentResponse
 from .rule_intent_request_details import RuleIntentRequestDetails as RuleIntentRequestDetails
 from .rule_mutate_intent_response import RuleMutateIntentResponse as RuleMutateIntentResponse
@@ -318,6 +325,7 @@ from .token_transfer_source_param import TokenTransferSourceParam as TokenTransf
 from .tron_trigger_smart_contract import TronTriggerSmartContract as TronTriggerSmartContract
 from .typed_data_type_field_input import TypedDataTypeFieldInput as TypedDataTypeFieldInput
 from .unsafe_unwrap_webhook_event import UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent
+from .wallet_assign_entity_params import WalletAssignEntityParams as WalletAssignEntityParams
 from .wallet_creation_input_param import WalletCreationInputParam as WalletCreationInputParam
 from .wallet_export_response_body import WalletExportResponseBody as WalletExportResponseBody
 from .wallet_init_import_response import WalletInitImportResponse as WalletInitImportResponse
@@ -464,6 +472,7 @@ from .typed_data_type_field_input_param import TypedDataTypeFieldInputParam as T
 from .user_get_by_custom_auth_id_params import UserGetByCustomAuthIDParams as UserGetByCustomAuthIDParams
 from .user_get_by_wallet_address_params import UserGetByWalletAddressParams as UserGetByWalletAddressParams
 from .user_unlink_linked_account_params import UserUnlinkLinkedAccountParams as UserUnlinkLinkedAccountParams
+from .wallet_entity_assignment_response import WalletEntityAssignmentResponse as WalletEntityAssignmentResponse
 from .additional_signer_item_input_param import AdditionalSignerItemInputParam as AdditionalSignerItemInputParam
 from .custom_token_transfer_source_param import CustomTokenTransferSourceParam as CustomTokenTransferSourceParam
 from .ethereum_sign_typed_data_rpc_input import EthereumSignTypedDataRpcInput as EthereumSignTypedDataRpcInput
@@ -793,6 +802,9 @@ from .spark_pay_lightning_invoice_rpc_input_param import (
 )
 from .wallet_action_swap_rejected_webhook_payload import (
     WalletActionSwapRejectedWebhookPayload as WalletActionSwapRejectedWebhookPayload,
+)
+from .wallet_entity_assignment_request_body_param import (
+    WalletEntityAssignmentRequestBodyParam as WalletEntityAssignmentRequestBodyParam,
 )
 from .ethereum_sign_user_operation_rpc_input_param import (
     EthereumSignUserOperationRpcInputParam as EthereumSignUserOperationRpcInputParam,

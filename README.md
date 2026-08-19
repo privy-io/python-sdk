@@ -194,7 +194,7 @@ client = PrivyAPI()
 wallet = client.wallets.create(
     chain_type="ethereum",
     entity={
-        "id": "x",
+        "id": "jorpjo4rfxj62nx1itt8y1zt",
         "type": "user",
     },
 )

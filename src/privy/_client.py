@@ -36,7 +36,7 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import apps, users, intents, wallets, policies, key_quorums, transactions
+    from .resources import apps, users, intents, wallets, policies, key_quorums, transactions, organizations
     from .resources.users import UsersResource, AsyncUsersResource
     from .resources.intents import IntentsResource, AsyncIntentsResource
     from .resources.policies import PoliciesResource, AsyncPoliciesResource
@@ -44,6 +44,7 @@ if TYPE_CHECKING:
     from .resources.apps.apps import AppsResource, AsyncAppsResource
     from .resources.key_quorums import KeyQuorumsResource, AsyncKeyQuorumsResource
     from .resources.transactions import TransactionsResource, AsyncTransactionsResource
+    from .resources.organizations import OrganizationsResource, AsyncOrganizationsResource
     from .resources.wallets.wallets import WalletsResource, AsyncWalletsResource
 
 __all__ = [
@@ -176,6 +177,13 @@ class PrivyAPI(SyncAPIClient):
         from .resources.users import UsersResource
 
         return UsersResource(self)
+
+    @cached_property
+    def organizations(self) -> OrganizationsResource:
+        """Operations related to organizations"""
+        from .resources.organizations import OrganizationsResource
+
+        return OrganizationsResource(self)
 
     @cached_property
     def policies(self) -> PoliciesResource:
@@ -451,6 +459,13 @@ class AsyncPrivyAPI(AsyncAPIClient):
         return AsyncUsersResource(self)
 
     @cached_property
+    def organizations(self) -> AsyncOrganizationsResource:
+        """Operations related to organizations"""
+        from .resources.organizations import AsyncOrganizationsResource
+
+        return AsyncOrganizationsResource(self)
+
+    @cached_property
     def policies(self) -> AsyncPoliciesResource:
         """Operations related to policies"""
         from .resources.policies import AsyncPoliciesResource
@@ -630,6 +645,13 @@ class PrivyAPIWithRawResponse:
         return UsersResourceWithRawResponse(self._client.users)
 
     @cached_property
+    def organizations(self) -> organizations.OrganizationsResourceWithRawResponse:
+        """Operations related to organizations"""
+        from .resources.organizations import OrganizationsResourceWithRawResponse
+
+        return OrganizationsResourceWithRawResponse(self._client.organizations)
+
+    @cached_property
     def policies(self) -> policies.PoliciesResourceWithRawResponse:
         """Operations related to policies"""
         from .resources.policies import PoliciesResourceWithRawResponse
@@ -683,6 +705,13 @@ class AsyncPrivyAPIWithRawResponse:
         from .resources.users import AsyncUsersResourceWithRawResponse
 
         return AsyncUsersResourceWithRawResponse(self._client.users)
+
+    @cached_property
+    def organizations(self) -> organizations.AsyncOrganizationsResourceWithRawResponse:
+        """Operations related to organizations"""
+        from .resources.organizations import AsyncOrganizationsResourceWithRawResponse
+
+        return AsyncOrganizationsResourceWithRawResponse(self._client.organizations)
 
     @cached_property
     def policies(self) -> policies.AsyncPoliciesResourceWithRawResponse:
@@ -740,6 +769,13 @@ class PrivyAPIWithStreamedResponse:
         return UsersResourceWithStreamingResponse(self._client.users)
 
     @cached_property
+    def organizations(self) -> organizations.OrganizationsResourceWithStreamingResponse:
+        """Operations related to organizations"""
+        from .resources.organizations import OrganizationsResourceWithStreamingResponse
+
+        return OrganizationsResourceWithStreamingResponse(self._client.organizations)
+
+    @cached_property
     def policies(self) -> policies.PoliciesResourceWithStreamingResponse:
         """Operations related to policies"""
         from .resources.policies import PoliciesResourceWithStreamingResponse
@@ -793,6 +829,13 @@ class AsyncPrivyAPIWithStreamedResponse:
         from .resources.users import AsyncUsersResourceWithStreamingResponse
 
         return AsyncUsersResourceWithStreamingResponse(self._client.users)
+
+    @cached_property
+    def organizations(self) -> organizations.AsyncOrganizationsResourceWithStreamingResponse:
+        """Operations related to organizations"""
+        from .resources.organizations import AsyncOrganizationsResourceWithStreamingResponse
+
+        return AsyncOrganizationsResourceWithStreamingResponse(self._client.organizations)
 
     @cached_property
     def policies(self) -> policies.AsyncPoliciesResourceWithStreamingResponse:

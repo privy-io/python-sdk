@@ -20,11 +20,13 @@ from ...types import (
     Hex,
     Caip2,
     Address,
+    EntityID,
     AmountType,
     OwnerIDInput,
     SparkNetwork,
     HpkeEncryption,
     WalletChainType,
+    WalletEntityType,
     WalletActionNonce,
     RawSignInputParams,
     WalletImportSupportedChains,
@@ -38,6 +40,7 @@ from ...types import (
     wallet_transfer_params,
     wallet_init_import_params,
     wallet_create_batch_params,
+    wallet_assign_entity_params,
     wallet_submit_import_params,
     wallet_authenticate_with_jwt_params,
     wallet_get_wallet_by_address_params,
@@ -91,6 +94,7 @@ from ..._base_client import AsyncPaginator, make_request_options
 from ...types.caip_2 import Caip2
 from ...types.wallet import Wallet
 from ...types.address import Address
+from ...types.entity_id import EntityID
 from ...types.amount_type import AmountType
 from ...types.spark_network import SparkNetwork
 from ...types.owner_id_input import OwnerIDInput
@@ -99,6 +103,7 @@ from ...types.owner_input_param import OwnerInputParam
 from ...types.raw_sign_response import RawSignResponse
 from ...types.wallet_chain_type import WalletChainType
 from ...types.policy_input_param import PolicyInputParam
+from ...types.wallet_entity_type import WalletEntityType
 from ...types.wallet_action_nonce import WalletActionNonce
 from ...types.wallet_rpc_response import WalletRpcResponse
 from ...types.raw_sign_input_params import RawSignInputParams
@@ -116,11 +121,13 @@ from ...types.seed_phrase_export_input_param import SeedPhraseExportInputParam
 from ...types.wallet_import_supported_chains import WalletImportSupportedChains
 from ...types.token_transfer_destination_param import TokenTransferDestinationParam
 from ...types.wallets.transfer_action_response import TransferActionResponse
+from ...types.wallet_entity_assignment_response import WalletEntityAssignmentResponse
 from ...types.spark_transfer_rpc_input_params_param import SparkTransferRpcInputParamsParam
 from ...types.spark_withdraw_rpc_input_params_param import SparkWithdrawRpcInputParamsParam
 from ...types.wallet_authenticate_with_jwt_response import WalletAuthenticateWithJwtResponse
 from ...types.ethereum_send_calls_rpc_input_params_param import EthereumSendCallsRpcInputParamsParam
 from ...types.solana_sign_message_rpc_input_params_param import SolanaSignMessageRpcInputParamsParam
+from ...types.wallet_entity_assignment_request_body_param import WalletEntityAssignmentRequestBodyParam
 from ...types.spark_transfer_tokens_rpc_input_params_param import SparkTransferTokensRpcInputParamsParam
 from ...types.tron_send_transaction_rpc_input_params_param import TronSendTransactionRpcInputParamsParam
 from ...types.tron_sign_transaction_rpc_input_params_param import TronSignTransactionRpcInputParamsParam
@@ -205,7 +212,7 @@ class WalletsResource(SyncAPIResource):
         chain_type: WalletChainType,
         additional_signers: AdditionalSignerInputParam | Omit = omit,
         display_name: str | Omit = omit,
-        entity: wallet_create_params.Entity | Omit = omit,
+        entity: WalletEntityAssignmentRequestBodyParam | Omit = omit,
         external_id: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
         owner_id: Optional[OwnerIDInput] | Omit = omit,
@@ -228,7 +235,7 @@ class WalletsResource(SyncAPIResource):
 
           display_name: A human-readable label for the wallet.
 
-          entity: The entity the wallet is attributed to.
+          entity: Request body for assigning an entity to a wallet.
 
           external_id: A customer-provided identifier for mapping to external systems. URL-safe
               characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
@@ -2297,6 +2304,54 @@ class WalletsResource(SyncAPIResource):
             cast_to=Wallet,
         )
 
+    def assign_entity(
+        self,
+        wallet_id: str,
+        *,
+        id: EntityID,
+        type: WalletEntityType,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> WalletEntityAssignmentResponse:
+        """
+        Assign a user or organization to a wallet.
+
+        Args:
+          wallet_id: ID of the wallet.
+
+          id: A Privy entity ID.
+
+          type: The type of entity a wallet is attributed to.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not wallet_id:
+            raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
+        return self._post(
+            path_template("/v1/wallets/{wallet_id}/entity", wallet_id=wallet_id),
+            body=maybe_transform(
+                {
+                    "id": id,
+                    "type": type,
+                },
+                wallet_assign_entity_params.WalletAssignEntityParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=WalletEntityAssignmentResponse,
+        )
+
     def authenticate_with_jwt(
         self,
         *,
@@ -2573,7 +2628,7 @@ class AsyncWalletsResource(AsyncAPIResource):
         chain_type: WalletChainType,
         additional_signers: AdditionalSignerInputParam | Omit = omit,
         display_name: str | Omit = omit,
-        entity: wallet_create_params.Entity | Omit = omit,
+        entity: WalletEntityAssignmentRequestBodyParam | Omit = omit,
         external_id: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
         owner_id: Optional[OwnerIDInput] | Omit = omit,
@@ -2596,7 +2651,7 @@ class AsyncWalletsResource(AsyncAPIResource):
 
           display_name: A human-readable label for the wallet.
 
-          entity: The entity the wallet is attributed to.
+          entity: Request body for assigning an entity to a wallet.
 
           external_id: A customer-provided identifier for mapping to external systems. URL-safe
               characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
@@ -4665,6 +4720,54 @@ class AsyncWalletsResource(AsyncAPIResource):
             cast_to=Wallet,
         )
 
+    async def assign_entity(
+        self,
+        wallet_id: str,
+        *,
+        id: EntityID,
+        type: WalletEntityType,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> WalletEntityAssignmentResponse:
+        """
+        Assign a user or organization to a wallet.
+
+        Args:
+          wallet_id: ID of the wallet.
+
+          id: A Privy entity ID.
+
+          type: The type of entity a wallet is attributed to.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not wallet_id:
+            raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
+        return await self._post(
+            path_template("/v1/wallets/{wallet_id}/entity", wallet_id=wallet_id),
+            body=await async_maybe_transform(
+                {
+                    "id": id,
+                    "type": type,
+                },
+                wallet_assign_entity_params.WalletAssignEntityParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=WalletEntityAssignmentResponse,
+        )
+
     async def authenticate_with_jwt(
         self,
         *,
@@ -4927,6 +5030,9 @@ class WalletsResourceWithRawResponse:
         self.archive = to_raw_response_wrapper(
             wallets.archive,
         )
+        self.assign_entity = to_raw_response_wrapper(
+            wallets.assign_entity,
+        )
         self.authenticate_with_jwt = to_raw_response_wrapper(
             wallets.authenticate_with_jwt,
         )
@@ -5003,6 +5109,9 @@ class AsyncWalletsResourceWithRawResponse:
         )
         self.archive = async_to_raw_response_wrapper(
             wallets.archive,
+        )
+        self.assign_entity = async_to_raw_response_wrapper(
+            wallets.assign_entity,
         )
         self.authenticate_with_jwt = async_to_raw_response_wrapper(
             wallets.authenticate_with_jwt,
@@ -5081,6 +5190,9 @@ class WalletsResourceWithStreamingResponse:
         self.archive = to_streamed_response_wrapper(
             wallets.archive,
         )
+        self.assign_entity = to_streamed_response_wrapper(
+            wallets.assign_entity,
+        )
         self.authenticate_with_jwt = to_streamed_response_wrapper(
             wallets.authenticate_with_jwt,
         )
@@ -5157,6 +5269,9 @@ class AsyncWalletsResourceWithStreamingResponse:
         )
         self.archive = async_to_streamed_response_wrapper(
             wallets.archive,
+        )
+        self.assign_entity = async_to_streamed_response_wrapper(
+            wallets.assign_entity,
         )
         self.authenticate_with_jwt = async_to_streamed_response_wrapper(
             wallets.authenticate_with_jwt,

@@ -15,6 +15,7 @@ from privy.types import (
     WalletExportResponseBody,
     WalletInitImportResponse,
     WalletBatchCreateResponse,
+    WalletEntityAssignmentResponse,
     WalletAuthenticateWithJwtResponse,
     WalletCreateWalletsWithRecoveryResponse,
 )
@@ -51,7 +52,7 @@ class TestWallets:
             ],
             display_name="display_name",
             entity={
-                "id": "x",
+                "id": "jorpjo4rfxj62nx1itt8y1zt",
                 "type": "user",
             },
             external_id="my-order-123",
@@ -3016,6 +3017,56 @@ class TestWallets:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
+    def test_method_assign_entity(self, client: PrivyAPI) -> None:
+        wallet = client.wallets.assign_entity(
+            wallet_id="wallet_id",
+            id="jorpjo4rfxj62nx1itt8y1zt",
+            type="user",
+        )
+        assert_matches_type(WalletEntityAssignmentResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_assign_entity(self, client: PrivyAPI) -> None:
+        response = client.wallets.with_raw_response.assign_entity(
+            wallet_id="wallet_id",
+            id="jorpjo4rfxj62nx1itt8y1zt",
+            type="user",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = response.parse()
+        assert_matches_type(WalletEntityAssignmentResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_assign_entity(self, client: PrivyAPI) -> None:
+        with client.wallets.with_streaming_response.assign_entity(
+            wallet_id="wallet_id",
+            id="jorpjo4rfxj62nx1itt8y1zt",
+            type="user",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = response.parse()
+            assert_matches_type(WalletEntityAssignmentResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_assign_entity(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            client.wallets.with_raw_response.assign_entity(
+                wallet_id="",
+                id="jorpjo4rfxj62nx1itt8y1zt",
+                type="user",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
     def test_method_authenticate_with_jwt(self, client: PrivyAPI) -> None:
         wallet = client.wallets.authenticate_with_jwt(
             encryption_type="HPKE",
@@ -3274,7 +3325,7 @@ class TestAsyncWallets:
             ],
             display_name="display_name",
             entity={
-                "id": "x",
+                "id": "jorpjo4rfxj62nx1itt8y1zt",
                 "type": "user",
             },
             external_id="my-order-123",
@@ -6235,6 +6286,56 @@ class TestAsyncWallets:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
             await async_client.wallets.with_raw_response.archive(
                 "",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_assign_entity(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets.assign_entity(
+            wallet_id="wallet_id",
+            id="jorpjo4rfxj62nx1itt8y1zt",
+            type="user",
+        )
+        assert_matches_type(WalletEntityAssignmentResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_assign_entity(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.with_raw_response.assign_entity(
+            wallet_id="wallet_id",
+            id="jorpjo4rfxj62nx1itt8y1zt",
+            type="user",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        wallet = await response.parse()
+        assert_matches_type(WalletEntityAssignmentResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_assign_entity(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.with_streaming_response.assign_entity(
+            wallet_id="wallet_id",
+            id="jorpjo4rfxj62nx1itt8y1zt",
+            type="user",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            wallet = await response.parse()
+            assert_matches_type(WalletEntityAssignmentResponse, wallet, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_assign_entity(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            await async_client.wallets.with_raw_response.assign_entity(
+                wallet_id="",
+                id="jorpjo4rfxj62nx1itt8y1zt",
+                type="user",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
