@@ -18,5 +18,4 @@ CurveSigningChainType: TypeAlias = Literal[
     "ton",
     "starknet",
     "xrpl",
-    "canton",
 ]
