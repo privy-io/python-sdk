@@ -396,6 +396,8 @@ Types:
 
 ```python
 from privy.types import (
+    CardIssuingBankAgreement,
+    CardIssuingBankInfo,
     CardIssuingCancellationReason,
     CardIssuingCardResponse,
     CardIssuingCardStatus,
@@ -405,6 +407,10 @@ from privy.types import (
     CardIssuingConfigQueryParams,
     CardIssuingConfigResponse,
     CardIssuingCreateCardInput,
+    CardIssuingCustomerBankTermsRequiredResponse,
+    CardIssuingCustomerBridgeTermsRequiredResponse,
+    CardIssuingCustomerConsentsRequestBody,
+    CardIssuingCustomerElectronicDisclosureRequiredResponse,
     CardIssuingCustomerErrorResponse,
     CardIssuingCustomerInput,
     CardIssuingCustomerKYCRequiredResponse,
@@ -413,7 +419,6 @@ from privy.types import (
     CardIssuingCustomerReadyResponse,
     CardIssuingCustomerRejectedResponse,
     CardIssuingCustomerResponse,
-    CardIssuingCustomerTermsRequiredResponse,
     CardIssuingDispute,
     CardIssuingDisputeStatus,
     CardIssuingEphemeralKey,
