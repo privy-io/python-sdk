@@ -15,12 +15,18 @@ class UsageGasSponsorshipRecordedWebhookPayload(BaseModel):
 
     amount_usd: str
 
+    event_id: str
+    """An opaque, stable identifier for this charge.
+
+    Use it to deduplicate webhook deliveries.
+    """
+
     recorded_at: int
 
     source_id: str
 
     source_type: UsageSourceType
-    """The type of wallet action that incurred a usage charge."""
+    """The type of operation that incurred a usage charge."""
 
     type: Literal["usage.gas_sponsorship.recorded"]
     """The type of webhook event."""

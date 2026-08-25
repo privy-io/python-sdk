@@ -4,6 +4,7 @@ from typing import Union
 from typing_extensions import Annotated, TypeAlias
 
 from ..._utils import PropertyInfo
+from .payout_response import PayoutResponse
 from .swap_action_response import SwapActionResponse
 from .transfer_action_response import TransferActionResponse
 from .earn_deposit_action_response import EarnDepositActionResponse
@@ -21,6 +22,7 @@ WalletActionResponse: TypeAlias = Annotated[
         EarnWithdrawActionResponse,
         EarnIncentiveClaimActionResponse,
         EarnFeeCollectActionResponse,
+        PayoutResponse,
     ],
     PropertyInfo(discriminator="type"),
 ]

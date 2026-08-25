@@ -37,15 +37,15 @@ from ._base_client import (
 
 if TYPE_CHECKING:
     from .resources import apps, users, intents, wallets, policies, key_quorums, transactions, organizations
-    from .resources.users import UsersResource, AsyncUsersResource
     from .resources.intents import IntentsResource, AsyncIntentsResource
     from .resources.policies import PoliciesResource, AsyncPoliciesResource
     from .resources.webhooks import WebhooksResource, AsyncWebhooksResource
     from .resources.apps.apps import AppsResource, AsyncAppsResource
     from .resources.key_quorums import KeyQuorumsResource, AsyncKeyQuorumsResource
+    from .resources.users.users import UsersResource, AsyncUsersResource
     from .resources.transactions import TransactionsResource, AsyncTransactionsResource
-    from .resources.organizations import OrganizationsResource, AsyncOrganizationsResource
     from .resources.wallets.wallets import WalletsResource, AsyncWalletsResource
+    from .resources.organizations.organizations import OrganizationsResource, AsyncOrganizationsResource
 
 __all__ = [
     "ENVIRONMENTS",

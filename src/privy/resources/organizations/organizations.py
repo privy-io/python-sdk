@@ -6,27 +6,53 @@ from typing import Optional
 
 import httpx
 
-from ..types import KeyQuorumID, organization_list_params, organization_create_params, organization_update_params
-from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
-from .._utils import path_template, maybe_transform, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from .kyb import (
+    KYBResource,
+    AsyncKYBResource,
+    KYBResourceWithRawResponse,
+    AsyncKYBResourceWithRawResponse,
+    KYBResourceWithStreamingResponse,
+    AsyncKYBResourceWithStreamingResponse,
+)
+from ...types import KeyQuorumID, organization_list_params, organization_create_params, organization_update_params
+from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
+from ..._utils import path_template, maybe_transform, async_maybe_transform
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..pagination import SyncCursor, AsyncCursor
-from .._base_client import AsyncPaginator, make_request_options
-from ..types.organization import Organization
-from ..types.key_quorum_id import KeyQuorumID
+from ...pagination import SyncCursor, AsyncCursor
+from ..._base_client import AsyncPaginator, make_request_options
+from ...types.organization import Organization
+from ...types.key_quorum_id import KeyQuorumID
+from .external_fiat_accounts import (
+    ExternalFiatAccountsResource,
+    AsyncExternalFiatAccountsResource,
+    ExternalFiatAccountsResourceWithRawResponse,
+    AsyncExternalFiatAccountsResourceWithRawResponse,
+    ExternalFiatAccountsResourceWithStreamingResponse,
+    AsyncExternalFiatAccountsResourceWithStreamingResponse,
+)
 
 __all__ = ["OrganizationsResource", "AsyncOrganizationsResource"]
 
 
 class OrganizationsResource(SyncAPIResource):
     """Operations related to organizations"""
+
+    @cached_property
+    def kyb(self) -> KYBResource:
+        """Operations related to fiat onramping and offramping"""
+        return KYBResource(self._client)
+
+    @cached_property
+    def external_fiat_accounts(self) -> ExternalFiatAccountsResource:
+        """Operations related to fiat onramping and offramping"""
+        return ExternalFiatAccountsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> OrganizationsResourceWithRawResponse:
@@ -251,6 +277,16 @@ class OrganizationsResource(SyncAPIResource):
 
 class AsyncOrganizationsResource(AsyncAPIResource):
     """Operations related to organizations"""
+
+    @cached_property
+    def kyb(self) -> AsyncKYBResource:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncKYBResource(self._client)
+
+    @cached_property
+    def external_fiat_accounts(self) -> AsyncExternalFiatAccountsResource:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncExternalFiatAccountsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncOrganizationsResourceWithRawResponse:
@@ -493,6 +529,16 @@ class OrganizationsResourceWithRawResponse:
             organizations.get,
         )
 
+    @cached_property
+    def kyb(self) -> KYBResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
+        return KYBResourceWithRawResponse(self._organizations.kyb)
+
+    @cached_property
+    def external_fiat_accounts(self) -> ExternalFiatAccountsResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
+        return ExternalFiatAccountsResourceWithRawResponse(self._organizations.external_fiat_accounts)
+
 
 class AsyncOrganizationsResourceWithRawResponse:
     def __init__(self, organizations: AsyncOrganizationsResource) -> None:
@@ -513,6 +559,16 @@ class AsyncOrganizationsResourceWithRawResponse:
         self.get = async_to_raw_response_wrapper(
             organizations.get,
         )
+
+    @cached_property
+    def kyb(self) -> AsyncKYBResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncKYBResourceWithRawResponse(self._organizations.kyb)
+
+    @cached_property
+    def external_fiat_accounts(self) -> AsyncExternalFiatAccountsResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncExternalFiatAccountsResourceWithRawResponse(self._organizations.external_fiat_accounts)
 
 
 class OrganizationsResourceWithStreamingResponse:
@@ -535,6 +591,16 @@ class OrganizationsResourceWithStreamingResponse:
             organizations.get,
         )
 
+    @cached_property
+    def kyb(self) -> KYBResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
+        return KYBResourceWithStreamingResponse(self._organizations.kyb)
+
+    @cached_property
+    def external_fiat_accounts(self) -> ExternalFiatAccountsResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
+        return ExternalFiatAccountsResourceWithStreamingResponse(self._organizations.external_fiat_accounts)
+
 
 class AsyncOrganizationsResourceWithStreamingResponse:
     def __init__(self, organizations: AsyncOrganizationsResource) -> None:
@@ -555,3 +621,13 @@ class AsyncOrganizationsResourceWithStreamingResponse:
         self.get = async_to_streamed_response_wrapper(
             organizations.get,
         )
+
+    @cached_property
+    def kyb(self) -> AsyncKYBResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncKYBResourceWithStreamingResponse(self._organizations.kyb)
+
+    @cached_property
+    def external_fiat_accounts(self) -> AsyncExternalFiatAccountsResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncExternalFiatAccountsResourceWithStreamingResponse(self._organizations.external_fiat_accounts)

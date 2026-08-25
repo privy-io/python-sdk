@@ -110,6 +110,14 @@ from ...types.raw_sign_input_params import RawSignInputParams
 from ...types.fee_configuration_param import FeeConfigurationParam
 from ...types.signature_options_param import SignatureOptionsParam
 from ...types.rpc_sponsor_options_param import RpcSponsorOptionsParam
+from .deposit_accounts.deposit_accounts import (
+    DepositAccountsResource,
+    AsyncDepositAccountsResource,
+    DepositAccountsResourceWithRawResponse,
+    AsyncDepositAccountsResourceWithRawResponse,
+    DepositAccountsResourceWithStreamingResponse,
+    AsyncDepositAccountsResourceWithStreamingResponse,
+)
 from ...types.token_transfer_source_param import TokenTransferSourceParam
 from ...types.wallet_export_response_body import WalletExportResponseBody
 from ...types.wallet_init_import_response import WalletInitImportResponse
@@ -186,6 +194,10 @@ class WalletsResource(SyncAPIResource):
     def swap(self) -> SwapResource:
         """Operations for swapping tokens within wallets"""
         return SwapResource(self._client)
+
+    @cached_property
+    def deposit_accounts(self) -> DepositAccountsResource:
+        return DepositAccountsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> WalletsResourceWithRawResponse:
@@ -2602,6 +2614,10 @@ class AsyncWalletsResource(AsyncAPIResource):
     def swap(self) -> AsyncSwapResource:
         """Operations for swapping tokens within wallets"""
         return AsyncSwapResource(self._client)
+
+    @cached_property
+    def deposit_accounts(self) -> AsyncDepositAccountsResource:
+        return AsyncDepositAccountsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncWalletsResourceWithRawResponse:
@@ -5075,6 +5091,10 @@ class WalletsResourceWithRawResponse:
         """Operations for swapping tokens within wallets"""
         return SwapResourceWithRawResponse(self._wallets.swap)
 
+    @cached_property
+    def deposit_accounts(self) -> DepositAccountsResourceWithRawResponse:
+        return DepositAccountsResourceWithRawResponse(self._wallets.deposit_accounts)
+
 
 class AsyncWalletsResourceWithRawResponse:
     def __init__(self, wallets: AsyncWalletsResource) -> None:
@@ -5154,6 +5174,10 @@ class AsyncWalletsResourceWithRawResponse:
     def swap(self) -> AsyncSwapResourceWithRawResponse:
         """Operations for swapping tokens within wallets"""
         return AsyncSwapResourceWithRawResponse(self._wallets.swap)
+
+    @cached_property
+    def deposit_accounts(self) -> AsyncDepositAccountsResourceWithRawResponse:
+        return AsyncDepositAccountsResourceWithRawResponse(self._wallets.deposit_accounts)
 
 
 class WalletsResourceWithStreamingResponse:
@@ -5235,6 +5259,10 @@ class WalletsResourceWithStreamingResponse:
         """Operations for swapping tokens within wallets"""
         return SwapResourceWithStreamingResponse(self._wallets.swap)
 
+    @cached_property
+    def deposit_accounts(self) -> DepositAccountsResourceWithStreamingResponse:
+        return DepositAccountsResourceWithStreamingResponse(self._wallets.deposit_accounts)
+
 
 class AsyncWalletsResourceWithStreamingResponse:
     def __init__(self, wallets: AsyncWalletsResource) -> None:
@@ -5314,3 +5342,7 @@ class AsyncWalletsResourceWithStreamingResponse:
     def swap(self) -> AsyncSwapResourceWithStreamingResponse:
         """Operations for swapping tokens within wallets"""
         return AsyncSwapResourceWithStreamingResponse(self._wallets.swap)
+
+    @cached_property
+    def deposit_accounts(self) -> AsyncDepositAccountsResourceWithStreamingResponse:
+        return AsyncDepositAccountsResourceWithStreamingResponse(self._wallets.deposit_accounts)

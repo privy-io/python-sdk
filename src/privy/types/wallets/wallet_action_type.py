@@ -5,5 +5,5 @@ from typing_extensions import Literal, TypeAlias
 __all__ = ["WalletActionType"]
 
 WalletActionType: TypeAlias = Literal[
-    "swap", "transfer", "earn_deposit", "earn_withdraw", "earn_incentive_claim", "earn_fee_collect"
+    "swap", "transfer", "earn_deposit", "earn_withdraw", "earn_incentive_claim", "earn_fee_collect", "payout"
 ]

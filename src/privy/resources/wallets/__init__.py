@@ -48,6 +48,14 @@ from .transactions import (
     TransactionsResourceWithStreamingResponse,
     AsyncTransactionsResourceWithStreamingResponse,
 )
+from .deposit_accounts import (
+    DepositAccountsResource,
+    AsyncDepositAccountsResource,
+    DepositAccountsResourceWithRawResponse,
+    AsyncDepositAccountsResourceWithRawResponse,
+    DepositAccountsResourceWithStreamingResponse,
+    AsyncDepositAccountsResourceWithStreamingResponse,
+)
 
 __all__ = [
     "ActionsResource",
@@ -80,6 +88,12 @@ __all__ = [
     "AsyncSwapResourceWithRawResponse",
     "SwapResourceWithStreamingResponse",
     "AsyncSwapResourceWithStreamingResponse",
+    "DepositAccountsResource",
+    "AsyncDepositAccountsResource",
+    "DepositAccountsResourceWithRawResponse",
+    "AsyncDepositAccountsResourceWithRawResponse",
+    "DepositAccountsResourceWithStreamingResponse",
+    "AsyncDepositAccountsResourceWithStreamingResponse",
     "WalletsResource",
     "AsyncWalletsResource",
     "WalletsResourceWithRawResponse",

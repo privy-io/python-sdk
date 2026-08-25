@@ -4,4 +4,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["FiatPaymentRail"]
 
-FiatPaymentRail: TypeAlias = Literal["sepa", "ach_push", "wire"]
+FiatPaymentRail: TypeAlias = Literal["sepa", "ach_push", "wire", "fednow", "faster_payments"]

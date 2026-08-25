@@ -12,9 +12,15 @@ from privy.types import (
     AdvancedSwapRequestBody,
     AdvancedSwapResponse,
     AmountType,
+    AttachWalletAutomationRequestBody,
     AuthorizationKeyDashboardResponse,
     AuthorizationKeyResponse,
     AuthorizationKeyRole,
+    CreateCryptoDepositAccountRequestBody,
+    CreateCryptoDepositAccountResponse,
+    CreateCryptoDepositAccountWithConfigRequestBody,
+    CreateCryptoDepositAccountWithRouteRequestBody,
+    CryptoDepositAddressRoute,
     CurveSigningChainType,
     CurveType,
     CustodialWallet,
@@ -22,6 +28,7 @@ from privy.types import (
     CustodialWalletCreateInput,
     CustodialWalletProvider,
     CustomTokenTransferSource,
+    DetachWalletAutomationRequestBody,
     DeveloperFee,
     EncryptedAuthorizationKey,
     EncryptedBoundAuthenticateResponse,
@@ -235,6 +242,8 @@ from privy.types import (
     WalletAuthenticateRequestBody,
     WalletAuthenticateWithJwtResponse,
     WalletAuthorizationHeaders,
+    WalletAutomationAttachmentListResponse,
+    WalletAutomationAttachmentResponse,
     WalletBatchCreateInput,
     WalletBatchCreateResponse,
     WalletBatchCreateResult,
@@ -324,11 +333,13 @@ from privy.types.wallets import (
     ListWalletActionsQuery,
     ListWalletActionsResponse,
     MorphoVaultDetails,
+    PayoutResponse,
     SvmTransactionWalletActionStep,
     SvmWalletActionStepStatus,
     SwapActionResponse,
     TvmTransactionWalletActionStep,
     TvmWalletActionStepStatus,
+    TempoVaultDetails,
     TransferActionResponse,
     VedaVaultDetails,
     WalletActionInclude,
@@ -389,6 +400,22 @@ Methods:
 
 - <code title="post /v1/wallets/{wallet_id}/swap">client.wallets.swap.<a href="./src/privy/resources/wallets/swap.py">execute</a>(wallet_id, \*\*<a href="src/privy/types/wallets/swap_execute_params.py">params</a>) -> <a href="./src/privy/types/wallets/swap_action_response.py">SwapActionResponse</a></code>
 - <code title="post /v1/wallets/{wallet_id}/swap/quote">client.wallets.swap.<a href="./src/privy/resources/wallets/swap.py">quote</a>(wallet_id, \*\*<a href="src/privy/types/wallets/swap_quote_params.py">params</a>) -> <a href="./src/privy/types/swap_quote_response.py">SwapQuoteResponse</a></code>
+
+## DepositAccounts
+
+### Crypto
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.deposit_accounts.crypto.<a href="./src/privy/resources/wallets/deposit_accounts/crypto.py">\_create</a>(wallet_id, \*\*<a href="src/privy/types/wallets/deposit_accounts/crypto_create_params.py">params</a>) -> <a href="./src/privy/types/create_crypto_deposit_account_response.py">CreateCryptoDepositAccountResponse</a></code>
+
+### Fiat
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/deposit_accounts/fiat">client.wallets.deposit_accounts.fiat.<a href="./src/privy/resources/wallets/deposit_accounts/fiat.py">create</a>(wallet_id, \*\*<a href="src/privy/types/wallets/deposit_accounts/fiat_create_params.py">params</a>) -> <a href="./src/privy/types/fiat_deposit_account_response.py">FiatDepositAccountResponse</a></code>
+- <code title="get /v1/wallets/{wallet_id}/deposit_accounts/fiat">client.wallets.deposit_accounts.fiat.<a href="./src/privy/resources/wallets/deposit_accounts/fiat.py">list</a>(wallet_id, \*\*<a href="src/privy/types/wallets/deposit_accounts/fiat_list_params.py">params</a>) -> <a href="./src/privy/types/list_fiat_deposit_accounts_response.py">ListFiatDepositAccountsResponse</a></code>
+- <code title="get /v1/wallets/{wallet_id}/deposit_accounts/fiat/{deposit_account_id}">client.wallets.deposit_accounts.fiat.<a href="./src/privy/resources/wallets/deposit_accounts/fiat.py">get</a>(deposit_account_id, \*, wallet_id) -> <a href="./src/privy/types/fiat_deposit_account_response.py">FiatDepositAccountResponse</a></code>
 
 # Cards
 
@@ -516,26 +543,43 @@ from privy.types import (
 
 Methods:
 
-- <code title="post /v1/users">client.users.<a href="./src/privy/resources/users.py">create</a>(\*\*<a href="src/privy/types/user_create_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="get /v1/users">client.users.<a href="./src/privy/resources/users.py">list</a>(\*\*<a href="src/privy/types/user_list_params.py">params</a>) -> <a href="./src/privy/types/user.py">SyncCursor[User]</a></code>
-- <code title="delete /v1/users/{user_id}">client.users.<a href="./src/privy/resources/users.py">delete</a>(user_id) -> None</code>
-- <code title="get /v1/users/{user_id}">client.users.<a href="./src/privy/resources/users.py">get</a>(user_id) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/custom_auth/id">client.users.<a href="./src/privy/resources/users.py">get_by_custom_auth_id</a>(\*\*<a href="src/privy/types/user_get_by_custom_auth_id_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/discord/username">client.users.<a href="./src/privy/resources/users.py">get_by_discord_username</a>(\*\*<a href="src/privy/types/user_get_by_discord_username_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/email/address">client.users.<a href="./src/privy/resources/users.py">get_by_email_address</a>(\*\*<a href="src/privy/types/user_get_by_email_address_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/farcaster/fid">client.users.<a href="./src/privy/resources/users.py">get_by_farcaster_id</a>(\*\*<a href="src/privy/types/user_get_by_farcaster_id_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/github/username">client.users.<a href="./src/privy/resources/users.py">get_by_github_username</a>(\*\*<a href="src/privy/types/user_get_by_github_username_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/phone/number">client.users.<a href="./src/privy/resources/users.py">get_by_phone_number</a>(\*\*<a href="src/privy/types/user_get_by_phone_number_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/smart_wallet/address">client.users.<a href="./src/privy/resources/users.py">get_by_smart_wallet_address</a>(\*\*<a href="src/privy/types/user_get_by_smart_wallet_address_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/telegram/telegram_user_id">client.users.<a href="./src/privy/resources/users.py">get_by_telegram_user_id</a>(\*\*<a href="src/privy/types/user_get_by_telegram_user_id_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/telegram/username">client.users.<a href="./src/privy/resources/users.py">get_by_telegram_username</a>(\*\*<a href="src/privy/types/user_get_by_telegram_username_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/twitter/subject">client.users.<a href="./src/privy/resources/users.py">get_by_twitter_subject</a>(\*\*<a href="src/privy/types/user_get_by_twitter_subject_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/twitter/username">client.users.<a href="./src/privy/resources/users.py">get_by_twitter_username</a>(\*\*<a href="src/privy/types/user_get_by_twitter_username_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/wallet/address">client.users.<a href="./src/privy/resources/users.py">get_by_wallet_address</a>(\*\*<a href="src/privy/types/user_get_by_wallet_address_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/{user_id}/wallets">client.users.<a href="./src/privy/resources/users.py">pregenerate_wallets</a>(user_id, \*\*<a href="src/privy/types/user_pregenerate_wallets_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/search">client.users.<a href="./src/privy/resources/users.py">search</a>(\*\*<a href="src/privy/types/user_search_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/privy/resources/users.py">set_custom_metadata</a>(user_id, \*\*<a href="src/privy/types/user_set_custom_metadata_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
-- <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/privy/resources/users.py">unlink_linked_account</a>(user_id, \*\*<a href="src/privy/types/user_unlink_linked_account_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users">client.users.<a href="./src/privy/resources/users/users.py">create</a>(\*\*<a href="src/privy/types/user_create_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="get /v1/users">client.users.<a href="./src/privy/resources/users/users.py">list</a>(\*\*<a href="src/privy/types/user_list_params.py">params</a>) -> <a href="./src/privy/types/user.py">SyncCursor[User]</a></code>
+- <code title="delete /v1/users/{user_id}">client.users.<a href="./src/privy/resources/users/users.py">delete</a>(user_id) -> None</code>
+- <code title="get /v1/users/{user_id}">client.users.<a href="./src/privy/resources/users/users.py">get</a>(user_id) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/custom_auth/id">client.users.<a href="./src/privy/resources/users/users.py">get_by_custom_auth_id</a>(\*\*<a href="src/privy/types/user_get_by_custom_auth_id_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/discord/username">client.users.<a href="./src/privy/resources/users/users.py">get_by_discord_username</a>(\*\*<a href="src/privy/types/user_get_by_discord_username_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/email/address">client.users.<a href="./src/privy/resources/users/users.py">get_by_email_address</a>(\*\*<a href="src/privy/types/user_get_by_email_address_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/farcaster/fid">client.users.<a href="./src/privy/resources/users/users.py">get_by_farcaster_id</a>(\*\*<a href="src/privy/types/user_get_by_farcaster_id_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/github/username">client.users.<a href="./src/privy/resources/users/users.py">get_by_github_username</a>(\*\*<a href="src/privy/types/user_get_by_github_username_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/phone/number">client.users.<a href="./src/privy/resources/users/users.py">get_by_phone_number</a>(\*\*<a href="src/privy/types/user_get_by_phone_number_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/smart_wallet/address">client.users.<a href="./src/privy/resources/users/users.py">get_by_smart_wallet_address</a>(\*\*<a href="src/privy/types/user_get_by_smart_wallet_address_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/telegram/telegram_user_id">client.users.<a href="./src/privy/resources/users/users.py">get_by_telegram_user_id</a>(\*\*<a href="src/privy/types/user_get_by_telegram_user_id_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/telegram/username">client.users.<a href="./src/privy/resources/users/users.py">get_by_telegram_username</a>(\*\*<a href="src/privy/types/user_get_by_telegram_username_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/twitter/subject">client.users.<a href="./src/privy/resources/users/users.py">get_by_twitter_subject</a>(\*\*<a href="src/privy/types/user_get_by_twitter_subject_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/twitter/username">client.users.<a href="./src/privy/resources/users/users.py">get_by_twitter_username</a>(\*\*<a href="src/privy/types/user_get_by_twitter_username_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/wallet/address">client.users.<a href="./src/privy/resources/users/users.py">get_by_wallet_address</a>(\*\*<a href="src/privy/types/user_get_by_wallet_address_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/{user_id}/wallets">client.users.<a href="./src/privy/resources/users/users.py">pregenerate_wallets</a>(user_id, \*\*<a href="src/privy/types/user_pregenerate_wallets_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/search">client.users.<a href="./src/privy/resources/users/users.py">search</a>(\*\*<a href="src/privy/types/user_search_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/privy/resources/users/users.py">set_custom_metadata</a>(user_id, \*\*<a href="src/privy/types/user_set_custom_metadata_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/privy/resources/users/users.py">unlink_linked_account</a>(user_id, \*\*<a href="src/privy/types/user_unlink_linked_account_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+
+## KYC
+
+Methods:
+
+- <code title="get /v1/users/{user_id}/kyc">client.users.kyc.<a href="./src/privy/resources/users/kyc.py">list</a>(user_id) -> <a href="./src/privy/types/kyc_status_list_response.py">KYCStatusListResponse</a></code>
+- <code title="post /v1/users/{user_id}/kyc/links">client.users.kyc.<a href="./src/privy/resources/users/kyc.py">initiate_links</a>(user_id, \*\*<a href="src/privy/types/users/kyc_initiate_links_params.py">params</a>) -> <a href="./src/privy/types/kyc_status_response.py">KYCStatusResponse</a></code>
+- <code title="post /v1/users/{user_id}/kyc/tos">client.users.kyc.<a href="./src/privy/resources/users/kyc.py">initiate_tos</a>(user_id, \*\*<a href="src/privy/types/users/kyc_initiate_tos_params.py">params</a>) -> <a href="./src/privy/types/kyx_tos_response.py">KyxTosResponse</a></code>
+
+## ExternalFiatAccounts
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/external_fiat_accounts">client.users.external_fiat_accounts.<a href="./src/privy/resources/users/external_fiat_accounts.py">create</a>(user_id, \*\*<a href="src/privy/types/users/external_fiat_account_create_params.py">params</a>) -> <a href="./src/privy/types/external_fiat_account_response.py">ExternalFiatAccountResponse</a></code>
+- <code title="get /v1/users/{user_id}/external_fiat_accounts">client.users.external_fiat_accounts.<a href="./src/privy/resources/users/external_fiat_accounts.py">list</a>(user_id, \*\*<a href="src/privy/types/users/external_fiat_account_list_params.py">params</a>) -> <a href="./src/privy/types/list_external_fiat_accounts_response.py">ListExternalFiatAccountsResponse</a></code>
+- <code title="delete /v1/users/{user_id}/external_fiat_accounts/{account_id}">client.users.external_fiat_accounts.<a href="./src/privy/resources/users/external_fiat_accounts.py">delete</a>(account_id, \*, user_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
+- <code title="get /v1/users/{user_id}/external_fiat_accounts/{account_id}">client.users.external_fiat_accounts.<a href="./src/privy/resources/users/external_fiat_accounts.py">get</a>(account_id, \*, user_id) -> <a href="./src/privy/types/external_fiat_account_response.py">ExternalFiatAccountResponse</a></code>
 
 # Organizations
 
@@ -557,11 +601,28 @@ from privy.types import (
 
 Methods:
 
-- <code title="post /v1/organizations">client.organizations.<a href="./src/privy/resources/organizations.py">create</a>(\*\*<a href="src/privy/types/organization_create_params.py">params</a>) -> <a href="./src/privy/types/organization.py">Organization</a></code>
-- <code title="patch /v1/organizations/{organization_id}">client.organizations.<a href="./src/privy/resources/organizations.py">update</a>(organization_id, \*\*<a href="src/privy/types/organization_update_params.py">params</a>) -> <a href="./src/privy/types/organization.py">Organization</a></code>
-- <code title="get /v1/organizations">client.organizations.<a href="./src/privy/resources/organizations.py">list</a>(\*\*<a href="src/privy/types/organization_list_params.py">params</a>) -> <a href="./src/privy/types/organization.py">SyncCursor[Organization]</a></code>
-- <code title="delete /v1/organizations/{organization_id}">client.organizations.<a href="./src/privy/resources/organizations.py">delete</a>(organization_id) -> None</code>
-- <code title="get /v1/organizations/{organization_id}">client.organizations.<a href="./src/privy/resources/organizations.py">get</a>(organization_id) -> <a href="./src/privy/types/organization.py">Organization</a></code>
+- <code title="post /v1/organizations">client.organizations.<a href="./src/privy/resources/organizations/organizations.py">create</a>(\*\*<a href="src/privy/types/organization_create_params.py">params</a>) -> <a href="./src/privy/types/organization.py">Organization</a></code>
+- <code title="patch /v1/organizations/{organization_id}">client.organizations.<a href="./src/privy/resources/organizations/organizations.py">update</a>(organization_id, \*\*<a href="src/privy/types/organization_update_params.py">params</a>) -> <a href="./src/privy/types/organization.py">Organization</a></code>
+- <code title="get /v1/organizations">client.organizations.<a href="./src/privy/resources/organizations/organizations.py">list</a>(\*\*<a href="src/privy/types/organization_list_params.py">params</a>) -> <a href="./src/privy/types/organization.py">SyncCursor[Organization]</a></code>
+- <code title="delete /v1/organizations/{organization_id}">client.organizations.<a href="./src/privy/resources/organizations/organizations.py">delete</a>(organization_id) -> None</code>
+- <code title="get /v1/organizations/{organization_id}">client.organizations.<a href="./src/privy/resources/organizations/organizations.py">get</a>(organization_id) -> <a href="./src/privy/types/organization.py">Organization</a></code>
+
+## KYB
+
+Methods:
+
+- <code title="get /v1/organizations/{organization_id}/kyb">client.organizations.kyb.<a href="./src/privy/resources/organizations/kyb.py">list</a>(organization_id) -> <a href="./src/privy/types/kyb_status_list_response.py">KYBStatusListResponse</a></code>
+- <code title="post /v1/organizations/{organization_id}/kyb/links">client.organizations.kyb.<a href="./src/privy/resources/organizations/kyb.py">initiate_links</a>(organization_id, \*\*<a href="src/privy/types/organizations/kyb_initiate_links_params.py">params</a>) -> <a href="./src/privy/types/kyb_status_response.py">KYBStatusResponse</a></code>
+- <code title="post /v1/organizations/{organization_id}/kyb/tos">client.organizations.kyb.<a href="./src/privy/resources/organizations/kyb.py">initiate_tos</a>(organization_id, \*\*<a href="src/privy/types/organizations/kyb_initiate_tos_params.py">params</a>) -> <a href="./src/privy/types/kyx_tos_response.py">KyxTosResponse</a></code>
+
+## ExternalFiatAccounts
+
+Methods:
+
+- <code title="post /v1/organizations/{organization_id}/external_fiat_accounts">client.organizations.external_fiat_accounts.<a href="./src/privy/resources/organizations/external_fiat_accounts.py">create</a>(organization_id, \*\*<a href="src/privy/types/organizations/external_fiat_account_create_params.py">params</a>) -> <a href="./src/privy/types/organization_external_fiat_account_response.py">OrganizationExternalFiatAccountResponse</a></code>
+- <code title="get /v1/organizations/{organization_id}/external_fiat_accounts">client.organizations.external_fiat_accounts.<a href="./src/privy/resources/organizations/external_fiat_accounts.py">list</a>(organization_id, \*\*<a href="src/privy/types/organizations/external_fiat_account_list_params.py">params</a>) -> <a href="./src/privy/types/list_organization_external_fiat_accounts_response.py">ListOrganizationExternalFiatAccountsResponse</a></code>
+- <code title="delete /v1/organizations/{organization_id}/external_fiat_accounts/{account_id}">client.organizations.external_fiat_accounts.<a href="./src/privy/resources/organizations/external_fiat_accounts.py">delete</a>(account_id, \*, organization_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
+- <code title="get /v1/organizations/{organization_id}/external_fiat_accounts/{account_id}">client.organizations.external_fiat_accounts.<a href="./src/privy/resources/organizations/external_fiat_accounts.py">get</a>(account_id, \*, organization_id) -> <a href="./src/privy/types/organization_external_fiat_account_response.py">OrganizationExternalFiatAccountResponse</a></code>
 
 # Policies
 
@@ -816,6 +877,12 @@ from privy.types import (
     BridgeRefundMetadata,
     BridgeStaticMemoDepositMetadata,
     BridgeTransferRefundMetadata,
+    DepositCompletedData,
+    DepositCompletedDestination,
+    DepositFailedData,
+    DepositStartedData,
+    DepositStartedDestination,
+    DepositStartedSource,
     FundsDepositedWebhookPayload,
     FundsWithdrawnWebhookPayload,
     IntentAuthorizedWebhookPayload,
@@ -834,6 +901,9 @@ from privy.types import (
     KrakenEmbedUserVerifiedWebhookPayload,
     MfaDisabledWebhookPayload,
     MfaEnabledWebhookPayload,
+    OrganizationKYBUpdatedData,
+    OrganizationKYBUpdatedKYBData,
+    OrganizationKYBUpdatedTosData,
     PrivateKeyExportWebhookPayload,
     SeedPhraseExportWebhookPayload,
     TransactionBroadcastedWebhookPayload,
@@ -849,6 +919,9 @@ from privy.types import (
     UserAuthenticatedWebhookPayload,
     UserCreatedWebhookPayload,
     UserDeletedWebhookPayload,
+    UserKYCUpdatedData,
+    UserKYCUpdatedKYCData,
+    UserKYCUpdatedTosData,
     UserLinkedAccountWebhookPayload,
     UserOperationCompletedWebhookPayload,
     UserReference,
@@ -872,6 +945,10 @@ from privy.types import (
     WalletActionEarnWithdrawFailedWebhookPayload,
     WalletActionEarnWithdrawRejectedWebhookPayload,
     WalletActionEarnWithdrawSucceededWebhookPayload,
+    WalletActionPayoutCreatedWebhookPayload,
+    WalletActionPayoutFailedWebhookPayload,
+    WalletActionPayoutRejectedWebhookPayload,
+    WalletActionPayoutSucceededWebhookPayload,
     WalletActionSwapCreatedWebhookPayload,
     WalletActionSwapFailedWebhookPayload,
     WalletActionSwapRejectedWebhookPayload,
@@ -881,6 +958,7 @@ from privy.types import (
     WalletActionTransferRejectedWebhookPayload,
     WalletActionTransferSucceededWebhookPayload,
     WalletArchivedWebhookPayload,
+    WalletAutomationSubmittedWebhookPayload,
     WalletFundsAsset,
     WalletFundsErc20Asset,
     WalletFundsNativeTokenAsset,
@@ -896,6 +974,11 @@ from privy.types import (
     YieldClaimReward,
     YieldDepositConfirmedWebhookPayload,
     YieldWithdrawConfirmedWebhookPayload,
+    OrganizationKYBUpdatedWebhookEvent,
+    UserKYCUpdatedWebhookEvent,
+    WalletDepositAccountDepositCompletedWebhookEvent,
+    WalletDepositAccountDepositFailedWebhookEvent,
+    WalletDepositAccountDepositStartedWebhookEvent,
     UnsafeUnwrapWebhookEvent,
 )
 ```
@@ -1162,6 +1245,46 @@ from privy.types import (
 )
 ```
 
+# WalletAutomations
+
+Types:
+
+```python
+from privy.types import (
+    AutomationActionConfig,
+    AutomationActionConfigInput,
+    AutomationAssetFilter,
+    AutomationAssetFilterAll,
+    AutomationAssetFilterExclude,
+    AutomationAssetFilterInclude,
+    AutomationAssetFilterInput,
+    AutomationAssetFilterInputExclude,
+    AutomationAssetFilterInputInclude,
+    AutomationAssetSpec,
+    AutomationAssetSpecInput,
+    AutomationConfig,
+    AutomationConfigInput,
+    AutomationDepositTriggerConfig,
+    AutomationDepositTriggerConfigInput,
+    AutomationDestinationAsset,
+    AutomationDestinationAssetInput,
+    AutomationSwapActionConfig,
+    AutomationSwapActionConfigInput,
+    AutomationTriggerConfig,
+    AutomationTriggerConfigInput,
+    CreateAutomationRequestBody,
+    SwapAttachmentParams,
+    UpdateAutomationRequestBody,
+    WalletAutomationExecutionListResponse,
+    WalletAutomationExecutionResponse,
+    WalletAutomationExecutionStatus,
+    WalletAutomationListResponse,
+    WalletAutomationResponse,
+    WalletAutomationStatus,
+    WalletAutomationSuccessResponse,
+)
+```
+
 # Shared
 
 Types:
@@ -1186,6 +1309,84 @@ from privy.types import (
     TokenIdentifier,
     TronAddress,
     TronHexAddress,
+)
+```
+
+# Fiat
+
+Types:
+
+```python
+from privy.types import (
+    BridgeCreateExternalFiatAccountRequestBody,
+    BridgeCreateFiatDepositAccountRequestBody,
+    BridgeExternalFiatAccount,
+    BridgeFiatDepositAccount,
+    BridgeOrganizationExternalFiatAccount,
+    CreateExternalFiatAccountRequestBody,
+    CreateFiatDepositAccountRequestBody,
+    CreateFiatDepositAccountSource,
+    CreatePayoutRequestBody,
+    ExternalFiatAccount,
+    ExternalFiatAccountAddress,
+    ExternalFiatAccountData,
+    ExternalFiatAccountGBData,
+    ExternalFiatAccountIbanData,
+    ExternalFiatAccountPixData,
+    ExternalFiatAccountResponse,
+    ExternalFiatAccountSwiftCategory,
+    ExternalFiatAccountSwiftData,
+    ExternalFiatAccountSwiftPurposeOfFunds,
+    ExternalFiatAccountUsData,
+    FiatCurrency,
+    FiatDepositAccount,
+    FiatDepositAccountDestination,
+    FiatDepositAccountResponse,
+    FiatDepositAccountSource,
+    FiatDepositAccountStatus,
+    FiatDepositInstructions,
+    FiatPaymentRail,
+    KYBLinksRequestBody,
+    KYBStatusListResponse,
+    KYBStatusResponse,
+    KYBTosRequestBody,
+    KYCIdentifyingDocument,
+    KYCLinksRequestBody,
+    KYCResidentialAddress,
+    KYCStatusListResponse,
+    KYCStatusResponse,
+    KYCSubmitData,
+    KYCSubmitRequestBody,
+    KyxCapabilities,
+    KyxCapabilityStatus,
+    KyxEndorsement,
+    KyxEndorsementName,
+    KyxEndorsementStatus,
+    KyxEnvironment,
+    KyxProvider,
+    KyxProviderStatus,
+    KyxTosRequestBody,
+    KyxTosResponse,
+    KyxTosStatus,
+    KyxTosStatusDetail,
+    KyxVerificationStatus,
+    KyxVerificationStatusDetail,
+    ListExternalFiatAccountsResponse,
+    ListFiatDepositAccountsResponse,
+    ListOrganizationExternalFiatAccountsResponse,
+    OfframpDepositInstructions,
+    OfframpResponse,
+    OnrampAsset,
+    OnrampChain,
+    OnrampDepositInstructions,
+    OnrampKYCResponse,
+    OnrampKYCStatus,
+    OnrampResponse,
+    OnrampTransferStatus,
+    OrganizationExternalFiatAccount,
+    OrganizationExternalFiatAccountResponse,
+    PayoutDestination,
+    PayoutSource,
 )
 ```
 
@@ -1329,26 +1530,6 @@ from privy.types import (
     EvmCaip2ChainID,
     VaultAsset,
     YieldAuthorizationHeaders,
-)
-```
-
-# Fiat
-
-Types:
-
-```python
-from privy.types import (
-    FiatCurrency,
-    FiatPaymentRail,
-    OfframpDepositInstructions,
-    OfframpResponse,
-    OnrampAsset,
-    OnrampChain,
-    OnrampDepositInstructions,
-    OnrampKYCResponse,
-    OnrampKYCStatus,
-    OnrampResponse,
-    OnrampTransferStatus,
 )
 ```
 

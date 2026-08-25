@@ -4,4 +4,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["UsageSourceType"]
 
-UsageSourceType: TypeAlias = Literal["wallet-action-transfer", "wallet-action-swap"]
+UsageSourceType: TypeAlias = Literal["wallet-action-transfer", "wallet-action-swap", "rpc"]

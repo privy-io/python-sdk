@@ -7,7 +7,15 @@ from typing_extensions import overload
 
 import httpx
 
-from ..types import (
+from .kyc import (
+    KYCResource,
+    AsyncKYCResource,
+    KYCResourceWithRawResponse,
+    AsyncKYCResourceWithRawResponse,
+    KYCResourceWithStreamingResponse,
+    AsyncKYCResourceWithStreamingResponse,
+)
+from ...types import (
     user_list_params,
     user_create_params,
     user_search_params,
@@ -27,29 +35,47 @@ from ..types import (
     user_get_by_telegram_username_params,
     user_get_by_smart_wallet_address_params,
 )
-from .._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
-from .._utils import path_template, required_args, maybe_transform, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
+from ..._utils import path_template, required_args, maybe_transform, async_maybe_transform
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ..pagination import SyncCursor, AsyncCursor
-from ..types.user import User
-from .._base_client import AsyncPaginator, make_request_options
-from ..types.custom_metadata_param import CustomMetadataParam
-from ..types.linked_account_type_param import LinkedAccountTypeParam
-from ..types.linked_account_input_param import LinkedAccountInputParam
-from ..types.wallet_creation_input_param import WalletCreationInputParam
+from ...pagination import SyncCursor, AsyncCursor
+from ...types.user import User
+from ..._base_client import AsyncPaginator, make_request_options
+from .external_fiat_accounts import (
+    ExternalFiatAccountsResource,
+    AsyncExternalFiatAccountsResource,
+    ExternalFiatAccountsResourceWithRawResponse,
+    AsyncExternalFiatAccountsResourceWithRawResponse,
+    ExternalFiatAccountsResourceWithStreamingResponse,
+    AsyncExternalFiatAccountsResourceWithStreamingResponse,
+)
+from ...types.custom_metadata_param import CustomMetadataParam
+from ...types.linked_account_type_param import LinkedAccountTypeParam
+from ...types.linked_account_input_param import LinkedAccountInputParam
+from ...types.wallet_creation_input_param import WalletCreationInputParam
 
 __all__ = ["UsersResource", "AsyncUsersResource"]
 
 
 class UsersResource(SyncAPIResource):
     """Operations related to users"""
+
+    @cached_property
+    def kyc(self) -> KYCResource:
+        """Operations related to fiat onramping and offramping"""
+        return KYCResource(self._client)
+
+    @cached_property
+    def external_fiat_accounts(self) -> ExternalFiatAccountsResource:
+        """Operations related to fiat onramping and offramping"""
+        return ExternalFiatAccountsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> UsersResourceWithRawResponse:
@@ -847,6 +873,16 @@ class UsersResource(SyncAPIResource):
 
 class AsyncUsersResource(AsyncAPIResource):
     """Operations related to users"""
+
+    @cached_property
+    def kyc(self) -> AsyncKYCResource:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncKYCResource(self._client)
+
+    @cached_property
+    def external_fiat_accounts(self) -> AsyncExternalFiatAccountsResource:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncExternalFiatAccountsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncUsersResourceWithRawResponse:
@@ -1715,6 +1751,16 @@ class UsersResourceWithRawResponse:
             users.unlink_linked_account,
         )
 
+    @cached_property
+    def kyc(self) -> KYCResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
+        return KYCResourceWithRawResponse(self._users.kyc)
+
+    @cached_property
+    def external_fiat_accounts(self) -> ExternalFiatAccountsResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
+        return ExternalFiatAccountsResourceWithRawResponse(self._users.external_fiat_accounts)
+
 
 class AsyncUsersResourceWithRawResponse:
     def __init__(self, users: AsyncUsersResource) -> None:
@@ -1780,6 +1826,16 @@ class AsyncUsersResourceWithRawResponse:
         self.unlink_linked_account = async_to_raw_response_wrapper(
             users.unlink_linked_account,
         )
+
+    @cached_property
+    def kyc(self) -> AsyncKYCResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncKYCResourceWithRawResponse(self._users.kyc)
+
+    @cached_property
+    def external_fiat_accounts(self) -> AsyncExternalFiatAccountsResourceWithRawResponse:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncExternalFiatAccountsResourceWithRawResponse(self._users.external_fiat_accounts)
 
 
 class UsersResourceWithStreamingResponse:
@@ -1847,6 +1903,16 @@ class UsersResourceWithStreamingResponse:
             users.unlink_linked_account,
         )
 
+    @cached_property
+    def kyc(self) -> KYCResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
+        return KYCResourceWithStreamingResponse(self._users.kyc)
+
+    @cached_property
+    def external_fiat_accounts(self) -> ExternalFiatAccountsResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
+        return ExternalFiatAccountsResourceWithStreamingResponse(self._users.external_fiat_accounts)
+
 
 class AsyncUsersResourceWithStreamingResponse:
     def __init__(self, users: AsyncUsersResource) -> None:
@@ -1912,3 +1978,13 @@ class AsyncUsersResourceWithStreamingResponse:
         self.unlink_linked_account = async_to_streamed_response_wrapper(
             users.unlink_linked_account,
         )
+
+    @cached_property
+    def kyc(self) -> AsyncKYCResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncKYCResourceWithStreamingResponse(self._users.kyc)
+
+    @cached_property
+    def external_fiat_accounts(self) -> AsyncExternalFiatAccountsResourceWithStreamingResponse:
+        """Operations related to fiat onramping and offramping"""
+        return AsyncExternalFiatAccountsResourceWithStreamingResponse(self._users.external_fiat_accounts)
