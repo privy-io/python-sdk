@@ -2,17 +2,25 @@
 
 from __future__ import annotations
 
-from typing import Literal, Mapping, cast
-from dataclasses import dataclass
+from typing import Literal, Mapping, Sequence, cast
+from dataclasses import field, dataclass
 
 import canonicaljson
 
 __all__ = [
+    "AuthorizationContext",
     "WalletAPIRequestSignatureInput",
     "format_request_for_authorization_signature",
 ]
 
 MutationMethod = Literal["POST", "PUT", "PATCH", "DELETE"]
+
+
+@dataclass(frozen=True)
+class AuthorizationContext:
+    """Credentials that contribute signatures to an authorized request."""
+
+    signatures: Sequence[str] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)

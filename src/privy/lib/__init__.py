@@ -2,9 +2,14 @@
 
 from .client import PrivyClient
 from .wallets import WalletsService
-from .authorization import WalletAPIRequestSignatureInput, format_request_for_authorization_signature
+from .authorization import (
+    AuthorizationContext,
+    WalletAPIRequestSignatureInput,
+    format_request_for_authorization_signature,
+)
 
 __all__ = [
+    "AuthorizationContext",
     "PrivyClient",
     "WalletAPIRequestSignatureInput",
     "WalletsService",

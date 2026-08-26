@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from privy import WalletAPIRequestSignatureInput, format_request_for_authorization_signature
+from privy import AuthorizationContext, WalletAPIRequestSignatureInput, format_request_for_authorization_signature
 
 
 def _format_body(body: object) -> bytes:
@@ -32,3 +32,9 @@ def test_empty_objects_and_arrays_are_formatted_as_empty_strings(empty_body: obj
 
 def test_none_body_is_formatted_as_json_null() -> None:
     assert _format_body(None).startswith(b'{"body":null')
+
+
+def test_authorization_context_accepts_precomputed_signatures() -> None:
+    context = AuthorizationContext(signatures=["first", "second"])
+
+    assert context.signatures == ["first", "second"]
