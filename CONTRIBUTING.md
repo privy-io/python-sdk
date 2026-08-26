@@ -89,6 +89,22 @@ $ pip install ./path-to-wheel-file.whl
 $ ./scripts/test
 ```
 
+### Live integration tests
+
+Integration tests make real requests to the Privy staging API; they do not use mocks. Copy `.env.example` to
+`.env`, populate `TEST_APP_ID` and `TEST_APP_SECRET`, export the values, and run:
+
+```sh
+$ set -a
+$ source .env
+$ set +a
+$ uv run pytest -m integration tests/integration
+```
+
+Each integration test must create the resources it needs rather than depending on pre-existing wallets, users, or
+other API resources. `TEST_API_URL` may be used to override the staging URL, but the suite refuses to target the
+production API.
+
 ## Linting and formatting
 
 This repository uses [ruff](https://github.com/astral-sh/ruff) and

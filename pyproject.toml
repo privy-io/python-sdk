@@ -118,6 +118,9 @@ replacement = '[\1](https://github.com/privy-io/python-sdk/tree/main/\g<2>)'
 testpaths = ["tests"]
 addopts = "--tb=short -n auto"
 xfail_strict = true
+markers = [
+  "integration: live tests against the Privy staging API",
+]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "session"
 filterwarnings = [
