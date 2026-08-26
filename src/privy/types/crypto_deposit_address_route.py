@@ -1,8 +1,8 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
 from .._models import BaseModel
-from .automation_asset_filter import AutomationAssetFilter
-from .automation_destination_asset import AutomationDestinationAsset
+from .crypto_deposit_asset import CryptoDepositAsset
+from .crypto_deposit_asset_filter import CryptoDepositAssetFilter
 
 __all__ = ["CryptoDepositAddressRoute"]
 
@@ -12,10 +12,17 @@ class CryptoDepositAddressRoute(BaseModel):
 
     deposit_address: str
 
-    destination: AutomationDestinationAsset
-    """Destination asset identified by contract address on a specific chain (CAIP-2)."""
+    destination: CryptoDepositAsset
+    """An asset on a chain.
 
-    source: AutomationAssetFilter
-    """Which assets to include/exclude for an automation trigger."""
+    Uses a human-readable alias (usdc, base) when one is on file, otherwise the raw
+    asset address and CAIP-2.
+    """
+
+    source: CryptoDepositAssetFilter
+    """Which assets a deposit address accepts.
+
+    Asset and chain use human-readable aliases when known.
+    """
 
     wallet_id: str

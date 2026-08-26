@@ -21,6 +21,7 @@ WalletAssetChainNameInputParam: TypeAlias = Union[
         "solana",
         "tron",
         "zksync_era",
+        "robinhood",
         "hoodi",
         "sepolia",
         "arbitrum_sepolia",
@@ -32,6 +33,7 @@ WalletAssetChainNameInputParam: TypeAlias = Union[
         "solana_devnet",
         "solana_testnet",
         "tron_nile",
+        "robinhood_testnet",
     ],
     str,
 ]

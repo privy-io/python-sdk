@@ -4,10 +4,10 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 
-__all__ = ["AutomationAssetFilterAll"]
+__all__ = ["CryptoDepositAssetFilterAll"]
 
 
-class AutomationAssetFilterAll(BaseModel):
+class CryptoDepositAssetFilterAll(BaseModel):
     """Match all assets."""
 
     mode: Literal["all"]
