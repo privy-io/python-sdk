@@ -1,7 +1,3 @@
-# The public client is introduced in a follow-up. Remove these suppressions once
-# PrivyClient is available for Pyright to inspect.
-# pyright: reportUnknownVariableType=false, reportUnknownParameterType=false
-
 from __future__ import annotations
 
 import os
@@ -9,7 +5,7 @@ from collections.abc import Iterator
 
 import pytest
 
-from privy import PrivyClient  # pyright: ignore[reportAttributeAccessIssue]
+from privy import PrivyClient
 
 STAGING_API_URL = "https://api.staging.privy.io"
 

@@ -1,12 +1,8 @@
-# The public client is introduced in a follow-up. Remove these suppressions once
-# PrivyClient is available for Pyright to inspect.
-# pyright: reportUnknownVariableType=false, reportUnknownParameterType=false, reportUnknownMemberType=false
-
 from __future__ import annotations
 
 import pytest
 
-from privy import PrivyClient  # pyright: ignore[reportAttributeAccessIssue]
+from privy import PrivyClient
 
 pytestmark = pytest.mark.integration
 
