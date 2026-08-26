@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import base64
-from typing import Literal, Mapping, Sequence, cast
+from typing import Literal, Mapping, Callable, Sequence, cast
 from dataclasses import field, dataclass
 
 import canonicaljson
@@ -22,6 +22,7 @@ __all__ = [
 ]
 
 MutationMethod = Literal["POST", "PUT", "PATCH", "DELETE"]
+Signer = Callable[[bytes], str]
 
 
 @dataclass(frozen=True)
@@ -30,6 +31,7 @@ class AuthorizationContext:
 
     signatures: Sequence[str] = field(default_factory=tuple)
     authorization_private_keys: Sequence[str] = field(default_factory=tuple)
+    signers: Sequence[Signer] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)
@@ -144,6 +146,7 @@ def prepare_request(
     signatures.extend(
         generate_authorization_signature(private_key, payload) for private_key in context.authorization_private_keys
     )
+    signatures.extend(signer(payload) for signer in context.signers)
     if not signatures:
         return PreparedRequest(headers={})
     return PreparedRequest(headers={"privy-authorization-signature": ",".join(signatures)})

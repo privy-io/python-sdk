@@ -60,6 +60,39 @@ def test_raw_sign_with_ownerless_tron_wallet(privy_client: PrivyClient) -> None:
     assert response.data.signature.startswith("0x")
 
 
+def test_raw_sign_with_authorization_signer(privy_client: PrivyClient) -> None:
+    key_pair = generate_p256_key_pair()
+    private_key = serialization.load_der_private_key(
+        base64.b64decode(key_pair.private_key),
+        password=None,
+    )
+    assert isinstance(private_key, ec.EllipticCurvePrivateKey)
+    wallet = privy_client.wallets.create(
+        chain_type="tron",
+        owner={"public_key": key_pair.public_key},
+    )
+    assert wallet.id
+    assert wallet.chain_type == "tron"
+
+    response = privy_client.wallets.raw_sign(
+        wallet.id,
+        wallet_raw_sign_params=RAW_SIGN_PARAMS,
+        request_options=PrivyRequestOptions(
+            authorization_context=AuthorizationContext(
+                signers=[
+                    lambda payload: base64.b64encode(private_key.sign(payload, ec.ECDSA(hashes.SHA256()))).decode(
+                        "ascii"
+                    )
+                ],
+            )
+        ),
+    )
+
+    assert response.method == "raw_sign"
+    assert response.data.encoding == "hex"
+    assert response.data.signature.startswith("0x")
+
+
 def test_raw_sign_with_precomputed_authorization_signature(privy_client: PrivyClient) -> None:
     private_key = ec.generate_private_key(ec.SECP256R1())
     wallet = privy_client.wallets.create(

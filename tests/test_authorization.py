@@ -129,3 +129,38 @@ def test_generate_authorization_signature_rejects_invalid_keys(invalid_key_kind:
 
     with pytest.raises(ValueError, match="authorization private key|P-256"):
         generate_authorization_signature(private_key, b"payload")
+
+
+def test_signers_receive_payload_and_sign_after_private_keys() -> None:
+    key_pair = generate_p256_key_pair()
+    received_payloads: list[bytes] = []
+
+    def signer(payload: bytes) -> str:
+        received_payloads.append(payload)
+        return "callback"
+
+    prepared = prepare_request(
+        app_id="app-123",
+        method="POST",
+        url="https://api.staging.privy.io/v1/wallets/wallet-1/raw_sign",
+        body={"params": {"hash": "0x1234"}},
+        authorization_context=AuthorizationContext(
+            signatures=["precomputed"],
+            authorization_private_keys=[key_pair.private_key],
+            signers=[signer],
+        ),
+    )
+
+    signatures = prepared.headers["privy-authorization-signature"].split(",")
+    assert signatures[0] == "precomputed"
+    assert signatures[2] == "callback"
+    assert received_payloads == [
+        format_request_for_authorization_signature(
+            WalletAPIRequestSignatureInput(
+                method="POST",
+                url="https://api.staging.privy.io/v1/wallets/wallet-1/raw_sign",
+                body={"params": {"hash": "0x1234"}},
+                headers={"privy-app-id": "app-123"},
+            )
+        )
+    ]
