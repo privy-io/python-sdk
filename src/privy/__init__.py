@@ -3,7 +3,7 @@
 import typing as _t
 
 from . import types
-from .lib import PrivyClient
+from .lib import PrivyClient, WalletAPIRequestSignatureInput, format_request_for_authorization_signature
 from ._types import NOT_GIVEN, Omit, NoneType, NotGiven, Transport, ProxiesTypes, omit, not_given
 from ._utils import file_from_path
 from ._client import (
@@ -75,6 +75,8 @@ __all__ = [
     "AsyncStream",
     "PrivyAPI",
     "PrivyClient",
+    "WalletAPIRequestSignatureInput",
+    "format_request_for_authorization_signature",
     "AsyncPrivyAPI",
     "ENVIRONMENTS",
     "file_from_path",
