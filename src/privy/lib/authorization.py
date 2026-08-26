@@ -2,16 +2,22 @@
 
 from __future__ import annotations
 
+import base64
 from typing import Literal, Mapping, Sequence, cast
 from dataclasses import field, dataclass
 
 import canonicaljson
+from cryptography.hazmat.primitives import hashes, serialization
+from cryptography.hazmat.primitives.asymmetric import ec
 
 __all__ = [
     "AuthorizationContext",
+    "P256KeyPair",
     "PreparedRequest",
     "WalletAPIRequestSignatureInput",
     "format_request_for_authorization_signature",
+    "generate_authorization_signature",
+    "generate_p256_key_pair",
     "prepare_request",
 ]
 
@@ -23,6 +29,50 @@ class AuthorizationContext:
     """Credentials that contribute signatures to an authorized request."""
 
     signatures: Sequence[str] = field(default_factory=tuple)
+    authorization_private_keys: Sequence[str] = field(default_factory=tuple)
+
+
+@dataclass(frozen=True)
+class P256KeyPair:
+    """A P-256 key pair encoded for Privy authorization."""
+
+    public_key: str
+    private_key: str
+
+
+def generate_p256_key_pair() -> P256KeyPair:
+    """Generate base64 DER SPKI/PKCS#8 P-256 keys without PEM headers."""
+
+    private_key = ec.generate_private_key(ec.SECP256R1())
+    public_key_der = private_key.public_key().public_bytes(
+        serialization.Encoding.DER,
+        serialization.PublicFormat.SubjectPublicKeyInfo,
+    )
+    private_key_der = private_key.private_bytes(
+        serialization.Encoding.DER,
+        serialization.PrivateFormat.PKCS8,
+        serialization.NoEncryption(),
+    )
+    return P256KeyPair(
+        public_key=base64.b64encode(public_key_der).decode("ascii"),
+        private_key=base64.b64encode(private_key_der).decode("ascii"),
+    )
+
+
+def generate_authorization_signature(authorization_private_key: str, payload: bytes) -> str:
+    """Sign payload bytes with a base64 DER PKCS#8 P-256 private key."""
+
+    try:
+        private_key_der = base64.b64decode(authorization_private_key, validate=True)
+        private_key = serialization.load_der_private_key(private_key_der, password=None)
+    except (TypeError, ValueError) as exc:
+        raise ValueError("Invalid authorization private key") from exc
+
+    if not isinstance(private_key, ec.EllipticCurvePrivateKey) or not isinstance(private_key.curve, ec.SECP256R1):
+        raise ValueError("Authorization private key must be a P-256 PKCS#8 private key")
+
+    signature = private_key.sign(payload, ec.ECDSA(hashes.SHA256()))
+    return base64.b64encode(signature).decode("ascii")
 
 
 @dataclass(frozen=True)
@@ -82,7 +132,7 @@ def prepare_request(
     context = authorization_context or AuthorizationContext()
     # Formatting is intentionally performed even for precomputed signatures so
     # every authorization-context path covers the same request representation.
-    format_request_for_authorization_signature(
+    payload = format_request_for_authorization_signature(
         WalletAPIRequestSignatureInput(
             method=method,
             url=url,
@@ -90,6 +140,10 @@ def prepare_request(
             headers={"privy-app-id": app_id},
         )
     )
-    if not context.signatures:
+    signatures = list(context.signatures)
+    signatures.extend(
+        generate_authorization_signature(private_key, payload) for private_key in context.authorization_private_keys
+    )
+    if not signatures:
         return PreparedRequest(headers={})
-    return PreparedRequest(headers={"privy-authorization-signature": ",".join(context.signatures)})
+    return PreparedRequest(headers={"privy-authorization-signature": ",".join(signatures)})

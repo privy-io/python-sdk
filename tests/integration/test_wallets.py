@@ -12,6 +12,7 @@ from privy import (
     PrivyRequestOptions,
     AuthorizationContext,
     WalletAPIRequestSignatureInput,
+    generate_p256_key_pair,
     format_request_for_authorization_signature,
 )
 from privy.types.wallet_raw_sign_params import WalletRawSignParams
@@ -75,6 +76,30 @@ def test_raw_sign_with_precomputed_authorization_signature(privy_client: PrivyCl
         request_options=PrivyRequestOptions(
             authorization_context=AuthorizationContext(
                 signatures=[base64.b64encode(signature).decode("ascii")],
+            )
+        ),
+    )
+
+    assert response.method == "raw_sign"
+    assert response.data.encoding == "hex"
+    assert response.data.signature.startswith("0x")
+
+
+def test_raw_sign_with_authorization_private_key(privy_client: PrivyClient) -> None:
+    key_pair = generate_p256_key_pair()
+    wallet = privy_client.wallets.create(
+        chain_type="tron",
+        owner={"public_key": key_pair.public_key},
+    )
+    assert wallet.id
+    assert wallet.chain_type == "tron"
+
+    response = privy_client.wallets.raw_sign(
+        wallet.id,
+        wallet_raw_sign_params=RAW_SIGN_PARAMS,
+        request_options=PrivyRequestOptions(
+            authorization_context=AuthorizationContext(
+                authorization_private_keys=[key_pair.private_key],
             )
         ),
     )

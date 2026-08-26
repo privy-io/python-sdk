@@ -4,12 +4,15 @@ import typing as _t
 
 from . import types
 from .lib import (
+    P256KeyPair,
     PrivyClient,
     PreparedRequest,
     PrivyRequestOptions,
     AuthorizationContext,
     WalletAPIRequestSignatureInput,
     prepare_request,
+    generate_p256_key_pair,
+    generate_authorization_signature,
     format_request_for_authorization_signature,
 )
 from ._types import NOT_GIVEN, Omit, NoneType, NotGiven, Transport, ProxiesTypes, omit, not_given
@@ -83,11 +86,14 @@ __all__ = [
     "AsyncStream",
     "PrivyAPI",
     "PrivyClient",
+    "P256KeyPair",
     "PrivyRequestOptions",
     "AuthorizationContext",
     "PreparedRequest",
     "WalletAPIRequestSignatureInput",
     "format_request_for_authorization_signature",
+    "generate_authorization_signature",
+    "generate_p256_key_pair",
     "prepare_request",
     "AsyncPrivyAPI",
     "ENVIRONMENTS",
