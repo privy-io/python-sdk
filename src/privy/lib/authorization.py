@@ -9,8 +9,10 @@ import canonicaljson
 
 __all__ = [
     "AuthorizationContext",
+    "PreparedRequest",
     "WalletAPIRequestSignatureInput",
     "format_request_for_authorization_signature",
+    "prepare_request",
 ]
 
 MutationMethod = Literal["POST", "PUT", "PATCH", "DELETE"]
@@ -21,6 +23,11 @@ class AuthorizationContext:
     """Credentials that contribute signatures to an authorized request."""
 
     signatures: Sequence[str] = field(default_factory=tuple)
+
+
+@dataclass(frozen=True)
+class PreparedRequest:
+    headers: Mapping[str, str]
 
 
 @dataclass(frozen=True)
@@ -60,3 +67,29 @@ def format_request_for_authorization_signature(input: WalletAPIRequestSignatureI
         "headers": dict(input.headers),
     }
     return canonicaljson.encode_canonical_json(payload)
+
+
+def prepare_request(
+    *,
+    app_id: str,
+    method: MutationMethod,
+    url: str,
+    body: object,
+    authorization_context: AuthorizationContext | None = None,
+) -> PreparedRequest:
+    """Prepare authorization headers for a generated API request."""
+
+    context = authorization_context or AuthorizationContext()
+    # Formatting is intentionally performed even for precomputed signatures so
+    # every authorization-context path covers the same request representation.
+    format_request_for_authorization_signature(
+        WalletAPIRequestSignatureInput(
+            method=method,
+            url=url,
+            body=body,
+            headers={"privy-app-id": app_id},
+        )
+    )
+    if not context.signatures:
+        return PreparedRequest(headers={})
+    return PreparedRequest(headers={"privy-authorization-signature": ",".join(context.signatures)})

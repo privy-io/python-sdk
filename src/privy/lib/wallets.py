@@ -2,6 +2,9 @@
 
 from __future__ import annotations
 
+from .._types import omit
+from .authorization import prepare_request
+from .request_options import PrivyRequestOptions
 from ..types.raw_sign_response import RawSignResponse
 from ..resources.wallets.wallets import WalletsResource
 from ..types.wallet_raw_sign_params import WalletRawSignParams
@@ -15,8 +18,20 @@ class WalletsService(WalletsResource):
         wallet_id: str,
         *,
         wallet_raw_sign_params: WalletRawSignParams,
-        authorization_context: object | None = None,
+        request_options: PrivyRequestOptions | None = None,
     ) -> RawSignResponse:
-        # Authorization support will be added with the authorization primitives.
-        _ = authorization_context
-        return self._raw_sign(wallet_id, **wallet_raw_sign_params)
+        options = request_options or PrivyRequestOptions()
+        client = self._client
+        prepared = prepare_request(
+            app_id=client.app_id,
+            method="POST",
+            url=f"{str(client.base_url).rstrip('/')}/v1/wallets/{wallet_id}/raw_sign",
+            body=dict(wallet_raw_sign_params),
+            authorization_context=options.authorization_context,
+        )
+        signature = prepared.headers.get("privy-authorization-signature")
+        return self._raw_sign(
+            wallet_id,
+            params=wallet_raw_sign_params["params"],
+            privy_authorization_signature=signature if signature is not None else omit,
+        )

@@ -15,8 +15,14 @@ certifi==2026.1.4
     # via
     #   httpcore
     #   httpx
+cffi==2.0.0 ; python_full_version < '3.10' and platform_python_implementation != 'PyPy'
+    # via cryptography
+cffi==2.1.1 ; python_full_version >= '3.10' and platform_python_implementation != 'PyPy'
+    # via cryptography
 colorama==0.4.6 ; sys_platform == 'win32'
     # via pytest
+cryptography==46.0.7
+    # via privy-client
 dirty-equals==0.11
 distro==1.9.0
     # via privy-client
@@ -60,6 +66,10 @@ pathspec==1.0.3
     # via mypy
 pluggy==1.6.0
     # via pytest
+pycparser==2.23 ; python_full_version < '3.10' and implementation_name != 'PyPy' and platform_python_implementation != 'PyPy'
+    # via cffi
+pycparser==3.0 ; python_full_version >= '3.10' and implementation_name != 'PyPy' and platform_python_implementation != 'PyPy'
+    # via cffi
 pydantic==2.12.5
     # via privy-client
 pydantic-core==2.41.5
@@ -98,6 +108,7 @@ tomli==2.4.0 ; python_full_version < '3.11'
 typing-extensions==4.15.0
     # via
     #   anyio
+    #   cryptography
     #   exceptiongroup
     #   mypy
     #   privy-client
