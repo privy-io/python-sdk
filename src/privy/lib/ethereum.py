@@ -9,8 +9,10 @@ from .request_options import PrivyRequestOptions
 from ..types.signature_options_param import SignatureOptionsParam
 from ..types.ethereum_personal_sign_rpc_response_data import EthereumPersonalSignRpcResponseData
 from ..types.ethereum_secp_256k_1_sign_rpc_response_data import EthereumSecp256k1SignRpcResponseData
+from ..types.ethereum_sign_transaction_rpc_response_data import EthereumSignTransactionRpcResponseData
 from ..types.ethereum_personal_sign_rpc_input_params_param import EthereumPersonalSignRpcInputParamsParam
 from ..types.ethereum_secp_256k_1_sign_rpc_input_params_param import EthereumSecp256k1SignRpcInputParamsParam
+from ..types.ethereum_sign_transaction_rpc_input_params_param import EthereumSignTransactionRpcInputParamsParam
 from ..types.ethereum_sign_7702_authorization_rpc_response_data import (
     EthereumSign7702AuthorizationRpcResponseData,
 )
@@ -128,3 +130,31 @@ class EthereumWalletService:
             )
         response_values: Any = response
         return cast(EthereumSign7702AuthorizationRpcResponseData, response_values.data)
+
+    def sign_transaction(
+        self,
+        wallet_id: str,
+        *,
+        params: EthereumSignTransactionRpcInputParamsParam,
+        address: str | None = None,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> EthereumSignTransactionRpcResponseData:
+        body: wallet_rpc_params.EthereumSignTransactionRpcInput = {
+            "method": "eth_signTransaction",
+            "chain_type": "ethereum",
+            "params": params,
+        }
+        if address is not None:
+            body["address"] = address
+
+        response = self._wallets.rpc(
+            wallet_id,
+            wallet_rpc_request_body=body,
+            request_options=request_options,
+        )
+        if response.method != "eth_signTransaction":
+            raise ValueError(
+                f"Unexpected wallet RPC response method: expected 'eth_signTransaction', got {response.method!r}"
+            )
+        response_values: Any = response
+        return cast(EthereumSignTransactionRpcResponseData, response_values.data)

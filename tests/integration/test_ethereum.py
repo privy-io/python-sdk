@@ -47,3 +47,22 @@ def test_sign_7702_authorization(privy_client: PrivyClient, ethereum_wallet: Wal
     assert response.authorization.r.startswith("0x")
     assert response.authorization.s.startswith("0x")
     assert response.authorization.y_parity in {0, 1}
+
+
+def test_sign_transaction(privy_client: PrivyClient, ethereum_wallet: Wallet) -> None:
+    response = privy_client.wallets.ethereum.sign_transaction(
+        ethereum_wallet.id,
+        params={
+            "transaction": {
+                "type": 2,
+                "chain_id": 1,
+                "to": "0x1234567890123456789012345678901234567890",
+                "value": "0x1",
+                "gas_limit": "0x5208",
+                "data": "0x",
+            }
+        },
+    )
+
+    assert response.encoding == "rlp"
+    assert response.signed_transaction.startswith("0x")
