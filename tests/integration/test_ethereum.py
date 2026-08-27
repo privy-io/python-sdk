@@ -88,3 +88,27 @@ def test_sign_typed_data(privy_client: PrivyClient, ethereum_wallet: Wallet) -> 
 
     assert response.encoding == "hex"
     assert response.signature.startswith("0x")
+
+
+@pytest.mark.skip(reason="Requires a funded wallet")
+def test_sign_user_operation(privy_client: PrivyClient, ethereum_wallet: Wallet) -> None:
+    response = privy_client.wallets.ethereum.sign_user_operation(
+        ethereum_wallet.id,
+        params={
+            "chain_id": "0x66eee",
+            "contract": "0x1234567890123456789012345678901234567890",
+            "user_operation": {
+                "sender": "0x1234567890123456789012345678901234567890",
+                "nonce": "0x0",
+                "call_data": "0x",
+                "call_gas_limit": "0x1",
+                "verification_gas_limit": "0x1",
+                "pre_verification_gas": "0x1",
+                "max_fee_per_gas": "0x1",
+                "max_priority_fee_per_gas": "0x1",
+            },
+        },
+    )
+
+    assert response.encoding == "hex"
+    assert response.signature.startswith("0x")
