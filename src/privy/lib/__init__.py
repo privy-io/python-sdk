@@ -1,6 +1,7 @@
 """Hand-written public API layered on top of the generated client."""
 
 from .client import PrivyClient
+from .solana import SolanaWalletService
 from .wallets import WalletsService
 from .ethereum import EthereumWalletService
 from .authorization import (
@@ -22,6 +23,7 @@ __all__ = [
     "PrivyClient",
     "EthereumWalletService",
     "PrivyRequestOptions",
+    "SolanaWalletService",
     "WalletAPIRequestSignatureInput",
     "WalletsService",
     "format_request_for_authorization_signature",

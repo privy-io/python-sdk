@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, cast
 
+from .solana import SolanaWalletService
 from .._types import omit
 from .._client import PrivyAPI
 from .ethereum import EthereumWalletService
@@ -22,6 +23,7 @@ class WalletsService(WalletsResource):
     def __init__(self, client: PrivyAPI) -> None:
         super().__init__(client)
         self.ethereum = EthereumWalletService(self)
+        self.solana = SolanaWalletService(self)
 
     def rpc(
         self,
