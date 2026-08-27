@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing_extensions import Required, TypedDict
 
-from .automation_asset_filter_input_param import AutomationAssetFilterInputParam
-from .automation_destination_asset_input_param import AutomationDestinationAssetInputParam
+from .crypto_deposit_asset_param import CryptoDepositAssetParam
+from .crypto_deposit_asset_filter_param import CryptoDepositAssetFilterParam
 
 __all__ = ["CreateCryptoDepositAccountWithRouteRequestBodyParam"]
 
@@ -13,15 +13,15 @@ __all__ = ["CreateCryptoDepositAccountWithRouteRequestBodyParam"]
 class CreateCryptoDepositAccountWithRouteRequestBodyParam(TypedDict, total=False):
     """Creates a crypto deposit account from an inline source and destination."""
 
-    destination: Required[AutomationDestinationAssetInputParam]
-    """
-    A destination asset spec accepting either raw identifiers (asset_address, caip2)
-    or human-readable aliases (asset, chain). Exactly one of asset_address or asset
-    must be provided; exactly one of caip2 or chain must be provided.
+    destination: Required[CryptoDepositAssetParam]
+    """An asset on a chain.
+
+    Uses a human-readable alias (usdc, base) when one is on file, otherwise the raw
+    asset address and CAIP-2.
     """
 
-    source: Required[AutomationAssetFilterInputParam]
-    """
-    Which assets to include/exclude for an automation trigger (input form with alias
-    support).
+    source: Required[CryptoDepositAssetFilterParam]
+    """Which assets a deposit address accepts.
+
+    Asset and chain use human-readable aliases when known.
     """

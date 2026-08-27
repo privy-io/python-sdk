@@ -84,6 +84,9 @@ class AppResponse(BaseModel):
 
     legacy_wallet_ui_config: bool
 
+    legal_name: Optional[str] = None
+    """The legal name of the company that operates the app."""
+
     line_oauth: bool
 
     linkedin_oauth: bool

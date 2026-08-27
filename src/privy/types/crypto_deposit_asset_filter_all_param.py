@@ -4,10 +4,10 @@ from __future__ import annotations
 
 from typing_extensions import Literal, Required, TypedDict
 
-__all__ = ["AutomationAssetFilterAllParam"]
+__all__ = ["CryptoDepositAssetFilterAllParam"]
 
 
-class AutomationAssetFilterAllParam(TypedDict, total=False):
+class CryptoDepositAssetFilterAllParam(TypedDict, total=False):
     """Match all assets."""
 
     mode: Required[Literal["all"]]

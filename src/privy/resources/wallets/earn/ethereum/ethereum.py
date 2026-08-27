@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+from typing import Any, cast
+
 import httpx
 
 from .....types import WalletActionNonce
@@ -24,10 +26,12 @@ from ....._response import (
     async_to_streamed_response_wrapper,
 )
 from ....._base_client import make_request_options
-from .....types.wallets.earn import ethereum_deposit_params, ethereum_withdraw_params
+from .....types.wallets.earn import ethereum_deposit_params, ethereum_withdraw_params, ethereum_vault_position_params
 from .....types.wallet_action_nonce import WalletActionNonce
 from .....types.wallets.earn_deposit_action_response import EarnDepositActionResponse
 from .....types.wallets.earn_withdraw_action_response import EarnWithdrawActionResponse
+from .....types.wallets.ethereum_earn_position_response import EthereumEarnPositionResponse
+from .....types.wallets.ethereum_earn_vault_details_response import EthereumEarnVaultDetailsResponse
 
 __all__ = ["EthereumResource", "AsyncEthereumResource"]
 
@@ -221,6 +225,99 @@ class EthereumResource(SyncAPIResource):
             cast_to=EarnWithdrawActionResponse,
         )
 
+    def vault_details(
+        self,
+        vault_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> EthereumEarnVaultDetailsResponse:
+        """
+        Retrieve detailed information about an earn vault, including current APY and
+        liquidity.
+
+        Args:
+          vault_id: The Privy vault ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not vault_id:
+            raise ValueError(f"Expected a non-empty value for `vault_id` but received {vault_id!r}")
+        return cast(
+            EthereumEarnVaultDetailsResponse,
+            self._get(
+                path_template("/v1/earn/ethereum/vaults/{vault_id}", vault_id=vault_id),
+                options=make_request_options(
+                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                ),
+                cast_to=cast(
+                    Any, EthereumEarnVaultDetailsResponse
+                ),  # Union types cannot be passed in as arguments in the type system
+            ),
+        )
+
+    def vault_position(
+        self,
+        wallet_id: str,
+        *,
+        vault_id: str,
+        include_archived: bool | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> EthereumEarnPositionResponse:
+        """
+        Retrieve a wallet's current position in a specific earn vault, including
+        deposit/withdraw totals and current onchain vault shares.
+
+        Args:
+          wallet_id: ID of the wallet.
+
+          vault_id: The vault ID to get position for.
+
+          include_archived: Include archived wallets in lookup. Defaults to false.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not wallet_id:
+            raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
+        return self._get(
+            path_template("/v1/wallets/{wallet_id}/earn/ethereum/vaults", wallet_id=wallet_id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "vault_id": vault_id,
+                        "include_archived": include_archived,
+                    },
+                    ethereum_vault_position_params.EthereumVaultPositionParams,
+                ),
+            ),
+            cast_to=EthereumEarnPositionResponse,
+        )
+
 
 class AsyncEthereumResource(AsyncAPIResource):
     """Operations related to wallet actions"""
@@ -411,6 +508,99 @@ class AsyncEthereumResource(AsyncAPIResource):
             cast_to=EarnWithdrawActionResponse,
         )
 
+    async def vault_details(
+        self,
+        vault_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> EthereumEarnVaultDetailsResponse:
+        """
+        Retrieve detailed information about an earn vault, including current APY and
+        liquidity.
+
+        Args:
+          vault_id: The Privy vault ID.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not vault_id:
+            raise ValueError(f"Expected a non-empty value for `vault_id` but received {vault_id!r}")
+        return cast(
+            EthereumEarnVaultDetailsResponse,
+            await self._get(
+                path_template("/v1/earn/ethereum/vaults/{vault_id}", vault_id=vault_id),
+                options=make_request_options(
+                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                ),
+                cast_to=cast(
+                    Any, EthereumEarnVaultDetailsResponse
+                ),  # Union types cannot be passed in as arguments in the type system
+            ),
+        )
+
+    async def vault_position(
+        self,
+        wallet_id: str,
+        *,
+        vault_id: str,
+        include_archived: bool | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> EthereumEarnPositionResponse:
+        """
+        Retrieve a wallet's current position in a specific earn vault, including
+        deposit/withdraw totals and current onchain vault shares.
+
+        Args:
+          wallet_id: ID of the wallet.
+
+          vault_id: The vault ID to get position for.
+
+          include_archived: Include archived wallets in lookup. Defaults to false.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not wallet_id:
+            raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
+        return await self._get(
+            path_template("/v1/wallets/{wallet_id}/earn/ethereum/vaults", wallet_id=wallet_id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform(
+                    {
+                        "vault_id": vault_id,
+                        "include_archived": include_archived,
+                    },
+                    ethereum_vault_position_params.EthereumVaultPositionParams,
+                ),
+            ),
+            cast_to=EthereumEarnPositionResponse,
+        )
+
 
 class EthereumResourceWithRawResponse:
     def __init__(self, ethereum: EthereumResource) -> None:
@@ -421,6 +611,12 @@ class EthereumResourceWithRawResponse:
         )
         self._withdraw = to_raw_response_wrapper(
             ethereum._withdraw,
+        )
+        self.vault_details = to_raw_response_wrapper(
+            ethereum.vault_details,
+        )
+        self.vault_position = to_raw_response_wrapper(
+            ethereum.vault_position,
         )
 
     @cached_property
@@ -439,6 +635,12 @@ class AsyncEthereumResourceWithRawResponse:
         self._withdraw = async_to_raw_response_wrapper(
             ethereum._withdraw,
         )
+        self.vault_details = async_to_raw_response_wrapper(
+            ethereum.vault_details,
+        )
+        self.vault_position = async_to_raw_response_wrapper(
+            ethereum.vault_position,
+        )
 
     @cached_property
     def incentive(self) -> AsyncIncentiveResourceWithRawResponse:
@@ -456,6 +658,12 @@ class EthereumResourceWithStreamingResponse:
         self._withdraw = to_streamed_response_wrapper(
             ethereum._withdraw,
         )
+        self.vault_details = to_streamed_response_wrapper(
+            ethereum.vault_details,
+        )
+        self.vault_position = to_streamed_response_wrapper(
+            ethereum.vault_position,
+        )
 
     @cached_property
     def incentive(self) -> IncentiveResourceWithStreamingResponse:
@@ -472,6 +680,12 @@ class AsyncEthereumResourceWithStreamingResponse:
         )
         self._withdraw = async_to_streamed_response_wrapper(
             ethereum._withdraw,
+        )
+        self.vault_details = async_to_streamed_response_wrapper(
+            ethereum.vault_details,
+        )
+        self.vault_position = async_to_streamed_response_wrapper(
+            ethereum.vault_position,
         )
 
     @cached_property

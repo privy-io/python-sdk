@@ -368,6 +368,8 @@ Methods:
 
 - <code title="post /v1/wallets/{wallet_id}/earn/ethereum/deposit">client.wallets.earn.ethereum.<a href="./src/privy/resources/wallets/earn/ethereum/ethereum.py">\_deposit</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/ethereum_deposit_params.py">params</a>) -> <a href="./src/privy/types/wallets/earn_deposit_action_response.py">EarnDepositActionResponse</a></code>
 - <code title="post /v1/wallets/{wallet_id}/earn/ethereum/withdraw">client.wallets.earn.ethereum.<a href="./src/privy/resources/wallets/earn/ethereum/ethereum.py">\_withdraw</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/ethereum_withdraw_params.py">params</a>) -> <a href="./src/privy/types/wallets/earn_withdraw_action_response.py">EarnWithdrawActionResponse</a></code>
+- <code title="get /v1/earn/ethereum/vaults/{vault_id}">client.wallets.earn.ethereum.<a href="./src/privy/resources/wallets/earn/ethereum/ethereum.py">vault_details</a>(vault_id) -> <a href="./src/privy/types/wallets/ethereum_earn_vault_details_response.py">EthereumEarnVaultDetailsResponse</a></code>
+- <code title="get /v1/wallets/{wallet_id}/earn/ethereum/vaults">client.wallets.earn.ethereum.<a href="./src/privy/resources/wallets/earn/ethereum/ethereum.py">vault_position</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/ethereum_vault_position_params.py">params</a>) -> <a href="./src/privy/types/wallets/ethereum_earn_position_response.py">EthereumEarnPositionResponse</a></code>
 
 #### Incentive
 

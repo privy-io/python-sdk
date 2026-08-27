@@ -306,6 +306,7 @@ from .wallet_funds_erc_20_asset import WalletFundsErc20Asset as WalletFundsErc20
 from .wallet_funds_trc_20_asset import WalletFundsTrc20Asset as WalletFundsTrc20Asset
 from .wallet_init_import_params import WalletInitImportParams as WalletInitImportParams
 from .wallet_invite_input_param import WalletInviteInputParam as WalletInviteInputParam
+from .crypto_deposit_asset_param import CryptoDepositAssetParam as CryptoDepositAssetParam
 from .external_oauth_provider_id import ExternalOAuthProviderID as ExternalOAuthProviderID
 from .key_quorum_intent_response import KeyQuorumIntentResponse as KeyQuorumIntentResponse
 from .kraken_embed_sorting_order import KrakenEmbedSortingOrder as KrakenEmbedSortingOrder
@@ -325,7 +326,6 @@ from .wallet_create_batch_params import WalletCreateBatchParams as WalletCreateB
 from .xrpl_transaction_condition import XrplTransactionCondition as XrplTransactionCondition
 from .aggregation_condition_param import AggregationConditionParam as AggregationConditionParam
 from .allowlist_deletion_response import AllowlistDeletionResponse as AllowlistDeletionResponse
-from .automation_asset_spec_param import AutomationAssetSpecParam as AutomationAssetSpecParam
 from .card_issuing_dispute_status import CardIssuingDisputeStatus as CardIssuingDisputeStatus
 from .crypto_deposit_asset_filter import CryptoDepositAssetFilter as CryptoDepositAssetFilter
 from .custodial_wallet_chain_type import CustodialWalletChainType as CustodialWalletChainType
@@ -499,8 +499,7 @@ from .user_get_by_email_address_params import UserGetByEmailAddressParams as Use
 from .wallet_recovered_webhook_payload import WalletRecoveredWebhookPayload as WalletRecoveredWebhookPayload
 from .xrpl_transaction_condition_field import XrplTransactionConditionField as XrplTransactionConditionField
 from .xrpl_transaction_condition_param import XrplTransactionConditionParam as XrplTransactionConditionParam
-from .automation_asset_filter_all_param import AutomationAssetFilterAllParam as AutomationAssetFilterAllParam
-from .automation_asset_spec_input_param import AutomationAssetSpecInputParam as AutomationAssetSpecInputParam
+from .crypto_deposit_asset_filter_param import CryptoDepositAssetFilterParam as CryptoDepositAssetFilterParam
 from .ethereum_calldata_condition_param import EthereumCalldataConditionParam as EthereumCalldataConditionParam
 from .intent_authorized_webhook_payload import IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload
 from .linked_account_github_input_param import LinkedAccountGitHubInputParam as LinkedAccountGitHubInputParam
@@ -524,7 +523,6 @@ from .user_get_by_wallet_address_params import UserGetByWalletAddressParams as U
 from .user_unlink_linked_account_params import UserUnlinkLinkedAccountParams as UserUnlinkLinkedAccountParams
 from .wallet_entity_assignment_response import WalletEntityAssignmentResponse as WalletEntityAssignmentResponse
 from .additional_signer_item_input_param import AdditionalSignerItemInputParam as AdditionalSignerItemInputParam
-from .automation_destination_asset_param import AutomationDestinationAssetParam as AutomationDestinationAssetParam
 from .custom_token_transfer_source_param import CustomTokenTransferSourceParam as CustomTokenTransferSourceParam
 from .ethereum_sign_typed_data_rpc_input import EthereumSignTypedDataRpcInput as EthereumSignTypedDataRpcInput
 from .export_private_key_rpc_input_param import ExportPrivateKeyRpcInputParam as ExportPrivateKeyRpcInputParam
@@ -552,7 +550,6 @@ from .user_get_by_twitter_subject_params import UserGetByTwitterSubjectParams as
 from .wallet_automation_execution_status import WalletAutomationExecutionStatus as WalletAutomationExecutionStatus
 from .xrpl_sign_transaction_rpc_response import XrplSignTransactionRpcResponse as XrplSignTransactionRpcResponse
 from .action_request_body_condition_param import ActionRequestBodyConditionParam as ActionRequestBodyConditionParam
-from .automation_asset_filter_input_param import AutomationAssetFilterInputParam as AutomationAssetFilterInputParam
 from .bridge_static_memo_deposit_metadata import BridgeStaticMemoDepositMetadata as BridgeStaticMemoDepositMetadata
 from .crypto_deposit_asset_filter_exclude import CryptoDepositAssetFilterExclude as CryptoDepositAssetFilterExclude
 from .crypto_deposit_asset_filter_include import CryptoDepositAssetFilterInclude as CryptoDepositAssetFilterInclude
@@ -599,6 +596,7 @@ from .transfer_received_transaction_detail import TransferReceivedTransactionDet
 from .typed_data_domain_input_params_param import TypedDataDomainInputParamsParam as TypedDataDomainInputParamsParam
 from .user_get_by_telegram_username_params import UserGetByTelegramUsernameParams as UserGetByTelegramUsernameParams
 from .user_updated_account_webhook_payload import UserUpdatedAccountWebhookPayload as UserUpdatedAccountWebhookPayload
+from .crypto_deposit_asset_filter_all_param import CryptoDepositAssetFilterAllParam as CryptoDepositAssetFilterAllParam
 from .ethereum_7702_authorization_condition import (
     Ethereum7702AuthorizationCondition as Ethereum7702AuthorizationCondition,
 )
@@ -732,9 +730,6 @@ from .xrpl_sign_transaction_rpc_response_data import (
 from .yield_deposit_confirmed_webhook_payload import (
     YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
 )
-from .automation_destination_asset_input_param import (
-    AutomationDestinationAssetInputParam as AutomationDestinationAssetInputParam,
-)
 from .create_fiat_deposit_account_source_param import (
     CreateFiatDepositAccountSourceParam as CreateFiatDepositAccountSourceParam,
 )
@@ -764,6 +759,12 @@ from .user_transferred_account_webhook_payload import (
 )
 from .yield_withdraw_confirmed_webhook_payload import (
     YieldWithdrawConfirmedWebhookPayload as YieldWithdrawConfirmedWebhookPayload,
+)
+from .crypto_deposit_asset_filter_exclude_param import (
+    CryptoDepositAssetFilterExcludeParam as CryptoDepositAssetFilterExcludeParam,
+)
+from .crypto_deposit_asset_filter_include_param import (
+    CryptoDepositAssetFilterIncludeParam as CryptoDepositAssetFilterIncludeParam,
 )
 from .ethereum_secp_256k_1_sign_rpc_input_param import (
     EthereumSecp256k1SignRpcInputParam as EthereumSecp256k1SignRpcInputParam,
@@ -842,12 +843,6 @@ from .wallet_action_swap_created_webhook_payload import (
 )
 from .wallet_create_wallets_with_recovery_params import (
     WalletCreateWalletsWithRecoveryParams as WalletCreateWalletsWithRecoveryParams,
-)
-from .automation_asset_filter_input_exclude_param import (
-    AutomationAssetFilterInputExcludeParam as AutomationAssetFilterInputExcludeParam,
-)
-from .automation_asset_filter_input_include_param import (
-    AutomationAssetFilterInputIncludeParam as AutomationAssetFilterInputIncludeParam,
 )
 from .ethereum_7702_authorization_condition_param import (
     Ethereum7702AuthorizationConditionParam as Ethereum7702AuthorizationConditionParam,

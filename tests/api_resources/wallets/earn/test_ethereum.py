@@ -9,7 +9,12 @@ import pytest
 
 from privy import PrivyAPI, AsyncPrivyAPI
 from tests.utils import assert_matches_type
-from privy.types.wallets import EarnDepositActionResponse, EarnWithdrawActionResponse
+from privy.types.wallets import (
+    EarnDepositActionResponse,
+    EarnWithdrawActionResponse,
+    EthereumEarnPositionResponse,
+    EthereumEarnVaultDetailsResponse,
+)
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -139,6 +144,104 @@ class TestEthereum:
                 vault_id="cm7oxq1el000e11o8iwp7d0d0",
             )
 
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_vault_details(self, client: PrivyAPI) -> None:
+        ethereum = client.wallets.earn.ethereum.vault_details(
+            "vault_id",
+        )
+        assert_matches_type(EthereumEarnVaultDetailsResponse, ethereum, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_vault_details(self, client: PrivyAPI) -> None:
+        response = client.wallets.earn.ethereum.with_raw_response.vault_details(
+            "vault_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        ethereum = response.parse()
+        assert_matches_type(EthereumEarnVaultDetailsResponse, ethereum, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_vault_details(self, client: PrivyAPI) -> None:
+        with client.wallets.earn.ethereum.with_streaming_response.vault_details(
+            "vault_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            ethereum = response.parse()
+            assert_matches_type(EthereumEarnVaultDetailsResponse, ethereum, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_vault_details(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `vault_id` but received ''"):
+            client.wallets.earn.ethereum.with_raw_response.vault_details(
+                "",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_vault_position(self, client: PrivyAPI) -> None:
+        ethereum = client.wallets.earn.ethereum.vault_position(
+            wallet_id="wallet_id",
+            vault_id="vault_id",
+        )
+        assert_matches_type(EthereumEarnPositionResponse, ethereum, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_vault_position_with_all_params(self, client: PrivyAPI) -> None:
+        ethereum = client.wallets.earn.ethereum.vault_position(
+            wallet_id="wallet_id",
+            vault_id="vault_id",
+            include_archived=True,
+        )
+        assert_matches_type(EthereumEarnPositionResponse, ethereum, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_vault_position(self, client: PrivyAPI) -> None:
+        response = client.wallets.earn.ethereum.with_raw_response.vault_position(
+            wallet_id="wallet_id",
+            vault_id="vault_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        ethereum = response.parse()
+        assert_matches_type(EthereumEarnPositionResponse, ethereum, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_vault_position(self, client: PrivyAPI) -> None:
+        with client.wallets.earn.ethereum.with_streaming_response.vault_position(
+            wallet_id="wallet_id",
+            vault_id="vault_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            ethereum = response.parse()
+            assert_matches_type(EthereumEarnPositionResponse, ethereum, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_vault_position(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            client.wallets.earn.ethereum.with_raw_response.vault_position(
+                wallet_id="",
+                vault_id="vault_id",
+            )
+
 
 class TestAsyncEthereum:
     parametrize = pytest.mark.parametrize(
@@ -265,4 +368,102 @@ class TestAsyncEthereum:
             await async_client.wallets.earn.ethereum.with_raw_response._withdraw(
                 wallet_id="",
                 vault_id="cm7oxq1el000e11o8iwp7d0d0",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_vault_details(self, async_client: AsyncPrivyAPI) -> None:
+        ethereum = await async_client.wallets.earn.ethereum.vault_details(
+            "vault_id",
+        )
+        assert_matches_type(EthereumEarnVaultDetailsResponse, ethereum, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_vault_details(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.earn.ethereum.with_raw_response.vault_details(
+            "vault_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        ethereum = await response.parse()
+        assert_matches_type(EthereumEarnVaultDetailsResponse, ethereum, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_vault_details(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.earn.ethereum.with_streaming_response.vault_details(
+            "vault_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            ethereum = await response.parse()
+            assert_matches_type(EthereumEarnVaultDetailsResponse, ethereum, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_vault_details(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `vault_id` but received ''"):
+            await async_client.wallets.earn.ethereum.with_raw_response.vault_details(
+                "",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_vault_position(self, async_client: AsyncPrivyAPI) -> None:
+        ethereum = await async_client.wallets.earn.ethereum.vault_position(
+            wallet_id="wallet_id",
+            vault_id="vault_id",
+        )
+        assert_matches_type(EthereumEarnPositionResponse, ethereum, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_vault_position_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        ethereum = await async_client.wallets.earn.ethereum.vault_position(
+            wallet_id="wallet_id",
+            vault_id="vault_id",
+            include_archived=True,
+        )
+        assert_matches_type(EthereumEarnPositionResponse, ethereum, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_vault_position(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.earn.ethereum.with_raw_response.vault_position(
+            wallet_id="wallet_id",
+            vault_id="vault_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        ethereum = await response.parse()
+        assert_matches_type(EthereumEarnPositionResponse, ethereum, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_vault_position(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.earn.ethereum.with_streaming_response.vault_position(
+            wallet_id="wallet_id",
+            vault_id="vault_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            ethereum = await response.parse()
+            assert_matches_type(EthereumEarnPositionResponse, ethereum, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_vault_position(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            await async_client.wallets.earn.ethereum.with_raw_response.vault_position(
+                wallet_id="",
+                vault_id="vault_id",
             )

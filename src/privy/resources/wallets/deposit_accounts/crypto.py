@@ -18,9 +18,9 @@ from ...._response import (
 )
 from ...._base_client import make_request_options
 from ....types.wallets.deposit_accounts import crypto_create_params
-from ....types.automation_asset_filter_input_param import AutomationAssetFilterInputParam
+from ....types.crypto_deposit_asset_param import CryptoDepositAssetParam
+from ....types.crypto_deposit_asset_filter_param import CryptoDepositAssetFilterParam
 from ....types.create_crypto_deposit_account_response import CreateCryptoDepositAccountResponse
-from ....types.automation_destination_asset_input_param import AutomationDestinationAssetInputParam
 
 __all__ = ["CryptoResource", "AsyncCryptoResource"]
 
@@ -97,8 +97,8 @@ class CryptoResource(SyncAPIResource):
         self,
         wallet_id: str,
         *,
-        destination: AutomationDestinationAssetInputParam,
-        source: AutomationAssetFilterInputParam,
+        destination: CryptoDepositAssetParam,
+        source: CryptoDepositAssetFilterParam,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -119,12 +119,11 @@ class CryptoResource(SyncAPIResource):
         Args:
           wallet_id: ID of the wallet.
 
-          destination: A destination asset spec accepting either raw identifiers (asset_address, caip2)
-              or human-readable aliases (asset, chain). Exactly one of asset_address or asset
-              must be provided; exactly one of caip2 or chain must be provided.
+          destination: An asset on a chain. Uses a human-readable alias (usdc, base) when one is on
+              file, otherwise the raw asset address and CAIP-2.
 
-          source: Which assets to include/exclude for an automation trigger (input form with alias
-              support).
+          source: Which assets a deposit address accepts. Asset and chain use human-readable
+              aliases when known.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -154,8 +153,8 @@ class CryptoResource(SyncAPIResource):
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
-        destination: AutomationDestinationAssetInputParam | Omit = omit,
-        source: AutomationAssetFilterInputParam | Omit = omit,
+        destination: CryptoDepositAssetParam | Omit = omit,
+        source: CryptoDepositAssetFilterParam | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -264,8 +263,8 @@ class AsyncCryptoResource(AsyncAPIResource):
         self,
         wallet_id: str,
         *,
-        destination: AutomationDestinationAssetInputParam,
-        source: AutomationAssetFilterInputParam,
+        destination: CryptoDepositAssetParam,
+        source: CryptoDepositAssetFilterParam,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -286,12 +285,11 @@ class AsyncCryptoResource(AsyncAPIResource):
         Args:
           wallet_id: ID of the wallet.
 
-          destination: A destination asset spec accepting either raw identifiers (asset_address, caip2)
-              or human-readable aliases (asset, chain). Exactly one of asset_address or asset
-              must be provided; exactly one of caip2 or chain must be provided.
+          destination: An asset on a chain. Uses a human-readable alias (usdc, base) when one is on
+              file, otherwise the raw asset address and CAIP-2.
 
-          source: Which assets to include/exclude for an automation trigger (input form with alias
-              support).
+          source: Which assets a deposit address accepts. Asset and chain use human-readable
+              aliases when known.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -321,8 +319,8 @@ class AsyncCryptoResource(AsyncAPIResource):
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
-        destination: AutomationDestinationAssetInputParam | Omit = omit,
-        source: AutomationAssetFilterInputParam | Omit = omit,
+        destination: CryptoDepositAssetParam | Omit = omit,
+        source: CryptoDepositAssetFilterParam | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,

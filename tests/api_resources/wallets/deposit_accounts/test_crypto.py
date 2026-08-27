@@ -80,10 +80,7 @@ class TestCrypto:
     def test_method_create_overload_2(self, client: PrivyAPI) -> None:
         crypto = client.wallets.deposit_accounts.crypto._create(
             wallet_id="wallet_id",
-            destination={
-                "asset_address": "x",
-                "caip2": "x",
-            },
+            destination={"asset": "usdc"},
             source={"mode": "all"},
         )
         assert_matches_type(CreateCryptoDepositAccountResponse, crypto, path=["response"])
@@ -94,10 +91,8 @@ class TestCrypto:
         crypto = client.wallets.deposit_accounts.crypto._create(
             wallet_id="wallet_id",
             destination={
-                "asset_address": "x",
-                "caip2": "x",
-                "asset": "x",
-                "chain": "x",
+                "asset": "usdc",
+                "chain": "base",
             },
             source={"mode": "all"},
             privy_authorization_signature="privy-authorization-signature",
@@ -111,10 +106,7 @@ class TestCrypto:
     def test_raw_response_create_overload_2(self, client: PrivyAPI) -> None:
         response = client.wallets.deposit_accounts.crypto.with_raw_response._create(
             wallet_id="wallet_id",
-            destination={
-                "asset_address": "x",
-                "caip2": "x",
-            },
+            destination={"asset": "usdc"},
             source={"mode": "all"},
         )
 
@@ -128,10 +120,7 @@ class TestCrypto:
     def test_streaming_response_create_overload_2(self, client: PrivyAPI) -> None:
         with client.wallets.deposit_accounts.crypto.with_streaming_response._create(
             wallet_id="wallet_id",
-            destination={
-                "asset_address": "x",
-                "caip2": "x",
-            },
+            destination={"asset": "usdc"},
             source={"mode": "all"},
         ) as response:
             assert not response.is_closed
@@ -148,10 +137,7 @@ class TestCrypto:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
             client.wallets.deposit_accounts.crypto.with_raw_response._create(
                 wallet_id="",
-                destination={
-                    "asset_address": "x",
-                    "caip2": "x",
-                },
+                destination={"asset": "usdc"},
                 source={"mode": "all"},
             )
 
@@ -224,10 +210,7 @@ class TestAsyncCrypto:
     async def test_method_create_overload_2(self, async_client: AsyncPrivyAPI) -> None:
         crypto = await async_client.wallets.deposit_accounts.crypto._create(
             wallet_id="wallet_id",
-            destination={
-                "asset_address": "x",
-                "caip2": "x",
-            },
+            destination={"asset": "usdc"},
             source={"mode": "all"},
         )
         assert_matches_type(CreateCryptoDepositAccountResponse, crypto, path=["response"])
@@ -238,10 +221,8 @@ class TestAsyncCrypto:
         crypto = await async_client.wallets.deposit_accounts.crypto._create(
             wallet_id="wallet_id",
             destination={
-                "asset_address": "x",
-                "caip2": "x",
-                "asset": "x",
-                "chain": "x",
+                "asset": "usdc",
+                "chain": "base",
             },
             source={"mode": "all"},
             privy_authorization_signature="privy-authorization-signature",
@@ -255,10 +236,7 @@ class TestAsyncCrypto:
     async def test_raw_response_create_overload_2(self, async_client: AsyncPrivyAPI) -> None:
         response = await async_client.wallets.deposit_accounts.crypto.with_raw_response._create(
             wallet_id="wallet_id",
-            destination={
-                "asset_address": "x",
-                "caip2": "x",
-            },
+            destination={"asset": "usdc"},
             source={"mode": "all"},
         )
 
@@ -272,10 +250,7 @@ class TestAsyncCrypto:
     async def test_streaming_response_create_overload_2(self, async_client: AsyncPrivyAPI) -> None:
         async with async_client.wallets.deposit_accounts.crypto.with_streaming_response._create(
             wallet_id="wallet_id",
-            destination={
-                "asset_address": "x",
-                "caip2": "x",
-            },
+            destination={"asset": "usdc"},
             source={"mode": "all"},
         ) as response:
             assert not response.is_closed
@@ -292,9 +267,6 @@ class TestAsyncCrypto:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
             await async_client.wallets.deposit_accounts.crypto.with_raw_response._create(
                 wallet_id="",
-                destination={
-                    "asset_address": "x",
-                    "caip2": "x",
-                },
+                destination={"asset": "usdc"},
                 source={"mode": "all"},
             )
