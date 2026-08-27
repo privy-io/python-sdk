@@ -69,3 +69,16 @@ def test_sign_transaction(privy_client: PrivyClient, solana_wallet: Wallet) -> N
 
     assert response.encoding == "base64"
     assert base64.b64decode(response.signed_transaction)
+
+
+@pytest.mark.skip(reason="skipped to avoid spending funds")
+def test_sign_and_send_transaction(privy_client: PrivyClient, solana_wallet: Wallet) -> None:
+    caip2 = "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
+    response = privy_client.wallets.solana.sign_and_send_transaction(
+        solana_wallet.id,
+        _create_transfer_transaction(solana_wallet.address),
+        caip2=caip2,
+    )
+
+    assert response.caip2 == caip2
+    assert response.hash
