@@ -8,6 +8,7 @@ from typing import TYPE_CHECKING, Any, cast
 from ..types import wallet_rpc_params
 from .request_options import PrivyRequestOptions
 from ..types.solana_sign_message_rpc_response_data import SolanaSignMessageRpcResponseData
+from ..types.solana_sign_transaction_rpc_response_data import SolanaSignTransactionRpcResponseData
 
 if TYPE_CHECKING:
     from .wallets import WalletsService
@@ -51,3 +52,36 @@ class SolanaWalletService:
             )
         response_values: Any = response
         return cast(SolanaSignMessageRpcResponseData, response_values.data)
+
+    def sign_transaction(
+        self,
+        wallet_id: str,
+        transaction: str | bytes | bytearray,
+        *,
+        address: str | None = None,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> SolanaSignTransactionRpcResponseData:
+        encoded_transaction = (
+            base64.b64encode(bytes(transaction)).decode("ascii")
+            if isinstance(transaction, (bytes, bytearray))
+            else transaction
+        )
+        body: wallet_rpc_params.SolanaSignTransactionRpcInput = {
+            "method": "signTransaction",
+            "chain_type": "solana",
+            "params": {"transaction": encoded_transaction, "encoding": "base64"},
+        }
+        if address is not None:
+            body["address"] = address
+
+        response = self._wallets.rpc(
+            wallet_id,
+            wallet_rpc_request_body=body,
+            request_options=request_options,
+        )
+        if response.method != "signTransaction":
+            raise ValueError(
+                f"Unexpected wallet RPC response method: expected 'signTransaction', got {response.method!r}"
+            )
+        response_values: Any = response
+        return cast(SolanaSignTransactionRpcResponseData, response_values.data)
