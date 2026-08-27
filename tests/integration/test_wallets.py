@@ -140,3 +140,31 @@ def test_raw_sign_with_authorization_private_key(privy_client: PrivyClient) -> N
     assert response.method == "raw_sign"
     assert response.data.encoding == "hex"
     assert response.data.signature.startswith("0x")
+
+
+def test_rpc_with_authorization_private_key(privy_client: PrivyClient) -> None:
+    key_pair = generate_p256_key_pair()
+    wallet = privy_client.wallets.create(
+        chain_type="ethereum",
+        owner={"public_key": key_pair.public_key},
+    )
+    assert wallet.id
+    assert wallet.chain_type == "ethereum"
+
+    response = privy_client.wallets.rpc(
+        wallet.id,
+        wallet_rpc_request_body={
+            "method": "personal_sign",
+            "chain_type": "ethereum",
+            "params": {"message": "Hello, world!", "encoding": "utf-8"},
+        },
+        request_options=PrivyRequestOptions(
+            authorization_context=AuthorizationContext(
+                authorization_private_keys=[key_pair.private_key],
+            )
+        ),
+    )
+
+    assert response.method == "personal_sign"
+    assert response.data.encoding == "hex"
+    assert response.data.signature.startswith("0x")
