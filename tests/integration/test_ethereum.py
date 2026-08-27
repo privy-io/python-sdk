@@ -112,3 +112,20 @@ def test_sign_user_operation(privy_client: PrivyClient, ethereum_wallet: Wallet)
 
     assert response.encoding == "hex"
     assert response.signature.startswith("0x")
+
+
+@pytest.mark.skip(reason="Requires a funded wallet")
+def test_send_transaction(privy_client: PrivyClient, ethereum_wallet: Wallet) -> None:
+    response = privy_client.wallets.ethereum.send_transaction(
+        ethereum_wallet.id,
+        caip2="eip155:11155111",
+        params={
+            "transaction": {
+                "to": ethereum_wallet.address,
+                "value": "0x1",
+            }
+        },
+    )
+
+    assert response.caip2 == "eip155:11155111"
+    assert response.hash.startswith("0x")

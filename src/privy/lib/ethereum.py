@@ -7,14 +7,17 @@ from typing import TYPE_CHECKING, Any, cast
 from ..types import wallet_rpc_params
 from .request_options import PrivyRequestOptions
 from ..types.signature_options_param import SignatureOptionsParam
+from ..types.rpc_sponsor_options_param import RpcSponsorOptionsParam
 from ..types.ethereum_personal_sign_rpc_response_data import EthereumPersonalSignRpcResponseData
 from ..types.ethereum_sign_typed_data_rpc_response_data import EthereumSignTypedDataRpcResponseData
 from ..types.ethereum_secp_256k_1_sign_rpc_response_data import EthereumSecp256k1SignRpcResponseData
+from ..types.ethereum_send_transaction_rpc_response_data import EthereumSendTransactionRpcResponseData
 from ..types.ethereum_sign_transaction_rpc_response_data import EthereumSignTransactionRpcResponseData
 from ..types.ethereum_personal_sign_rpc_input_params_param import EthereumPersonalSignRpcInputParamsParam
 from ..types.ethereum_sign_user_operation_rpc_response_data import EthereumSignUserOperationRpcResponseData
 from ..types.ethereum_sign_typed_data_rpc_input_params_param import EthereumSignTypedDataRpcInputParamsParam
 from ..types.ethereum_secp_256k_1_sign_rpc_input_params_param import EthereumSecp256k1SignRpcInputParamsParam
+from ..types.ethereum_send_transaction_rpc_input_params_param import EthereumSendTransactionRpcInputParamsParam
 from ..types.ethereum_sign_transaction_rpc_input_params_param import EthereumSignTransactionRpcInputParamsParam
 from ..types.ethereum_sign_7702_authorization_rpc_response_data import (
     EthereumSign7702AuthorizationRpcResponseData,
@@ -224,3 +227,45 @@ class EthereumWalletService:
             )
         response_values: Any = response
         return cast(EthereumSignUserOperationRpcResponseData, response_values.data)
+
+    def send_transaction(
+        self,
+        wallet_id: str,
+        *,
+        caip2: str,
+        params: EthereumSendTransactionRpcInputParamsParam,
+        address: str | None = None,
+        experimental_data_suffix: str | None = None,
+        reference_id: str | None = None,
+        sponsor: bool | None = None,
+        sponsor_options: RpcSponsorOptionsParam | None = None,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> EthereumSendTransactionRpcResponseData:
+        body: wallet_rpc_params.EthereumSendTransactionRpcInput = {
+            "method": "eth_sendTransaction",
+            "chain_type": "ethereum",
+            "caip2": caip2,
+            "params": params,
+        }
+        if address is not None:
+            body["address"] = address
+        if experimental_data_suffix is not None:
+            body["experimental_data_suffix"] = experimental_data_suffix
+        if reference_id is not None:
+            body["reference_id"] = reference_id
+        if sponsor is not None:
+            body["sponsor"] = sponsor
+        if sponsor_options is not None:
+            body["sponsor_options"] = sponsor_options
+
+        response = self._wallets.rpc(
+            wallet_id,
+            wallet_rpc_request_body=body,
+            request_options=request_options,
+        )
+        if response.method != "eth_sendTransaction":
+            raise ValueError(
+                f"Unexpected wallet RPC response method: expected 'eth_sendTransaction', got {response.method!r}"
+            )
+        response_values: Any = response
+        return cast(EthereumSendTransactionRpcResponseData, response_values.data)
