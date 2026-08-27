@@ -22,3 +22,13 @@ def test_sign_message(privy_client: PrivyClient, ethereum_wallet: Wallet, messag
 
     assert response.encoding == "hex"
     assert response.signature.startswith("0x")
+
+
+def test_sign_secp256k1(privy_client: PrivyClient, ethereum_wallet: Wallet) -> None:
+    response = privy_client.wallets.ethereum.sign_secp256k1(
+        ethereum_wallet.id,
+        params={"hash": "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"},
+    )
+
+    assert response.encoding == "hex"
+    assert response.signature.startswith("0x")

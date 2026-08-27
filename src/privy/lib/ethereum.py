@@ -8,7 +8,9 @@ from ..types import wallet_rpc_params
 from .request_options import PrivyRequestOptions
 from ..types.signature_options_param import SignatureOptionsParam
 from ..types.ethereum_personal_sign_rpc_response_data import EthereumPersonalSignRpcResponseData
+from ..types.ethereum_secp_256k_1_sign_rpc_response_data import EthereumSecp256k1SignRpcResponseData
 from ..types.ethereum_personal_sign_rpc_input_params_param import EthereumPersonalSignRpcInputParamsParam
+from ..types.ethereum_secp_256k_1_sign_rpc_input_params_param import EthereumSecp256k1SignRpcInputParamsParam
 
 if TYPE_CHECKING:
     from .wallets import WalletsService
@@ -63,3 +65,31 @@ class EthereumWalletService:
             )
         response_values: Any = response
         return cast(EthereumPersonalSignRpcResponseData, response_values.data)
+
+    def sign_secp256k1(
+        self,
+        wallet_id: str,
+        *,
+        params: EthereumSecp256k1SignRpcInputParamsParam,
+        address: str | None = None,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> EthereumSecp256k1SignRpcResponseData:
+        body: wallet_rpc_params.EthereumSecp256k1SignRpcInput = {
+            "method": "secp256k1_sign",
+            "chain_type": "ethereum",
+            "params": params,
+        }
+        if address is not None:
+            body["address"] = address
+
+        response = self._wallets.rpc(
+            wallet_id,
+            wallet_rpc_request_body=body,
+            request_options=request_options,
+        )
+        if response.method != "secp256k1_sign":
+            raise ValueError(
+                f"Unexpected wallet RPC response method: expected 'secp256k1_sign', got {response.method!r}"
+            )
+        response_values: Any = response
+        return cast(EthereumSecp256k1SignRpcResponseData, response_values.data)
