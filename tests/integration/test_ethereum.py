@@ -32,3 +32,18 @@ def test_sign_secp256k1(privy_client: PrivyClient, ethereum_wallet: Wallet) -> N
 
     assert response.encoding == "hex"
     assert response.signature.startswith("0x")
+
+
+def test_sign_7702_authorization(privy_client: PrivyClient, ethereum_wallet: Wallet) -> None:
+    response = privy_client.wallets.ethereum.sign_7702_authorization(
+        ethereum_wallet.id,
+        params={
+            "chain_id": 11155111,
+            "contract": "0x1234567890123456789012345678901234567890",
+        },
+    )
+
+    assert response.authorization.contract == "0x1234567890123456789012345678901234567890"
+    assert response.authorization.r.startswith("0x")
+    assert response.authorization.s.startswith("0x")
+    assert response.authorization.y_parity in {0, 1}

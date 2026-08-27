@@ -11,6 +11,12 @@ from ..types.ethereum_personal_sign_rpc_response_data import EthereumPersonalSig
 from ..types.ethereum_secp_256k_1_sign_rpc_response_data import EthereumSecp256k1SignRpcResponseData
 from ..types.ethereum_personal_sign_rpc_input_params_param import EthereumPersonalSignRpcInputParamsParam
 from ..types.ethereum_secp_256k_1_sign_rpc_input_params_param import EthereumSecp256k1SignRpcInputParamsParam
+from ..types.ethereum_sign_7702_authorization_rpc_response_data import (
+    EthereumSign7702AuthorizationRpcResponseData,
+)
+from ..types.ethereum_sign_7702_authorization_rpc_input_params_param import (
+    EthereumSign7702AuthorizationRpcInputParamsParam,
+)
 
 if TYPE_CHECKING:
     from .wallets import WalletsService
@@ -93,3 +99,32 @@ class EthereumWalletService:
             )
         response_values: Any = response
         return cast(EthereumSecp256k1SignRpcResponseData, response_values.data)
+
+    def sign_7702_authorization(
+        self,
+        wallet_id: str,
+        *,
+        params: EthereumSign7702AuthorizationRpcInputParamsParam,
+        address: str | None = None,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> EthereumSign7702AuthorizationRpcResponseData:
+        body: wallet_rpc_params.EthereumSign7702AuthorizationRpcInput = {
+            "method": "eth_sign7702Authorization",
+            "chain_type": "ethereum",
+            "params": params,
+        }
+        if address is not None:
+            body["address"] = address
+
+        response = self._wallets.rpc(
+            wallet_id,
+            wallet_rpc_request_body=body,
+            request_options=request_options,
+        )
+        if response.method != "eth_sign7702Authorization":
+            raise ValueError(
+                "Unexpected wallet RPC response method: "
+                f"expected 'eth_sign7702Authorization', got {response.method!r}"
+            )
+        response_values: Any = response
+        return cast(EthereumSign7702AuthorizationRpcResponseData, response_values.data)
