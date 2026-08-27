@@ -8,7 +8,9 @@ from ..types import wallet_rpc_params
 from .request_options import PrivyRequestOptions
 from ..types.signature_options_param import SignatureOptionsParam
 from ..types.rpc_sponsor_options_param import RpcSponsorOptionsParam
+from ..types.ethereum_send_calls_rpc_response_data import EthereumSendCallsRpcResponseData
 from ..types.ethereum_personal_sign_rpc_response_data import EthereumPersonalSignRpcResponseData
+from ..types.ethereum_send_calls_rpc_input_params_param import EthereumSendCallsRpcInputParamsParam
 from ..types.ethereum_sign_typed_data_rpc_response_data import EthereumSignTypedDataRpcResponseData
 from ..types.ethereum_secp_256k_1_sign_rpc_response_data import EthereumSecp256k1SignRpcResponseData
 from ..types.ethereum_send_transaction_rpc_response_data import EthereumSendTransactionRpcResponseData
@@ -269,3 +271,42 @@ class EthereumWalletService:
             )
         response_values: Any = response
         return cast(EthereumSendTransactionRpcResponseData, response_values.data)
+
+    def send_calls(
+        self,
+        wallet_id: str,
+        *,
+        caip2: str,
+        params: EthereumSendCallsRpcInputParamsParam,
+        address: str | None = None,
+        experimental_data_suffix: str | None = None,
+        sponsor: bool | None = None,
+        sponsor_options: RpcSponsorOptionsParam | None = None,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> EthereumSendCallsRpcResponseData:
+        body: wallet_rpc_params.EthereumSendCallsRpcInput = {
+            "method": "wallet_sendCalls",
+            "chain_type": "ethereum",
+            "caip2": caip2,
+            "params": params,
+        }
+        if address is not None:
+            body["address"] = address
+        if experimental_data_suffix is not None:
+            body["experimental_data_suffix"] = experimental_data_suffix
+        if sponsor is not None:
+            body["sponsor"] = sponsor
+        if sponsor_options is not None:
+            body["sponsor_options"] = sponsor_options
+
+        response = self._wallets.rpc(
+            wallet_id,
+            wallet_rpc_request_body=body,
+            request_options=request_options,
+        )
+        if response.method != "wallet_sendCalls":
+            raise ValueError(
+                f"Unexpected wallet RPC response method: expected 'wallet_sendCalls', got {response.method!r}"
+            )
+        response_values: Any = response
+        return cast(EthereumSendCallsRpcResponseData, response_values.data)
