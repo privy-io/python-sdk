@@ -8,9 +8,11 @@ from ..types import wallet_rpc_params
 from .request_options import PrivyRequestOptions
 from ..types.signature_options_param import SignatureOptionsParam
 from ..types.ethereum_personal_sign_rpc_response_data import EthereumPersonalSignRpcResponseData
+from ..types.ethereum_sign_typed_data_rpc_response_data import EthereumSignTypedDataRpcResponseData
 from ..types.ethereum_secp_256k_1_sign_rpc_response_data import EthereumSecp256k1SignRpcResponseData
 from ..types.ethereum_sign_transaction_rpc_response_data import EthereumSignTransactionRpcResponseData
 from ..types.ethereum_personal_sign_rpc_input_params_param import EthereumPersonalSignRpcInputParamsParam
+from ..types.ethereum_sign_typed_data_rpc_input_params_param import EthereumSignTypedDataRpcInputParamsParam
 from ..types.ethereum_secp_256k_1_sign_rpc_input_params_param import EthereumSecp256k1SignRpcInputParamsParam
 from ..types.ethereum_sign_transaction_rpc_input_params_param import EthereumSignTransactionRpcInputParamsParam
 from ..types.ethereum_sign_7702_authorization_rpc_response_data import (
@@ -158,3 +160,37 @@ class EthereumWalletService:
             )
         response_values: Any = response
         return cast(EthereumSignTransactionRpcResponseData, response_values.data)
+
+    def sign_typed_data(
+        self,
+        wallet_id: str,
+        *,
+        params: EthereumSignTypedDataRpcInputParamsParam,
+        address: str | None = None,
+        caip2: str | None = None,
+        signature_options: SignatureOptionsParam | None = None,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> EthereumSignTypedDataRpcResponseData:
+        body: wallet_rpc_params.EthereumSignTypedDataRpcInput = {
+            "method": "eth_signTypedData_v4",
+            "chain_type": "ethereum",
+            "params": params,
+        }
+        if address is not None:
+            body["address"] = address
+        if caip2 is not None:
+            body["caip2"] = caip2
+        if signature_options is not None:
+            body["signature_options"] = signature_options
+
+        response = self._wallets.rpc(
+            wallet_id,
+            wallet_rpc_request_body=body,
+            request_options=request_options,
+        )
+        if response.method != "eth_signTypedData_v4":
+            raise ValueError(
+                f"Unexpected wallet RPC response method: expected 'eth_signTypedData_v4', got {response.method!r}"
+            )
+        response_values: Any = response
+        return cast(EthereumSignTypedDataRpcResponseData, response_values.data)

@@ -66,3 +66,25 @@ def test_sign_transaction(privy_client: PrivyClient, ethereum_wallet: Wallet) ->
 
     assert response.encoding == "rlp"
     assert response.signed_transaction.startswith("0x")
+
+
+def test_sign_typed_data(privy_client: PrivyClient, ethereum_wallet: Wallet) -> None:
+    response = privy_client.wallets.ethereum.sign_typed_data(
+        ethereum_wallet.id,
+        params={
+            "typed_data": {
+                "domain": {
+                    "name": "Test",
+                    "version": "1",
+                    "chainId": 1,
+                    "verifyingContract": "0x1234567890123456789012345678901234567890",
+                },
+                "primary_type": "Message",
+                "types": {"Message": [{"name": "content", "type": "string"}]},
+                "message": {"content": "Hello world"},
+            }
+        },
+    )
+
+    assert response.encoding == "hex"
+    assert response.signature.startswith("0x")
