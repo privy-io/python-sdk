@@ -8,6 +8,7 @@ from .solana import SolanaWalletService
 from .._types import omit
 from .._client import PrivyAPI
 from .ethereum import EthereumWalletService
+from .request_url import build_request_url
 from .authorization import prepare_request
 from .request_options import PrivyRequestOptions
 from ..types.raw_sign_response import RawSignResponse
@@ -65,7 +66,7 @@ class WalletsService(WalletsResource):
         prepared = prepare_request(
             app_id=client.app_id,
             method="POST",
-            url=f"{str(client.base_url).rstrip('/')}/v1/wallets/{wallet_id}/raw_sign",
+            url=build_request_url(client, f"/v1/wallets/{wallet_id}/raw_sign"),
             body=dict(wallet_raw_sign_params),
             authorization_context=options.authorization_context,
         )
