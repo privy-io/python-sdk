@@ -2,6 +2,7 @@
 
 from .client import PrivyClient
 from .wallets import WalletsService
+from .ethereum import EthereumWalletService
 from .authorization import (
     P256KeyPair,
     PreparedRequest,
@@ -19,6 +20,7 @@ __all__ = [
     "P256KeyPair",
     "PreparedRequest",
     "PrivyClient",
+    "EthereumWalletService",
     "PrivyRequestOptions",
     "WalletAPIRequestSignatureInput",
     "WalletsService",

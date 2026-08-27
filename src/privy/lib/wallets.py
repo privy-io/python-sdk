@@ -5,6 +5,8 @@ from __future__ import annotations
 from typing import Any, Callable, cast
 
 from .._types import omit
+from .._client import PrivyAPI
+from .ethereum import EthereumWalletService
 from .authorization import prepare_request
 from .request_options import PrivyRequestOptions
 from ..types.raw_sign_response import RawSignResponse
@@ -17,6 +19,10 @@ __all__ = ["WalletsService"]
 
 
 class WalletsService(WalletsResource):
+    def __init__(self, client: PrivyAPI) -> None:
+        super().__init__(client)
+        self.ethereum = EthereumWalletService(self)
+
     def rpc(
         self,
         wallet_id: str,
