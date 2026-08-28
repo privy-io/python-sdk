@@ -139,11 +139,15 @@ class WalletAPIRequestSignatureInput:
         object.__setattr__(self, "method", cast("MutationMethod", method))
 
 
-def format_request_for_authorization_signature(input: WalletAPIRequestSignatureInput) -> bytes:
+def format_request_for_authorization_signature(
+    input: WalletAPIRequestSignatureInput, *, preserve_empty_body: bool = False
+) -> bytes:
     """Return deterministic UTF-8 JSON bytes for an authorization request."""
 
     body = input.body
-    if (isinstance(body, Mapping) and not body) or (isinstance(body, (list, tuple)) and not body):
+    if not preserve_empty_body and (
+        (isinstance(body, Mapping) and not body) or (isinstance(body, (list, tuple)) and not body)
+    ):
         body = ""
     payload: dict[str, object] = {
         "version": input.version,
@@ -163,6 +167,7 @@ def prepare_request(
     body: object,
     authorization_context: AuthorizationContext | None = None,
     jwt_exchanger: JWTExchanger | None = None,
+    preserve_empty_body: bool = False,
 ) -> PreparedRequest:
     """Prepare authorization headers for a generated API request."""
 
@@ -175,7 +180,8 @@ def prepare_request(
             url=url,
             body=body,
             headers={"privy-app-id": app_id},
-        )
+        ),
+        preserve_empty_body=preserve_empty_body,
     )
     signatures = generate_authorization_signatures(
         context,

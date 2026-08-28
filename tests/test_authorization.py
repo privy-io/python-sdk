@@ -70,6 +70,20 @@ def test_precomputed_signatures_are_forwarded_in_order() -> None:
     assert prepared.headers == {"privy-authorization-signature": "first,second"}
 
 
+def test_empty_body_can_be_preserved_for_delete_signatures() -> None:
+    payloads: list[bytes] = []
+    prepare_request(
+        app_id="app-123",
+        method="DELETE",
+        url="https://api.staging.privy.io/v1/policies/policy-1",
+        body={},
+        authorization_context=AuthorizationContext(signers=[lambda payload: payloads.append(payload) or "signed"]),
+        preserve_empty_body=True,
+    )
+
+    assert payloads[0].startswith(b'{"body":{}')
+
+
 def test_p256_key_pair_uses_spki_and_pkcs8_der_formats() -> None:
     key_pair = generate_p256_key_pair()
 
