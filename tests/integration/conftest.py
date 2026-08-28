@@ -18,6 +18,11 @@ def required_environment(name: str) -> str:
 
 
 @pytest.fixture(scope="session")
+def jwt_auth_private_key() -> str:
+    return required_environment("JWT_AUTH_SK").replace("\\n", "\n").strip()
+
+
+@pytest.fixture(scope="session")
 def privy_client() -> Iterator[PrivyClient]:
     api_url = (os.environ.get("TEST_API_URL") or STAGING_API_URL).rstrip("/")
     if api_url == "https://api.privy.io":

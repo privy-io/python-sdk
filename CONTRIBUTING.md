@@ -92,7 +92,7 @@ $ ./scripts/test
 ### Live integration tests
 
 Integration tests make real requests to the Privy staging API; they do not use mocks. Copy `.env.example` to
-`.env`, populate `TEST_APP_ID` and `TEST_APP_SECRET`, export the values, and run:
+`.env`, populate `TEST_APP_ID`, `TEST_APP_SECRET`, and `JWT_AUTH_SK`, export the values, and run:
 
 ```sh
 $ set -a

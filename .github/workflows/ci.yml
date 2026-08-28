@@ -67,6 +67,7 @@ jobs:
       TEST_API_URL: ${{ secrets.TEST_API_URL }}
       TEST_APP_ID: ${{ secrets.TEST_APP_ID }}
       TEST_APP_SECRET: ${{ secrets.TEST_APP_SECRET }}
+      JWT_AUTH_SK: ${{ secrets.JWT_AUTH_SK }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
