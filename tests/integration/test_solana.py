@@ -2,12 +2,22 @@ from __future__ import annotations
 
 import base64
 import struct
+from typing import cast
+from collections.abc import Mapping
 
 import pytest
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PublicKey
 
 from privy import PrivyClient
-from privy.types.wallet import Wallet
+
+from .wallet_setup import (
+    WALLET_CASES,
+    TestWallet as WalletUnderTest,
+    WalletOwnership,
+    TestWalletResources as WalletResources,
+    create_test_wallets,
+    setup_test_wallet_resources,
+)
 
 pytestmark = pytest.mark.integration
 
@@ -42,29 +52,48 @@ def _create_transfer_transaction(source: str) -> bytes:
 
 
 @pytest.fixture(scope="module")
-def solana_wallet(privy_client: PrivyClient) -> Wallet:
-    wallet = privy_client.wallets.create(chain_type="solana")
-    assert wallet.id
-    assert wallet.address
-    assert wallet.chain_type == "solana"
-    return wallet
+def wallet_resources(privy_client: PrivyClient) -> WalletResources:
+    return setup_test_wallet_resources(privy_client)
+
+
+@pytest.fixture(scope="module")
+def solana_wallets(
+    wallet_resources: WalletResources, jwt_auth_private_key: str
+) -> Mapping[WalletOwnership, WalletUnderTest]:
+    return create_test_wallets(wallet_resources, "solana", jwt_auth_private_key)
+
+
+@pytest.fixture(scope="module", params=WALLET_CASES, ids=WALLET_CASES)
+def solana_wallet(
+    request: pytest.FixtureRequest, solana_wallets: Mapping[WalletOwnership, WalletUnderTest]
+) -> WalletUnderTest:
+    test_wallet = solana_wallets[cast(WalletOwnership, request.param)]
+    assert test_wallet.wallet.id
+    assert test_wallet.wallet.address
+    assert test_wallet.wallet.chain_type == "solana"
+    return test_wallet
 
 
 @pytest.mark.parametrize("message", [b"Hello, world!", base64.b64encode(b"Hello, world!").decode("ascii")])
-def test_sign_message(privy_client: PrivyClient, solana_wallet: Wallet, message: str | bytes) -> None:
-    response = privy_client.wallets.solana.sign_message(solana_wallet.id, message)
+def test_sign_message(privy_client: PrivyClient, solana_wallet: WalletUnderTest, message: str | bytes) -> None:
+    response = privy_client.wallets.solana.sign_message(
+        solana_wallet.wallet.id,
+        message,
+        request_options=solana_wallet.request_options,
+    )
 
     assert response.encoding == "base64"
-    Ed25519PublicKey.from_public_bytes(_base58_decode(solana_wallet.address)).verify(
+    Ed25519PublicKey.from_public_bytes(_base58_decode(solana_wallet.wallet.address)).verify(
         base64.b64decode(response.signature),
         base64.b64decode(message) if isinstance(message, str) else message,
     )
 
 
-def test_sign_transaction(privy_client: PrivyClient, solana_wallet: Wallet) -> None:
+def test_sign_transaction(privy_client: PrivyClient, solana_wallet: WalletUnderTest) -> None:
     response = privy_client.wallets.solana.sign_transaction(
-        solana_wallet.id,
-        _create_transfer_transaction(solana_wallet.address),
+        solana_wallet.wallet.id,
+        _create_transfer_transaction(solana_wallet.wallet.address),
+        request_options=solana_wallet.request_options,
     )
 
     assert response.encoding == "base64"
@@ -72,12 +101,13 @@ def test_sign_transaction(privy_client: PrivyClient, solana_wallet: Wallet) -> N
 
 
 @pytest.mark.skip(reason="skipped to avoid spending funds")
-def test_sign_and_send_transaction(privy_client: PrivyClient, solana_wallet: Wallet) -> None:
+def test_sign_and_send_transaction(privy_client: PrivyClient, solana_wallet: WalletUnderTest) -> None:
     caip2 = "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1"
     response = privy_client.wallets.solana.sign_and_send_transaction(
-        solana_wallet.id,
-        _create_transfer_transaction(solana_wallet.address),
+        solana_wallet.wallet.id,
+        _create_transfer_transaction(solana_wallet.wallet.address),
         caip2=caip2,
+        request_options=solana_wallet.request_options,
     )
 
     assert response.caip2 == caip2
