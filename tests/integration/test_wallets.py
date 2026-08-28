@@ -60,6 +60,27 @@ def test_raw_sign_with_ownerless_tron_wallet(privy_client: PrivyClient) -> None:
     assert response.data.signature.startswith("0x")
 
 
+def test_update_with_authorization_private_key(privy_client: PrivyClient) -> None:
+    key_pair = generate_p256_key_pair()
+    wallet = privy_client.wallets.create(
+        chain_type="ethereum",
+        owner={"public_key": key_pair.public_key},
+    )
+
+    updated = privy_client.wallets.update(
+        wallet.id,
+        wallet_update_params={"display_name": "Updated wallet"},
+        request_options=PrivyRequestOptions(
+            authorization_context=AuthorizationContext(
+                authorization_private_keys=[key_pair.private_key],
+            )
+        ),
+    )
+
+    assert updated.id == wallet.id
+    assert updated.display_name == "Updated wallet"
+
+
 def test_raw_sign_with_authorization_signer(privy_client: PrivyClient) -> None:
     key_pair = generate_p256_key_pair()
     private_key = serialization.load_der_private_key(

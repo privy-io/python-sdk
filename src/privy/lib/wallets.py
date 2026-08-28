@@ -9,12 +9,14 @@ from .._types import omit
 from .._client import PrivyAPI
 from .ethereum import EthereumWalletService
 from .request_url import build_request_url
+from ..types.wallet import Wallet
 from .authorization import prepare_request
 from .request_options import PrivyRequestOptions
 from ..types.raw_sign_response import RawSignResponse
 from ..types.wallet_rpc_params import WalletRpcParams
 from ..resources.wallets.wallets import WalletsResource
 from ..types.wallet_rpc_response import WalletRpcResponse
+from ..types.wallet_update_params import WalletUpdateParams
 from ..types.wallet_raw_sign_params import WalletRawSignParams
 
 __all__ = ["WalletsService"]
@@ -25,6 +27,32 @@ class WalletsService(WalletsResource):
         super().__init__(client)
         self.ethereum = EthereumWalletService(self)
         self.solana = SolanaWalletService(self)
+
+    def update(
+        self,
+        wallet_id: str,
+        *,
+        wallet_update_params: WalletUpdateParams,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> Wallet:
+        options = request_options or PrivyRequestOptions()
+        client = self._client
+        body = dict(wallet_update_params)
+        prepared = prepare_request(
+            app_id=client.app_id,
+            method="PATCH",
+            url=build_request_url(client, f"/v1/wallets/{wallet_id}"),
+            body=body,
+            authorization_context=options.authorization_context,
+        )
+        signature = prepared.headers.get("privy-authorization-signature")
+        generated: Any = self
+        update = cast(Callable[..., Wallet], generated._update)
+        return update(
+            wallet_id,
+            **body,
+            privy_authorization_signature=signature if signature is not None else omit,
+        )
 
     def rpc(
         self,
