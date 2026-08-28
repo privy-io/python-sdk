@@ -12,6 +12,7 @@ from privy import (
     prepare_request,
     generate_p256_key_pair,
     generate_authorization_signature,
+    generate_authorization_signatures,
     format_request_for_authorization_signature,
 )
 
@@ -49,6 +50,12 @@ def test_authorization_context_accepts_precomputed_signatures() -> None:
     context = AuthorizationContext(signatures=["first", "second"])
 
     assert context.signatures == ["first", "second"]
+
+
+def test_authorization_context_accepts_user_jwts() -> None:
+    context = AuthorizationContext(user_jwts=["first.jwt", "second.jwt"])
+
+    assert context.user_jwts == ["first.jwt", "second.jwt"]
 
 
 def test_precomputed_signatures_are_forwarded_in_order() -> None:
@@ -164,3 +171,42 @@ def test_signers_receive_payload_and_sign_after_private_keys() -> None:
             )
         )
     ]
+
+
+def test_user_jwts_are_exchanged_and_sign_after_explicit_private_keys() -> None:
+    explicit_key = generate_p256_key_pair()
+    jwt_key = generate_p256_key_pair()
+
+    class Exchanger:
+        def __init__(self) -> None:
+            self.jwts: list[str] = []
+
+        def exchange_jwt_for_authorization_key(self, jwt: str) -> str:
+            self.jwts.append(jwt)
+            return jwt_key.private_key
+
+    exchanger = Exchanger()
+    payload = b"payload"
+    signatures = generate_authorization_signatures(
+        AuthorizationContext(
+            signatures=["precomputed"],
+            authorization_private_keys=[explicit_key.private_key],
+            user_jwts=["user.jwt"],
+            signers=[lambda _: "callback"],
+        ),
+        payload,
+        jwt_exchanger=exchanger,
+    )
+
+    assert exchanger.jwts == ["user.jwt"]
+    assert signatures[0] == "precomputed"
+    assert signatures[3] == "callback"
+    for key_pair, signature in zip((explicit_key, jwt_key), signatures[1:3]):
+        public_key = serialization.load_der_public_key(base64.b64decode(key_pair.public_key))
+        assert isinstance(public_key, ec.EllipticCurvePublicKey)
+        public_key.verify(base64.b64decode(signature), payload, ec.ECDSA(hashes.SHA256()))
+
+
+def test_user_jwts_require_an_exchanger() -> None:
+    with pytest.raises(ValueError, match="jwt_exchanger is required"):
+        generate_authorization_signatures(AuthorizationContext(user_jwts=["user.jwt"]), b"payload")

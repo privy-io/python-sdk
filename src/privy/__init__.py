@@ -15,6 +15,7 @@ from .lib import (
     prepare_request,
     generate_p256_key_pair,
     generate_authorization_signature,
+    generate_authorization_signatures,
     format_request_for_authorization_signature,
 )
 from ._types import NOT_GIVEN, Omit, NoneType, NotGiven, Transport, ProxiesTypes, omit, not_given
@@ -97,6 +98,7 @@ __all__ = [
     "WalletAPIRequestSignatureInput",
     "format_request_for_authorization_signature",
     "generate_authorization_signature",
+    "generate_authorization_signatures",
     "generate_p256_key_pair",
     "prepare_request",
     "AsyncPrivyAPI",

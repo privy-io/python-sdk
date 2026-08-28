@@ -16,6 +16,7 @@ from .authorization import (
     prepare_request,
     generate_p256_key_pair,
     generate_authorization_signature,
+    generate_authorization_signatures,
     format_request_for_authorization_signature,
 )
 from .request_options import PrivyRequestOptions
@@ -36,6 +37,7 @@ __all__ = [
     "UsersService",
     "format_request_for_authorization_signature",
     "generate_authorization_signature",
+    "generate_authorization_signatures",
     "generate_p256_key_pair",
     "prepare_request",
 ]

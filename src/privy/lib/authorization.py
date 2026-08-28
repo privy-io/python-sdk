@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import base64
-from typing import Literal, Mapping, Callable, Sequence, cast
+from typing import Literal, Mapping, Callable, Protocol, Sequence, cast
 from dataclasses import field, dataclass
 
 import canonicaljson
@@ -17,6 +17,7 @@ __all__ = [
     "WalletAPIRequestSignatureInput",
     "format_request_for_authorization_signature",
     "generate_authorization_signature",
+    "generate_authorization_signatures",
     "generate_p256_key_pair",
     "prepare_request",
 ]
@@ -25,13 +26,24 @@ MutationMethod = Literal["POST", "PUT", "PATCH", "DELETE"]
 Signer = Callable[[bytes], str]
 
 
+class JWTExchanger(Protocol):
+    """Exchanges a user JWT for a short-lived authorization private key."""
+
+    def exchange_jwt_for_authorization_key(self, jwt: str) -> str: ...
+
+
 @dataclass(frozen=True)
 class AuthorizationContext:
-    """Credentials that contribute signatures to an authorized request."""
+    """Credentials that contribute signatures to an authorized request.
+
+    User JWTs are exchanged for short-lived authorization private keys before
+    the request is signed.
+    """
 
     signatures: Sequence[str] = field(default_factory=tuple)
     authorization_private_keys: Sequence[str] = field(default_factory=tuple)
     signers: Sequence[Signer] = field(default_factory=tuple)
+    user_jwts: Sequence[str] = field(default_factory=tuple)
 
 
 @dataclass(frozen=True)
@@ -75,6 +87,28 @@ def generate_authorization_signature(authorization_private_key: str, payload: by
 
     signature = private_key.sign(payload, ec.ECDSA(hashes.SHA256()))
     return base64.b64encode(signature).decode("ascii")
+
+
+def generate_authorization_signatures(
+    authorization_context: AuthorizationContext,
+    payload: bytes,
+    *,
+    jwt_exchanger: JWTExchanger | None = None,
+) -> list[str]:
+    """Generate signatures for every credential in an authorization context."""
+
+    if authorization_context.user_jwts and jwt_exchanger is None:
+        raise ValueError("jwt_exchanger is required when user_jwts are provided")
+
+    signatures = list(authorization_context.signatures)
+    private_keys = list(authorization_context.authorization_private_keys)
+    if jwt_exchanger is not None:
+        private_keys.extend(
+            jwt_exchanger.exchange_jwt_for_authorization_key(jwt) for jwt in authorization_context.user_jwts
+        )
+    signatures.extend(generate_authorization_signature(private_key, payload) for private_key in private_keys)
+    signatures.extend(signer(payload) for signer in authorization_context.signers)
+    return signatures
 
 
 @dataclass(frozen=True)
@@ -128,6 +162,7 @@ def prepare_request(
     url: str,
     body: object,
     authorization_context: AuthorizationContext | None = None,
+    jwt_exchanger: JWTExchanger | None = None,
 ) -> PreparedRequest:
     """Prepare authorization headers for a generated API request."""
 
@@ -142,11 +177,11 @@ def prepare_request(
             headers={"privy-app-id": app_id},
         )
     )
-    signatures = list(context.signatures)
-    signatures.extend(
-        generate_authorization_signature(private_key, payload) for private_key in context.authorization_private_keys
+    signatures = generate_authorization_signatures(
+        context,
+        payload,
+        jwt_exchanger=jwt_exchanger,
     )
-    signatures.extend(signer(payload) for signer in context.signers)
     if not signatures:
         return PreparedRequest(headers={})
     return PreparedRequest(headers={"privy-authorization-signature": ",".join(signatures)})
