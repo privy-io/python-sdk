@@ -79,4 +79,4 @@ jobs:
         run: uv sync --all-extras
 
       - name: Run live integration tests
-        run: uv run pytest -n 0 -m integration tests/integration
+        run: uv run pytest --verbose -n 0 -m integration tests/integration
