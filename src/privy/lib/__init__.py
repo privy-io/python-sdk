@@ -5,6 +5,7 @@ from .client import PrivyClient
 from .solana import SolanaWalletService
 from .wallets import WalletsService
 from .ethereum import EthereumWalletService
+from .policies import PoliciesService
 from .key_quorums import KeyQuorumsService
 from .transactions import TransactionsService
 from .authorization import (
@@ -29,6 +30,7 @@ __all__ = [
     "EthereumWalletService",
     "PrivyRequestOptions",
     "SolanaWalletService",
+    "PoliciesService",
     "WalletAPIRequestSignatureInput",
     "WalletsService",
     "UsersService",
