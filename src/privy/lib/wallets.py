@@ -9,6 +9,7 @@ from .._types import omit
 from .._client import PrivyAPI
 from .ethereum import EthereumWalletService
 from .request_url import build_request_url
+from .jwt_exchange import JWTExchangeService
 from ..types.wallet import Wallet
 from .authorization import prepare_request
 from .request_options import PrivyRequestOptions
@@ -23,8 +24,9 @@ __all__ = ["WalletsService"]
 
 
 class WalletsService(WalletsResource):
-    def __init__(self, client: PrivyAPI) -> None:
+    def __init__(self, client: PrivyAPI, jwt_exchanger: JWTExchangeService | None = None) -> None:
         super().__init__(client)
+        self._jwt_exchanger = jwt_exchanger
         self.ethereum = EthereumWalletService(self)
         self.solana = SolanaWalletService(self)
 
@@ -72,6 +74,7 @@ class WalletsService(WalletsResource):
             url=f"{str(base_url).rstrip('/')}/v1/wallets/{wallet_id}/rpc",
             body=body,
             authorization_context=options.authorization_context,
+            jwt_exchanger=self._jwt_exchanger,
         )
         signature = prepared.headers.get("privy-authorization-signature")
         generated: Any = self
@@ -97,6 +100,7 @@ class WalletsService(WalletsResource):
             url=build_request_url(client, f"/v1/wallets/{wallet_id}/raw_sign"),
             body=dict(wallet_raw_sign_params),
             authorization_context=options.authorization_context,
+            jwt_exchanger=self._jwt_exchanger,
         )
         signature = prepared.headers.get("privy-authorization-signature")
         return self._raw_sign(
