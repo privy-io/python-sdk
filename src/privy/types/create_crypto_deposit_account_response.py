@@ -11,4 +11,4 @@ __all__ = ["CreateCryptoDepositAccountResponse"]
 class CreateCryptoDepositAccountResponse(BaseModel):
     """Response returned after creating a crypto deposit account."""
 
-    deposit_addresses: List[CryptoDepositAddressRoute]
+    deposit_accounts: List[CryptoDepositAddressRoute]
