@@ -11,6 +11,7 @@ authors = [
 dependencies = [
   "canonicaljson>=2.0.0, <3",
   "cryptography>=41, <47",
+  "pyhpke>=0.6.3, <0.6.4",
   "httpx>=0.23.0, <1",
   "pydantic>=1.9.0, <3",
   "typing-extensions>=4.14, <5",

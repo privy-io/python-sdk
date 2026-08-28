@@ -1097,6 +1097,7 @@ dependencies = [
     { name = "cryptography" },
     { name = "distro" },
     { name = "httpx" },
+    { name = "pyhpke" },
     { name = "pydantic", version = "1.10.26", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-12-privy-client-pydantic-v1'" },
     { name = "pydantic", version = "2.12.5", source = { registry = "https://pypi.org/simple" }, marker = "extra == 'group-12-privy-client-pydantic-v2' or extra != 'group-12-privy-client-pydantic-v1'" },
     { name = "sniffio" },
@@ -1142,6 +1143,7 @@ requires-dist = [
     { name = "distro", specifier = ">=1.7.0,<2" },
     { name = "httpx", specifier = ">=0.23.0,<1" },
     { name = "httpx-aiohttp", marker = "extra == 'aiohttp'", specifier = ">=0.1.9" },
+    { name = "pyhpke", specifier = ">=0.6.3,<0.6.4" },
     { name = "pydantic", specifier = ">=1.9.0,<3" },
     { name = "sniffio" },
     { name = "typing-extensions", specifier = ">=4.14,<5" },
@@ -1530,6 +1532,18 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/b0/77/a5b8c569bf593b0140bde72ea885a803b82086995367bf2037de0159d924/pygments-2.19.2.tar.gz", hash = "sha256:636cb2477cec7f8952536970bc533bc43743542f70392ae026374600add5b887", size = 4968631, upload-time = "2025-06-21T13:39:12.283Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/c7/21/705964c7812476f378728bdf590ca4b771ec72385c533964653c68e86bdc/pygments-2.19.2-py3-none-any.whl", hash = "sha256:86540386c03d588bb81d44bc3928634ff26449851e99741617ecb9037ee5ec0b", size = 1225217, upload-time = "2025-06-21T13:39:07.939Z" },
+]
+
+[[package]]
+name = "pyhpke"
+version = "0.6.3"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "cryptography" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/39/d0/dd9bb29b12e9d96faa7595712ac8cba6d5205deac32e4c061b54407472a4/pyhpke-0.6.3.tar.gz", hash = "sha256:e310dfe70ab0428871236335dce2e0bb5d5578d86f8067b5326204e69571913e", size = 1763631, upload-time = "2025-10-18T00:36:25.316843Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/f8/e0/a3a8d4d967fb5b4bdbba1021673b8a066a78c6284d1c47ab291c4be0b5c9/pyhpke-0.6.3-py3-none-any.whl", hash = "sha256:15e3cf85b0b8271b89947738f7e5cb42c80a8f55756377ee7fc26a285f3076df", size = 22975, upload-time = "2025-10-18T00:36:24.066458Z" },
 ]
 
 [[package]]
