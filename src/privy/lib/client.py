@@ -8,6 +8,7 @@ from .users import UsersService
 from .wallets import WalletsService
 from .._client import PrivyAPI
 from .._version import __version__
+from .key_quorums import KeyQuorumsService
 from .transactions import TransactionsService
 
 __all__ = ["PrivyClient"]
@@ -24,6 +25,7 @@ class PrivyClient:
             default_headers={"privy-client": f"python:{__version__}"},
         )
         self.wallets = WalletsService(self._client)
+        self.key_quorums = KeyQuorumsService(self._client)
         self.users = UsersService(self._client)
         self.transactions = TransactionsService(self._client)
 

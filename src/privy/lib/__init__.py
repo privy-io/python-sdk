@@ -5,6 +5,7 @@ from .client import PrivyClient
 from .solana import SolanaWalletService
 from .wallets import WalletsService
 from .ethereum import EthereumWalletService
+from .key_quorums import KeyQuorumsService
 from .transactions import TransactionsService
 from .authorization import (
     P256KeyPair,
@@ -20,6 +21,7 @@ from .request_options import PrivyRequestOptions
 
 __all__ = [
     "AuthorizationContext",
+    "KeyQuorumsService",
     "P256KeyPair",
     "PreparedRequest",
     "TransactionsService",
