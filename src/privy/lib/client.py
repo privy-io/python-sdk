@@ -7,6 +7,7 @@ from types import TracebackType
 from .wallets import WalletsService
 from .._client import PrivyAPI
 from .._version import __version__
+from .transactions import TransactionsService
 
 __all__ = ["PrivyClient"]
 
@@ -22,6 +23,7 @@ class PrivyClient:
             default_headers={"privy-client": f"python:{__version__}"},
         )
         self.wallets = WalletsService(self._client)
+        self.transactions = TransactionsService(self._client)
 
     def close(self) -> None:
         self._client.close()
