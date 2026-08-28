@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from typing import Any, Callable, cast
 
+from .tron import TronWalletService
 from .solana import SolanaWalletService
 from .._types import omit
 from .._client import PrivyAPI
@@ -29,6 +30,7 @@ class WalletsService(WalletsResource):
         self._jwt_exchanger = jwt_exchanger
         self.ethereum = EthereumWalletService(self)
         self.solana = SolanaWalletService(self)
+        self.tron = TronWalletService(self)
 
     def update(
         self,

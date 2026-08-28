@@ -1,5 +1,6 @@
 """Hand-written public API layered on top of the generated client."""
 
+from .tron import TronWalletService
 from .users import UsersService
 from .client import PrivyClient
 from .solana import SolanaWalletService
@@ -32,6 +33,7 @@ __all__ = [
     "PrivyRequestOptions",
     "SolanaWalletService",
     "PoliciesService",
+    "TronWalletService",
     "WalletAPIRequestSignatureInput",
     "WalletsService",
     "UsersService",
