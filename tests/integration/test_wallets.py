@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import os
 import base64
+from typing import cast
+from collections.abc import Mapping
 
 import pytest
 from cryptography.hazmat.primitives import hashes, serialization
@@ -17,10 +19,38 @@ from privy import (
 )
 from privy.types.wallet_raw_sign_params import WalletRawSignParams
 
+from .wallet_setup import (
+    WALLET_CASES,
+    TestWallet as WalletUnderTest,
+    WalletOwnership,
+    TestWalletResources as WalletResources,
+    create_test_wallets,
+    setup_test_wallet_resources,
+)
+
 pytestmark = pytest.mark.integration
 
 RAW_SIGN_HASH = "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
 RAW_SIGN_PARAMS: WalletRawSignParams = {"params": {"hash": RAW_SIGN_HASH}}
+
+
+@pytest.fixture(scope="module")
+def wallet_resources(privy_client: PrivyClient) -> WalletResources:
+    return setup_test_wallet_resources(privy_client)
+
+
+@pytest.fixture(scope="module")
+def tron_wallets(
+    wallet_resources: WalletResources, jwt_auth_private_key: str
+) -> Mapping[WalletOwnership, WalletUnderTest]:
+    return create_test_wallets(wallet_resources, "tron", jwt_auth_private_key)
+
+
+@pytest.fixture(scope="module", params=WALLET_CASES, ids=WALLET_CASES)
+def tron_wallet(
+    request: pytest.FixtureRequest, tron_wallets: Mapping[WalletOwnership, WalletUnderTest]
+) -> WalletUnderTest:
+    return tron_wallets[cast(WalletOwnership, request.param)]
 
 
 def encoded_public_key(private_key: ec.EllipticCurvePrivateKey) -> str:
@@ -43,8 +73,8 @@ def authorization_payload(wallet_id: str) -> bytes:
     )
 
 
-def test_raw_sign_with_ownerless_tron_wallet(privy_client: PrivyClient) -> None:
-    wallet = privy_client.wallets.create(chain_type="tron")
+def test_raw_sign(privy_client: PrivyClient, tron_wallet: WalletUnderTest) -> None:
+    wallet = tron_wallet.wallet
     assert wallet.id, f"expected created wallet to have an ID, got {wallet.to_dict()!r}"
     assert wallet.address
     assert wallet.chain_type == "tron"
@@ -53,6 +83,7 @@ def test_raw_sign_with_ownerless_tron_wallet(privy_client: PrivyClient) -> None:
     response = privy_client.wallets.raw_sign(
         wallet.id,
         wallet_raw_sign_params=RAW_SIGN_PARAMS,
+        request_options=tron_wallet.request_options,
     )
 
     assert response.method == "raw_sign"
