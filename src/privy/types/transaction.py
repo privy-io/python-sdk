@@ -25,6 +25,7 @@ class Transaction(BaseModel):
     wallet_id: str
 
     reference_id: Optional[str] = None
+    """Developer-provided reference ID, if one was included in the request."""
 
     sponsored: Optional[bool] = None
 

@@ -41,6 +41,7 @@ from .token_output import TokenOutput as TokenOutput
 from .tron_address import TronAddress as TronAddress
 from .wallet_asset import WalletAsset as WalletAsset
 from .abi_parameter import AbiParameter as AbiParameter
+from .aptos_bcs_hex import AptosBcsHex as AptosBcsHex
 from .developer_fee import DeveloperFee as DeveloperFee
 from .fee_line_item import FeeLineItem as FeeLineItem
 from .fiat_currency import FiatCurrency as FiatCurrency
@@ -474,6 +475,8 @@ from .wallet_archived_webhook_payload import WalletArchivedWebhookPayload as Wal
 from .wallet_funds_native_token_asset import WalletFundsNativeTokenAsset as WalletFundsNativeTokenAsset
 from .wallet_restored_webhook_payload import WalletRestoredWebhookPayload as WalletRestoredWebhookPayload
 from .xrpl_sign_transaction_rpc_input import XrplSignTransactionRpcInput as XrplSignTransactionRpcInput
+from .aptos_sign_transaction_rpc_input import AptosSignTransactionRpcInput as AptosSignTransactionRpcInput
+from .aptos_signed_transaction_bcs_hex import AptosSignedTransactionBcsHex as AptosSignedTransactionBcsHex
 from .card_issuing_cancellation_reason import CardIssuingCancellationReason as CardIssuingCancellationReason
 from .ethereum_personal_sign_rpc_input import EthereumPersonalSignRpcInput as EthereumPersonalSignRpcInput
 from .ethereum_send_calls_rpc_response import EthereumSendCallsRpcResponse as EthereumSendCallsRpcResponse
@@ -550,6 +553,7 @@ from .user_get_by_twitter_subject_params import UserGetByTwitterSubjectParams as
 from .wallet_automation_execution_status import WalletAutomationExecutionStatus as WalletAutomationExecutionStatus
 from .xrpl_sign_transaction_rpc_response import XrplSignTransactionRpcResponse as XrplSignTransactionRpcResponse
 from .action_request_body_condition_param import ActionRequestBodyConditionParam as ActionRequestBodyConditionParam
+from .aptos_sign_transaction_rpc_response import AptosSignTransactionRpcResponse as AptosSignTransactionRpcResponse
 from .bridge_static_memo_deposit_metadata import BridgeStaticMemoDepositMetadata as BridgeStaticMemoDepositMetadata
 from .crypto_deposit_asset_filter_exclude import CryptoDepositAssetFilterExclude as CryptoDepositAssetFilterExclude
 from .crypto_deposit_asset_filter_include import CryptoDepositAssetFilterInclude as CryptoDepositAssetFilterInclude
@@ -639,6 +643,9 @@ from .xrpl_sign_transaction_rpc_input_param import XrplSignTransactionRpcInputPa
 from .yield_claim_confirmed_webhook_payload import (
     YieldClaimConfirmedWebhookPayload as YieldClaimConfirmedWebhookPayload,
 )
+from .aptos_sign_transaction_rpc_input_param import (
+    AptosSignTransactionRpcInputParam as AptosSignTransactionRpcInputParam,
+)
 from .create_crypto_deposit_account_response import (
     CreateCryptoDepositAccountResponse as CreateCryptoDepositAccountResponse,
 )
@@ -694,6 +701,9 @@ from .unsigned_standard_ethereum_transaction import (
 from .xrpl_sign_transaction_rpc_input_params import (
     XrplSignTransactionRpcInputParams as XrplSignTransactionRpcInputParams,
 )
+from .aptos_sign_transaction_rpc_input_params import (
+    AptosSignTransactionRpcInputParams as AptosSignTransactionRpcInputParams,
+)
 from .ethereum_personal_sign_rpc_input_params import (
     EthereumPersonalSignRpcInputParams as EthereumPersonalSignRpcInputParams,
 )
@@ -729,6 +739,9 @@ from .xrpl_sign_transaction_rpc_response_data import (
 )
 from .yield_deposit_confirmed_webhook_payload import (
     YieldDepositConfirmedWebhookPayload as YieldDepositConfirmedWebhookPayload,
+)
+from .aptos_sign_transaction_rpc_response_data import (
+    AptosSignTransactionRpcResponseData as AptosSignTransactionRpcResponseData,
 )
 from .create_fiat_deposit_account_source_param import (
     CreateFiatDepositAccountSourceParam as CreateFiatDepositAccountSourceParam,
@@ -942,6 +955,9 @@ from .wallet_creation_additional_signer_item_param import (
 )
 from .xrpl_sign_transaction_rpc_input_params_param import (
     XrplSignTransactionRpcInputParamsParam as XrplSignTransactionRpcInputParamsParam,
+)
+from .aptos_sign_transaction_rpc_input_params_param import (
+    AptosSignTransactionRpcInputParamsParam as AptosSignTransactionRpcInputParamsParam,
 )
 from .ethereum_personal_sign_rpc_input_params_param import (
     EthereumPersonalSignRpcInputParamsParam as EthereumPersonalSignRpcInputParamsParam,

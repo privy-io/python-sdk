@@ -20,6 +20,7 @@ class SolanaSignAndSendTransactionRpcResponseData(BaseModel):
     hash: str
 
     reference_id: Optional[str] = None
+    """Developer-provided reference ID, if one was included in the request."""
 
     signed_transaction: Optional[str] = None
 

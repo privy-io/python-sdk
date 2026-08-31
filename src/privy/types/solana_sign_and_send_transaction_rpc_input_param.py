@@ -34,6 +34,7 @@ class SolanaSignAndSendTransactionRpcInputParam(TypedDict, total=False):
     optimistic_broadcast: bool
 
     reference_id: str
+    """Developer-provided identifier for this request. Must be unique per app."""
 
     sponsor: bool
 

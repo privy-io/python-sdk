@@ -85,5 +85,8 @@ class SwapActionResponse(BaseModel):
     gas token symbol.
     """
 
+    reference_id: Optional[str] = None
+    """Developer-provided reference ID, if one was included in the request."""
+
     steps: Optional[List[WalletActionStep]] = None
     """The steps of the wallet action. Only returned if `?include=steps` is provided."""

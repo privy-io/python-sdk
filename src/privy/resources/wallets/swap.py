@@ -61,6 +61,7 @@ class SwapResource(SyncAPIResource):
         amount_type: AmountType | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
         nonce: WalletActionNonce | Omit = omit,
+        reference_id: str | Omit = omit,
         slippage_bps: int | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
@@ -90,6 +91,8 @@ class SwapResource(SyncAPIResource):
 
           nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
               request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
 
           slippage_bps: Maximum slippage tolerance in basis points (e.g., 50 for 0.5%).
 
@@ -132,6 +135,7 @@ class SwapResource(SyncAPIResource):
                     "amount_type": amount_type,
                     "fee_configuration": fee_configuration,
                     "nonce": nonce,
+                    "reference_id": reference_id,
                     "slippage_bps": slippage_bps,
                 },
                 swap_execute_params.SwapExecuteParams,
@@ -257,6 +261,7 @@ class AsyncSwapResource(AsyncAPIResource):
         amount_type: AmountType | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
         nonce: WalletActionNonce | Omit = omit,
+        reference_id: str | Omit = omit,
         slippage_bps: int | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
@@ -286,6 +291,8 @@ class AsyncSwapResource(AsyncAPIResource):
 
           nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
               request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
 
           slippage_bps: Maximum slippage tolerance in basis points (e.g., 50 for 0.5%).
 
@@ -328,6 +335,7 @@ class AsyncSwapResource(AsyncAPIResource):
                     "amount_type": amount_type,
                     "fee_configuration": fee_configuration,
                     "nonce": nonce,
+                    "reference_id": reference_id,
                     "slippage_bps": slippage_bps,
                 },
                 swap_execute_params.SwapExecuteParams,

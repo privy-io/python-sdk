@@ -71,6 +71,7 @@ class EthereumResource(SyncAPIResource):
         amount: str | Omit = omit,
         nonce: WalletActionNonce | Omit = omit,
         raw_amount: str | Omit = omit,
+        reference_id: str | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -97,6 +98,8 @@ class EthereumResource(SyncAPIResource):
 
           raw_amount: Amount in smallest unit to deposit (e.g. "1500000" for 1.5 USDC with 6
               decimals). Exactly one of `amount` or `raw_amount` must be provided.
+
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -135,6 +138,7 @@ class EthereumResource(SyncAPIResource):
                     "amount": amount,
                     "nonce": nonce,
                     "raw_amount": raw_amount,
+                    "reference_id": reference_id,
                 },
                 ethereum_deposit_params.EthereumDepositParams,
             ),
@@ -152,6 +156,7 @@ class EthereumResource(SyncAPIResource):
         amount: str | Omit = omit,
         nonce: WalletActionNonce | Omit = omit,
         raw_amount: str | Omit = omit,
+        reference_id: str | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -178,6 +183,8 @@ class EthereumResource(SyncAPIResource):
 
           raw_amount: Amount in smallest unit to withdraw (e.g. "1500000" for 1.5 USDC with 6
               decimals). Exactly one of `amount` or `raw_amount` must be provided.
+
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -216,6 +223,7 @@ class EthereumResource(SyncAPIResource):
                     "amount": amount,
                     "nonce": nonce,
                     "raw_amount": raw_amount,
+                    "reference_id": reference_id,
                 },
                 ethereum_withdraw_params.EthereumWithdrawParams,
             ),
@@ -354,6 +362,7 @@ class AsyncEthereumResource(AsyncAPIResource):
         amount: str | Omit = omit,
         nonce: WalletActionNonce | Omit = omit,
         raw_amount: str | Omit = omit,
+        reference_id: str | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -380,6 +389,8 @@ class AsyncEthereumResource(AsyncAPIResource):
 
           raw_amount: Amount in smallest unit to deposit (e.g. "1500000" for 1.5 USDC with 6
               decimals). Exactly one of `amount` or `raw_amount` must be provided.
+
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -418,6 +429,7 @@ class AsyncEthereumResource(AsyncAPIResource):
                     "amount": amount,
                     "nonce": nonce,
                     "raw_amount": raw_amount,
+                    "reference_id": reference_id,
                 },
                 ethereum_deposit_params.EthereumDepositParams,
             ),
@@ -435,6 +447,7 @@ class AsyncEthereumResource(AsyncAPIResource):
         amount: str | Omit = omit,
         nonce: WalletActionNonce | Omit = omit,
         raw_amount: str | Omit = omit,
+        reference_id: str | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -461,6 +474,8 @@ class AsyncEthereumResource(AsyncAPIResource):
 
           raw_amount: Amount in smallest unit to withdraw (e.g. "1500000" for 1.5 USDC with 6
               decimals). Exactly one of `amount` or `raw_amount` must be provided.
+
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -499,6 +514,7 @@ class AsyncEthereumResource(AsyncAPIResource):
                     "amount": amount,
                     "nonce": nonce,
                     "raw_amount": raw_amount,
+                    "reference_id": reference_id,
                 },
                 ethereum_withdraw_params.EthereumWithdrawParams,
             ),

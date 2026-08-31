@@ -1,5 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from typing import Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
@@ -54,3 +55,6 @@ class WalletActionPayoutCreatedWebhookPayload(BaseModel):
 
     wallet_id: str
     """The ID of the wallet involved in the action."""
+
+    reference_id: Optional[str] = None
+    """Developer-provided reference ID, if one was included in the request."""

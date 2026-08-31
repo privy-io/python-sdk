@@ -76,6 +76,7 @@ from ..types.spark_transfer_tokens_rpc_input_params_param import SparkTransferTo
 from ..types.tron_send_transaction_rpc_input_params_param import TronSendTransactionRpcInputParamsParam
 from ..types.tron_sign_transaction_rpc_input_params_param import TronSignTransactionRpcInputParamsParam
 from ..types.xrpl_sign_transaction_rpc_input_params_param import XrplSignTransactionRpcInputParamsParam
+from ..types.aptos_sign_transaction_rpc_input_params_param import AptosSignTransactionRpcInputParamsParam
 from ..types.ethereum_personal_sign_rpc_input_params_param import EthereumPersonalSignRpcInputParamsParam
 from ..types.solana_sign_transaction_rpc_input_params_param import SolanaSignTransactionRpcInputParamsParam
 from ..types.ethereum_sign_typed_data_rpc_input_params_param import EthereumSignTypedDataRpcInputParamsParam
@@ -453,6 +454,8 @@ class IntentsResource(SyncAPIResource):
           experimental_data_suffix: A hex-encoded string prefixed with '0x', capped at 300002 characters (150,000
               bytes).
 
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
+
           sponsor_options: Options for user-pays gas sponsorship on the RPC endpoint. When provided
               alongside `sponsor: true`, controls which token asset the user pays gas with.
 
@@ -746,6 +749,44 @@ class IntentsResource(SyncAPIResource):
         self,
         path_wallet_id: str,
         *,
+        method: Literal["aptos_signTransaction"],
+        params: AptosSignTransactionRpcInputParamsParam,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> RpcIntentResponse:
+        """Create an intent to execute an RPC method on a wallet.
+
+        The intent must be
+        authorized by either the wallet owner or signers before it can be executed.
+
+        Args:
+          path_wallet_id: ID of the wallet.
+
+          params: Parameters for the Aptos `aptos_signTransaction` RPC.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        ...
+
+    @overload
+    def rpc(
+        self,
+        path_wallet_id: str,
+        *,
         method: Literal["signTransaction"],
         params: SolanaSignTransactionRpcInputParamsParam,
         address: str | Omit = omit,
@@ -816,6 +857,8 @@ class IntentsResource(SyncAPIResource):
           caip2: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
 
           params: Parameters for the SVM `signAndSendTransaction` RPC.
+
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
 
           sponsor_options: Options for user-pays gas sponsorship on the RPC endpoint. When provided
               alongside `sponsor: true`, controls which token asset the user pays gas with.
@@ -1527,6 +1570,7 @@ class IntentsResource(SyncAPIResource):
         | Literal["eth_sign7702Authorization"]
         | Literal["eth_signUserOperation"]
         | Literal["wallet_sendCalls"]
+        | Literal["aptos_signTransaction"]
         | Literal["signTransaction"]
         | Literal["signAndSendTransaction"]
         | Literal["signMessage"]
@@ -1554,6 +1598,7 @@ class IntentsResource(SyncAPIResource):
         | EthereumSign7702AuthorizationRpcInputParamsParam
         | EthereumSignUserOperationRpcInputParamsParam
         | EthereumSendCallsRpcInputParamsParam
+        | AptosSignTransactionRpcInputParamsParam
         | SolanaSignTransactionRpcInputParamsParam
         | SolanaSignAndSendTransactionRpcInputParamsParam
         | SolanaSignMessageRpcInputParamsParam
@@ -1630,6 +1675,7 @@ class IntentsResource(SyncAPIResource):
         amount_type: AmountType | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
         nonce: WalletActionNonce | Omit = omit,
+        reference_id: str | Omit = omit,
         slippage_bps: int | Omit = omit,
         privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -1664,6 +1710,8 @@ class IntentsResource(SyncAPIResource):
           nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
               request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
+
           slippage_bps: Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
               cross-chain or cross-asset transfers; omit to use the provider default.
 
@@ -1691,6 +1739,7 @@ class IntentsResource(SyncAPIResource):
                     "amount_type": amount_type,
                     "fee_configuration": fee_configuration,
                     "nonce": nonce,
+                    "reference_id": reference_id,
                     "slippage_bps": slippage_bps,
                 },
                 intent_transfer_params.IntentTransferParams,
@@ -2318,6 +2367,8 @@ class AsyncIntentsResource(AsyncAPIResource):
           experimental_data_suffix: A hex-encoded string prefixed with '0x', capped at 300002 characters (150,000
               bytes).
 
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
+
           sponsor_options: Options for user-pays gas sponsorship on the RPC endpoint. When provided
               alongside `sponsor: true`, controls which token asset the user pays gas with.
 
@@ -2611,6 +2662,44 @@ class AsyncIntentsResource(AsyncAPIResource):
         self,
         path_wallet_id: str,
         *,
+        method: Literal["aptos_signTransaction"],
+        params: AptosSignTransactionRpcInputParamsParam,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> RpcIntentResponse:
+        """Create an intent to execute an RPC method on a wallet.
+
+        The intent must be
+        authorized by either the wallet owner or signers before it can be executed.
+
+        Args:
+          path_wallet_id: ID of the wallet.
+
+          params: Parameters for the Aptos `aptos_signTransaction` RPC.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        ...
+
+    @overload
+    async def rpc(
+        self,
+        path_wallet_id: str,
+        *,
         method: Literal["signTransaction"],
         params: SolanaSignTransactionRpcInputParamsParam,
         address: str | Omit = omit,
@@ -2681,6 +2770,8 @@ class AsyncIntentsResource(AsyncAPIResource):
           caip2: A valid CAIP-2 chain ID (e.g. 'eip155:4217' for Tempo, 'eip155:1' for Ethereum).
 
           params: Parameters for the SVM `signAndSendTransaction` RPC.
+
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
 
           sponsor_options: Options for user-pays gas sponsorship on the RPC endpoint. When provided
               alongside `sponsor: true`, controls which token asset the user pays gas with.
@@ -3392,6 +3483,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         | Literal["eth_sign7702Authorization"]
         | Literal["eth_signUserOperation"]
         | Literal["wallet_sendCalls"]
+        | Literal["aptos_signTransaction"]
         | Literal["signTransaction"]
         | Literal["signAndSendTransaction"]
         | Literal["signMessage"]
@@ -3419,6 +3511,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         | EthereumSign7702AuthorizationRpcInputParamsParam
         | EthereumSignUserOperationRpcInputParamsParam
         | EthereumSendCallsRpcInputParamsParam
+        | AptosSignTransactionRpcInputParamsParam
         | SolanaSignTransactionRpcInputParamsParam
         | SolanaSignAndSendTransactionRpcInputParamsParam
         | SolanaSignMessageRpcInputParamsParam
@@ -3495,6 +3588,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         amount_type: AmountType | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
         nonce: WalletActionNonce | Omit = omit,
+        reference_id: str | Omit = omit,
         slippage_bps: int | Omit = omit,
         privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -3529,6 +3623,8 @@ class AsyncIntentsResource(AsyncAPIResource):
           nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
               request. Must be at least 24 characters (e.g. a cuid2 or UUID).
 
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
+
           slippage_bps: Maximum allowed slippage in basis points (1 bps = 0.01%). Only applicable for
               cross-chain or cross-asset transfers; omit to use the provider default.
 
@@ -3556,6 +3652,7 @@ class AsyncIntentsResource(AsyncAPIResource):
                     "amount_type": amount_type,
                     "fee_configuration": fee_configuration,
                     "nonce": nonce,
+                    "reference_id": reference_id,
                     "slippage_bps": slippage_bps,
                 },
                 intent_transfer_params.IntentTransferParams,

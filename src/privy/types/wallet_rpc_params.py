@@ -21,6 +21,7 @@ from .spark_transfer_tokens_rpc_input_params_param import SparkTransferTokensRpc
 from .tron_send_transaction_rpc_input_params_param import TronSendTransactionRpcInputParamsParam
 from .tron_sign_transaction_rpc_input_params_param import TronSignTransactionRpcInputParamsParam
 from .xrpl_sign_transaction_rpc_input_params_param import XrplSignTransactionRpcInputParamsParam
+from .aptos_sign_transaction_rpc_input_params_param import AptosSignTransactionRpcInputParamsParam
 from .ethereum_personal_sign_rpc_input_params_param import EthereumPersonalSignRpcInputParamsParam
 from .solana_sign_transaction_rpc_input_params_param import SolanaSignTransactionRpcInputParamsParam
 from .ethereum_sign_typed_data_rpc_input_params_param import EthereumSignTypedDataRpcInputParamsParam
@@ -51,6 +52,7 @@ __all__ = [
     "EthereumSign7702AuthorizationRpcInput",
     "EthereumSignUserOperationRpcInput",
     "EthereumSendCallsRpcInput",
+    "AptosSignTransactionRpcInput",
     "SolanaSignTransactionRpcInput",
     "SolanaSignAndSendTransactionRpcInput",
     "SolanaSignMessageRpcInput",
@@ -128,6 +130,7 @@ class EthereumSendTransactionRpcInput(TypedDict, total=False):
     """
 
     reference_id: str
+    """Developer-provided identifier for this request. Must be unique per app."""
 
     sponsor: bool
 
@@ -397,6 +400,32 @@ class EthereumSendCallsRpcInput(TypedDict, total=False):
     """
 
 
+class AptosSignTransactionRpcInput(TypedDict, total=False):
+    method: Required[Literal["aptos_signTransaction"]]
+
+    params: Required[AptosSignTransactionRpcInputParamsParam]
+    """Parameters for the Aptos `aptos_signTransaction` RPC."""
+
+    privy_authorization_signature: Annotated[str, PropertyInfo(alias="privy-authorization-signature")]
+    """Request authorization signature.
+
+    If multiple signatures are required, they should be comma separated.
+    """
+
+    privy_idempotency_key: Annotated[str, PropertyInfo(alias="privy-idempotency-key")]
+    """
+    Idempotency keys ensure API requests are executed only once within a 24-hour
+    window.
+    """
+
+    privy_request_expiry: Annotated[str, PropertyInfo(alias="privy-request-expiry")]
+    """Request expiry.
+
+    Value is a Unix timestamp in milliseconds representing the deadline by which the
+    request must be processed.
+    """
+
+
 class SolanaSignTransactionRpcInput(TypedDict, total=False):
     method: Required[Literal["signTransaction"]]
 
@@ -448,6 +477,7 @@ class SolanaSignAndSendTransactionRpcInput(TypedDict, total=False):
     optimistic_broadcast: bool
 
     reference_id: str
+    """Developer-provided identifier for this request. Must be unique per app."""
 
     sponsor: bool
 
@@ -974,6 +1004,7 @@ WalletRpcParams: TypeAlias = Union[
     EthereumSign7702AuthorizationRpcInput,
     EthereumSignUserOperationRpcInput,
     EthereumSendCallsRpcInput,
+    AptosSignTransactionRpcInput,
     SolanaSignTransactionRpcInput,
     SolanaSignAndSendTransactionRpcInput,
     SolanaSignMessageRpcInput,

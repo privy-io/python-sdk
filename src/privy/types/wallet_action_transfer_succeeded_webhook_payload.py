@@ -43,6 +43,9 @@ class WalletActionTransferSucceededWebhookPayload(BaseModel):
     wallet_id: str
     """The ID of the wallet involved in the action."""
 
+    reference_id: Optional[str] = None
+    """Developer-provided reference ID, if one was included in the request."""
+
     source_amount: Optional[str] = None
     """Decimal amount sent on the source chain (e.g.
 

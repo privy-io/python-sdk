@@ -51,6 +51,7 @@ class IncentiveResource(SyncAPIResource):
         *,
         chain: str,
         nonce: WalletActionNonce | Omit = omit,
+        reference_id: str | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -73,6 +74,8 @@ class IncentiveResource(SyncAPIResource):
 
           nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
               request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -109,6 +112,7 @@ class IncentiveResource(SyncAPIResource):
                 {
                     "chain": chain,
                     "nonce": nonce,
+                    "reference_id": reference_id,
                 },
                 incentive_claim_params.IncentiveClaimParams,
             ),
@@ -147,6 +151,7 @@ class AsyncIncentiveResource(AsyncAPIResource):
         *,
         chain: str,
         nonce: WalletActionNonce | Omit = omit,
+        reference_id: str | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -169,6 +174,8 @@ class AsyncIncentiveResource(AsyncAPIResource):
 
           nonce: Unique caller-generated nonce used to prevent replaying a signed wallet action
               request. Must be at least 24 characters (e.g. a cuid2 or UUID).
+
+          reference_id: Developer-provided identifier for this request. Must be unique per app.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -205,6 +212,7 @@ class AsyncIncentiveResource(AsyncAPIResource):
                 {
                     "chain": chain,
                     "nonce": nonce,
+                    "reference_id": reference_id,
                 },
                 incentive_claim_params.IncentiveClaimParams,
             ),

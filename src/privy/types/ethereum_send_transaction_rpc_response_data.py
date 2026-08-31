@@ -21,6 +21,7 @@ class EthereumSendTransactionRpcResponseData(BaseModel):
     hash: str
 
     reference_id: Optional[str] = None
+    """Developer-provided reference ID, if one was included in the request."""
 
     transaction_id: Optional[str] = None
 

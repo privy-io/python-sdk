@@ -73,3 +73,6 @@ class WalletActionEarnWithdrawSucceededWebhookPayload(BaseModel):
     6 for USDC, 18 for ETH). Only present when the token is known in the asset
     registry.
     """
+
+    reference_id: Optional[str] = None
+    """Developer-provided reference ID, if one was included in the request."""

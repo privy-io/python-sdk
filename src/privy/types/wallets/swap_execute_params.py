@@ -39,6 +39,9 @@ class SwapExecuteParams(TypedDict, total=False):
     request. Must be at least 24 characters (e.g. a cuid2 or UUID).
     """
 
+    reference_id: str
+    """Developer-provided identifier for this request. Must be unique per app."""
+
     slippage_bps: int
     """Maximum slippage tolerance in basis points (e.g., 50 for 0.5%)."""
 

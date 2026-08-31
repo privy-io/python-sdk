@@ -37,6 +37,7 @@ class EthereumSendTransactionRpcInputParam(TypedDict, total=False):
     """
 
     reference_id: str
+    """Developer-provided identifier for this request. Must be unique per app."""
 
     sponsor: bool
 

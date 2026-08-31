@@ -69,5 +69,8 @@ class EarnWithdrawActionResponse(BaseModel):
     failure_reason: Optional[FailureReason] = None
     """A description of why a wallet action (or a step within a wallet action) failed."""
 
+    reference_id: Optional[str] = None
+    """Developer-provided reference ID, if one was included in the request."""
+
     steps: Optional[List[WalletActionStep]] = None
     """The steps of the wallet action. Only returned if `?include=steps` is provided."""

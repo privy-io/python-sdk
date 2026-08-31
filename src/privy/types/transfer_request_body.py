@@ -48,6 +48,9 @@ class TransferRequestBody(BaseModel):
     request. Must be at least 24 characters (e.g. a cuid2 or UUID).
     """
 
+    reference_id: Optional[str] = None
+    """Developer-provided identifier for this request. Must be unique per app."""
+
     slippage_bps: Optional[int] = None
     """Maximum allowed slippage in basis points (1 bps = 0.01%).
 

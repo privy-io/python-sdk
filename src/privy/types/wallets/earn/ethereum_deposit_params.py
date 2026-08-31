@@ -33,6 +33,9 @@ class EthereumDepositParams(TypedDict, total=False):
     must be provided.
     """
 
+    reference_id: str
+    """Developer-provided identifier for this request. Must be unique per app."""
+
     privy_authorization_signature: Annotated[str, PropertyInfo(alias="privy-authorization-signature")]
     """Request authorization signature.
 

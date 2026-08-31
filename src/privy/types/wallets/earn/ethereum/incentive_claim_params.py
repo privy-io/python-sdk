@@ -24,6 +24,9 @@ class IncentiveClaimParams(TypedDict, total=False):
     request. Must be at least 24 characters (e.g. a cuid2 or UUID).
     """
 
+    reference_id: str
+    """Developer-provided identifier for this request. Must be unique per app."""
+
     privy_authorization_signature: Annotated[str, PropertyInfo(alias="privy-authorization-signature")]
     """Request authorization signature.
 

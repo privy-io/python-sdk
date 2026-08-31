@@ -11,6 +11,6 @@ __all__ = ["ListOrganizationExternalFiatAccountsResponse"]
 class ListOrganizationExternalFiatAccountsResponse(BaseModel):
     """A list of external fiat accounts linked to an organization."""
 
-    accounts: List[OrganizationExternalFiatAccount]
+    external_fiat_accounts: List[OrganizationExternalFiatAccount]
 
     next_cursor: Optional[str] = None

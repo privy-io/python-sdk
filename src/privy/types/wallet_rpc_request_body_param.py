@@ -16,6 +16,7 @@ from .spark_transfer_tokens_rpc_input_param import SparkTransferTokensRpcInputPa
 from .tron_send_transaction_rpc_input_param import TronSendTransactionRpcInputParam
 from .tron_sign_transaction_rpc_input_param import TronSignTransactionRpcInputParam
 from .xrpl_sign_transaction_rpc_input_param import XrplSignTransactionRpcInputParam
+from .aptos_sign_transaction_rpc_input_param import AptosSignTransactionRpcInputParam
 from .ethereum_personal_sign_rpc_input_param import EthereumPersonalSignRpcInputParam
 from .solana_sign_transaction_rpc_input_param import SolanaSignTransactionRpcInputParam
 from .ethereum_sign_typed_data_rpc_input_param import EthereumSignTypedDataRpcInputParam
@@ -44,6 +45,7 @@ WalletRpcRequestBodyParam: TypeAlias = Union[
     EthereumSign7702AuthorizationRpcInputParam,
     EthereumSignUserOperationRpcInputParam,
     EthereumSendCallsRpcInputParam,
+    AptosSignTransactionRpcInputParam,
     SolanaSignTransactionRpcInputParam,
     SolanaSignAndSendTransactionRpcInputParam,
     SolanaSignMessageRpcInputParam,
