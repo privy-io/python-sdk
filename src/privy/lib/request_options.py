@@ -12,3 +12,4 @@ __all__ = ["PrivyRequestOptions"]
 @dataclass(frozen=True)
 class PrivyRequestOptions:
     authorization_context: AuthorizationContext | None = None
+    request_expiry: int | None = None

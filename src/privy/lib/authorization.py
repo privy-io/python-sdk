@@ -166,12 +166,16 @@ def prepare_request(
     url: str,
     body: object,
     authorization_context: AuthorizationContext | None = None,
+    request_expiry: int | None = None,
     jwt_exchanger: JWTExchanger | None = None,
     preserve_empty_body: bool = False,
 ) -> PreparedRequest:
     """Prepare authorization headers for a generated API request."""
 
     context = authorization_context or AuthorizationContext()
+    request_headers = {"privy-app-id": app_id}
+    if request_expiry is not None:
+        request_headers["privy-request-expiry"] = str(request_expiry)
     # Formatting is intentionally performed even for precomputed signatures so
     # every authorization-context path covers the same request representation.
     payload = format_request_for_authorization_signature(
@@ -179,7 +183,7 @@ def prepare_request(
             method=method,
             url=url,
             body=body,
-            headers={"privy-app-id": app_id},
+            headers=request_headers,
         ),
         preserve_empty_body=preserve_empty_body,
     )
@@ -188,6 +192,9 @@ def prepare_request(
         payload,
         jwt_exchanger=jwt_exchanger,
     )
-    if not signatures:
-        return PreparedRequest(headers={})
-    return PreparedRequest(headers={"privy-authorization-signature": ",".join(signatures)})
+    headers: dict[str, str] = {}
+    if signatures:
+        headers["privy-authorization-signature"] = ",".join(signatures)
+    if request_expiry is not None:
+        headers["privy-request-expiry"] = str(request_expiry)
+    return PreparedRequest(headers=headers)

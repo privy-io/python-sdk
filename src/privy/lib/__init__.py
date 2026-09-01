@@ -20,6 +20,7 @@ from .authorization import (
     generate_authorization_signatures,
     format_request_for_authorization_signature,
 )
+from .request_expiry import PrivyRequestExpiryOptions
 from .request_options import PrivyRequestOptions
 
 __all__ = [
@@ -31,6 +32,7 @@ __all__ = [
     "PrivyClient",
     "EthereumWalletService",
     "PrivyRequestOptions",
+    "PrivyRequestExpiryOptions",
     "SolanaWalletService",
     "PoliciesService",
     "TronWalletService",

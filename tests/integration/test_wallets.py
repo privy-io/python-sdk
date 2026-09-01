@@ -61,14 +61,17 @@ def encoded_public_key(private_key: ec.EllipticCurvePrivateKey) -> str:
     return base64.b64encode(public_key).decode("ascii")
 
 
-def authorization_payload(wallet_id: str) -> bytes:
+def authorization_payload(wallet_id: str, request_expiry: int) -> bytes:
     api_url = (os.environ.get("TEST_API_URL") or "https://api.staging.privy.io").rstrip("/")
     return format_request_for_authorization_signature(
         WalletAPIRequestSignatureInput(
             method="POST",
             url=f"{api_url}/v1/wallets/{wallet_id}/raw_sign",
             body=RAW_SIGN_PARAMS,
-            headers={"privy-app-id": os.environ["TEST_APP_ID"]},
+            headers={
+                "privy-app-id": os.environ["TEST_APP_ID"],
+                "privy-request-expiry": str(request_expiry),
+            },
         )
     )
 
@@ -154,14 +157,17 @@ def test_raw_sign_with_precomputed_authorization_signature(privy_client: PrivyCl
     assert wallet.id
     assert wallet.chain_type == "tron"
 
-    signature = private_key.sign(authorization_payload(wallet.id), ec.ECDSA(hashes.SHA256()))
+    request_expiry = privy_client.get_request_expiry()
+    assert request_expiry is not None
+    signature = private_key.sign(authorization_payload(wallet.id, request_expiry), ec.ECDSA(hashes.SHA256()))
     response = privy_client.wallets.raw_sign(
         wallet.id,
         wallet_raw_sign_params=RAW_SIGN_PARAMS,
         request_options=PrivyRequestOptions(
             authorization_context=AuthorizationContext(
                 signatures=[base64.b64encode(signature).decode("ascii")],
-            )
+            ),
+            request_expiry=request_expiry,
         ),
     )
 
