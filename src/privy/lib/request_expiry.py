@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 __all__ = [
     "DEFAULT_REQUEST_EXPIRY_MS",
+    "DEFAULT_INTENT_REQUEST_EXPIRY_MS",
     "PrivyRequestExpiryOptions",
     "RequestExpiryProvider",
     "resolve_request_expiry",
@@ -15,6 +16,8 @@ __all__ = [
 
 # 15 minutes
 DEFAULT_REQUEST_EXPIRY_MS = 15 * 60 * 1000
+# 72 hours
+DEFAULT_INTENT_REQUEST_EXPIRY_MS = 72 * 60 * 60 * 1000
 
 RequestExpiryProvider = Callable[[], Optional[int]]
 
@@ -23,12 +26,13 @@ RequestExpiryProvider = Callable[[], Optional[int]]
 class PrivyRequestExpiryOptions:
     """Client-level configuration for automatic request expiry.
 
-    ``default_ms`` is a duration from now. Per-request expiry values are absolute
-    Unix timestamps in milliseconds.
+    ``default_ms`` and ``default_intent_ms`` are durations from now. Per-request
+    expiry values are absolute Unix timestamps in milliseconds.
     """
 
     disabled: bool = False
     default_ms: int | None = None
+    default_intent_ms: int | None = None
 
 
 def resolve_request_expiry(

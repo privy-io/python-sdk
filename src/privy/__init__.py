@@ -6,6 +6,7 @@ from . import types
 from .lib import (
     P256KeyPair,
     PrivyClient,
+    IntentsService,
     PreparedRequest,
     TronWalletService,
     PrivyRequestOptions,
@@ -95,6 +96,7 @@ __all__ = [
     "SolanaWalletService",
     "TronWalletService",
     "P256KeyPair",
+    "IntentsService",
     "PrivyRequestOptions",
     "PrivyRequestExpiryOptions",
     "AuthorizationContext",

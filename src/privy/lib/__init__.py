@@ -4,6 +4,7 @@ from .tron import TronWalletService
 from .users import UsersService
 from .client import PrivyClient
 from .solana import SolanaWalletService
+from .intents import IntentsService
 from .wallets import WalletsService
 from .ethereum import EthereumWalletService
 from .policies import PoliciesService
@@ -26,6 +27,7 @@ from .request_options import PrivyRequestOptions
 __all__ = [
     "AuthorizationContext",
     "KeyQuorumsService",
+    "IntentsService",
     "P256KeyPair",
     "PreparedRequest",
     "TransactionsService",
