@@ -18,8 +18,11 @@ class TempoVaultDetails(BaseModel):
     admin_wallet_address: str
     """EVM address of the vault admin wallet."""
 
-    admin_wallet_id: str
-    """Privy wallet ID of the vault admin."""
+    admin_wallet_id: Optional[str] = None
+    """
+    Privy wallet ID of the vault admin, or null when the Tempo vault admin is not
+    Privy-managed.
+    """
 
     app_apy: Optional[float] = None
     """
