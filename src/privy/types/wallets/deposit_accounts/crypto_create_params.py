@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from typing import Union
-from typing_extensions import Required, Annotated, TypeAlias, TypedDict
+from typing_extensions import Literal, Required, Annotated, TypeAlias, TypedDict
 
 from ...._utils import PropertyInfo
 from ...crypto_deposit_asset_param import CryptoDepositAssetParam
@@ -18,6 +18,8 @@ __all__ = [
 
 class CreateCryptoDepositAccountWithConfigRequestBody(TypedDict, total=False):
     deposit_config_id: Required[str]
+
+    type: Required[Literal["deposit_config"]]
 
     privy_authorization_signature: Annotated[str, PropertyInfo(alias="privy-authorization-signature")]
     """Request authorization signature.
@@ -52,6 +54,8 @@ class CreateCryptoDepositAccountWithRouteRequestBody(TypedDict, total=False):
 
     Asset and chain use human-readable aliases when known.
     """
+
+    type: Required[Literal["inline_route"]]
 
     privy_authorization_signature: Annotated[str, PropertyInfo(alias="privy-authorization-signature")]
     """Request authorization signature.

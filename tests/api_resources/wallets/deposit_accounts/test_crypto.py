@@ -23,6 +23,7 @@ class TestCrypto:
         crypto = client.wallets.deposit_accounts.crypto._create(
             wallet_id="wallet_id",
             deposit_config_id="x",
+            type="deposit_config",
         )
         assert_matches_type(CreateCryptoDepositAccountResponse, crypto, path=["response"])
 
@@ -32,6 +33,7 @@ class TestCrypto:
         crypto = client.wallets.deposit_accounts.crypto._create(
             wallet_id="wallet_id",
             deposit_config_id="x",
+            type="deposit_config",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
             privy_request_expiry="privy-request-expiry",
@@ -44,6 +46,7 @@ class TestCrypto:
         response = client.wallets.deposit_accounts.crypto.with_raw_response._create(
             wallet_id="wallet_id",
             deposit_config_id="x",
+            type="deposit_config",
         )
 
         assert response.is_closed is True
@@ -57,6 +60,7 @@ class TestCrypto:
         with client.wallets.deposit_accounts.crypto.with_streaming_response._create(
             wallet_id="wallet_id",
             deposit_config_id="x",
+            type="deposit_config",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -73,6 +77,7 @@ class TestCrypto:
             client.wallets.deposit_accounts.crypto.with_raw_response._create(
                 wallet_id="",
                 deposit_config_id="x",
+                type="deposit_config",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -82,6 +87,7 @@ class TestCrypto:
             wallet_id="wallet_id",
             destination={"asset": "usdc"},
             source={"mode": "all"},
+            type="inline_route",
         )
         assert_matches_type(CreateCryptoDepositAccountResponse, crypto, path=["response"])
 
@@ -95,6 +101,7 @@ class TestCrypto:
                 "chain": "base",
             },
             source={"mode": "all"},
+            type="inline_route",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
             privy_request_expiry="privy-request-expiry",
@@ -108,6 +115,7 @@ class TestCrypto:
             wallet_id="wallet_id",
             destination={"asset": "usdc"},
             source={"mode": "all"},
+            type="inline_route",
         )
 
         assert response.is_closed is True
@@ -122,6 +130,7 @@ class TestCrypto:
             wallet_id="wallet_id",
             destination={"asset": "usdc"},
             source={"mode": "all"},
+            type="inline_route",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -139,6 +148,7 @@ class TestCrypto:
                 wallet_id="",
                 destination={"asset": "usdc"},
                 source={"mode": "all"},
+                type="inline_route",
             )
 
 
@@ -153,6 +163,7 @@ class TestAsyncCrypto:
         crypto = await async_client.wallets.deposit_accounts.crypto._create(
             wallet_id="wallet_id",
             deposit_config_id="x",
+            type="deposit_config",
         )
         assert_matches_type(CreateCryptoDepositAccountResponse, crypto, path=["response"])
 
@@ -162,6 +173,7 @@ class TestAsyncCrypto:
         crypto = await async_client.wallets.deposit_accounts.crypto._create(
             wallet_id="wallet_id",
             deposit_config_id="x",
+            type="deposit_config",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
             privy_request_expiry="privy-request-expiry",
@@ -174,6 +186,7 @@ class TestAsyncCrypto:
         response = await async_client.wallets.deposit_accounts.crypto.with_raw_response._create(
             wallet_id="wallet_id",
             deposit_config_id="x",
+            type="deposit_config",
         )
 
         assert response.is_closed is True
@@ -187,6 +200,7 @@ class TestAsyncCrypto:
         async with async_client.wallets.deposit_accounts.crypto.with_streaming_response._create(
             wallet_id="wallet_id",
             deposit_config_id="x",
+            type="deposit_config",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -203,6 +217,7 @@ class TestAsyncCrypto:
             await async_client.wallets.deposit_accounts.crypto.with_raw_response._create(
                 wallet_id="",
                 deposit_config_id="x",
+                type="deposit_config",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -212,6 +227,7 @@ class TestAsyncCrypto:
             wallet_id="wallet_id",
             destination={"asset": "usdc"},
             source={"mode": "all"},
+            type="inline_route",
         )
         assert_matches_type(CreateCryptoDepositAccountResponse, crypto, path=["response"])
 
@@ -225,6 +241,7 @@ class TestAsyncCrypto:
                 "chain": "base",
             },
             source={"mode": "all"},
+            type="inline_route",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
             privy_request_expiry="privy-request-expiry",
@@ -238,6 +255,7 @@ class TestAsyncCrypto:
             wallet_id="wallet_id",
             destination={"asset": "usdc"},
             source={"mode": "all"},
+            type="inline_route",
         )
 
         assert response.is_closed is True
@@ -252,6 +270,7 @@ class TestAsyncCrypto:
             wallet_id="wallet_id",
             destination={"asset": "usdc"},
             source={"mode": "all"},
+            type="inline_route",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -269,4 +288,5 @@ class TestAsyncCrypto:
                 wallet_id="",
                 destination={"asset": "usdc"},
                 source={"mode": "all"},
+                type="inline_route",
             )

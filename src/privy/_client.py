@@ -166,17 +166,25 @@ class PrivyAPI(SyncAPIClient):
         )
 
     @cached_property
-    def wallets(self) -> WalletsResource:
-        from .resources.wallets import WalletsResource
+    def apps(self) -> AppsResource:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AppsResource
 
-        return WalletsResource(self)
+        return AppsResource(self)
 
     @cached_property
-    def users(self) -> UsersResource:
-        """Operations related to users"""
-        from .resources.users import UsersResource
+    def intents(self) -> IntentsResource:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import IntentsResource
 
-        return UsersResource(self)
+        return IntentsResource(self)
+
+    @cached_property
+    def key_quorums(self) -> KeyQuorumsResource:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import KeyQuorumsResource
+
+        return KeyQuorumsResource(self)
 
     @cached_property
     def organizations(self) -> OrganizationsResource:
@@ -200,25 +208,17 @@ class PrivyAPI(SyncAPIClient):
         return TransactionsResource(self)
 
     @cached_property
-    def key_quorums(self) -> KeyQuorumsResource:
-        """Operations related to key quorums"""
-        from .resources.key_quorums import KeyQuorumsResource
+    def users(self) -> UsersResource:
+        """Operations related to users"""
+        from .resources.users import UsersResource
 
-        return KeyQuorumsResource(self)
-
-    @cached_property
-    def intents(self) -> IntentsResource:
-        """Operations related to authorization intents for wallet actions"""
-        from .resources.intents import IntentsResource
-
-        return IntentsResource(self)
+        return UsersResource(self)
 
     @cached_property
-    def apps(self) -> AppsResource:
-        """Operations related to app settings and allowlist management"""
-        from .resources.apps import AppsResource
+    def wallets(self) -> WalletsResource:
+        from .resources.wallets import WalletsResource
 
-        return AppsResource(self)
+        return WalletsResource(self)
 
     @cached_property
     def webhooks(self) -> WebhooksResource:
@@ -446,17 +446,25 @@ class AsyncPrivyAPI(AsyncAPIClient):
         )
 
     @cached_property
-    def wallets(self) -> AsyncWalletsResource:
-        from .resources.wallets import AsyncWalletsResource
+    def apps(self) -> AsyncAppsResource:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AsyncAppsResource
 
-        return AsyncWalletsResource(self)
+        return AsyncAppsResource(self)
 
     @cached_property
-    def users(self) -> AsyncUsersResource:
-        """Operations related to users"""
-        from .resources.users import AsyncUsersResource
+    def intents(self) -> AsyncIntentsResource:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import AsyncIntentsResource
 
-        return AsyncUsersResource(self)
+        return AsyncIntentsResource(self)
+
+    @cached_property
+    def key_quorums(self) -> AsyncKeyQuorumsResource:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import AsyncKeyQuorumsResource
+
+        return AsyncKeyQuorumsResource(self)
 
     @cached_property
     def organizations(self) -> AsyncOrganizationsResource:
@@ -480,25 +488,17 @@ class AsyncPrivyAPI(AsyncAPIClient):
         return AsyncTransactionsResource(self)
 
     @cached_property
-    def key_quorums(self) -> AsyncKeyQuorumsResource:
-        """Operations related to key quorums"""
-        from .resources.key_quorums import AsyncKeyQuorumsResource
+    def users(self) -> AsyncUsersResource:
+        """Operations related to users"""
+        from .resources.users import AsyncUsersResource
 
-        return AsyncKeyQuorumsResource(self)
-
-    @cached_property
-    def intents(self) -> AsyncIntentsResource:
-        """Operations related to authorization intents for wallet actions"""
-        from .resources.intents import AsyncIntentsResource
-
-        return AsyncIntentsResource(self)
+        return AsyncUsersResource(self)
 
     @cached_property
-    def apps(self) -> AsyncAppsResource:
-        """Operations related to app settings and allowlist management"""
-        from .resources.apps import AsyncAppsResource
+    def wallets(self) -> AsyncWalletsResource:
+        from .resources.wallets import AsyncWalletsResource
 
-        return AsyncAppsResource(self)
+        return AsyncWalletsResource(self)
 
     @cached_property
     def webhooks(self) -> AsyncWebhooksResource:
@@ -632,17 +632,25 @@ class PrivyAPIWithRawResponse:
         self._client = client
 
     @cached_property
-    def wallets(self) -> wallets.WalletsResourceWithRawResponse:
-        from .resources.wallets import WalletsResourceWithRawResponse
+    def apps(self) -> apps.AppsResourceWithRawResponse:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AppsResourceWithRawResponse
 
-        return WalletsResourceWithRawResponse(self._client.wallets)
+        return AppsResourceWithRawResponse(self._client.apps)
 
     @cached_property
-    def users(self) -> users.UsersResourceWithRawResponse:
-        """Operations related to users"""
-        from .resources.users import UsersResourceWithRawResponse
+    def intents(self) -> intents.IntentsResourceWithRawResponse:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import IntentsResourceWithRawResponse
 
-        return UsersResourceWithRawResponse(self._client.users)
+        return IntentsResourceWithRawResponse(self._client.intents)
+
+    @cached_property
+    def key_quorums(self) -> key_quorums.KeyQuorumsResourceWithRawResponse:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import KeyQuorumsResourceWithRawResponse
+
+        return KeyQuorumsResourceWithRawResponse(self._client.key_quorums)
 
     @cached_property
     def organizations(self) -> organizations.OrganizationsResourceWithRawResponse:
@@ -666,25 +674,17 @@ class PrivyAPIWithRawResponse:
         return TransactionsResourceWithRawResponse(self._client.transactions)
 
     @cached_property
-    def key_quorums(self) -> key_quorums.KeyQuorumsResourceWithRawResponse:
-        """Operations related to key quorums"""
-        from .resources.key_quorums import KeyQuorumsResourceWithRawResponse
+    def users(self) -> users.UsersResourceWithRawResponse:
+        """Operations related to users"""
+        from .resources.users import UsersResourceWithRawResponse
 
-        return KeyQuorumsResourceWithRawResponse(self._client.key_quorums)
-
-    @cached_property
-    def intents(self) -> intents.IntentsResourceWithRawResponse:
-        """Operations related to authorization intents for wallet actions"""
-        from .resources.intents import IntentsResourceWithRawResponse
-
-        return IntentsResourceWithRawResponse(self._client.intents)
+        return UsersResourceWithRawResponse(self._client.users)
 
     @cached_property
-    def apps(self) -> apps.AppsResourceWithRawResponse:
-        """Operations related to app settings and allowlist management"""
-        from .resources.apps import AppsResourceWithRawResponse
+    def wallets(self) -> wallets.WalletsResourceWithRawResponse:
+        from .resources.wallets import WalletsResourceWithRawResponse
 
-        return AppsResourceWithRawResponse(self._client.apps)
+        return WalletsResourceWithRawResponse(self._client.wallets)
 
 
 class AsyncPrivyAPIWithRawResponse:
@@ -694,17 +694,25 @@ class AsyncPrivyAPIWithRawResponse:
         self._client = client
 
     @cached_property
-    def wallets(self) -> wallets.AsyncWalletsResourceWithRawResponse:
-        from .resources.wallets import AsyncWalletsResourceWithRawResponse
+    def apps(self) -> apps.AsyncAppsResourceWithRawResponse:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AsyncAppsResourceWithRawResponse
 
-        return AsyncWalletsResourceWithRawResponse(self._client.wallets)
+        return AsyncAppsResourceWithRawResponse(self._client.apps)
 
     @cached_property
-    def users(self) -> users.AsyncUsersResourceWithRawResponse:
-        """Operations related to users"""
-        from .resources.users import AsyncUsersResourceWithRawResponse
+    def intents(self) -> intents.AsyncIntentsResourceWithRawResponse:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import AsyncIntentsResourceWithRawResponse
 
-        return AsyncUsersResourceWithRawResponse(self._client.users)
+        return AsyncIntentsResourceWithRawResponse(self._client.intents)
+
+    @cached_property
+    def key_quorums(self) -> key_quorums.AsyncKeyQuorumsResourceWithRawResponse:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import AsyncKeyQuorumsResourceWithRawResponse
+
+        return AsyncKeyQuorumsResourceWithRawResponse(self._client.key_quorums)
 
     @cached_property
     def organizations(self) -> organizations.AsyncOrganizationsResourceWithRawResponse:
@@ -728,25 +736,17 @@ class AsyncPrivyAPIWithRawResponse:
         return AsyncTransactionsResourceWithRawResponse(self._client.transactions)
 
     @cached_property
-    def key_quorums(self) -> key_quorums.AsyncKeyQuorumsResourceWithRawResponse:
-        """Operations related to key quorums"""
-        from .resources.key_quorums import AsyncKeyQuorumsResourceWithRawResponse
+    def users(self) -> users.AsyncUsersResourceWithRawResponse:
+        """Operations related to users"""
+        from .resources.users import AsyncUsersResourceWithRawResponse
 
-        return AsyncKeyQuorumsResourceWithRawResponse(self._client.key_quorums)
-
-    @cached_property
-    def intents(self) -> intents.AsyncIntentsResourceWithRawResponse:
-        """Operations related to authorization intents for wallet actions"""
-        from .resources.intents import AsyncIntentsResourceWithRawResponse
-
-        return AsyncIntentsResourceWithRawResponse(self._client.intents)
+        return AsyncUsersResourceWithRawResponse(self._client.users)
 
     @cached_property
-    def apps(self) -> apps.AsyncAppsResourceWithRawResponse:
-        """Operations related to app settings and allowlist management"""
-        from .resources.apps import AsyncAppsResourceWithRawResponse
+    def wallets(self) -> wallets.AsyncWalletsResourceWithRawResponse:
+        from .resources.wallets import AsyncWalletsResourceWithRawResponse
 
-        return AsyncAppsResourceWithRawResponse(self._client.apps)
+        return AsyncWalletsResourceWithRawResponse(self._client.wallets)
 
 
 class PrivyAPIWithStreamedResponse:
@@ -756,17 +756,25 @@ class PrivyAPIWithStreamedResponse:
         self._client = client
 
     @cached_property
-    def wallets(self) -> wallets.WalletsResourceWithStreamingResponse:
-        from .resources.wallets import WalletsResourceWithStreamingResponse
+    def apps(self) -> apps.AppsResourceWithStreamingResponse:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AppsResourceWithStreamingResponse
 
-        return WalletsResourceWithStreamingResponse(self._client.wallets)
+        return AppsResourceWithStreamingResponse(self._client.apps)
 
     @cached_property
-    def users(self) -> users.UsersResourceWithStreamingResponse:
-        """Operations related to users"""
-        from .resources.users import UsersResourceWithStreamingResponse
+    def intents(self) -> intents.IntentsResourceWithStreamingResponse:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import IntentsResourceWithStreamingResponse
 
-        return UsersResourceWithStreamingResponse(self._client.users)
+        return IntentsResourceWithStreamingResponse(self._client.intents)
+
+    @cached_property
+    def key_quorums(self) -> key_quorums.KeyQuorumsResourceWithStreamingResponse:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import KeyQuorumsResourceWithStreamingResponse
+
+        return KeyQuorumsResourceWithStreamingResponse(self._client.key_quorums)
 
     @cached_property
     def organizations(self) -> organizations.OrganizationsResourceWithStreamingResponse:
@@ -790,25 +798,17 @@ class PrivyAPIWithStreamedResponse:
         return TransactionsResourceWithStreamingResponse(self._client.transactions)
 
     @cached_property
-    def key_quorums(self) -> key_quorums.KeyQuorumsResourceWithStreamingResponse:
-        """Operations related to key quorums"""
-        from .resources.key_quorums import KeyQuorumsResourceWithStreamingResponse
+    def users(self) -> users.UsersResourceWithStreamingResponse:
+        """Operations related to users"""
+        from .resources.users import UsersResourceWithStreamingResponse
 
-        return KeyQuorumsResourceWithStreamingResponse(self._client.key_quorums)
-
-    @cached_property
-    def intents(self) -> intents.IntentsResourceWithStreamingResponse:
-        """Operations related to authorization intents for wallet actions"""
-        from .resources.intents import IntentsResourceWithStreamingResponse
-
-        return IntentsResourceWithStreamingResponse(self._client.intents)
+        return UsersResourceWithStreamingResponse(self._client.users)
 
     @cached_property
-    def apps(self) -> apps.AppsResourceWithStreamingResponse:
-        """Operations related to app settings and allowlist management"""
-        from .resources.apps import AppsResourceWithStreamingResponse
+    def wallets(self) -> wallets.WalletsResourceWithStreamingResponse:
+        from .resources.wallets import WalletsResourceWithStreamingResponse
 
-        return AppsResourceWithStreamingResponse(self._client.apps)
+        return WalletsResourceWithStreamingResponse(self._client.wallets)
 
 
 class AsyncPrivyAPIWithStreamedResponse:
@@ -818,17 +818,25 @@ class AsyncPrivyAPIWithStreamedResponse:
         self._client = client
 
     @cached_property
-    def wallets(self) -> wallets.AsyncWalletsResourceWithStreamingResponse:
-        from .resources.wallets import AsyncWalletsResourceWithStreamingResponse
+    def apps(self) -> apps.AsyncAppsResourceWithStreamingResponse:
+        """Operations related to app settings and allowlist management"""
+        from .resources.apps import AsyncAppsResourceWithStreamingResponse
 
-        return AsyncWalletsResourceWithStreamingResponse(self._client.wallets)
+        return AsyncAppsResourceWithStreamingResponse(self._client.apps)
 
     @cached_property
-    def users(self) -> users.AsyncUsersResourceWithStreamingResponse:
-        """Operations related to users"""
-        from .resources.users import AsyncUsersResourceWithStreamingResponse
+    def intents(self) -> intents.AsyncIntentsResourceWithStreamingResponse:
+        """Operations related to authorization intents for wallet actions"""
+        from .resources.intents import AsyncIntentsResourceWithStreamingResponse
 
-        return AsyncUsersResourceWithStreamingResponse(self._client.users)
+        return AsyncIntentsResourceWithStreamingResponse(self._client.intents)
+
+    @cached_property
+    def key_quorums(self) -> key_quorums.AsyncKeyQuorumsResourceWithStreamingResponse:
+        """Operations related to key quorums"""
+        from .resources.key_quorums import AsyncKeyQuorumsResourceWithStreamingResponse
+
+        return AsyncKeyQuorumsResourceWithStreamingResponse(self._client.key_quorums)
 
     @cached_property
     def organizations(self) -> organizations.AsyncOrganizationsResourceWithStreamingResponse:
@@ -852,25 +860,17 @@ class AsyncPrivyAPIWithStreamedResponse:
         return AsyncTransactionsResourceWithStreamingResponse(self._client.transactions)
 
     @cached_property
-    def key_quorums(self) -> key_quorums.AsyncKeyQuorumsResourceWithStreamingResponse:
-        """Operations related to key quorums"""
-        from .resources.key_quorums import AsyncKeyQuorumsResourceWithStreamingResponse
+    def users(self) -> users.AsyncUsersResourceWithStreamingResponse:
+        """Operations related to users"""
+        from .resources.users import AsyncUsersResourceWithStreamingResponse
 
-        return AsyncKeyQuorumsResourceWithStreamingResponse(self._client.key_quorums)
-
-    @cached_property
-    def intents(self) -> intents.AsyncIntentsResourceWithStreamingResponse:
-        """Operations related to authorization intents for wallet actions"""
-        from .resources.intents import AsyncIntentsResourceWithStreamingResponse
-
-        return AsyncIntentsResourceWithStreamingResponse(self._client.intents)
+        return AsyncUsersResourceWithStreamingResponse(self._client.users)
 
     @cached_property
-    def apps(self) -> apps.AsyncAppsResourceWithStreamingResponse:
-        """Operations related to app settings and allowlist management"""
-        from .resources.apps import AsyncAppsResourceWithStreamingResponse
+    def wallets(self) -> wallets.AsyncWalletsResourceWithStreamingResponse:
+        from .resources.wallets import AsyncWalletsResourceWithStreamingResponse
 
-        return AsyncAppsResourceWithStreamingResponse(self._client.apps)
+        return AsyncWalletsResourceWithStreamingResponse(self._client.wallets)
 
 
 Client = PrivyAPI

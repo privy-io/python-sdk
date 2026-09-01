@@ -130,12 +130,12 @@ from privy import PrivyAPI
 
 client = PrivyAPI()
 
-all_wallets = []
+all_intents = []
 # Automatically fetches more pages as needed.
-for wallet in client.wallets.list():
-    # Do something with wallet here
-    all_wallets.append(wallet)
-print(all_wallets)
+for intent in client.intents.list():
+    # Do something with intent here
+    all_intents.append(intent)
+print(all_intents)
 ```
 
 Or, asynchronously:
@@ -148,11 +148,11 @@ client = AsyncPrivyAPI()
 
 
 async def main() -> None:
-    all_wallets = []
+    all_intents = []
     # Iterate through items across all pages, issuing requests as needed.
-    async for wallet in client.wallets.list():
-        all_wallets.append(wallet)
-    print(all_wallets)
+    async for intent in client.intents.list():
+        all_intents.append(intent)
+    print(all_intents)
 
 
 asyncio.run(main())
@@ -161,7 +161,7 @@ asyncio.run(main())
 Alternatively, you can use the `.has_next_page()`, `.next_page_info()`, or `.get_next_page()` methods for more granular control working with pages:
 
 ```python
-first_page = await client.wallets.list()
+first_page = await client.intents.list()
 if first_page.has_next_page():
     print(f"will fetch next page using these details: {first_page.next_page_info()}")
     next_page = await first_page.get_next_page()
@@ -173,11 +173,11 @@ if first_page.has_next_page():
 Or just work directly with the returned data:
 
 ```python
-first_page = await client.wallets.list()
+first_page = await client.intents.list()
 
 print(f"next page cursor: {first_page.next_cursor}")  # => "next page cursor: ..."
-for wallet in first_page.data:
-    print(wallet.id)
+for intent in first_page.data:
+    print(intent)
 
 # Remove `await` for non-async usage.
 ```
@@ -191,14 +191,12 @@ from privy import PrivyAPI
 
 client = PrivyAPI()
 
-wallet = client.wallets.create(
-    chain_type="ethereum",
-    entity={
-        "id": "jorpjo4rfxj62nx1itt8y1zt",
-        "type": "user",
-    },
+rpc_intent_response = client.intents.rpc(
+    path_wallet_id="wallet_id",
+    method="eth_signTransaction",
+    params={"transaction": {}},
 )
-print(wallet.entity)
+print(rpc_intent_response.params)
 ```
 
 ## Handling errors

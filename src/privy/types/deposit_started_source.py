@@ -3,8 +3,7 @@
 from typing import Optional
 
 from .._models import BaseModel
-from .fiat_currency import FiatCurrency
-from .fiat_payment_rail import FiatPaymentRail
+from .fiat_deposit_currency import FiatDepositCurrency
 
 __all__ = ["DepositStartedSource"]
 
@@ -15,10 +14,14 @@ class DepositStartedSource(BaseModel):
     amount: str
     """The fiat amount deposited."""
 
-    currency: FiatCurrency
-    """Supported fiat currencies."""
+    currency: FiatDepositCurrency
+    """Fiat currencies a deposit account can receive deposits in."""
 
-    payment_rail: Optional[FiatPaymentRail] = None
-    """Supported fiat payment rails."""
+    payment_rail: Optional[str] = None
+    """The payment rail the deposit arrived on.
+
+    Known values include "sepa", "ach_push", "wire", "fednow", "faster_payments",
+    "pix", "spei", but the provider may return others.
+    """
 
     sender_name: Optional[str] = None

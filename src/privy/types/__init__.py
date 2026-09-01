@@ -191,6 +191,7 @@ from .coinbase_solana_asset import CoinbaseSolanaAsset as CoinbaseSolanaAsset
 from .condition_value_param import ConditionValueParam as ConditionValueParam
 from .custom_metadata_param import CustomMetadataParam as CustomMetadataParam
 from .external_fiat_account import ExternalFiatAccount as ExternalFiatAccount
+from .fiat_deposit_currency import FiatDepositCurrency as FiatDepositCurrency
 from .hd_submit_input_param import HDSubmitInputParam as HDSubmitInputParam
 from .kyx_capability_status import KyxCapabilityStatus as KyxCapabilityStatus
 from .kyx_tos_status_detail import KyxTosStatusDetail as KyxTosStatusDetail
@@ -534,6 +535,7 @@ from .linked_account_discord_input_param import LinkedAccountDiscordInputParam a
 from .linked_account_passkey_input_param import LinkedAccountPasskeyInputParam as LinkedAccountPasskeyInputParam
 from .linked_account_spotify_input_param import LinkedAccountSpotifyInputParam as LinkedAccountSpotifyInputParam
 from .linked_account_twitter_input_param import LinkedAccountTwitterInputParam as LinkedAccountTwitterInputParam
+from .near_sign_transaction_rpc_response import NearSignTransactionRpcResponse as NearSignTransactionRpcResponse
 from .organization_external_fiat_account import OrganizationExternalFiatAccount as OrganizationExternalFiatAccount
 from .private_key_export_webhook_payload import PrivateKeyExportWebhookPayload as PrivateKeyExportWebhookPayload
 from .rule_intent_create_request_details import RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails
@@ -614,6 +616,7 @@ from .linked_account_custom_jwt_input_param import LinkedAccountCustomJwtInputPa
 from .linked_account_solana_embedded_wallet import (
     LinkedAccountSolanaEmbeddedWallet as LinkedAccountSolanaEmbeddedWallet,
 )
+from .near_signed_transaction_borsh_base_64 import NearSignedTransactionBorshBase64 as NearSignedTransactionBorshBase64
 from .output_with_previous_transaction_data import (
     OutputWithPreviousTransactionData as OutputWithPreviousTransactionData,
 )
@@ -680,6 +683,9 @@ from .intent_authorization_key_quorum_member import (
 from .kraken_embed_custom_order_status_value import (
     KrakenEmbedCustomOrderStatusValue as KrakenEmbedCustomOrderStatusValue,
 )
+from .near_sign_transaction_rpc_request_body import (
+    NearSignTransactionRpcRequestBody as NearSignTransactionRpcRequestBody,
+)
 from .organization_kyb_updated_webhook_event import (
     OrganizationKYBUpdatedWebhookEvent as OrganizationKYBUpdatedWebhookEvent,
 )
@@ -709,6 +715,12 @@ from .ethereum_personal_sign_rpc_input_params import (
 )
 from .linked_account_ethereum_embedded_wallet import (
     LinkedAccountEthereumEmbeddedWallet as LinkedAccountEthereumEmbeddedWallet,
+)
+from .near_sign_transaction_rpc_response_data import (
+    NearSignTransactionRpcResponseData as NearSignTransactionRpcResponseData,
+)
+from .near_unsigned_transaction_borsh_base_64 import (
+    NearUnsignedTransactionBorshBase64 as NearUnsignedTransactionBorshBase64,
 )
 from .solana_sign_transaction_rpc_input_param import (
     SolanaSignTransactionRpcInputParam as SolanaSignTransactionRpcInputParam,
@@ -920,6 +932,9 @@ from .external_fiat_account_swift_purpose_of_funds import (
 from .linked_account_curve_signing_embedded_wallet import (
     LinkedAccountCurveSigningEmbeddedWallet as LinkedAccountCurveSigningEmbeddedWallet,
 )
+from .near_sign_transaction_rpc_request_body_param import (
+    NearSignTransactionRpcRequestBodyParam as NearSignTransactionRpcRequestBodyParam,
+)
 from .spark_claim_static_deposit_rpc_response_data import (
     SparkClaimStaticDepositRpcResponseData as SparkClaimStaticDepositRpcResponseData,
 )
@@ -973,6 +988,9 @@ from .linked_account_bitcoin_segwit_embedded_wallet import (
 )
 from .linked_account_passkey_credential_device_type import (
     LinkedAccountPasskeyCredentialDeviceType as LinkedAccountPasskeyCredentialDeviceType,
+)
+from .near_sign_transaction_rpc_request_body_params import (
+    NearSignTransactionRpcRequestBodyParams as NearSignTransactionRpcRequestBodyParams,
 )
 from .solana_sign_and_send_transaction_rpc_response import (
     SolanaSignAndSendTransactionRpcResponse as SolanaSignAndSendTransactionRpcResponse,
@@ -1120,6 +1138,9 @@ from .wallet_action_earn_withdraw_failed_webhook_payload import (
 )
 from .ethereum_sign_user_operation_rpc_input_params_param import (
     EthereumSignUserOperationRpcInputParamsParam as EthereumSignUserOperationRpcInputParamsParam,
+)
+from .near_sign_transaction_rpc_request_body_params_param import (
+    NearSignTransactionRpcRequestBodyParamsParam as NearSignTransactionRpcRequestBodyParamsParam,
 )
 from .wallet_action_earn_deposit_rejected_webhook_payload import (
     WalletActionEarnDepositRejectedWebhookPayload as WalletActionEarnDepositRejectedWebhookPayload,

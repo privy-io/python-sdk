@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing_extensions import overload
+from typing_extensions import Literal, overload
 
 import httpx
 
@@ -53,6 +53,7 @@ class CryptoResource(SyncAPIResource):
         wallet_id: str,
         *,
         deposit_config_id: str,
+        type: Literal["deposit_config"],
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -99,6 +100,7 @@ class CryptoResource(SyncAPIResource):
         *,
         destination: CryptoDepositAssetParam,
         source: CryptoDepositAssetFilterParam,
+        type: Literal["inline_route"],
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -144,12 +146,13 @@ class CryptoResource(SyncAPIResource):
         """
         ...
 
-    @required_args(["deposit_config_id"], ["destination", "source"])
+    @required_args(["deposit_config_id", "type"], ["destination", "source", "type"])
     def _create(
         self,
         wallet_id: str,
         *,
         deposit_config_id: str | Omit = omit,
+        type: Literal["deposit_config"] | Literal["inline_route"],
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -179,6 +182,7 @@ class CryptoResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "deposit_config_id": deposit_config_id,
+                    "type": type,
                     "destination": destination,
                     "source": source,
                 },
@@ -219,6 +223,7 @@ class AsyncCryptoResource(AsyncAPIResource):
         wallet_id: str,
         *,
         deposit_config_id: str,
+        type: Literal["deposit_config"],
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -265,6 +270,7 @@ class AsyncCryptoResource(AsyncAPIResource):
         *,
         destination: CryptoDepositAssetParam,
         source: CryptoDepositAssetFilterParam,
+        type: Literal["inline_route"],
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -310,12 +316,13 @@ class AsyncCryptoResource(AsyncAPIResource):
         """
         ...
 
-    @required_args(["deposit_config_id"], ["destination", "source"])
+    @required_args(["deposit_config_id", "type"], ["destination", "source", "type"])
     async def _create(
         self,
         wallet_id: str,
         *,
         deposit_config_id: str | Omit = omit,
+        type: Literal["deposit_config"] | Literal["inline_route"],
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -345,6 +352,7 @@ class AsyncCryptoResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "deposit_config_id": deposit_config_id,
+                    "type": type,
                     "destination": destination,
                     "source": source,
                 },

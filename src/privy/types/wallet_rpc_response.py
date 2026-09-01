@@ -11,6 +11,7 @@ from .export_private_key_rpc_response import ExportPrivateKeyRpcResponse
 from .export_seed_phrase_rpc_response import ExportSeedPhraseRpcResponse
 from .ethereum_send_calls_rpc_response import EthereumSendCallsRpcResponse
 from .solana_sign_message_rpc_response import SolanaSignMessageRpcResponse
+from .near_sign_transaction_rpc_response import NearSignTransactionRpcResponse
 from .spark_transfer_tokens_rpc_response import SparkTransferTokensRpcResponse
 from .tron_send_transaction_rpc_response import TronSendTransactionRpcResponse
 from .tron_sign_transaction_rpc_response import TronSignTransactionRpcResponse
@@ -63,6 +64,7 @@ WalletRpcResponse: TypeAlias = Annotated[
         TronSignTransactionRpcResponse,
         TronSendTransactionRpcResponse,
         XrplSignTransactionRpcResponse,
+        NearSignTransactionRpcResponse,
         ExportPrivateKeyRpcResponse,
         ExportSeedPhraseRpcResponse,
     ],

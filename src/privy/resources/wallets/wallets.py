@@ -151,6 +151,7 @@ from ...types.ethereum_sign_transaction_rpc_input_params_param import EthereumSi
 from ...types.spark_claim_static_deposit_rpc_input_params_param import SparkClaimStaticDepositRpcInputParamsParam
 from ...types.spark_pay_lightning_invoice_rpc_input_params_param import SparkPayLightningInvoiceRpcInputParamsParam
 from ...types.ethereum_sign_user_operation_rpc_input_params_param import EthereumSignUserOperationRpcInputParamsParam
+from ...types.near_sign_transaction_rpc_request_body_params_param import NearSignTransactionRpcRequestBodyParamsParam
 from ...types.spark_create_lightning_invoice_rpc_input_params_param import (
     SparkCreateLightningInvoiceRpcInputParamsParam,
 )
@@ -178,18 +179,17 @@ class WalletsResource(SyncAPIResource):
         return ActionsResource(self._client)
 
     @cached_property
-    def earn(self) -> EarnResource:
-        return EarnResource(self._client)
-
-    @cached_property
-    def transactions(self) -> TransactionsResource:
-        """Operations related to wallets"""
-        return TransactionsResource(self._client)
-
-    @cached_property
     def balance(self) -> BalanceResource:
         """Operations related to wallets"""
         return BalanceResource(self._client)
+
+    @cached_property
+    def deposit_accounts(self) -> DepositAccountsResource:
+        return DepositAccountsResource(self._client)
+
+    @cached_property
+    def earn(self) -> EarnResource:
+        return EarnResource(self._client)
 
     @cached_property
     def swap(self) -> SwapResource:
@@ -197,8 +197,9 @@ class WalletsResource(SyncAPIResource):
         return SwapResource(self._client)
 
     @cached_property
-    def deposit_accounts(self) -> DepositAccountsResource:
-        return DepositAccountsResource(self._client)
+    def transactions(self) -> TransactionsResource:
+        """Operations related to wallets"""
+        return TransactionsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> WalletsResourceWithRawResponse:
@@ -1880,6 +1881,50 @@ class WalletsResource(SyncAPIResource):
         self,
         path_wallet_id: str,
         *,
+        method: Literal["near_signTransaction"],
+        params: NearSignTransactionRpcRequestBodyParamsParam,
+        privy_authorization_signature: str | Omit = omit,
+        privy_idempotency_key: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> WalletRpcResponse:
+        """
+        Sign a message or transaction with a wallet by wallet ID.
+
+        Args:
+          path_wallet_id: ID of the wallet.
+
+          params: Parameters for the NEAR `near_signTransaction` RPC.
+
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_idempotency_key: Idempotency keys ensure API requests are executed only once within a 24-hour
+              window.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        ...
+
+    @overload
+    def _rpc(
+        self,
+        path_wallet_id: str,
+        *,
         address: str,
         method: Literal["exportPrivateKey"],
         params: PrivateKeyExportInputParam,
@@ -1996,6 +2041,7 @@ class WalletsResource(SyncAPIResource):
         | Literal["tron_signTransaction"]
         | Literal["tron_sendTransaction"]
         | Literal["xrpl_signTransaction"]
+        | Literal["near_signTransaction"]
         | Literal["exportPrivateKey"]
         | Literal["exportSeedPhrase"],
         params: EthereumSignTransactionRpcInputParamsParam
@@ -2022,6 +2068,7 @@ class WalletsResource(SyncAPIResource):
         | TronSignTransactionRpcInputParamsParam
         | TronSendTransactionRpcInputParamsParam
         | XrplSignTransactionRpcInputParamsParam
+        | NearSignTransactionRpcRequestBodyParamsParam
         | PrivateKeyExportInputParam
         | SeedPhraseExportInputParam
         | Omit = omit,
@@ -2652,18 +2699,17 @@ class AsyncWalletsResource(AsyncAPIResource):
         return AsyncActionsResource(self._client)
 
     @cached_property
-    def earn(self) -> AsyncEarnResource:
-        return AsyncEarnResource(self._client)
-
-    @cached_property
-    def transactions(self) -> AsyncTransactionsResource:
-        """Operations related to wallets"""
-        return AsyncTransactionsResource(self._client)
-
-    @cached_property
     def balance(self) -> AsyncBalanceResource:
         """Operations related to wallets"""
         return AsyncBalanceResource(self._client)
+
+    @cached_property
+    def deposit_accounts(self) -> AsyncDepositAccountsResource:
+        return AsyncDepositAccountsResource(self._client)
+
+    @cached_property
+    def earn(self) -> AsyncEarnResource:
+        return AsyncEarnResource(self._client)
 
     @cached_property
     def swap(self) -> AsyncSwapResource:
@@ -2671,8 +2717,9 @@ class AsyncWalletsResource(AsyncAPIResource):
         return AsyncSwapResource(self._client)
 
     @cached_property
-    def deposit_accounts(self) -> AsyncDepositAccountsResource:
-        return AsyncDepositAccountsResource(self._client)
+    def transactions(self) -> AsyncTransactionsResource:
+        """Operations related to wallets"""
+        return AsyncTransactionsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncWalletsResourceWithRawResponse:
@@ -4354,6 +4401,50 @@ class AsyncWalletsResource(AsyncAPIResource):
         self,
         path_wallet_id: str,
         *,
+        method: Literal["near_signTransaction"],
+        params: NearSignTransactionRpcRequestBodyParamsParam,
+        privy_authorization_signature: str | Omit = omit,
+        privy_idempotency_key: str | Omit = omit,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> WalletRpcResponse:
+        """
+        Sign a message or transaction with a wallet by wallet ID.
+
+        Args:
+          path_wallet_id: ID of the wallet.
+
+          params: Parameters for the NEAR `near_signTransaction` RPC.
+
+          privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
+              should be comma separated.
+
+          privy_idempotency_key: Idempotency keys ensure API requests are executed only once within a 24-hour
+              window.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        ...
+
+    @overload
+    async def _rpc(
+        self,
+        path_wallet_id: str,
+        *,
         address: str,
         method: Literal["exportPrivateKey"],
         params: PrivateKeyExportInputParam,
@@ -4470,6 +4561,7 @@ class AsyncWalletsResource(AsyncAPIResource):
         | Literal["tron_signTransaction"]
         | Literal["tron_sendTransaction"]
         | Literal["xrpl_signTransaction"]
+        | Literal["near_signTransaction"]
         | Literal["exportPrivateKey"]
         | Literal["exportSeedPhrase"],
         params: EthereumSignTransactionRpcInputParamsParam
@@ -4496,6 +4588,7 @@ class AsyncWalletsResource(AsyncAPIResource):
         | TronSignTransactionRpcInputParamsParam
         | TronSendTransactionRpcInputParamsParam
         | XrplSignTransactionRpcInputParamsParam
+        | NearSignTransactionRpcRequestBodyParamsParam
         | PrivateKeyExportInputParam
         | SeedPhraseExportInputParam
         | Omit = omit,
@@ -5182,18 +5275,17 @@ class WalletsResourceWithRawResponse:
         return ActionsResourceWithRawResponse(self._wallets.actions)
 
     @cached_property
-    def earn(self) -> EarnResourceWithRawResponse:
-        return EarnResourceWithRawResponse(self._wallets.earn)
-
-    @cached_property
-    def transactions(self) -> TransactionsResourceWithRawResponse:
-        """Operations related to wallets"""
-        return TransactionsResourceWithRawResponse(self._wallets.transactions)
-
-    @cached_property
     def balance(self) -> BalanceResourceWithRawResponse:
         """Operations related to wallets"""
         return BalanceResourceWithRawResponse(self._wallets.balance)
+
+    @cached_property
+    def deposit_accounts(self) -> DepositAccountsResourceWithRawResponse:
+        return DepositAccountsResourceWithRawResponse(self._wallets.deposit_accounts)
+
+    @cached_property
+    def earn(self) -> EarnResourceWithRawResponse:
+        return EarnResourceWithRawResponse(self._wallets.earn)
 
     @cached_property
     def swap(self) -> SwapResourceWithRawResponse:
@@ -5201,8 +5293,9 @@ class WalletsResourceWithRawResponse:
         return SwapResourceWithRawResponse(self._wallets.swap)
 
     @cached_property
-    def deposit_accounts(self) -> DepositAccountsResourceWithRawResponse:
-        return DepositAccountsResourceWithRawResponse(self._wallets.deposit_accounts)
+    def transactions(self) -> TransactionsResourceWithRawResponse:
+        """Operations related to wallets"""
+        return TransactionsResourceWithRawResponse(self._wallets.transactions)
 
 
 class AsyncWalletsResourceWithRawResponse:
@@ -5266,18 +5359,17 @@ class AsyncWalletsResourceWithRawResponse:
         return AsyncActionsResourceWithRawResponse(self._wallets.actions)
 
     @cached_property
-    def earn(self) -> AsyncEarnResourceWithRawResponse:
-        return AsyncEarnResourceWithRawResponse(self._wallets.earn)
-
-    @cached_property
-    def transactions(self) -> AsyncTransactionsResourceWithRawResponse:
-        """Operations related to wallets"""
-        return AsyncTransactionsResourceWithRawResponse(self._wallets.transactions)
-
-    @cached_property
     def balance(self) -> AsyncBalanceResourceWithRawResponse:
         """Operations related to wallets"""
         return AsyncBalanceResourceWithRawResponse(self._wallets.balance)
+
+    @cached_property
+    def deposit_accounts(self) -> AsyncDepositAccountsResourceWithRawResponse:
+        return AsyncDepositAccountsResourceWithRawResponse(self._wallets.deposit_accounts)
+
+    @cached_property
+    def earn(self) -> AsyncEarnResourceWithRawResponse:
+        return AsyncEarnResourceWithRawResponse(self._wallets.earn)
 
     @cached_property
     def swap(self) -> AsyncSwapResourceWithRawResponse:
@@ -5285,8 +5377,9 @@ class AsyncWalletsResourceWithRawResponse:
         return AsyncSwapResourceWithRawResponse(self._wallets.swap)
 
     @cached_property
-    def deposit_accounts(self) -> AsyncDepositAccountsResourceWithRawResponse:
-        return AsyncDepositAccountsResourceWithRawResponse(self._wallets.deposit_accounts)
+    def transactions(self) -> AsyncTransactionsResourceWithRawResponse:
+        """Operations related to wallets"""
+        return AsyncTransactionsResourceWithRawResponse(self._wallets.transactions)
 
 
 class WalletsResourceWithStreamingResponse:
@@ -5350,18 +5443,17 @@ class WalletsResourceWithStreamingResponse:
         return ActionsResourceWithStreamingResponse(self._wallets.actions)
 
     @cached_property
-    def earn(self) -> EarnResourceWithStreamingResponse:
-        return EarnResourceWithStreamingResponse(self._wallets.earn)
-
-    @cached_property
-    def transactions(self) -> TransactionsResourceWithStreamingResponse:
-        """Operations related to wallets"""
-        return TransactionsResourceWithStreamingResponse(self._wallets.transactions)
-
-    @cached_property
     def balance(self) -> BalanceResourceWithStreamingResponse:
         """Operations related to wallets"""
         return BalanceResourceWithStreamingResponse(self._wallets.balance)
+
+    @cached_property
+    def deposit_accounts(self) -> DepositAccountsResourceWithStreamingResponse:
+        return DepositAccountsResourceWithStreamingResponse(self._wallets.deposit_accounts)
+
+    @cached_property
+    def earn(self) -> EarnResourceWithStreamingResponse:
+        return EarnResourceWithStreamingResponse(self._wallets.earn)
 
     @cached_property
     def swap(self) -> SwapResourceWithStreamingResponse:
@@ -5369,8 +5461,9 @@ class WalletsResourceWithStreamingResponse:
         return SwapResourceWithStreamingResponse(self._wallets.swap)
 
     @cached_property
-    def deposit_accounts(self) -> DepositAccountsResourceWithStreamingResponse:
-        return DepositAccountsResourceWithStreamingResponse(self._wallets.deposit_accounts)
+    def transactions(self) -> TransactionsResourceWithStreamingResponse:
+        """Operations related to wallets"""
+        return TransactionsResourceWithStreamingResponse(self._wallets.transactions)
 
 
 class AsyncWalletsResourceWithStreamingResponse:
@@ -5434,18 +5527,17 @@ class AsyncWalletsResourceWithStreamingResponse:
         return AsyncActionsResourceWithStreamingResponse(self._wallets.actions)
 
     @cached_property
-    def earn(self) -> AsyncEarnResourceWithStreamingResponse:
-        return AsyncEarnResourceWithStreamingResponse(self._wallets.earn)
-
-    @cached_property
-    def transactions(self) -> AsyncTransactionsResourceWithStreamingResponse:
-        """Operations related to wallets"""
-        return AsyncTransactionsResourceWithStreamingResponse(self._wallets.transactions)
-
-    @cached_property
     def balance(self) -> AsyncBalanceResourceWithStreamingResponse:
         """Operations related to wallets"""
         return AsyncBalanceResourceWithStreamingResponse(self._wallets.balance)
+
+    @cached_property
+    def deposit_accounts(self) -> AsyncDepositAccountsResourceWithStreamingResponse:
+        return AsyncDepositAccountsResourceWithStreamingResponse(self._wallets.deposit_accounts)
+
+    @cached_property
+    def earn(self) -> AsyncEarnResourceWithStreamingResponse:
+        return AsyncEarnResourceWithStreamingResponse(self._wallets.earn)
 
     @cached_property
     def swap(self) -> AsyncSwapResourceWithStreamingResponse:
@@ -5453,5 +5545,6 @@ class AsyncWalletsResourceWithStreamingResponse:
         return AsyncSwapResourceWithStreamingResponse(self._wallets.swap)
 
     @cached_property
-    def deposit_accounts(self) -> AsyncDepositAccountsResourceWithStreamingResponse:
-        return AsyncDepositAccountsResourceWithStreamingResponse(self._wallets.deposit_accounts)
+    def transactions(self) -> AsyncTransactionsResourceWithStreamingResponse:
+        """Operations related to wallets"""
+        return AsyncTransactionsResourceWithStreamingResponse(self._wallets.transactions)

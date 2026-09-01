@@ -26,6 +26,7 @@ from .ethereum_sign_transaction_rpc_input_param import EthereumSignTransactionRp
 from .spark_claim_static_deposit_rpc_input_param import SparkClaimStaticDepositRpcInputParam
 from .spark_pay_lightning_invoice_rpc_input_param import SparkPayLightningInvoiceRpcInputParam
 from .ethereum_sign_user_operation_rpc_input_param import EthereumSignUserOperationRpcInputParam
+from .near_sign_transaction_rpc_request_body_param import NearSignTransactionRpcRequestBodyParam
 from .spark_create_lightning_invoice_rpc_input_param import SparkCreateLightningInvoiceRpcInputParam
 from .spark_get_withdrawal_fee_quote_rpc_input_param import SparkGetWithdrawalFeeQuoteRpcInputParam
 from .ethereum_sign_7702_authorization_rpc_input_param import EthereumSign7702AuthorizationRpcInputParam
@@ -63,6 +64,7 @@ WalletRpcRequestBodyParam: TypeAlias = Union[
     TronSignTransactionRpcInputParam,
     TronSendTransactionRpcInputParam,
     XrplSignTransactionRpcInputParam,
+    NearSignTransactionRpcRequestBodyParam,
     ExportPrivateKeyRpcInputParam,
     ExportSeedPhraseRpcInputParam,
 ]

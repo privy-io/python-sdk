@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing_extensions import Required, TypedDict
+from typing_extensions import Literal, Required, TypedDict
 
 from .crypto_deposit_asset_param import CryptoDepositAssetParam
 from .crypto_deposit_asset_filter_param import CryptoDepositAssetFilterParam
@@ -25,3 +25,5 @@ class CreateCryptoDepositAccountWithRouteRequestBodyParam(TypedDict, total=False
 
     Asset and chain use human-readable aliases when known.
     """
+
+    type: Required[Literal["inline_route"]]

@@ -31,6 +31,7 @@ from .ethereum_sign_transaction_rpc_input_params_param import EthereumSignTransa
 from .spark_claim_static_deposit_rpc_input_params_param import SparkClaimStaticDepositRpcInputParamsParam
 from .spark_pay_lightning_invoice_rpc_input_params_param import SparkPayLightningInvoiceRpcInputParamsParam
 from .ethereum_sign_user_operation_rpc_input_params_param import EthereumSignUserOperationRpcInputParamsParam
+from .near_sign_transaction_rpc_request_body_params_param import NearSignTransactionRpcRequestBodyParamsParam
 from .spark_create_lightning_invoice_rpc_input_params_param import SparkCreateLightningInvoiceRpcInputParamsParam
 from .spark_get_withdrawal_fee_quote_rpc_input_params_param import SparkGetWithdrawalFeeQuoteRpcInputParamsParam
 from .ethereum_sign_7702_authorization_rpc_input_params_param import EthereumSign7702AuthorizationRpcInputParamsParam
@@ -70,6 +71,7 @@ __all__ = [
     "TronSignTransactionRpcInput",
     "TronSendTransactionRpcInput",
     "XrplSignTransactionRpcInput",
+    "NearSignTransactionRpcRequestBody",
     "ExportPrivateKeyRpcInput",
     "ExportSeedPhraseRpcInput",
 ]
@@ -939,6 +941,32 @@ class XrplSignTransactionRpcInput(TypedDict, total=False):
     """
 
 
+class NearSignTransactionRpcRequestBody(TypedDict, total=False):
+    method: Required[Literal["near_signTransaction"]]
+
+    params: Required[NearSignTransactionRpcRequestBodyParamsParam]
+    """Parameters for the NEAR `near_signTransaction` RPC."""
+
+    privy_authorization_signature: Annotated[str, PropertyInfo(alias="privy-authorization-signature")]
+    """Request authorization signature.
+
+    If multiple signatures are required, they should be comma separated.
+    """
+
+    privy_idempotency_key: Annotated[str, PropertyInfo(alias="privy-idempotency-key")]
+    """
+    Idempotency keys ensure API requests are executed only once within a 24-hour
+    window.
+    """
+
+    privy_request_expiry: Annotated[str, PropertyInfo(alias="privy-request-expiry")]
+    """Request expiry.
+
+    Value is a Unix timestamp in milliseconds representing the deadline by which the
+    request must be processed.
+    """
+
+
 class ExportPrivateKeyRpcInput(TypedDict, total=False):
     address: Required[str]
 
@@ -1022,6 +1050,7 @@ WalletRpcParams: TypeAlias = Union[
     TronSignTransactionRpcInput,
     TronSendTransactionRpcInput,
     XrplSignTransactionRpcInput,
+    NearSignTransactionRpcRequestBody,
     ExportPrivateKeyRpcInput,
     ExportSeedPhraseRpcInput,
 ]
