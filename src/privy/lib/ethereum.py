@@ -30,15 +30,15 @@ from ..types.ethereum_sign_7702_authorization_rpc_input_params_param import (
 )
 
 if TYPE_CHECKING:
-    from .wallets import WalletsService
+    from .wallets import PrivyWalletsService
 
-__all__ = ["EthereumWalletService"]
+__all__ = ["PrivyEthereumService"]
 
 
-class EthereumWalletService:
+class PrivyEthereumService:
     """Convenience methods for Ethereum wallet operations."""
 
-    def __init__(self, wallets: WalletsService) -> None:
+    def __init__(self, wallets: PrivyWalletsService) -> None:
         self._wallets = wallets
 
     def sign_message(

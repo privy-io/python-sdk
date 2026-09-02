@@ -30,10 +30,10 @@ from ..types.intent_update_key_quorum_params import IntentUpdateKeyQuorumParams
 from ..types.intent_create_policy_rule_params import IntentCreatePolicyRuleParams
 from ..types.intent_update_policy_rule_params import IntentUpdatePolicyRuleParams
 
-__all__ = ["IntentsService"]
+__all__ = ["PrivyIntentsService"]
 
 
-class IntentsService(IntentsResource):
+class PrivyIntentsService(IntentsResource):
     """Intent operations with client-level request-expiry defaults."""
 
     def __init__(

@@ -12,15 +12,15 @@ from ..types.tron_send_transaction_rpc_input_params_param import TronSendTransac
 from ..types.tron_sign_transaction_rpc_input_params_param import TronSignTransactionRpcInputParamsParam
 
 if TYPE_CHECKING:
-    from .wallets import WalletsService
+    from .wallets import PrivyWalletsService
 
-__all__ = ["TronWalletService"]
+__all__ = ["PrivyTronService"]
 
 
-class TronWalletService:
+class PrivyTronService:
     """Convenience methods for Tron wallet operations."""
 
-    def __init__(self, wallets: WalletsService) -> None:
+    def __init__(self, wallets: PrivyWalletsService) -> None:
         self._wallets = wallets
 
     def sign_transaction(

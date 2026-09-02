@@ -4,7 +4,7 @@ import time
 
 import pytest
 
-from privy import PrivyClient, TronWalletService
+from privy import PrivyClient, PrivyTronService
 from privy.types.wallet import Wallet
 
 pytestmark = pytest.mark.integration
@@ -29,7 +29,7 @@ def tron_wallet(privy_client: PrivyClient) -> Wallet:
 
 
 def test_tron_service(privy_client: PrivyClient) -> None:
-    assert isinstance(privy_client.wallets.tron, TronWalletService)
+    assert isinstance(privy_client.wallets.tron, PrivyTronService)
 
 
 def test_sign_transaction(privy_client: PrivyClient, tron_wallet: Wallet) -> None:

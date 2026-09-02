@@ -18,10 +18,10 @@ from ..types.policy_update_params import PolicyUpdateParams
 from ..types.policy_create_rule_params import PolicyCreateRuleParams
 from ..types.policy_update_rule_params import PolicyUpdateRuleParams
 
-__all__ = ["PoliciesService"]
+__all__ = ["PrivyPoliciesService"]
 
 
-class PoliciesService(PoliciesResource):
+class PrivyPoliciesService(PoliciesResource):
     def __init__(
         self,
         client: PrivyAPI,

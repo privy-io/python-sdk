@@ -2,8 +2,8 @@
 
 from ..resources.users.users import UsersResource
 
-__all__ = ["UsersService"]
+__all__ = ["PrivyUsersService"]
 
 
-class UsersService(UsersResource):
+class PrivyUsersService(UsersResource):
     pass

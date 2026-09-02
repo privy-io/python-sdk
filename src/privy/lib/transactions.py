@@ -2,8 +2,8 @@
 
 from ..resources.transactions import TransactionsResource
 
-__all__ = ["TransactionsService"]
+__all__ = ["PrivyTransactionsService"]
 
 
-class TransactionsService(TransactionsResource):
+class PrivyTransactionsService(TransactionsResource):
     pass

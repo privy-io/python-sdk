@@ -1,15 +1,15 @@
 """Hand-written public API layered on top of the generated client."""
 
-from .tron import TronWalletService
-from .users import UsersService
+from .tron import PrivyTronService
+from .users import PrivyUsersService
 from .client import PrivyClient
-from .solana import SolanaWalletService
-from .intents import IntentsService
-from .wallets import WalletsService
-from .ethereum import EthereumWalletService
-from .policies import PoliciesService
-from .key_quorums import KeyQuorumsService
-from .transactions import TransactionsService
+from .solana import PrivySolanaService
+from .intents import PrivyIntentsService
+from .wallets import PrivyWalletsService
+from .ethereum import PrivyEthereumService
+from .policies import PrivyPoliciesService
+from .key_quorums import PrivyKeyQuorumsService
+from .transactions import PrivyTransactionsService
 from .authorization import (
     P256KeyPair,
     PreparedRequest,
@@ -26,21 +26,21 @@ from .request_options import PrivyRequestOptions
 
 __all__ = [
     "AuthorizationContext",
-    "KeyQuorumsService",
-    "IntentsService",
+    "PrivyKeyQuorumsService",
+    "PrivyIntentsService",
     "P256KeyPair",
     "PreparedRequest",
-    "TransactionsService",
+    "PrivyTransactionsService",
     "PrivyClient",
-    "EthereumWalletService",
+    "PrivyEthereumService",
     "PrivyRequestOptions",
     "PrivyRequestExpiryOptions",
-    "SolanaWalletService",
-    "PoliciesService",
-    "TronWalletService",
+    "PrivySolanaService",
+    "PrivyPoliciesService",
+    "PrivyTronService",
     "WalletAPIRequestSignatureInput",
-    "WalletsService",
-    "UsersService",
+    "PrivyWalletsService",
+    "PrivyUsersService",
     "format_request_for_authorization_signature",
     "generate_authorization_signature",
     "generate_authorization_signatures",

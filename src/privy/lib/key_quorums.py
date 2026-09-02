@@ -16,10 +16,10 @@ from ..resources.key_quorums import KeyQuorumsResource
 from ..types.success_response import SuccessResponse
 from ..types.key_quorum_update_params import KeyQuorumUpdateParams
 
-__all__ = ["KeyQuorumsService"]
+__all__ = ["PrivyKeyQuorumsService"]
 
 
-class KeyQuorumsService(KeyQuorumsResource):
+class PrivyKeyQuorumsService(KeyQuorumsResource):
     def __init__(
         self,
         client: PrivyAPI,

@@ -13,15 +13,15 @@ from ..types.solana_sign_transaction_rpc_response_data import SolanaSignTransact
 from ..types.solana_sign_and_send_transaction_rpc_response_data import SolanaSignAndSendTransactionRpcResponseData
 
 if TYPE_CHECKING:
-    from .wallets import WalletsService
+    from .wallets import PrivyWalletsService
 
-__all__ = ["SolanaWalletService"]
+__all__ = ["PrivySolanaService"]
 
 
-class SolanaWalletService:
+class PrivySolanaService:
     """Convenience methods for Solana wallet operations."""
 
-    def __init__(self, wallets: WalletsService) -> None:
+    def __init__(self, wallets: PrivyWalletsService) -> None:
         self._wallets = wallets
 
     def sign_message(

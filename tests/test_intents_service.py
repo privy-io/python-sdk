@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any, Callable, cast
 from unittest.mock import patch
 
-from privy import PrivyClient, IntentsService, PrivyRequestOptions, PrivyRequestExpiryOptions, omit
+from privy import PrivyClient, PrivyIntentsService, PrivyRequestOptions, PrivyRequestExpiryOptions, omit
 from privy.resources.intents import IntentsResource
 
 BASE_URL = "https://api.example.com"
@@ -20,7 +20,7 @@ def make_client(request_expiry: PrivyRequestExpiryOptions | None = None) -> Priv
     )
 
 
-def rpc(service: IntentsService, request_options: PrivyRequestOptions | None = None) -> object:
+def rpc(service: PrivyIntentsService, request_options: PrivyRequestOptions | None = None) -> object:
     return service.rpc(
         "wallet-id",
         intent_rpc_request_body={

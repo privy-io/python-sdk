@@ -5,15 +5,15 @@ from __future__ import annotations
 import time
 from types import TracebackType
 
-from .users import UsersService
-from .intents import IntentsService
-from .wallets import WalletsService
+from .users import PrivyUsersService
+from .intents import PrivyIntentsService
+from .wallets import PrivyWalletsService
 from .._client import PrivyAPI
-from .policies import PoliciesService
+from .policies import PrivyPoliciesService
 from .._version import __version__
-from .key_quorums import KeyQuorumsService
+from .key_quorums import PrivyKeyQuorumsService
 from .jwt_exchange import DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY, JWTExchangeService
-from .transactions import TransactionsService
+from .transactions import PrivyTransactionsService
 from .request_expiry import (
     DEFAULT_REQUEST_EXPIRY_MS,
     DEFAULT_INTENT_REQUEST_EXPIRY_MS,
@@ -53,16 +53,16 @@ class PrivyClient:
             base_url=base_url,
             default_headers={"privy-client": f"python:{__version__}"},
         )
-        self.policies = PoliciesService(self._client, self.get_request_expiry)
-        self.key_quorums = KeyQuorumsService(self._client, self.get_request_expiry)
-        self.intents = IntentsService(self._client, self._get_intent_request_expiry)
-        self.users = UsersService(self._client)
-        self.transactions = TransactionsService(self._client)
+        self.policies = PrivyPoliciesService(self._client, self.get_request_expiry)
+        self.key_quorums = PrivyKeyQuorumsService(self._client, self.get_request_expiry)
+        self.intents = PrivyIntentsService(self._client, self._get_intent_request_expiry)
+        self.users = PrivyUsersService(self._client)
+        self.transactions = PrivyTransactionsService(self._client)
         self._jwt_exchange = JWTExchangeService(
             self._client.wallets,
             cache_max_capacity=authorization_key_cache_max_capacity,
         )
-        self.wallets = WalletsService(self._client, self._jwt_exchange, self.get_request_expiry)
+        self.wallets = PrivyWalletsService(self._client, self._jwt_exchange, self.get_request_expiry)
 
     def get_request_expiry(self, expiry_ms_from_now: int | None = None) -> int | None:
         """Return an absolute request-expiry timestamp in Unix milliseconds."""

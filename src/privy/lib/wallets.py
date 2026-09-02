@@ -4,11 +4,11 @@ from __future__ import annotations
 
 from typing import Any, Callable, cast
 
-from .tron import TronWalletService
-from .solana import SolanaWalletService
+from .tron import PrivyTronService
+from .solana import PrivySolanaService
 from .._types import omit
 from .._client import PrivyAPI
-from .ethereum import EthereumWalletService
+from .ethereum import PrivyEthereumService
 from .request_url import build_request_url
 from .jwt_exchange import JWTExchangeService
 from ..types.wallet import Wallet
@@ -22,10 +22,10 @@ from ..types.wallet_rpc_response import WalletRpcResponse
 from ..types.wallet_update_params import WalletUpdateParams
 from ..types.wallet_raw_sign_params import WalletRawSignParams
 
-__all__ = ["WalletsService"]
+__all__ = ["PrivyWalletsService"]
 
 
-class WalletsService(WalletsResource):
+class PrivyWalletsService(WalletsResource):
     def __init__(
         self,
         client: PrivyAPI,
@@ -35,9 +35,9 @@ class WalletsService(WalletsResource):
         super().__init__(client)
         self._jwt_exchanger = jwt_exchanger
         self._request_expiry_provider = request_expiry_provider
-        self.ethereum = EthereumWalletService(self)
-        self.solana = SolanaWalletService(self)
-        self.tron = TronWalletService(self)
+        self.ethereum = PrivyEthereumService(self)
+        self.solana = PrivySolanaService(self)
+        self.tron = PrivyTronService(self)
 
     def update(
         self,
