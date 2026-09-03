@@ -11,6 +11,7 @@ from .policy_input_param import PolicyInputParam
 from .hd_submit_input_param import HDSubmitInputParam
 from .additional_signer_input_param import AdditionalSignerInputParam
 from .private_key_submit_input_param import PrivateKeySubmitInputParam
+from .wallet_entity_assignment_request_body_param import WalletEntityAssignmentRequestBodyParam
 
 __all__ = ["WalletSubmitImportParams", "Wallet"]
 
@@ -24,6 +25,9 @@ class WalletSubmitImportParams(TypedDict, total=False):
 
     display_name: str
     """A human-readable label for the wallet."""
+
+    entity: WalletEntityAssignmentRequestBodyParam
+    """Request body for assigning an entity to a wallet."""
 
     external_id: str
     """A customer-provided identifier for mapping to external systems.

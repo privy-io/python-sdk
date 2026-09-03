@@ -90,6 +90,14 @@ from .transactions import (
     TransactionsResourceWithStreamingResponse,
     AsyncTransactionsResourceWithStreamingResponse,
 )
+from .payout.payout import (
+    PayoutResource,
+    AsyncPayoutResource,
+    PayoutResourceWithRawResponse,
+    AsyncPayoutResourceWithRawResponse,
+    PayoutResourceWithStreamingResponse,
+    AsyncPayoutResourceWithStreamingResponse,
+)
 from ..._base_client import AsyncPaginator, make_request_options
 from ...types.caip_2 import Caip2
 from ...types.wallet import Wallet
@@ -190,6 +198,10 @@ class WalletsResource(SyncAPIResource):
     @cached_property
     def earn(self) -> EarnResource:
         return EarnResource(self._client)
+
+    @cached_property
+    def payout(self) -> PayoutResource:
+        return PayoutResource(self._client)
 
     @cached_property
     def swap(self) -> SwapResource:
@@ -2140,6 +2152,7 @@ class WalletsResource(SyncAPIResource):
         wallet: wallet_submit_import_params.Wallet,
         additional_signers: AdditionalSignerInputParam | Omit = omit,
         display_name: str | Omit = omit,
+        entity: WalletEntityAssignmentRequestBodyParam | Omit = omit,
         external_id: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
         owner_id: Optional[OwnerIDInput] | Omit = omit,
@@ -2160,6 +2173,8 @@ class WalletsResource(SyncAPIResource):
           additional_signers: Additional signers for the wallet.
 
           display_name: A human-readable label for the wallet.
+
+          entity: Request body for assigning an entity to a wallet.
 
           external_id: A customer-provided identifier for mapping to external systems. URL-safe
               characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
@@ -2188,6 +2203,7 @@ class WalletsResource(SyncAPIResource):
                     "wallet": wallet,
                     "additional_signers": additional_signers,
                     "display_name": display_name,
+                    "entity": entity,
                     "external_id": external_id,
                     "owner": owner,
                     "owner_id": owner_id,
@@ -2710,6 +2726,10 @@ class AsyncWalletsResource(AsyncAPIResource):
     @cached_property
     def earn(self) -> AsyncEarnResource:
         return AsyncEarnResource(self._client)
+
+    @cached_property
+    def payout(self) -> AsyncPayoutResource:
+        return AsyncPayoutResource(self._client)
 
     @cached_property
     def swap(self) -> AsyncSwapResource:
@@ -4660,6 +4680,7 @@ class AsyncWalletsResource(AsyncAPIResource):
         wallet: wallet_submit_import_params.Wallet,
         additional_signers: AdditionalSignerInputParam | Omit = omit,
         display_name: str | Omit = omit,
+        entity: WalletEntityAssignmentRequestBodyParam | Omit = omit,
         external_id: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
         owner_id: Optional[OwnerIDInput] | Omit = omit,
@@ -4680,6 +4701,8 @@ class AsyncWalletsResource(AsyncAPIResource):
           additional_signers: Additional signers for the wallet.
 
           display_name: A human-readable label for the wallet.
+
+          entity: Request body for assigning an entity to a wallet.
 
           external_id: A customer-provided identifier for mapping to external systems. URL-safe
               characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
@@ -4708,6 +4731,7 @@ class AsyncWalletsResource(AsyncAPIResource):
                     "wallet": wallet,
                     "additional_signers": additional_signers,
                     "display_name": display_name,
+                    "entity": entity,
                     "external_id": external_id,
                     "owner": owner,
                     "owner_id": owner_id,
@@ -5288,6 +5312,10 @@ class WalletsResourceWithRawResponse:
         return EarnResourceWithRawResponse(self._wallets.earn)
 
     @cached_property
+    def payout(self) -> PayoutResourceWithRawResponse:
+        return PayoutResourceWithRawResponse(self._wallets.payout)
+
+    @cached_property
     def swap(self) -> SwapResourceWithRawResponse:
         """Operations for swapping tokens within wallets"""
         return SwapResourceWithRawResponse(self._wallets.swap)
@@ -5370,6 +5398,10 @@ class AsyncWalletsResourceWithRawResponse:
     @cached_property
     def earn(self) -> AsyncEarnResourceWithRawResponse:
         return AsyncEarnResourceWithRawResponse(self._wallets.earn)
+
+    @cached_property
+    def payout(self) -> AsyncPayoutResourceWithRawResponse:
+        return AsyncPayoutResourceWithRawResponse(self._wallets.payout)
 
     @cached_property
     def swap(self) -> AsyncSwapResourceWithRawResponse:
@@ -5456,6 +5488,10 @@ class WalletsResourceWithStreamingResponse:
         return EarnResourceWithStreamingResponse(self._wallets.earn)
 
     @cached_property
+    def payout(self) -> PayoutResourceWithStreamingResponse:
+        return PayoutResourceWithStreamingResponse(self._wallets.payout)
+
+    @cached_property
     def swap(self) -> SwapResourceWithStreamingResponse:
         """Operations for swapping tokens within wallets"""
         return SwapResourceWithStreamingResponse(self._wallets.swap)
@@ -5538,6 +5574,10 @@ class AsyncWalletsResourceWithStreamingResponse:
     @cached_property
     def earn(self) -> AsyncEarnResourceWithStreamingResponse:
         return AsyncEarnResourceWithStreamingResponse(self._wallets.earn)
+
+    @cached_property
+    def payout(self) -> AsyncPayoutResourceWithStreamingResponse:
+        return AsyncPayoutResourceWithStreamingResponse(self._wallets.payout)
 
     @cached_property
     def swap(self) -> AsyncSwapResourceWithStreamingResponse:

@@ -13,6 +13,11 @@ __all__ = ["IntentListParams"]
 
 class IntentListParams(TypedDict, total=False):
     created_by_id: str
+    """Filter by creator user ID.
+
+    For user-token requests, Privy uses the authenticated user ID to scope intent
+    visibility. This filter only narrows that scoped result.
+    """
 
     current_user_has_signed: Literal["true", "false"]
 
@@ -24,6 +29,11 @@ class IntentListParams(TypedDict, total=False):
     limit: Optional[float]
 
     pending_member_id: str
+    """Filter by a user whose approval is still pending.
+
+    For user-token requests, Privy uses the authenticated user ID to scope intent
+    visibility. This filter only narrows that scoped result.
+    """
 
     resource_id: str
 

@@ -2899,6 +2899,10 @@ class TestWallets:
                 }
             ],
             display_name="display_name",
+            entity={
+                "id": "jorpjo4rfxj62nx1itt8y1zt",
+                "type": "user",
+            },
             external_id="external_id",
             owner={"user_id": "user_id"},
             owner_id="rkiz0ivz254drv1xw982v3jq",
@@ -6299,6 +6303,10 @@ class TestAsyncWallets:
                 }
             ],
             display_name="display_name",
+            entity={
+                "id": "jorpjo4rfxj62nx1itt8y1zt",
+                "type": "user",
+            },
             external_id="external_id",
             owner={"user_id": "user_id"},
             owner_id="rkiz0ivz254drv1xw982v3jq",

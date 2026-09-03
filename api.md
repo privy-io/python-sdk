@@ -870,6 +870,14 @@ Methods:
 
 - <code title="post /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/privy/resources/wallets/earn/ethereum/incentive.py">\_claim</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/ethereum/incentive_claim_params.py">params</a>) -> <a href="./src/privy/types/wallets/earn_incentive_claim_action_response.py">EarnIncentiveClaimActionResponse</a></code>
 
+## Payout
+
+### Fiat
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/payout/fiat">client.wallets.payout.fiat.<a href="./src/privy/resources/wallets/payout/fiat.py">\_create</a>(wallet_id, \*\*<a href="src/privy/types/wallets/payout/fiat_create_params.py">params</a>) -> <a href="./src/privy/types/wallets/payout_response.py">PayoutResponse</a></code>
+
 ## Swap
 
 Methods:

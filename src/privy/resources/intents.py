@@ -148,11 +148,21 @@ class IntentsResource(SyncAPIResource):
     ) -> SyncCursor[IntentResponse]:
         """List intents for an app.
 
-        Returns a paginated list of intents with their current
-        status and details.
+        Returns a paginated list with each intent's current
+        status and details. Requests authenticated with an app secret can retrieve all
+        intents for the app. Requests authenticated with a user token return only
+        intents that the authenticated user created, must approve, or has signed. Query
+        parameters only narrow this scoped result set.
 
         Args:
+          created_by_id: Filter by creator user ID. For user-token requests, Privy uses the authenticated
+              user ID to scope intent visibility. This filter only narrows that scoped result.
+
           intent_type: Type of intent.
+
+          pending_member_id: Filter by a user whose approval is still pending. For user-token requests, Privy
+              uses the authenticated user ID to scope intent visibility. This filter only
+              narrows that scoped result.
 
           status: Current status of an intent.
 
@@ -309,8 +319,11 @@ class IntentsResource(SyncAPIResource):
     ) -> IntentResponse:
         """Retrieve an intent by ID.
 
-        Returns the intent details including its current
-        status, authorization details, and execution result if applicable.
+        Returns its current status, authorization details, and
+        execution result when applicable. Requests authenticated with an app secret can
+        retrieve any intent for the app. Requests authenticated with a user token can
+        retrieve only intents that the authenticated user created, must approve, or has
+        signed. Unrelated intents return a 404 response.
 
         Args:
           intent_id: ID of the intent.
@@ -2101,11 +2114,21 @@ class AsyncIntentsResource(AsyncAPIResource):
     ) -> AsyncPaginator[IntentResponse, AsyncCursor[IntentResponse]]:
         """List intents for an app.
 
-        Returns a paginated list of intents with their current
-        status and details.
+        Returns a paginated list with each intent's current
+        status and details. Requests authenticated with an app secret can retrieve all
+        intents for the app. Requests authenticated with a user token return only
+        intents that the authenticated user created, must approve, or has signed. Query
+        parameters only narrow this scoped result set.
 
         Args:
+          created_by_id: Filter by creator user ID. For user-token requests, Privy uses the authenticated
+              user ID to scope intent visibility. This filter only narrows that scoped result.
+
           intent_type: Type of intent.
+
+          pending_member_id: Filter by a user whose approval is still pending. For user-token requests, Privy
+              uses the authenticated user ID to scope intent visibility. This filter only
+              narrows that scoped result.
 
           status: Current status of an intent.
 
@@ -2262,8 +2285,11 @@ class AsyncIntentsResource(AsyncAPIResource):
     ) -> IntentResponse:
         """Retrieve an intent by ID.
 
-        Returns the intent details including its current
-        status, authorization details, and execution result if applicable.
+        Returns its current status, authorization details, and
+        execution result when applicable. Requests authenticated with an app secret can
+        retrieve any intent for the app. Requests authenticated with a user token can
+        retrieve only intents that the authenticated user created, must approve, or has
+        signed. Unrelated intents return a 404 response.
 
         Args:
           intent_id: ID of the intent.

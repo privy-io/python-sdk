@@ -10,6 +10,7 @@ from .owner_id_input import OwnerIDInput
 from .owner_input_param import OwnerInputParam
 from .wallet_chain_type import WalletChainType
 from .additional_signer_input_param import AdditionalSignerInputParam
+from .wallet_entity_assignment_request_body_param import WalletEntityAssignmentRequestBodyParam
 
 __all__ = ["WalletBatchItemInputParam"]
 
@@ -25,6 +26,9 @@ class WalletBatchItemInputParam(TypedDict, total=False):
 
     display_name: str
     """A human-readable label for the wallet."""
+
+    entity: WalletEntityAssignmentRequestBodyParam
+    """Request body for assigning an entity to a wallet."""
 
     external_id: str
     """A customer-provided identifier for mapping to external systems.
