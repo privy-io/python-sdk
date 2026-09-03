@@ -31,9 +31,9 @@ class JWTExchangeService:
         self,
         wallets: WalletsResource,
         *,
-        cache_max_capacity: int = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
+        cache_max_capacity: int | None = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
     ) -> None:
-        if cache_max_capacity <= 0:
+        if cache_max_capacity is not None and cache_max_capacity <= 0:
             raise ValueError("authorization_key_cache_max_capacity must be greater than zero")
         self._wallets = wallets
         self._recipient = HPKERecipient()
@@ -70,6 +70,9 @@ class JWTExchangeService:
         return authorization_key
 
     def _get_cached(self, jwt: str) -> str | None:
+        if self._cache_max_capacity is None:
+            return None
+
         with self._lock:
             entry = self._cache.get(jwt)
             if entry is None:
@@ -81,6 +84,9 @@ class JWTExchangeService:
             return entry.authorization_key
 
     def _put_cached(self, jwt: str, authorization_key: str, expires_at: float) -> None:
+        if self._cache_max_capacity is None:
+            return
+
         with self._lock:
             self._cache[jwt] = _CacheEntry(authorization_key, expires_at)
             self._cache.move_to_end(jwt)

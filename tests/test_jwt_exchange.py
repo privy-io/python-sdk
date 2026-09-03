@@ -127,6 +127,15 @@ def test_exchange_jwt_does_not_reuse_expired_authorization_key() -> None:
     assert len(wallets.calls) == 2
 
 
+def test_exchange_jwt_does_not_cache_when_cache_is_disabled() -> None:
+    wallets = _Wallets("base64-private-key")
+    service = JWTExchangeService(wallets, cache_max_capacity=None)  # type: ignore[arg-type]
+
+    service.exchange_jwt_for_authorization_key("user.jwt")
+    service.exchange_jwt_for_authorization_key("user.jwt")
+    assert len(wallets.calls) == 2
+
+
 def test_exchange_jwt_rejects_unencrypted_response() -> None:
     class RawWallets:
         def authenticate_with_jwt(self, **_: Any) -> RawWalletAuthenticateResponse:
