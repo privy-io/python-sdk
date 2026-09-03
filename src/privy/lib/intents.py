@@ -12,6 +12,9 @@ from typing import Any, Callable, cast
 
 from .._types import Omit, omit
 from .._client import PrivyAPI
+from .request_url import build_request_url
+from .jwt_exchange import JWTExchangeService
+from .authorization import MutationMethod, prepare_request
 from .request_expiry import RequestExpiryProvider, resolve_request_expiry
 from .request_options import PrivyRequestOptions
 from ..resources.intents import IntentsResource
@@ -40,23 +43,44 @@ class PrivyIntentsService(IntentsResource):
         self,
         client: PrivyAPI,
         request_expiry_provider: RequestExpiryProvider | None = None,
+        jwt_exchanger: JWTExchangeService | None = None,
     ) -> None:
         super().__init__(client)
         self._request_expiry_provider = request_expiry_provider
+        self._jwt_exchanger = jwt_exchanger
 
-    def _expiry_header(
+    def _prepare_request(
         self,
+        *,
+        method: MutationMethod,
+        path: str,
+        body: dict[str, object],
         request_options: PrivyRequestOptions | None,
-        body: dict[str, object] | None = None,
-    ) -> str | Omit:
+        preserve_empty_body: bool = False,
+    ) -> tuple[str | Omit, dict[str, str] | None]:
         options = request_options or PrivyRequestOptions()
-        raw_request_expiry = body.pop("privy_request_expiry", None) if body is not None else None
-        if options.request_expiry is not None:
-            return str(options.request_expiry)
-        if raw_request_expiry is not None:
-            return str(raw_request_expiry)
-        request_expiry = resolve_request_expiry(options.request_expiry, self._request_expiry_provider)
-        return str(request_expiry) if request_expiry is not None else omit
+        raw_request_expiry = body.pop("privy_request_expiry", None)
+        request_expiry = (
+            options.request_expiry
+            if options.request_expiry is not None
+            else raw_request_expiry
+            if raw_request_expiry is not None
+            else resolve_request_expiry(None, self._request_expiry_provider)
+        )
+        prepared = prepare_request(
+            app_id=self._client.app_id,
+            method=method,
+            url=build_request_url(self._client, path),
+            body=body,
+            authorization_context=options.authorization_context,
+            request_expiry=cast(Any, request_expiry),
+            jwt_exchanger=self._jwt_exchanger,
+            preserve_empty_body=preserve_empty_body,
+        )
+        signature = prepared.headers.get("privy-authorization-signature")
+        extra_headers = {"privy-authorization-signature": signature} if signature is not None else None
+        expiry_header = str(request_expiry) if request_expiry is not None else omit
+        return expiry_header, extra_headers
 
     def rpc(
         self,
@@ -66,13 +90,19 @@ class PrivyIntentsService(IntentsResource):
         request_options: PrivyRequestOptions | None = None,
     ) -> RpcIntentResponse:
         body = dict(intent_rpc_request_body)
-        expiry_header = self._expiry_header(request_options, body)
+        expiry_header, extra_headers = self._prepare_request(
+            method="POST",
+            path=f"/v1/intents/wallets/{wallet_id}/rpc",
+            body=body,
+            request_options=request_options,
+        )
         generated: Any = super()
         rpc = cast(Callable[..., RpcIntentResponse], generated.rpc)
         return rpc(
             wallet_id,
             **body,
             privy_request_expiry=expiry_header,
+            extra_headers=extra_headers,
         )
 
     def transfer(
@@ -83,13 +113,19 @@ class PrivyIntentsService(IntentsResource):
         request_options: PrivyRequestOptions | None = None,
     ) -> TransferIntentResponse:
         body = dict(intent_transfer_params)
-        expiry_header = self._expiry_header(request_options, body)
+        expiry_header, extra_headers = self._prepare_request(
+            method="POST",
+            path=f"/v1/intents/wallets/{wallet_id}/transfer",
+            body=body,
+            request_options=request_options,
+        )
         generated: Any = super()
         transfer = cast(Callable[..., TransferIntentResponse], generated.transfer)
         return transfer(
             wallet_id,
             **body,
             privy_request_expiry=expiry_header,
+            extra_headers=extra_headers,
         )
 
     def create_policy_rule(
@@ -100,13 +136,19 @@ class PrivyIntentsService(IntentsResource):
         request_options: PrivyRequestOptions | None = None,
     ) -> RuleMutateIntentResponse:
         body = dict(intent_create_policy_rule_params)
-        expiry_header = self._expiry_header(request_options, body)
+        expiry_header, extra_headers = self._prepare_request(
+            method="POST",
+            path=f"/v1/intents/policies/{policy_id}/rules",
+            body=body,
+            request_options=request_options,
+        )
         generated: Any = super()
         create_policy_rule = cast(Callable[..., RuleMutateIntentResponse], generated.create_policy_rule)
         return create_policy_rule(
             policy_id,
             **body,
             privy_request_expiry=expiry_header,
+            extra_headers=extra_headers,
         )
 
     def delete_policy_rule(
@@ -116,12 +158,20 @@ class PrivyIntentsService(IntentsResource):
         policy_id: str,
         request_options: PrivyRequestOptions | None = None,
     ) -> RuleDeleteIntentResponse:
+        expiry_header, extra_headers = self._prepare_request(
+            method="DELETE",
+            path=f"/v1/intents/policies/{policy_id}/rules/{rule_id}",
+            body={},
+            request_options=request_options,
+            preserve_empty_body=True,
+        )
         generated: Any = super()
         delete_policy_rule = cast(Callable[..., RuleDeleteIntentResponse], generated.delete_policy_rule)
         return delete_policy_rule(
             rule_id,
             policy_id=policy_id,
-            privy_request_expiry=self._expiry_header(request_options),
+            privy_request_expiry=expiry_header,
+            extra_headers=extra_headers,
         )
 
     def update_policy(
@@ -132,13 +182,19 @@ class PrivyIntentsService(IntentsResource):
         request_options: PrivyRequestOptions | None = None,
     ) -> PolicyIntentResponse:
         body = dict(intent_update_policy_params)
-        expiry_header = self._expiry_header(request_options, body)
+        expiry_header, extra_headers = self._prepare_request(
+            method="PATCH",
+            path=f"/v1/intents/policies/{policy_id}",
+            body=body,
+            request_options=request_options,
+        )
         generated: Any = super()
         update_policy = cast(Callable[..., PolicyIntentResponse], generated.update_policy)
         return update_policy(
             policy_id,
             **body,
             privy_request_expiry=expiry_header,
+            extra_headers=extra_headers,
         )
 
     def update_policy_rule(
@@ -150,7 +206,12 @@ class PrivyIntentsService(IntentsResource):
     ) -> RuleMutateIntentResponse:
         body = dict(intent_update_policy_rule_params)
         policy_id = cast(str, body.pop("policy_id"))
-        expiry_header = self._expiry_header(request_options, body)
+        expiry_header, extra_headers = self._prepare_request(
+            method="PATCH",
+            path=f"/v1/intents/policies/{policy_id}/rules/{rule_id}",
+            body=body,
+            request_options=request_options,
+        )
         generated: Any = super()
         update_policy_rule = cast(Callable[..., RuleMutateIntentResponse], generated.update_policy_rule)
         return update_policy_rule(
@@ -158,6 +219,7 @@ class PrivyIntentsService(IntentsResource):
             policy_id=policy_id,
             **body,
             privy_request_expiry=expiry_header,
+            extra_headers=extra_headers,
         )
 
     def update_wallet(
@@ -168,13 +230,19 @@ class PrivyIntentsService(IntentsResource):
         request_options: PrivyRequestOptions | None = None,
     ) -> WalletIntentResponse:
         body = dict(intent_update_wallet_params)
-        expiry_header = self._expiry_header(request_options, body)
+        expiry_header, extra_headers = self._prepare_request(
+            method="PATCH",
+            path=f"/v1/intents/wallets/{wallet_id}",
+            body=body,
+            request_options=request_options,
+        )
         generated: Any = super()
         update_wallet = cast(Callable[..., WalletIntentResponse], generated.update_wallet)
         return update_wallet(
             wallet_id,
             **body,
             privy_request_expiry=expiry_header,
+            extra_headers=extra_headers,
         )
 
     def update_key_quorum(
@@ -185,11 +253,17 @@ class PrivyIntentsService(IntentsResource):
         request_options: PrivyRequestOptions | None = None,
     ) -> KeyQuorumIntentResponse:
         body = dict(intent_update_key_quorum_params)
-        expiry_header = self._expiry_header(request_options, body)
+        expiry_header, extra_headers = self._prepare_request(
+            method="PATCH",
+            path=f"/v1/intents/key_quorums/{key_quorum_id}",
+            body=body,
+            request_options=request_options,
+        )
         generated: Any = super()
         update_key_quorum = cast(Callable[..., KeyQuorumIntentResponse], generated.update_key_quorum)
         return update_key_quorum(
             key_quorum_id,
             **body,
             privy_request_expiry=expiry_header,
+            extra_headers=extra_headers,
         )

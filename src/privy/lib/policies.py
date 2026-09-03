@@ -7,6 +7,7 @@ from typing import Any, Callable, cast
 from .._types import omit
 from .._client import PrivyAPI
 from .request_url import build_request_url
+from .jwt_exchange import JWTExchangeService
 from ..types.policy import Policy
 from .authorization import prepare_request
 from .request_expiry import RequestExpiryProvider, resolve_request_expiry
@@ -26,9 +27,11 @@ class PrivyPoliciesService(PoliciesResource):
         self,
         client: PrivyAPI,
         request_expiry_provider: RequestExpiryProvider | None = None,
+        jwt_exchanger: JWTExchangeService | None = None,
     ) -> None:
         super().__init__(client)
         self._request_expiry_provider = request_expiry_provider
+        self._jwt_exchanger = jwt_exchanger
 
     def create_rule(
         self,
@@ -48,6 +51,7 @@ class PrivyPoliciesService(PoliciesResource):
             body=body,
             authorization_context=options.authorization_context,
             request_expiry=request_expiry,
+            jwt_exchanger=self._jwt_exchanger,
         )
         signature = prepared.headers.get("privy-authorization-signature")
         expiry_header = prepared.headers.get("privy-request-expiry")
@@ -78,6 +82,7 @@ class PrivyPoliciesService(PoliciesResource):
             body=body,
             authorization_context=options.authorization_context,
             request_expiry=request_expiry,
+            jwt_exchanger=self._jwt_exchanger,
         )
         signature = prepared.headers.get("privy-authorization-signature")
         expiry_header = prepared.headers.get("privy-request-expiry")
@@ -109,6 +114,7 @@ class PrivyPoliciesService(PoliciesResource):
             body=params,
             authorization_context=options.authorization_context,
             request_expiry=request_expiry,
+            jwt_exchanger=self._jwt_exchanger,
         )
         signature = prepared.headers.get("privy-authorization-signature")
         expiry_header = prepared.headers.get("privy-request-expiry")
@@ -138,6 +144,7 @@ class PrivyPoliciesService(PoliciesResource):
             body={},
             authorization_context=options.authorization_context,
             request_expiry=request_expiry,
+            jwt_exchanger=self._jwt_exchanger,
             preserve_empty_body=True,
         )
         signature = prepared.headers.get("privy-authorization-signature")
@@ -167,6 +174,7 @@ class PrivyPoliciesService(PoliciesResource):
             body={},
             authorization_context=options.authorization_context,
             request_expiry=request_expiry,
+            jwt_exchanger=self._jwt_exchanger,
             preserve_empty_body=True,
         )
         signature = prepared.headers.get("privy-authorization-signature")

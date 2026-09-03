@@ -53,15 +53,15 @@ class PrivyClient:
             base_url=base_url,
             default_headers={"privy-client": f"python:{__version__}"},
         )
-        self.policies = PrivyPoliciesService(self._client, self.get_request_expiry)
-        self.key_quorums = PrivyKeyQuorumsService(self._client, self.get_request_expiry)
-        self.intents = PrivyIntentsService(self._client, self._get_intent_request_expiry)
-        self.users = PrivyUsersService(self._client)
-        self.transactions = PrivyTransactionsService(self._client)
         self._jwt_exchange = JWTExchangeService(
             self._client.wallets,
             cache_max_capacity=authorization_key_cache_max_capacity,
         )
+        self.policies = PrivyPoliciesService(self._client, self.get_request_expiry, self._jwt_exchange)
+        self.key_quorums = PrivyKeyQuorumsService(self._client, self.get_request_expiry, self._jwt_exchange)
+        self.intents = PrivyIntentsService(self._client, self._get_intent_request_expiry, self._jwt_exchange)
+        self.users = PrivyUsersService(self._client)
+        self.transactions = PrivyTransactionsService(self._client)
         self.wallets = PrivyWalletsService(self._client, self._jwt_exchange, self.get_request_expiry)
 
     def get_request_expiry(self, expiry_ms_from_now: int | None = None) -> int | None:

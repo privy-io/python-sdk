@@ -57,6 +57,7 @@ class PrivyWalletsService(WalletsResource):
             body=body,
             authorization_context=options.authorization_context,
             request_expiry=request_expiry,
+            jwt_exchanger=self._jwt_exchanger,
         )
         signature = prepared.headers.get("privy-authorization-signature")
         expiry_header = prepared.headers.get("privy-request-expiry")
