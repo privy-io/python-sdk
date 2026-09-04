@@ -2006,6 +2006,7 @@ class IntentsResource(SyncAPIResource):
         *,
         additional_signers: AdditionalSignerInputParam | Omit = omit,
         display_name: Optional[str] | Omit = omit,
+        external_id: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
         owner_id: Optional[OwnerIDInput] | Omit = omit,
         policy_ids: SequenceNotStr[str] | Omit = omit,
@@ -2028,6 +2029,10 @@ class IntentsResource(SyncAPIResource):
           additional_signers: Additional signers for the wallet.
 
           display_name: A human-readable label for the wallet. Set to null to clear.
+
+          external_id: A customer-provided identifier for mapping to external systems. URL-safe
+              characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
+              once set.
 
           owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
               null to remove the current owner.
@@ -2058,6 +2063,7 @@ class IntentsResource(SyncAPIResource):
                 {
                     "additional_signers": additional_signers,
                     "display_name": display_name,
+                    "external_id": external_id,
                     "owner": owner,
                     "owner_id": owner_id,
                     "policy_ids": policy_ids,
@@ -3972,6 +3978,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         *,
         additional_signers: AdditionalSignerInputParam | Omit = omit,
         display_name: Optional[str] | Omit = omit,
+        external_id: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
         owner_id: Optional[OwnerIDInput] | Omit = omit,
         policy_ids: SequenceNotStr[str] | Omit = omit,
@@ -3994,6 +4001,10 @@ class AsyncIntentsResource(AsyncAPIResource):
           additional_signers: Additional signers for the wallet.
 
           display_name: A human-readable label for the wallet. Set to null to clear.
+
+          external_id: A customer-provided identifier for mapping to external systems. URL-safe
+              characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be changed
+              once set.
 
           owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
               null to remove the current owner.
@@ -4024,6 +4035,7 @@ class AsyncIntentsResource(AsyncAPIResource):
                 {
                     "additional_signers": additional_signers,
                     "display_name": display_name,
+                    "external_id": external_id,
                     "owner": owner,
                     "owner_id": owner_id,
                     "policy_ids": policy_ids,

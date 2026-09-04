@@ -21,6 +21,13 @@ class WalletUpdateParams(TypedDict, total=False):
     display_name: Optional[str]
     """A human-readable label for the wallet. Set to null to clear."""
 
+    external_id: str
+    """A customer-provided identifier for mapping to external systems.
+
+    URL-safe characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be
+    changed once set.
+    """
+
     owner: Optional[OwnerInputParam]
     """
     The owner of the resource, specified as a Privy user ID, a P-256 public key, or

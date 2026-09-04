@@ -3062,6 +3062,7 @@ class TestWallets:
                 }
             ],
             display_name="display_name",
+            external_id="external_id",
             owner={"user_id": "user_id"},
             owner_id="string",
             policy_ids=["tb54eps4z44ed0jepousxi4n"],
@@ -6466,6 +6467,7 @@ class TestAsyncWallets:
                 }
             ],
             display_name="display_name",
+            external_id="external_id",
             owner={"user_id": "user_id"},
             owner_id="string",
             policy_ids=["tb54eps4z44ed0jepousxi4n"],

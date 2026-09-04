@@ -25,6 +25,8 @@ class WalletIntentResponseRequestDetailsBody(BaseModel):
 
     display_name: Optional[str] = None
 
+    external_id: Optional[str] = None
+
     owner: Optional[OwnerInput] = None
     """
     The owner of the resource, specified as a Privy user ID, a P-256 public key, or

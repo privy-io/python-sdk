@@ -71,7 +71,8 @@ class Wallet(BaseModel):
     external_id: Optional[str] = None
     """A customer-provided identifier for mapping to external systems.
 
-    Write-once, set only at creation.
+    URL-safe characters only ([a-zA-Z0-9_-]), max 64 chars. Write-once: cannot be
+    changed once set.
     """
 
     public_key: Optional[str] = None

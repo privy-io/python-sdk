@@ -3125,6 +3125,7 @@ class TestIntents:
                 }
             ],
             display_name="display_name",
+            external_id="external_id",
             owner={"user_id": "user_id"},
             owner_id="string",
             policy_ids=["xxxxxxxxxxxxxxxxxxxxxxxx"],
@@ -6270,6 +6271,7 @@ class TestAsyncIntents:
                 }
             ],
             display_name="display_name",
+            external_id="external_id",
             owner={"user_id": "user_id"},
             owner_id="string",
             policy_ids=["xxxxxxxxxxxxxxxxxxxxxxxx"],
