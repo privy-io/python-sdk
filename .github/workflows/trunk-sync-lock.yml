@@ -29,8 +29,7 @@ permissions:
 jobs:
   lock:
     runs-on: ${{ vars.STLC_RUNNER || 'ubuntu-latest' }}
-    # Disabled until the production Python SDK repository is publicly readable.
-    if: ${{ false && github.repository == 'privy-io/python-sdk-private' }}
+    if: github.repository == 'privy-io/python-sdk-private'
     env:
       PRODUCTION_REPO: privy-io/python-sdk
       PRODUCTION_REPO_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
