@@ -5,15 +5,18 @@ from __future__ import annotations
 import time
 from types import TracebackType
 
+from .apps import PrivyAppsService
 from .users import PrivyUsersService
 from .intents import PrivyIntentsService
 from .wallets import PrivyWalletsService
 from .._client import PrivyAPI
 from .policies import PrivyPoliciesService
+from .webhooks import PrivyWebhooksService
 from .._version import __version__
 from .key_quorums import PrivyKeyQuorumsService
 from .jwt_exchange import DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY, JWTExchangeService
 from .transactions import PrivyTransactionsService
+from .organizations import PrivyOrganizationsService
 from .request_expiry import (
     DEFAULT_REQUEST_EXPIRY_MS,
     DEFAULT_INTENT_REQUEST_EXPIRY_MS,
@@ -57,12 +60,15 @@ class PrivyClient:
             self._client.wallets,
             cache_max_capacity=authorization_key_cache_max_capacity,
         )
+        self.apps = PrivyAppsService(self._client)
         self.policies = PrivyPoliciesService(self._client, self.get_request_expiry, self._jwt_exchange)
         self.key_quorums = PrivyKeyQuorumsService(self._client, self.get_request_expiry, self._jwt_exchange)
         self.intents = PrivyIntentsService(self._client, self._get_intent_request_expiry, self._jwt_exchange)
         self.users = PrivyUsersService(self._client)
+        self.organizations = PrivyOrganizationsService(self._client)
         self.transactions = PrivyTransactionsService(self._client)
         self.wallets = PrivyWalletsService(self._client, self._jwt_exchange, self.get_request_expiry)
+        self.webhooks = PrivyWebhooksService(self._client)
 
     def get_request_expiry(self, expiry_ms_from_now: int | None = None) -> int | None:
         """Return an absolute request-expiry timestamp in Unix milliseconds."""

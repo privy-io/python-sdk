@@ -1,5 +1,6 @@
 """Hand-written public API layered on top of the generated client."""
 
+from .apps import PrivyAppsService
 from .tron import PrivyTronService
 from .users import PrivyUsersService
 from .client import PrivyClient
@@ -8,6 +9,7 @@ from .intents import PrivyIntentsService
 from .wallets import PrivyWalletsService
 from .ethereum import PrivyEthereumService
 from .policies import PrivyPoliciesService
+from .webhooks import PrivyWebhooksService
 from .key_quorums import PrivyKeyQuorumsService
 from .transactions import PrivyTransactionsService
 from .authorization import (
@@ -21,13 +23,16 @@ from .authorization import (
     generate_authorization_signatures,
     format_request_for_authorization_signature,
 )
+from .organizations import PrivyOrganizationsService
 from .request_expiry import PrivyRequestExpiryOptions
 from .request_options import PrivyRequestOptions
 
 __all__ = [
     "AuthorizationContext",
+    "PrivyAppsService",
     "PrivyKeyQuorumsService",
     "PrivyIntentsService",
+    "PrivyOrganizationsService",
     "P256KeyPair",
     "PreparedRequest",
     "PrivyTransactionsService",
@@ -40,6 +45,7 @@ __all__ = [
     "PrivyTronService",
     "WalletAPIRequestSignatureInput",
     "PrivyWalletsService",
+    "PrivyWebhooksService",
     "PrivyUsersService",
     "format_request_for_authorization_signature",
     "generate_authorization_signature",
