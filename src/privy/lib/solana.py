@@ -30,6 +30,7 @@ class PrivySolanaService:
         message: str | bytes | bytearray,
         *,
         address: str | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> SolanaSignMessageRpcResponseData:
         encoded_message = (
@@ -46,12 +47,11 @@ class PrivySolanaService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "signMessage":
-            raise ValueError(
-                f"Unexpected wallet RPC response method: expected 'signMessage', got {response.method!r}"
-            )
+            raise ValueError(f"Unexpected wallet RPC response method: expected 'signMessage', got {response.method!r}")
         response_values: Any = response
         return cast(SolanaSignMessageRpcResponseData, response_values.data)
 
@@ -61,6 +61,7 @@ class PrivySolanaService:
         transaction: str | bytes | bytearray,
         *,
         address: str | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> SolanaSignTransactionRpcResponseData:
         encoded_transaction = (
@@ -79,6 +80,7 @@ class PrivySolanaService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "signTransaction":
@@ -99,6 +101,7 @@ class PrivySolanaService:
         reference_id: str | None = None,
         sponsor: bool | None = None,
         sponsor_options: RpcSponsorOptionsParam | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> SolanaSignAndSendTransactionRpcResponseData:
         encoded_transaction = (
@@ -126,12 +129,12 @@ class PrivySolanaService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "signAndSendTransaction":
             raise ValueError(
-                "Unexpected wallet RPC response method: expected "
-                f"'signAndSendTransaction', got {response.method!r}"
+                f"Unexpected wallet RPC response method: expected 'signAndSendTransaction', got {response.method!r}"
             )
         response_values: Any = response
         return cast(SolanaSignAndSendTransactionRpcResponseData, response_values.data)

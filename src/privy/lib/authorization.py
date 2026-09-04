@@ -165,6 +165,7 @@ def prepare_request(
     method: MutationMethod,
     url: str,
     body: object,
+    idempotency_key: str | None = None,
     authorization_context: AuthorizationContext | None = None,
     request_expiry: int | None = None,
     jwt_exchanger: JWTExchanger | None = None,
@@ -174,6 +175,8 @@ def prepare_request(
 
     context = authorization_context or AuthorizationContext()
     request_headers = {"privy-app-id": app_id}
+    if idempotency_key is not None:
+        request_headers["privy-idempotency-key"] = idempotency_key
     if request_expiry is not None:
         request_headers["privy-request-expiry"] = str(request_expiry)
     # Formatting is intentionally performed even for precomputed signatures so
@@ -195,6 +198,8 @@ def prepare_request(
     headers: dict[str, str] = {}
     if signatures:
         headers["privy-authorization-signature"] = ",".join(signatures)
+    if idempotency_key is not None:
+        headers["privy-idempotency-key"] = idempotency_key
     if request_expiry is not None:
         headers["privy-request-expiry"] = str(request_expiry)
     return PreparedRequest(headers=headers)

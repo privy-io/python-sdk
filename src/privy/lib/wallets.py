@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Any, Callable, cast
+from typing_extensions import override
 
 from .tron import PrivyTronService
 from .solana import PrivySolanaService
@@ -38,6 +39,24 @@ class PrivyWalletsService(WalletsResource):
         self.ethereum = PrivyEthereumService(self)
         self.solana = PrivySolanaService(self)
         self.tron = PrivyTronService(self)
+
+    @override
+    def create(
+        self,
+        *,
+        idempotency_key: str | None = None,
+        **params: Any,
+    ) -> Wallet:
+        generated_params: dict[str, Any] = dict(params)
+        generated_idempotency_key = generated_params.pop("privy_idempotency_key", omit)
+        if idempotency_key is not None and generated_idempotency_key is not omit:
+            raise TypeError("idempotency_key and privy_idempotency_key cannot both be supplied")
+        generated: Any = super()
+        create = cast(Callable[..., Wallet], generated.create)
+        return create(
+            **generated_params,
+            privy_idempotency_key=(idempotency_key if idempotency_key is not None else generated_idempotency_key),
+        )
 
     def update(
         self,
@@ -75,6 +94,7 @@ class PrivyWalletsService(WalletsResource):
         wallet_id: str,
         *,
         wallet_rpc_request_body: WalletRpcParams,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> WalletRpcResponse:
         options = request_options or PrivyRequestOptions()
@@ -88,11 +108,13 @@ class PrivyWalletsService(WalletsResource):
             method="POST",
             url=f"{str(base_url).rstrip('/')}/v1/wallets/{wallet_id}/rpc",
             body=body,
+            idempotency_key=idempotency_key,
             authorization_context=options.authorization_context,
             request_expiry=request_expiry,
             jwt_exchanger=self._jwt_exchanger,
         )
         signature = prepared.headers.get("privy-authorization-signature")
+        idempotency_header = prepared.headers.get("privy-idempotency-key")
         expiry_header = prepared.headers.get("privy-request-expiry")
         generated: Any = self
         rpc = cast(Callable[..., WalletRpcResponse], generated._rpc)
@@ -100,6 +122,7 @@ class PrivyWalletsService(WalletsResource):
             wallet_id,
             **body,
             privy_authorization_signature=signature if signature is not None else omit,
+            privy_idempotency_key=idempotency_header if idempotency_header is not None else omit,
             privy_request_expiry=expiry_header if expiry_header is not None else omit,
         )
 
@@ -108,6 +131,7 @@ class PrivyWalletsService(WalletsResource):
         wallet_id: str,
         *,
         wallet_raw_sign_params: WalletRawSignParams,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> RawSignResponse:
         options = request_options or PrivyRequestOptions()
@@ -118,15 +142,20 @@ class PrivyWalletsService(WalletsResource):
             method="POST",
             url=build_request_url(client, f"/v1/wallets/{wallet_id}/raw_sign"),
             body=dict(wallet_raw_sign_params),
+            idempotency_key=idempotency_key,
             authorization_context=options.authorization_context,
             request_expiry=request_expiry,
             jwt_exchanger=self._jwt_exchanger,
         )
         signature = prepared.headers.get("privy-authorization-signature")
+        idempotency_header = prepared.headers.get("privy-idempotency-key")
         expiry_header = prepared.headers.get("privy-request-expiry")
-        return self._raw_sign(
+        generated: Any = self
+        raw_sign = cast(Callable[..., RawSignResponse], generated._raw_sign)
+        return raw_sign(
             wallet_id,
             params=wallet_raw_sign_params["params"],
             privy_authorization_signature=signature if signature is not None else omit,
+            privy_idempotency_key=idempotency_header if idempotency_header is not None else omit,
             privy_request_expiry=expiry_header if expiry_header is not None else omit,
         )

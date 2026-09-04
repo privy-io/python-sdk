@@ -49,6 +49,7 @@ class PrivyEthereumService:
         address: str | None = None,
         caip2: str | None = None,
         signature_options: SignatureOptionsParam | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> EthereumPersonalSignRpcResponseData:
         params: EthereumPersonalSignRpcInputParamsParam
@@ -74,6 +75,7 @@ class PrivyEthereumService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "personal_sign":
@@ -89,6 +91,7 @@ class PrivyEthereumService:
         *,
         params: EthereumSecp256k1SignRpcInputParamsParam,
         address: str | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> EthereumSecp256k1SignRpcResponseData:
         body: wallet_rpc_params.EthereumSecp256k1SignRpcInput = {
@@ -102,6 +105,7 @@ class PrivyEthereumService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "secp256k1_sign":
@@ -117,6 +121,7 @@ class PrivyEthereumService:
         *,
         params: EthereumSign7702AuthorizationRpcInputParamsParam,
         address: str | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> EthereumSign7702AuthorizationRpcResponseData:
         body: wallet_rpc_params.EthereumSign7702AuthorizationRpcInput = {
@@ -130,12 +135,12 @@ class PrivyEthereumService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "eth_sign7702Authorization":
             raise ValueError(
-                "Unexpected wallet RPC response method: "
-                f"expected 'eth_sign7702Authorization', got {response.method!r}"
+                f"Unexpected wallet RPC response method: expected 'eth_sign7702Authorization', got {response.method!r}"
             )
         response_values: Any = response
         return cast(EthereumSign7702AuthorizationRpcResponseData, response_values.data)
@@ -146,6 +151,7 @@ class PrivyEthereumService:
         *,
         params: EthereumSignTransactionRpcInputParamsParam,
         address: str | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> EthereumSignTransactionRpcResponseData:
         body: wallet_rpc_params.EthereumSignTransactionRpcInput = {
@@ -159,6 +165,7 @@ class PrivyEthereumService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "eth_signTransaction":
@@ -176,6 +183,7 @@ class PrivyEthereumService:
         address: str | None = None,
         caip2: str | None = None,
         signature_options: SignatureOptionsParam | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> EthereumSignTypedDataRpcResponseData:
         body: wallet_rpc_params.EthereumSignTypedDataRpcInput = {
@@ -193,6 +201,7 @@ class PrivyEthereumService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "eth_signTypedData_v4":
@@ -208,6 +217,7 @@ class PrivyEthereumService:
         *,
         params: EthereumSignUserOperationRpcInputParamsParam,
         address: str | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> EthereumSignUserOperationRpcResponseData:
         body: wallet_rpc_params.EthereumSignUserOperationRpcInput = {
@@ -221,6 +231,7 @@ class PrivyEthereumService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "eth_signUserOperation":
@@ -241,6 +252,7 @@ class PrivyEthereumService:
         reference_id: str | None = None,
         sponsor: bool | None = None,
         sponsor_options: RpcSponsorOptionsParam | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> EthereumSendTransactionRpcResponseData:
         body: wallet_rpc_params.EthereumSendTransactionRpcInput = {
@@ -263,6 +275,7 @@ class PrivyEthereumService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "eth_sendTransaction":
@@ -282,6 +295,7 @@ class PrivyEthereumService:
         experimental_data_suffix: str | None = None,
         sponsor: bool | None = None,
         sponsor_options: RpcSponsorOptionsParam | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> EthereumSendCallsRpcResponseData:
         body: wallet_rpc_params.EthereumSendCallsRpcInput = {
@@ -302,6 +316,7 @@ class PrivyEthereumService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "wallet_sendCalls":

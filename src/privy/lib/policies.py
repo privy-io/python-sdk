@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Any, Callable, cast
+from typing_extensions import override
 
 from .._types import omit
 from .._client import PrivyAPI
@@ -32,6 +33,24 @@ class PrivyPoliciesService(PoliciesResource):
         super().__init__(client)
         self._request_expiry_provider = request_expiry_provider
         self._jwt_exchanger = jwt_exchanger
+
+    @override
+    def create(
+        self,
+        *,
+        idempotency_key: str | None = None,
+        **params: Any,
+    ) -> Policy:
+        generated_params: dict[str, Any] = dict(params)
+        generated_idempotency_key = generated_params.pop("privy_idempotency_key", omit)
+        if idempotency_key is not None and generated_idempotency_key is not omit:
+            raise TypeError("idempotency_key and privy_idempotency_key cannot both be supplied")
+        generated: Any = super()
+        create = cast(Callable[..., Policy], generated.create)
+        return create(
+            **generated_params,
+            privy_idempotency_key=(idempotency_key if idempotency_key is not None else generated_idempotency_key),
+        )
 
     def create_rule(
         self,

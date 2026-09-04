@@ -28,6 +28,7 @@ class PrivyTronService:
         wallet_id: str,
         *,
         params: TronSignTransactionRpcInputParamsParam,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> TronSignTransactionRpcResponseData:
         """Sign a Tron transaction without broadcasting it."""
@@ -38,6 +39,7 @@ class PrivyTronService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "tron_signTransaction":
@@ -53,6 +55,7 @@ class PrivyTronService:
         *,
         params: TronSendTransactionRpcInputParamsParam,
         caip2: str | None = None,
+        idempotency_key: str | None = None,
         request_options: PrivyRequestOptions | None = None,
     ) -> TronSendTransactionRpcResponseData:
         """Sign and broadcast a Tron transaction."""
@@ -66,6 +69,7 @@ class PrivyTronService:
         response = self._wallets.rpc(
             wallet_id,
             wallet_rpc_request_body=body,
+            idempotency_key=idempotency_key,
             request_options=request_options,
         )
         if response.method != "tron_sendTransaction":

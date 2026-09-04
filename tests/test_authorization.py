@@ -70,6 +70,24 @@ def test_precomputed_signatures_are_forwarded_in_order() -> None:
     assert prepared.headers == {"privy-authorization-signature": "first,second"}
 
 
+def test_idempotency_key_is_signed_and_forwarded() -> None:
+    payloads: list[bytes] = []
+    prepared = prepare_request(
+        app_id="app-123",
+        method="POST",
+        url="https://api.staging.privy.io/v1/wallets/wallet-1/raw_sign",
+        body={"params": {"hash": "0x1234"}},
+        idempotency_key="request-123",
+        authorization_context=AuthorizationContext(signers=[lambda payload: payloads.append(payload) or "signed"]),
+    )
+
+    assert prepared.headers == {
+        "privy-authorization-signature": "signed",
+        "privy-idempotency-key": "request-123",
+    }
+    assert b'"privy-idempotency-key":"request-123"' in payloads[0]
+
+
 def test_empty_body_can_be_preserved_for_delete_signatures() -> None:
     payloads: list[bytes] = []
     prepare_request(
