@@ -26,6 +26,14 @@ def make_client(request_expiry: PrivyRequestExpiryOptions | None = None) -> Priv
     )
 
 
+def test_client_defaults_to_production_base_url() -> None:
+    client = PrivyClient(app_id="app-id", app_secret="app-secret")
+    try:
+        assert client._client.base_url == "https://api.privy.io"
+    finally:
+        client.close()
+
+
 def test_get_request_expiry_uses_default_and_custom_durations() -> None:
     client = make_client()
     try:

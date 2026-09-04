@@ -31,7 +31,7 @@ class PrivyClient:
         *,
         app_id: str,
         app_secret: str,
-        base_url: str,
+        base_url: str | None = None,
         authorization_key_cache_max_capacity: int | None = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
         request_expiry: PrivyRequestExpiryOptions | None = None,
     ) -> None:
