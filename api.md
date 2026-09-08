@@ -447,6 +447,57 @@ Methods:
 - <code title="post /v1/users/{user_id}/kyc/links">client.users.kyc.<a href="./src/privy/resources/users/kyc.py">initiate_links</a>(user_id, \*\*<a href="src/privy/types/users/kyc_initiate_links_params.py">params</a>) -> <a href="./src/privy/types/kyc_status_response.py">KYCStatusResponse</a></code>
 - <code title="post /v1/users/{user_id}/kyc/tos">client.users.kyc.<a href="./src/privy/resources/users/kyc.py">initiate_tos</a>(user_id, \*\*<a href="src/privy/types/users/kyc_initiate_tos_params.py">params</a>) -> <a href="./src/privy/types/kyx_tos_response.py">KyxTosResponse</a></code>
 
+# WalletAutomations
+
+Types:
+
+```python
+from privy.types import (
+    AutomationActionConfig,
+    AutomationActionConfigInput,
+    AutomationAssetFilter,
+    AutomationAssetFilterAll,
+    AutomationAssetFilterExclude,
+    AutomationAssetFilterInclude,
+    AutomationAssetFilterInput,
+    AutomationAssetFilterInputExclude,
+    AutomationAssetFilterInputInclude,
+    AutomationAssetSpec,
+    AutomationAssetSpecInput,
+    AutomationConfig,
+    AutomationConfigInput,
+    AutomationDepositTriggerConfig,
+    AutomationDepositTriggerConfigInput,
+    AutomationDestinationAsset,
+    AutomationDestinationAssetInput,
+    AutomationEarnDepositActionConfig,
+    AutomationEarnDepositActionConfigInput,
+    AutomationSwapActionConfig,
+    AutomationSwapActionConfigInput,
+    AutomationTriggerConfig,
+    AutomationTriggerConfigInput,
+    CreateAutomationRequestBody,
+    SwapAttachmentParams,
+    UpdateAutomationRequestBody,
+    WalletAutomationExecutionListResponse,
+    WalletAutomationExecutionResponse,
+    WalletAutomationExecutionStatus,
+    WalletAutomationListResponse,
+    WalletAutomationReindexAssetResult,
+    WalletAutomationReindexAssetStatus,
+    WalletAutomationReindexCaip2,
+    WalletAutomationReindexRequestBody,
+    WalletAutomationReindexResponse,
+    WalletAutomationResponse,
+    WalletAutomationStatus,
+    WalletAutomationSuccessResponse,
+)
+```
+
+Methods:
+
+- <code title="post /v1/wallet_automations/reindex">client.wallet_automations.<a href="./src/privy/resources/wallet_automations.py">reindex</a>(\*\*<a href="src/privy/types/wallet_automation_reindex_params.py">params</a>) -> <a href="./src/privy/types/wallet_automation_reindex_response.py">WalletAutomationReindexResponse</a></code>
+
 # Wallets
 
 Types:
@@ -996,6 +1047,7 @@ from privy.types import (
     WalletArchivedWebhookPayload,
     WalletAutomationSubmittedWebhookPayload,
     WalletFundsAsset,
+    WalletFundsBtknAsset,
     WalletFundsErc20Asset,
     WalletFundsNativeTokenAsset,
     WalletFundsSacAsset,
@@ -1283,48 +1335,6 @@ from privy.types import (
 )
 ```
 
-# WalletAutomations
-
-Types:
-
-```python
-from privy.types import (
-    AutomationActionConfig,
-    AutomationActionConfigInput,
-    AutomationAssetFilter,
-    AutomationAssetFilterAll,
-    AutomationAssetFilterExclude,
-    AutomationAssetFilterInclude,
-    AutomationAssetFilterInput,
-    AutomationAssetFilterInputExclude,
-    AutomationAssetFilterInputInclude,
-    AutomationAssetSpec,
-    AutomationAssetSpecInput,
-    AutomationConfig,
-    AutomationConfigInput,
-    AutomationDepositTriggerConfig,
-    AutomationDepositTriggerConfigInput,
-    AutomationDestinationAsset,
-    AutomationDestinationAssetInput,
-    AutomationEarnDepositActionConfig,
-    AutomationEarnDepositActionConfigInput,
-    AutomationSwapActionConfig,
-    AutomationSwapActionConfigInput,
-    AutomationTriggerConfig,
-    AutomationTriggerConfigInput,
-    CreateAutomationRequestBody,
-    SwapAttachmentParams,
-    UpdateAutomationRequestBody,
-    WalletAutomationExecutionListResponse,
-    WalletAutomationExecutionResponse,
-    WalletAutomationExecutionStatus,
-    WalletAutomationListResponse,
-    WalletAutomationResponse,
-    WalletAutomationStatus,
-    WalletAutomationSuccessResponse,
-)
-```
-
 # Shared
 
 Types:
@@ -1332,9 +1342,11 @@ Types:
 ```python
 from privy.types import (
     BitcoinAddress,
+    BitcoinCaip2,
     CurrencyAmount,
     Environment,
     EvmAddress,
+    EvmCaip2,
     EvmChecksumAddress,
     HyperliquidTokenAddress,
     KeyQuorumID,
@@ -1345,9 +1357,11 @@ from privy.types import (
     OwnerInputUser,
     P256PublicKey,
     SolanaAddress,
+    SolanaCaip2,
     SuccessResponse,
     TokenIdentifier,
     TronAddress,
+    TronCaip2,
     TronHexAddress,
 )
 ```

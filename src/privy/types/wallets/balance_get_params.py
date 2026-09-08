@@ -46,6 +46,8 @@ class BalanceGetParams(TypedDict, total=False):
             "tron",
             "zksync_era",
             "robinhood",
+            "hyperevm",
+            "hypercore",
             "tempo_testnet",
             "hoodi",
             "sepolia",

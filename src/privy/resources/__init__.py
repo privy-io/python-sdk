@@ -65,6 +65,14 @@ from .organizations import (
     OrganizationsResourceWithStreamingResponse,
     AsyncOrganizationsResourceWithStreamingResponse,
 )
+from .wallet_automations import (
+    WalletAutomationsResource,
+    AsyncWalletAutomationsResource,
+    WalletAutomationsResourceWithRawResponse,
+    AsyncWalletAutomationsResourceWithRawResponse,
+    WalletAutomationsResourceWithStreamingResponse,
+    AsyncWalletAutomationsResourceWithStreamingResponse,
+)
 
 __all__ = [
     "AppsResource",
@@ -109,6 +117,12 @@ __all__ = [
     "AsyncUsersResourceWithRawResponse",
     "UsersResourceWithStreamingResponse",
     "AsyncUsersResourceWithStreamingResponse",
+    "WalletAutomationsResource",
+    "AsyncWalletAutomationsResource",
+    "WalletAutomationsResourceWithRawResponse",
+    "AsyncWalletAutomationsResourceWithRawResponse",
+    "WalletAutomationsResourceWithStreamingResponse",
+    "AsyncWalletAutomationsResourceWithStreamingResponse",
     "WalletsResource",
     "AsyncWalletsResource",
     "WalletsResourceWithRawResponse",

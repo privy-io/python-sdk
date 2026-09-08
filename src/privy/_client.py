@@ -36,7 +36,17 @@ from ._base_client import (
 )
 
 if TYPE_CHECKING:
-    from .resources import apps, users, intents, wallets, policies, key_quorums, transactions, organizations
+    from .resources import (
+        apps,
+        users,
+        intents,
+        wallets,
+        policies,
+        key_quorums,
+        transactions,
+        organizations,
+        wallet_automations,
+    )
     from .resources.intents import IntentsResource, AsyncIntentsResource
     from .resources.policies import PoliciesResource, AsyncPoliciesResource
     from .resources.webhooks import WebhooksResource, AsyncWebhooksResource
@@ -45,6 +55,7 @@ if TYPE_CHECKING:
     from .resources.users.users import UsersResource, AsyncUsersResource
     from .resources.transactions import TransactionsResource, AsyncTransactionsResource
     from .resources.wallets.wallets import WalletsResource, AsyncWalletsResource
+    from .resources.wallet_automations import WalletAutomationsResource, AsyncWalletAutomationsResource
     from .resources.organizations.organizations import OrganizationsResource, AsyncOrganizationsResource
 
 __all__ = [
@@ -213,6 +224,13 @@ class PrivyAPI(SyncAPIClient):
         from .resources.users import UsersResource
 
         return UsersResource(self)
+
+    @cached_property
+    def wallet_automations(self) -> WalletAutomationsResource:
+        """Operations related to wallet automations"""
+        from .resources.wallet_automations import WalletAutomationsResource
+
+        return WalletAutomationsResource(self)
 
     @cached_property
     def wallets(self) -> WalletsResource:
@@ -495,6 +513,13 @@ class AsyncPrivyAPI(AsyncAPIClient):
         return AsyncUsersResource(self)
 
     @cached_property
+    def wallet_automations(self) -> AsyncWalletAutomationsResource:
+        """Operations related to wallet automations"""
+        from .resources.wallet_automations import AsyncWalletAutomationsResource
+
+        return AsyncWalletAutomationsResource(self)
+
+    @cached_property
     def wallets(self) -> AsyncWalletsResource:
         from .resources.wallets import AsyncWalletsResource
 
@@ -681,6 +706,13 @@ class PrivyAPIWithRawResponse:
         return UsersResourceWithRawResponse(self._client.users)
 
     @cached_property
+    def wallet_automations(self) -> wallet_automations.WalletAutomationsResourceWithRawResponse:
+        """Operations related to wallet automations"""
+        from .resources.wallet_automations import WalletAutomationsResourceWithRawResponse
+
+        return WalletAutomationsResourceWithRawResponse(self._client.wallet_automations)
+
+    @cached_property
     def wallets(self) -> wallets.WalletsResourceWithRawResponse:
         from .resources.wallets import WalletsResourceWithRawResponse
 
@@ -741,6 +773,13 @@ class AsyncPrivyAPIWithRawResponse:
         from .resources.users import AsyncUsersResourceWithRawResponse
 
         return AsyncUsersResourceWithRawResponse(self._client.users)
+
+    @cached_property
+    def wallet_automations(self) -> wallet_automations.AsyncWalletAutomationsResourceWithRawResponse:
+        """Operations related to wallet automations"""
+        from .resources.wallet_automations import AsyncWalletAutomationsResourceWithRawResponse
+
+        return AsyncWalletAutomationsResourceWithRawResponse(self._client.wallet_automations)
 
     @cached_property
     def wallets(self) -> wallets.AsyncWalletsResourceWithRawResponse:
@@ -805,6 +844,13 @@ class PrivyAPIWithStreamedResponse:
         return UsersResourceWithStreamingResponse(self._client.users)
 
     @cached_property
+    def wallet_automations(self) -> wallet_automations.WalletAutomationsResourceWithStreamingResponse:
+        """Operations related to wallet automations"""
+        from .resources.wallet_automations import WalletAutomationsResourceWithStreamingResponse
+
+        return WalletAutomationsResourceWithStreamingResponse(self._client.wallet_automations)
+
+    @cached_property
     def wallets(self) -> wallets.WalletsResourceWithStreamingResponse:
         from .resources.wallets import WalletsResourceWithStreamingResponse
 
@@ -865,6 +911,13 @@ class AsyncPrivyAPIWithStreamedResponse:
         from .resources.users import AsyncUsersResourceWithStreamingResponse
 
         return AsyncUsersResourceWithStreamingResponse(self._client.users)
+
+    @cached_property
+    def wallet_automations(self) -> wallet_automations.AsyncWalletAutomationsResourceWithStreamingResponse:
+        """Operations related to wallet automations"""
+        from .resources.wallet_automations import AsyncWalletAutomationsResourceWithStreamingResponse
+
+        return AsyncWalletAutomationsResourceWithStreamingResponse(self._client.wallet_automations)
 
     @cached_property
     def wallets(self) -> wallets.AsyncWalletsResourceWithStreamingResponse:
