@@ -842,6 +842,8 @@ from privy.types.wallets import (
     EarnIncentiveRewardsQuery,
     EarnIncentiveRewardsResponse,
     EarnIncetiveClaimRewardEntry,
+    EarnPositionApyAllocation,
+    EarnPositionApyType,
     EarnWithdrawActionResponse,
     EarnWithdrawRequestBody,
     EthereumEarnPositionQuery,

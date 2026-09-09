@@ -19,6 +19,7 @@ from .morpho_vault_details import MorphoVaultDetails as MorphoVaultDetails
 from .swap_action_response import SwapActionResponse as SwapActionResponse
 from .wallet_action_status import WalletActionStatus as WalletActionStatus
 from .wallet_action_include import WalletActionInclude as WalletActionInclude
+from .earn_position_apy_type import EarnPositionApyType as EarnPositionApyType
 from .ethereum_earn_provider import EthereumEarnProvider as EthereumEarnProvider
 from .transaction_get_params import TransactionGetParams as TransactionGetParams
 from .wallet_action_response import WalletActionResponse as WalletActionResponse
@@ -26,6 +27,7 @@ from .wallet_action_step_type import WalletActionStepType as WalletActionStepTyp
 from .transaction_get_response import TransactionGetResponse as TransactionGetResponse
 from .transfer_action_response import TransferActionResponse as TransferActionResponse
 from .earn_deposit_action_response import EarnDepositActionResponse as EarnDepositActionResponse
+from .earn_position_apy_allocation import EarnPositionApyAllocation as EarnPositionApyAllocation
 from .earn_withdraw_action_response import EarnWithdrawActionResponse as EarnWithdrawActionResponse
 from .evm_wallet_action_step_status import EvmWalletActionStepStatus as EvmWalletActionStepStatus
 from .svm_wallet_action_step_status import SvmWalletActionStepStatus as SvmWalletActionStepStatus

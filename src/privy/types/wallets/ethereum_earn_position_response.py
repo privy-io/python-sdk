@@ -1,7 +1,10 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from typing import List, Optional
+
 from ..._models import BaseModel
 from .earn_asset import EarnAsset
+from .earn_position_apy_allocation import EarnPositionApyAllocation
 
 __all__ = ["EthereumEarnPositionResponse"]
 
@@ -23,3 +26,12 @@ class EthereumEarnPositionResponse(BaseModel):
 
     total_withdrawn: str
     """Total amount withdrawn from the vault, in smallest unit."""
+
+    apy_allocation: Optional[List[EarnPositionApyAllocation]] = None
+    """Vault APY allocations by origin, returned together with apy_bps when available."""
+
+    apy_bps: Optional[int] = None
+    """Wallet-specific net APY in basis points, rounded to the nearest integer.
+
+    Returned together with apy_allocation when available.
+    """
