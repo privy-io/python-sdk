@@ -1,6 +1,8 @@
-"""The HPKE recipient used by the JWT authorization-key exchange."""
+"""HPKE recipient support for encrypted Privy API responses."""
 
 from __future__ import annotations
+
+import base64
 
 from pyhpke import KDFId, KEMId, AEADId, KEMKey, CipherSuite
 from cryptography.hazmat.primitives import serialization
@@ -26,6 +28,20 @@ class HPKERecipient:
             serialization.PublicFormat.SubjectPublicKeyInfo,
         )
 
+    @property
+    def public_key_spki_base64(self) -> str:
+        """Return the recipient public key as base64-encoded DER SPKI."""
+
+        return base64.b64encode(self.public_key_spki).decode("ascii")
+
     def decrypt(self, encapsulated_key: bytes, ciphertext: bytes) -> bytes:
         context = self._suite.create_recipient_context(encapsulated_key, self._hpke_private_key)
         return context.open(ciphertext)
+
+    def decrypt_base64(self, encapsulated_key: str, ciphertext: str) -> bytes:
+        """Decrypt base64-encoded HPKE response fields."""
+
+        return self.decrypt(
+            base64.b64decode(encapsulated_key, validate=True),
+            base64.b64decode(ciphertext, validate=True),
+        )

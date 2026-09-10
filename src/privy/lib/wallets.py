@@ -3,14 +3,18 @@
 from __future__ import annotations
 
 from typing import Any, Callable, cast
-from typing_extensions import override
+from typing_extensions import TypedDict, override
+
+from pyhpke import PyHPKEError
 
 from .tron import PrivyTronService
+from ._hpke import HPKERecipient
 from .solana import PrivySolanaService
 from .._types import omit
 from .._client import PrivyAPI
 from .ethereum import PrivyEthereumService
 from .request_url import build_request_url
+from .._exceptions import PrivyAPIError
 from .jwt_exchange import JWTExchangeService
 from ..types.wallet import Wallet
 from .authorization import prepare_request
@@ -25,7 +29,15 @@ from ..types.wallet_raw_sign_params import WalletRawSignParams
 from ..types.wallet_transfer_params import WalletTransferParams
 from ..types.wallets.transfer_action_response import TransferActionResponse
 
-__all__ = ["PrivyWalletsService"]
+__all__ = ["ExportPrivateKeyResponse", "ExportSeedPhraseResponse", "PrivyWalletsService"]
+
+
+class ExportPrivateKeyResponse(TypedDict):
+    private_key: str
+
+
+class ExportSeedPhraseResponse(TypedDict):
+    seed_phrase: str
 
 
 class PrivyWalletsService(WalletsResource):
@@ -90,6 +102,79 @@ class PrivyWalletsService(WalletsResource):
             privy_authorization_signature=signature if signature is not None else omit,
             privy_request_expiry=expiry_header if expiry_header is not None else omit,
         )
+
+    def export_private_key(
+        self,
+        wallet_id: str,
+        *,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> ExportPrivateKeyResponse:
+        """Securely export a wallet's private key using HPKE."""
+
+        private_key = self._export_decrypted(
+            wallet_id,
+            export_seed_phrase=False,
+            request_options=request_options,
+        )
+        return {"private_key": private_key}
+
+    def export_seed_phrase(
+        self,
+        wallet_id: str,
+        *,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> ExportSeedPhraseResponse:
+        """Securely export a wallet's seed phrase using HPKE."""
+
+        seed_phrase = self._export_decrypted(
+            wallet_id,
+            export_seed_phrase=True,
+            request_options=request_options,
+        )
+        return {"seed_phrase": seed_phrase}
+
+    def _export_decrypted(
+        self,
+        wallet_id: str,
+        *,
+        export_seed_phrase: bool,
+        request_options: PrivyRequestOptions | None,
+    ) -> str:
+        options = request_options or PrivyRequestOptions()
+        request_expiry = resolve_request_expiry(options.request_expiry, self._request_expiry_provider)
+        recipient = HPKERecipient()
+        body = {
+            "encryption_type": "HPKE",
+            "recipient_public_key": recipient.public_key_spki_base64,
+            "export_seed_phrase": export_seed_phrase,
+        }
+        client = self._client
+        prepared = prepare_request(
+            app_id=client.app_id,
+            method="POST",
+            url=build_request_url(client, f"/v1/wallets/{wallet_id}/export"),
+            body=body,
+            authorization_context=options.authorization_context,
+            request_expiry=request_expiry,
+            jwt_exchanger=self._jwt_exchanger,
+        )
+        signature = prepared.headers.get("privy-authorization-signature")
+        expiry_header = prepared.headers.get("privy-request-expiry")
+        response = self._export(
+            wallet_id,
+            encryption_type="HPKE",
+            recipient_public_key=recipient.public_key_spki_base64,
+            export_seed_phrase=export_seed_phrase,
+            privy_authorization_signature=signature if signature is not None else omit,
+            privy_request_expiry=expiry_header if expiry_header is not None else omit,
+        )
+        if response.encryption_type != "HPKE":
+            raise PrivyAPIError("Wallet export failed: unsupported encryption type")
+
+        try:
+            return recipient.decrypt_base64(response.encapsulated_key, response.ciphertext).decode("utf-8")
+        except (PyHPKEError, ValueError, UnicodeDecodeError) as exc:
+            raise PrivyAPIError("Wallet export failed: invalid encrypted wallet data") from exc
 
     def rpc(
         self,

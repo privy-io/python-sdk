@@ -1,13 +1,17 @@
 from __future__ import annotations
 
 import os
+import re
+import hmac
 import base64
+import hashlib
+import unicodedata
 from typing import cast
 from collections.abc import Mapping
 
 import pytest
 from cryptography.hazmat.primitives import hashes, serialization
-from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives.asymmetric import ec, ed25519
 
 from privy import (
     PrivyClient,
@@ -93,6 +97,97 @@ def authorization_payload(wallet_id: str, request_expiry: int) -> bytes:
             },
         )
     )
+
+
+def compressed_secp256k1_public_key(private_key: str) -> str:
+    key = ec.derive_private_key(int(private_key, 16), ec.SECP256K1())
+    return (
+        key.public_key()
+        .public_bytes(
+            serialization.Encoding.X962,
+            serialization.PublicFormat.CompressedPoint,
+        )
+        .hex()
+    )
+
+
+def solana_address_from_seed_phrase(seed_phrase: str) -> str:
+    mnemonic = unicodedata.normalize("NFKD", seed_phrase).encode("utf-8")
+    seed = hashlib.pbkdf2_hmac("sha512", mnemonic, b"mnemonic", 2048)
+    digest = hmac.new(b"ed25519 seed", seed, hashlib.sha512).digest()
+    private_key, chain_code = digest[:32], digest[32:]
+
+    for index in (44, 501, 0, 0):
+        hardened_index = index + 2**31
+        digest = hmac.new(
+            chain_code,
+            b"\x00" + private_key + hardened_index.to_bytes(4, "big"),
+            hashlib.sha512,
+        ).digest()
+        private_key, chain_code = digest[:32], digest[32:]
+
+    public_key = (
+        ed25519.Ed25519PrivateKey.from_private_bytes(private_key)
+        .public_key()
+        .public_bytes(
+            serialization.Encoding.Raw,
+            serialization.PublicFormat.Raw,
+        )
+    )
+    return base58_encode(public_key)
+
+
+def base58_encode(value: bytes) -> str:
+    alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+    encoded = ""
+    number = int.from_bytes(value, "big")
+    while number:
+        number, remainder = divmod(number, 58)
+        encoded = alphabet[remainder] + encoded
+    return alphabet[0] * (len(value) - len(value.lstrip(b"\x00"))) + encoded
+
+
+def test_export_private_key(privy_client: PrivyClient) -> None:
+    key_pair = generate_p256_key_pair()
+    wallet = privy_client.wallets.create(
+        chain_type="tron",
+        owner={"public_key": key_pair.public_key},
+    )
+    assert wallet.public_key
+
+    exported = privy_client.wallets.export_private_key(
+        wallet.id,
+        request_options=PrivyRequestOptions(
+            authorization_context=AuthorizationContext(
+                authorization_private_keys=[key_pair.private_key],
+            )
+        ),
+    )
+
+    assert re.fullmatch(r"[0-9a-f]{64}", exported["private_key"])
+    assert compressed_secp256k1_public_key(exported["private_key"]) == wallet.public_key
+
+
+def test_export_seed_phrase(privy_client: PrivyClient) -> None:
+    key_pair = generate_p256_key_pair()
+    wallet = privy_client.wallets.create(
+        chain_type="solana",
+        owner={"public_key": key_pair.public_key},
+    )
+
+    exported = privy_client.wallets.export_seed_phrase(
+        wallet.id,
+        request_options=PrivyRequestOptions(
+            authorization_context=AuthorizationContext(
+                authorization_private_keys=[key_pair.private_key],
+            )
+        ),
+    )
+
+    words = exported["seed_phrase"].split()
+    assert 12 <= len(words) <= 24
+    assert all(re.fullmatch(r"[a-z]+", word) for word in words)
+    assert solana_address_from_seed_phrase(exported["seed_phrase"]) == wallet.address
 
 
 def test_raw_sign(privy_client: PrivyClient, tron_wallet: WalletUnderTest) -> None:

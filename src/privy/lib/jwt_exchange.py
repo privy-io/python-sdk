@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import time
-import base64
 import threading
 from collections import OrderedDict
 from dataclasses import dataclass
@@ -49,7 +48,7 @@ class JWTExchangeService:
         response = self._wallets.authenticate_with_jwt(
             user_jwt=jwt,
             encryption_type="HPKE",
-            recipient_public_key=base64.b64encode(self._recipient.public_key_spki).decode("ascii"),
+            recipient_public_key=self._recipient.public_key_spki_base64,
         )
         if not isinstance(response, EncryptedWalletAuthenticateResponse):
             raise PrivyAPIError("JWT exchange failed: unsupported encryption type")
@@ -58,10 +57,7 @@ class JWTExchangeService:
         if encrypted.encryption_type != "HPKE":
             raise PrivyAPIError("JWT exchange failed: unsupported encryption type")
         try:
-            plaintext = self._recipient.decrypt(
-                base64.b64decode(encrypted.encapsulated_key, validate=True),
-                base64.b64decode(encrypted.ciphertext, validate=True),
-            )
+            plaintext = self._recipient.decrypt_base64(encrypted.encapsulated_key, encrypted.ciphertext)
             authorization_key = plaintext.decode("utf-8")
         except (PyHPKEError, ValueError, UnicodeDecodeError) as exc:
             raise PrivyAPIError("JWT exchange failed: invalid encrypted authorization key") from exc
