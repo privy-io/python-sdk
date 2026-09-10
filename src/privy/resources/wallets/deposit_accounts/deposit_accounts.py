@@ -10,7 +10,9 @@ from .fiat import (
     FiatResourceWithStreamingResponse,
     AsyncFiatResourceWithStreamingResponse,
 )
-from .crypto import (
+from ...._compat import cached_property
+from ...._resource import SyncAPIResource, AsyncAPIResource
+from .crypto.crypto import (
     CryptoResource,
     AsyncCryptoResource,
     CryptoResourceWithRawResponse,
@@ -18,8 +20,6 @@ from .crypto import (
     CryptoResourceWithStreamingResponse,
     AsyncCryptoResourceWithStreamingResponse,
 )
-from ...._compat import cached_property
-from ...._resource import SyncAPIResource, AsyncAPIResource
 
 __all__ = ["DepositAccountsResource", "AsyncDepositAccountsResource"]
 

@@ -821,6 +821,9 @@ from .ethereum_sign_typed_data_rpc_input_params import (
 from .ethereum_sign_user_operation_rpc_response import (
     EthereumSignUserOperationRpcResponse as EthereumSignUserOperationRpcResponse,
 )
+from .get_crypto_deposit_account_order_response import (
+    GetCryptoDepositAccountOrderResponse as GetCryptoDepositAccountOrderResponse,
+)
 from .solana_sign_transaction_rpc_response_data import (
     SolanaSignTransactionRpcResponseData as SolanaSignTransactionRpcResponseData,
 )

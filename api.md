@@ -97,6 +97,7 @@ from privy.types import (
     CardIssuingListCardsInput,
     CardIssuingListTransactionsInput,
     CardIssuingMerchant,
+    CardIssuingPinUpdate,
     CardIssuingReplaceCardRequestBody,
     CardIssuingReplacementReason,
     CardIssuingStatementQueryParams,
@@ -595,6 +596,8 @@ from privy.types import (
     FirstClassChainType,
     Gas,
     GetByWalletAddressRequestBody,
+    GetCryptoDepositAccountNextOrderResponse,
+    GetCryptoDepositAccountOrderResponse,
     HDInitInput,
     HDPath,
     HDSubmitInput,
@@ -896,7 +899,13 @@ Methods:
 
 Methods:
 
-- <code title="post /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.deposit_accounts.crypto.<a href="./src/privy/resources/wallets/deposit_accounts/crypto.py">\_create</a>(wallet_id, \*\*<a href="src/privy/types/wallets/deposit_accounts/crypto_create_params.py">params</a>) -> <a href="./src/privy/types/create_crypto_deposit_account_response.py">CreateCryptoDepositAccountResponse</a></code>
+- <code title="post /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.deposit_accounts.crypto.<a href="./src/privy/resources/wallets/deposit_accounts/crypto/crypto.py">\_create</a>(wallet_id, \*\*<a href="src/privy/types/wallets/deposit_accounts/crypto_create_params.py">params</a>) -> <a href="./src/privy/types/create_crypto_deposit_account_response.py">CreateCryptoDepositAccountResponse</a></code>
+
+#### Orders
+
+Methods:
+
+- <code title="get /v1/wallets/{wallet_id}/deposit_accounts/crypto/orders/{order_id}">client.wallets.deposit_accounts.crypto.orders.<a href="./src/privy/resources/wallets/deposit_accounts/crypto/orders.py">get</a>(order_id, \*, wallet_id) -> <a href="./src/privy/types/get_crypto_deposit_account_order_response.py">GetCryptoDepositAccountOrderResponse</a></code>
 
 ### Fiat
 

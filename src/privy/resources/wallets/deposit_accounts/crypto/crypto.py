@@ -6,27 +6,40 @@ from typing_extensions import Literal, overload
 
 import httpx
 
-from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from ...._utils import path_template, required_args, maybe_transform, strip_not_given, async_maybe_transform
-from ...._compat import cached_property
-from ...._resource import SyncAPIResource, AsyncAPIResource
-from ...._response import (
+from .orders import (
+    OrdersResource,
+    AsyncOrdersResource,
+    OrdersResourceWithRawResponse,
+    AsyncOrdersResourceWithRawResponse,
+    OrdersResourceWithStreamingResponse,
+    AsyncOrdersResourceWithStreamingResponse,
+)
+from ....._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ....._utils import path_template, required_args, maybe_transform, strip_not_given, async_maybe_transform
+from ....._compat import cached_property
+from ....._resource import SyncAPIResource, AsyncAPIResource
+from ....._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...._base_client import make_request_options
-from ....types.wallets.deposit_accounts import crypto_create_params
-from ....types.crypto_deposit_asset_param import CryptoDepositAssetParam
-from ....types.crypto_deposit_asset_filter_param import CryptoDepositAssetFilterParam
-from ....types.create_crypto_deposit_account_response import CreateCryptoDepositAccountResponse
+from ....._base_client import make_request_options
+from .....types.wallets.deposit_accounts import crypto_create_params
+from .....types.crypto_deposit_asset_param import CryptoDepositAssetParam
+from .....types.crypto_deposit_asset_filter_param import CryptoDepositAssetFilterParam
+from .....types.create_crypto_deposit_account_response import CreateCryptoDepositAccountResponse
 
 __all__ = ["CryptoResource", "AsyncCryptoResource"]
 
 
 class CryptoResource(SyncAPIResource):
     """Operations related to wallets"""
+
+    @cached_property
+    def orders(self) -> OrdersResource:
+        """Operations related to wallets"""
+        return OrdersResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> CryptoResourceWithRawResponse:
@@ -197,6 +210,11 @@ class CryptoResource(SyncAPIResource):
 
 class AsyncCryptoResource(AsyncAPIResource):
     """Operations related to wallets"""
+
+    @cached_property
+    def orders(self) -> AsyncOrdersResource:
+        """Operations related to wallets"""
+        return AsyncOrdersResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncCryptoResourceWithRawResponse:
@@ -373,6 +391,11 @@ class CryptoResourceWithRawResponse:
             crypto._create,
         )
 
+    @cached_property
+    def orders(self) -> OrdersResourceWithRawResponse:
+        """Operations related to wallets"""
+        return OrdersResourceWithRawResponse(self._crypto.orders)
+
 
 class AsyncCryptoResourceWithRawResponse:
     def __init__(self, crypto: AsyncCryptoResource) -> None:
@@ -381,6 +404,11 @@ class AsyncCryptoResourceWithRawResponse:
         self._create = async_to_raw_response_wrapper(
             crypto._create,
         )
+
+    @cached_property
+    def orders(self) -> AsyncOrdersResourceWithRawResponse:
+        """Operations related to wallets"""
+        return AsyncOrdersResourceWithRawResponse(self._crypto.orders)
 
 
 class CryptoResourceWithStreamingResponse:
@@ -391,6 +419,11 @@ class CryptoResourceWithStreamingResponse:
             crypto._create,
         )
 
+    @cached_property
+    def orders(self) -> OrdersResourceWithStreamingResponse:
+        """Operations related to wallets"""
+        return OrdersResourceWithStreamingResponse(self._crypto.orders)
+
 
 class AsyncCryptoResourceWithStreamingResponse:
     def __init__(self, crypto: AsyncCryptoResource) -> None:
@@ -399,3 +432,8 @@ class AsyncCryptoResourceWithStreamingResponse:
         self._create = async_to_streamed_response_wrapper(
             crypto._create,
         )
+
+    @cached_property
+    def orders(self) -> AsyncOrdersResourceWithStreamingResponse:
+        """Operations related to wallets"""
+        return AsyncOrdersResourceWithStreamingResponse(self._crypto.orders)

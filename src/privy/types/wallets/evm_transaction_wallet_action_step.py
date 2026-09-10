@@ -35,3 +35,6 @@ class EvmTransactionWalletActionStep(BaseModel):
 
     Absent until finality is confirmed.
     """
+
+    gas_credits_charged_usd: Optional[str] = None
+    """Amount charged in USD for gas sponsorship on this step."""
