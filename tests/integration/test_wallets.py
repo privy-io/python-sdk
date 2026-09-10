@@ -18,6 +18,7 @@ from privy import (
     format_request_for_authorization_signature,
 )
 from privy.types.wallet_raw_sign_params import WalletRawSignParams
+from privy.types.wallet_transfer_params import WalletTransferParams
 
 from .wallet_setup import (
     WALLET_CASES,
@@ -32,6 +33,10 @@ pytestmark = pytest.mark.integration
 
 RAW_SIGN_HASH = "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
 RAW_SIGN_PARAMS: WalletRawSignParams = {"params": {"hash": RAW_SIGN_HASH}}
+TRANSFER_PARAMS: WalletTransferParams = {
+    "source": {"asset": "usdc", "amount": "0.01", "chain": "base"},
+    "destination": {"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
+}
 
 
 @pytest.fixture(scope="module")
@@ -51,6 +56,20 @@ def tron_wallet(
     request: pytest.FixtureRequest, tron_wallets: Mapping[WalletOwnership, WalletUnderTest]
 ) -> WalletUnderTest:
     return tron_wallets[cast(WalletOwnership, request.param)]
+
+
+@pytest.fixture(scope="module")
+def ethereum_wallets(
+    wallet_resources: WalletResources, jwt_auth_private_key: str
+) -> Mapping[WalletOwnership, WalletUnderTest]:
+    return create_test_wallets(wallet_resources, "ethereum", jwt_auth_private_key)
+
+
+@pytest.fixture(scope="module", params=WALLET_CASES, ids=WALLET_CASES)
+def ethereum_wallet(
+    request: pytest.FixtureRequest, ethereum_wallets: Mapping[WalletOwnership, WalletUnderTest]
+) -> WalletUnderTest:
+    return ethereum_wallets[cast(WalletOwnership, request.param)]
 
 
 def encoded_public_key(private_key: ec.EllipticCurvePrivateKey) -> str:
@@ -113,6 +132,22 @@ def test_update_with_authorization_private_key(privy_client: PrivyClient) -> Non
 
     assert updated.id == wallet.id
     assert updated.display_name == "Updated wallet"
+
+
+@pytest.mark.skip(reason="Requires funded wallets and transfers real funds")
+def test_transfer(privy_client: PrivyClient, ethereum_wallet: WalletUnderTest) -> None:
+    wallet = ethereum_wallet.wallet
+    response = privy_client.wallets.transfer(
+        wallet.id,
+        wallet_transfer_params=TRANSFER_PARAMS,
+        request_options=ethereum_wallet.request_options,
+    )
+
+    assert response.id
+    assert response.wallet_id == wallet.id
+    assert response.type == "transfer"
+    assert response.destination_address == TRANSFER_PARAMS["destination"]["address"]
+    assert response.source_chain == TRANSFER_PARAMS["source"]["chain"]
 
 
 def test_raw_sign_with_authorization_signer(privy_client: PrivyClient) -> None:

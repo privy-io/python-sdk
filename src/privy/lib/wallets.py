@@ -22,6 +22,8 @@ from ..resources.wallets.wallets import WalletsResource
 from ..types.wallet_rpc_response import WalletRpcResponse
 from ..types.wallet_update_params import WalletUpdateParams
 from ..types.wallet_raw_sign_params import WalletRawSignParams
+from ..types.wallet_transfer_params import WalletTransferParams
+from ..types.wallets.transfer_action_response import TransferActionResponse
 
 __all__ = ["PrivyWalletsService"]
 
@@ -119,6 +121,42 @@ class PrivyWalletsService(WalletsResource):
         generated: Any = self
         rpc = cast(Callable[..., WalletRpcResponse], generated._rpc)
         return rpc(
+            wallet_id,
+            **body,
+            privy_authorization_signature=signature if signature is not None else omit,
+            privy_idempotency_key=idempotency_header if idempotency_header is not None else omit,
+            privy_request_expiry=expiry_header if expiry_header is not None else omit,
+        )
+
+    def transfer(
+        self,
+        wallet_id: str,
+        *,
+        wallet_transfer_params: WalletTransferParams,
+        idempotency_key: str | None = None,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> TransferActionResponse:
+        """Transfer tokens from a wallet to a destination address."""
+
+        options = request_options or PrivyRequestOptions()
+        request_expiry = resolve_request_expiry(options.request_expiry, self._request_expiry_provider)
+        body = dict(wallet_transfer_params)
+        prepared = prepare_request(
+            app_id=self._client.app_id,
+            method="POST",
+            url=build_request_url(self._client, f"/v1/wallets/{wallet_id}/transfer"),
+            body=body,
+            idempotency_key=idempotency_key,
+            authorization_context=options.authorization_context,
+            request_expiry=request_expiry,
+            jwt_exchanger=self._jwt_exchanger,
+        )
+        signature = prepared.headers.get("privy-authorization-signature")
+        idempotency_header = prepared.headers.get("privy-idempotency-key")
+        expiry_header = prepared.headers.get("privy-request-expiry")
+        generated: Any = self
+        transfer = cast(Callable[..., TransferActionResponse], generated._transfer)
+        return transfer(
             wallet_id,
             **body,
             privy_authorization_signature=signature if signature is not None else omit,
