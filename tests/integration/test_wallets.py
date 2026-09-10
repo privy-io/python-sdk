@@ -5,11 +5,13 @@ import re
 import hmac
 import base64
 import hashlib
+import secrets
 import unicodedata
 from typing import cast
 from collections.abc import Mapping
 
 import pytest
+from eth_hash.auto import keccak
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec, ed25519
 
@@ -41,6 +43,62 @@ TRANSFER_PARAMS: WalletTransferParams = {
     "source": {"asset": "usdc", "amount": "0.01", "chain": "base"},
     "destination": {"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
 }
+_BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+_SECP256K1_ORDER = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141
+_TEST_MNEMONIC = "test test test test test test test test test test test junk"
+
+
+def base58_encode(value: bytes) -> str:
+    number = int.from_bytes(value, "big")
+    encoded = ""
+    while number:
+        number, remainder = divmod(number, 58)
+        encoded = _BASE58_ALPHABET[remainder] + encoded
+    return "1" * (len(value) - len(value.lstrip(b"\0"))) + encoded
+
+
+def ethereum_address(private_key: int) -> str:
+    public_key = (
+        ec.derive_private_key(private_key, ec.SECP256K1())
+        .public_key()
+        .public_bytes(
+            serialization.Encoding.X962,
+            serialization.PublicFormat.UncompressedPoint,
+        )
+    )
+    lowercase_address = keccak(public_key[1:])[-20:].hex()
+    address_hash = keccak(lowercase_address.encode("ascii")).hex()
+    checksum_address = "".join(
+        character.upper() if character in "abcdef" and int(address_hash[index], 16) >= 8 else character
+        for index, character in enumerate(lowercase_address)
+    )
+    return f"0x{checksum_address}"
+
+
+def derive_ethereum_hd_private_key(mnemonic: str, index: int) -> int:
+    normalized = unicodedata.normalize("NFKD", mnemonic).encode("utf-8")
+    seed = hashlib.pbkdf2_hmac("sha512", normalized, b"mnemonic", 2048)
+    digest = hmac.new(b"Bitcoin seed", seed, hashlib.sha512).digest()
+    private_key = int.from_bytes(digest[:32], "big")
+    chain_code = digest[32:]
+
+    for child_index in (44 | 0x80000000, 60 | 0x80000000, 0x80000000, 0, index):
+        if child_index >= 0x80000000:
+            data = b"\0" + private_key.to_bytes(32, "big")
+        else:
+            data = (
+                ec.derive_private_key(private_key, ec.SECP256K1())
+                .public_key()
+                .public_bytes(
+                    serialization.Encoding.X962,
+                    serialization.PublicFormat.CompressedPoint,
+                )
+            )
+        digest = hmac.new(chain_code, data + child_index.to_bytes(4, "big"), hashlib.sha512).digest()
+        private_key = (private_key + int.from_bytes(digest[:32], "big")) % _SECP256K1_ORDER
+        chain_code = digest[32:]
+
+    return private_key
 
 
 @pytest.fixture(scope="module")
@@ -99,6 +157,66 @@ def authorization_payload(wallet_id: str, request_expiry: int) -> bytes:
     )
 
 
+def test_import_ethereum_private_key(privy_client: PrivyClient) -> None:
+    owner = generate_p256_key_pair()
+    private_key = secrets.randbelow(_SECP256K1_ORDER - 1) + 1
+    address = ethereum_address(private_key)
+    wallet = privy_client.wallets.import_wallet(
+        wallet={
+            "entropy_type": "private-key",
+            "chain_type": "ethereum",
+            "address": address,
+            "private_key": f"0x{private_key:064x}",
+        },
+        owner={"public_key": owner.public_key},
+    )
+
+    assert wallet.id
+    assert wallet.chain_type == "ethereum"
+    assert wallet.address == address
+
+
+def test_import_ethereum_hd_wallet(privy_client: PrivyClient) -> None:
+    owner = generate_p256_key_pair()
+    index = secrets.randbelow(0x80000000)
+    address = ethereum_address(derive_ethereum_hd_private_key(_TEST_MNEMONIC, index))
+    wallet = privy_client.wallets.import_wallet(
+        wallet={
+            "entropy_type": "hd",
+            "chain_type": "ethereum",
+            "address": address,
+            "private_key": _TEST_MNEMONIC,
+            "index": index,
+        },
+        owner={"public_key": owner.public_key},
+    )
+
+    assert wallet.id
+    assert wallet.chain_type == "ethereum"
+    assert wallet.address == address
+
+
+def test_import_solana_base58_private_key(privy_client: PrivyClient) -> None:
+    owner = generate_p256_key_pair()
+    private_key = ed25519.Ed25519PrivateKey.generate()
+    seed = private_key.private_bytes_raw()
+    public_key = private_key.public_key().public_bytes_raw()
+    address = base58_encode(public_key)
+    wallet = privy_client.wallets.import_wallet(
+        wallet={
+            "entropy_type": "private-key",
+            "chain_type": "solana",
+            "address": address,
+            "private_key": base58_encode(seed + public_key),
+        },
+        owner={"public_key": owner.public_key},
+    )
+
+    assert wallet.id
+    assert wallet.chain_type == "solana"
+    assert wallet.address == address
+
+
 def compressed_secp256k1_public_key(private_key: str) -> str:
     key = ec.derive_private_key(int(private_key, 16), ec.SECP256K1())
     return (
@@ -135,16 +253,6 @@ def solana_address_from_seed_phrase(seed_phrase: str) -> str:
         )
     )
     return base58_encode(public_key)
-
-
-def base58_encode(value: bytes) -> str:
-    alphabet = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
-    encoded = ""
-    number = int.from_bytes(value, "big")
-    while number:
-        number, remainder = divmod(number, 58)
-        encoded = alphabet[remainder] + encoded
-    return alphabet[0] * (len(value) - len(value.lstrip(b"\x00"))) + encoded
 
 
 def test_export_private_key(privy_client: PrivyClient) -> None:

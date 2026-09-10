@@ -1,4 +1,4 @@
-"""HPKE recipient support for encrypted Privy API responses."""
+"""HPKE sender and recipient helpers for encrypted Privy API payloads."""
 
 from __future__ import annotations
 
@@ -7,6 +7,30 @@ import base64
 from pyhpke import KDFId, KEMId, AEADId, KEMKey, CipherSuite
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import ec
+
+
+class HPKESender:
+    """RFC 9180 base-mode sender for Privy's fixed HPKE cipher suite."""
+
+    def __init__(self) -> None:
+        self._suite = CipherSuite.new(
+            KEMId.DHKEM_P256_HKDF_SHA256,
+            KDFId.HKDF_SHA256,
+            AEADId.CHACHA20_POLY1305,
+        )
+
+    def encrypt(self, recipient_public_key: bytes, plaintext: bytes) -> tuple[bytes, bytes]:
+        public_key: object
+        if len(recipient_public_key) == 65 and recipient_public_key[0] == 4:
+            public_key = ec.EllipticCurvePublicKey.from_encoded_point(ec.SECP256R1(), recipient_public_key)
+        else:
+            public_key = serialization.load_der_public_key(recipient_public_key)
+        if not isinstance(public_key, ec.EllipticCurvePublicKey) or not isinstance(public_key.curve, ec.SECP256R1):
+            raise ValueError("HPKE recipient public key must be a P-256 public key")
+
+        recipient_key = KEMKey.from_pyca_cryptography_key(public_key)
+        encapsulated_key, context = self._suite.create_sender_context(recipient_key)
+        return encapsulated_key, context.seal(plaintext)
 
 
 class HPKERecipient:

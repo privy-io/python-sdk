@@ -6,7 +6,14 @@ from .users import PrivyUsersService
 from .client import PrivyClient
 from .solana import PrivySolanaService
 from .intents import PrivyIntentsService
-from .wallets import PrivyWalletsService, ExportPrivateKeyResponse, ExportSeedPhraseResponse
+from .wallets import (
+    WalletImport,
+    HDWalletImport,
+    PrivyWalletsService,
+    PrivateKeyWalletImport,
+    ExportPrivateKeyResponse,
+    ExportSeedPhraseResponse,
+)
 from .ethereum import PrivyEthereumService
 from .policies import PrivyPoliciesService
 from .webhooks import PrivyWebhooksService
@@ -46,6 +53,9 @@ __all__ = [
     "PrivyPoliciesService",
     "PrivyTronService",
     "WalletAPIRequestSignatureInput",
+    "HDWalletImport",
+    "PrivateKeyWalletImport",
+    "WalletImport",
     "PrivyWalletsService",
     "PrivyWebhooksService",
     "PrivyUsersService",

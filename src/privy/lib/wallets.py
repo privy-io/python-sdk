@@ -2,15 +2,16 @@
 
 from __future__ import annotations
 
-from typing import Any, Callable, cast
-from typing_extensions import TypedDict, override
+import base64
+from typing import Any, Union, Literal, Callable, TypedDict, cast
+from typing_extensions import TypeAlias, override
 
 from pyhpke import PyHPKEError
 
 from .tron import PrivyTronService
-from ._hpke import HPKERecipient
+from ._hpke import HPKESender, HPKERecipient
 from .solana import PrivySolanaService
-from .._types import omit
+from .._types import Omit, omit
 from .._client import PrivyAPI
 from .ethereum import PrivyEthereumService
 from .request_url import build_request_url
@@ -19,17 +20,31 @@ from .jwt_exchange import JWTExchangeService
 from ..types.wallet import Wallet
 from .authorization import prepare_request
 from .request_expiry import RequestExpiryProvider, resolve_request_expiry
+from .wallet_entropy import entropy_to_bytes
 from .request_options import PrivyRequestOptions
+from ..types.owner_id_input import OwnerIDInput
+from ..types.owner_input_param import OwnerInputParam
 from ..types.raw_sign_response import RawSignResponse
 from ..types.wallet_rpc_params import WalletRpcParams
+from ..types.policy_input_param import PolicyInputParam
 from ..resources.wallets.wallets import WalletsResource
 from ..types.wallet_rpc_response import WalletRpcResponse
 from ..types.wallet_update_params import WalletUpdateParams
 from ..types.wallet_raw_sign_params import WalletRawSignParams
 from ..types.wallet_transfer_params import WalletTransferParams
+from ..types.additional_signer_input_param import AdditionalSignerInputParam
+from ..types.wallet_import_supported_chains import WalletImportSupportedChains
 from ..types.wallets.transfer_action_response import TransferActionResponse
+from ..types.wallet_entity_assignment_request_body_param import WalletEntityAssignmentRequestBodyParam
 
-__all__ = ["ExportPrivateKeyResponse", "ExportSeedPhraseResponse", "PrivyWalletsService"]
+__all__ = [
+    "ExportPrivateKeyResponse",
+    "ExportSeedPhraseResponse",
+    "HDWalletImport",
+    "PrivateKeyWalletImport",
+    "WalletImport",
+    "PrivyWalletsService",
+]
 
 
 class ExportPrivateKeyResponse(TypedDict):
@@ -38,6 +53,28 @@ class ExportPrivateKeyResponse(TypedDict):
 
 class ExportSeedPhraseResponse(TypedDict):
     seed_phrase: str
+
+
+class HDWalletImport(TypedDict):
+    """An HD wallet seed phrase and derivation index to import."""
+
+    address: str
+    chain_type: WalletImportSupportedChains
+    entropy_type: Literal["hd"]
+    private_key: Union[str, bytes, bytearray]
+    index: int
+
+
+class PrivateKeyWalletImport(TypedDict):
+    """A chain-specific private key to import."""
+
+    address: str
+    chain_type: WalletImportSupportedChains
+    entropy_type: Literal["private-key"]
+    private_key: Union[str, bytes, bytearray]
+
+
+WalletImport: TypeAlias = Union[HDWalletImport, PrivateKeyWalletImport]
 
 
 class PrivyWalletsService(WalletsResource):
@@ -70,6 +107,55 @@ class PrivyWalletsService(WalletsResource):
         return create(
             **generated_params,
             privy_idempotency_key=(idempotency_key if idempotency_key is not None else generated_idempotency_key),
+        )
+
+    def import_wallet(
+        self,
+        *,
+        wallet: WalletImport,
+        additional_signers: AdditionalSignerInputParam | Omit = omit,
+        display_name: str | Omit = omit,
+        entity: WalletEntityAssignmentRequestBodyParam | Omit = omit,
+        external_id: str | Omit = omit,
+        owner: OwnerInputParam | None | Omit = omit,
+        owner_id: OwnerIDInput | None | Omit = omit,
+        policy_ids: PolicyInputParam | Omit = omit,
+    ) -> Wallet:
+        """Securely import a private-key or HD wallet using Privy's HPKE flow."""
+
+        import_wallet = cast(dict[str, Any], dict(wallet))
+        private_key = cast(Union[str, bytes, bytearray], import_wallet.pop("private_key"))
+        if "hpke_config" in import_wallet:
+            raise PrivyAPIError("wallet.hpke_config is not supported: encryption parameters are fixed by the SDK")
+
+        entropy_type = cast(str, import_wallet["entropy_type"])
+        chain_type = cast(WalletImportSupportedChains, import_wallet["chain_type"])
+        entropy = entropy_to_bytes(private_key, entropy_type=entropy_type, chain_type=chain_type)
+
+        generated: Any = self
+        init_import = cast(Callable[..., Any], generated._init_import)
+        init_response = init_import(**import_wallet, encryption_type="HPKE")
+        if init_response.encryption_type != "HPKE":
+            raise PrivyAPIError(f"Invalid encryption type: {init_response.encryption_type}")
+
+        encryption_public_key = base64.b64decode(init_response.encryption_public_key, validate=True)
+        encapsulated_key, ciphertext = HPKESender().encrypt(encryption_public_key, entropy)
+        encrypted_wallet = {
+            **import_wallet,
+            "encryption_type": "HPKE",
+            "encapsulated_key": base64.b64encode(encapsulated_key).decode("ascii"),
+            "ciphertext": base64.b64encode(ciphertext).decode("ascii"),
+        }
+        submit_import = cast(Callable[..., Wallet], generated._submit_import)
+        return submit_import(
+            wallet=encrypted_wallet,
+            additional_signers=additional_signers,
+            display_name=display_name,
+            entity=entity,
+            external_id=external_id,
+            owner=owner,
+            owner_id=owner_id,
+            policy_ids=policy_ids,
         )
 
     def update(
