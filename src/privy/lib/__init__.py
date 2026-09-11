@@ -1,6 +1,7 @@
 """Hand-written public API layered on top of the generated client."""
 
 from .apps import PrivyAppsService
+from .earn import PrivyEarnService, PrivyEarnEthereumService, PrivyEarnEthereumIncentiveService
 from .tron import PrivyTronService
 from .users import PrivyUsersService
 from .client import PrivyClient
@@ -47,6 +48,9 @@ __all__ = [
     "PrivyTransactionsService",
     "PrivyClient",
     "PrivyEthereumService",
+    "PrivyEarnService",
+    "PrivyEarnEthereumService",
+    "PrivyEarnEthereumIncentiveService",
     "PrivyRequestOptions",
     "PrivyRequestExpiryOptions",
     "PrivySolanaService",

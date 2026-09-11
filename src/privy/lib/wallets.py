@@ -8,6 +8,7 @@ from typing_extensions import TypeAlias, override
 
 from pyhpke import PyHPKEError
 
+from .earn import PrivyEarnService
 from .tron import PrivyTronService
 from ._hpke import HPKESender, HPKERecipient
 from .solana import PrivySolanaService
@@ -90,6 +91,12 @@ class PrivyWalletsService(WalletsResource):
         self.ethereum = PrivyEthereumService(self)
         self.solana = PrivySolanaService(self)
         self.tron = PrivyTronService(self)
+        self._earn = PrivyEarnService(client, jwt_exchanger, request_expiry_provider)
+
+    @property
+    @override
+    def earn(self) -> PrivyEarnService:
+        return self._earn
 
     @override
     def create(
