@@ -18,6 +18,7 @@ dependencies = [
   "anyio>=3.5.0, <5",
   "distro>=1.7.0, <2",
   "sniffio",
+  "svix>=1.56.0,<1.57",
 ]
 
 requires-python = ">= 3.9"

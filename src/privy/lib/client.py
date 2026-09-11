@@ -37,6 +37,7 @@ class PrivyClient:
         base_url: str | None = None,
         authorization_key_cache_max_capacity: int | None = DEFAULT_AUTHORIZATION_KEY_CACHE_MAX_CAPACITY,
         request_expiry: PrivyRequestExpiryOptions | None = None,
+        webhook_signing_secret: str | None = None,
     ) -> None:
         request_expiry_options = request_expiry or PrivyRequestExpiryOptions()
         self._request_expiry_disabled = request_expiry_options.disabled
@@ -68,7 +69,7 @@ class PrivyClient:
         self.organizations = PrivyOrganizationsService(self._client)
         self.transactions = PrivyTransactionsService(self._client)
         self.wallets = PrivyWalletsService(self._client, self._jwt_exchange, self.get_request_expiry)
-        self.webhooks = PrivyWebhooksService(self._client)
+        self.webhooks = PrivyWebhooksService(self._client, webhook_signing_secret)
 
     def get_request_expiry(self, expiry_ms_from_now: int | None = None) -> int | None:
         """Return an absolute request-expiry timestamp in Unix milliseconds."""

@@ -16,7 +16,7 @@ from .wallets import (
 )
 from .ethereum import PrivyEthereumService
 from .policies import PrivyPoliciesService
-from .webhooks import PrivyWebhooksService
+from .webhooks import WebhookPayload, InvalidWebhookError, PrivyWebhooksService
 from .key_quorums import PrivyKeyQuorumsService
 from .transactions import PrivyTransactionsService
 from .authorization import (
@@ -57,7 +57,9 @@ __all__ = [
     "PrivateKeyWalletImport",
     "WalletImport",
     "PrivyWalletsService",
+    "InvalidWebhookError",
     "PrivyWebhooksService",
+    "WebhookPayload",
     "PrivyUsersService",
     "format_request_for_authorization_signature",
     "generate_authorization_signature",
