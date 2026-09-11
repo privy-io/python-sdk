@@ -3,6 +3,7 @@
 from .apps import PrivyAppsService
 from .earn import PrivyEarnService, PrivyEarnEthereumService, PrivyEarnEthereumIncentiveService
 from .tron import PrivyTronService
+from .swaps import PrivySwapsService
 from .users import PrivyUsersService
 from .client import PrivyClient
 from .solana import PrivySolanaService
@@ -54,6 +55,7 @@ __all__ = [
     "PrivyRequestOptions",
     "PrivyRequestExpiryOptions",
     "PrivySolanaService",
+    "PrivySwapsService",
     "PrivyPoliciesService",
     "PrivyTronService",
     "WalletAPIRequestSignatureInput",

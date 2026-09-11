@@ -11,6 +11,7 @@ from pyhpke import PyHPKEError
 from .earn import PrivyEarnService
 from .tron import PrivyTronService
 from ._hpke import HPKESender, HPKERecipient
+from .swaps import PrivySwapsService
 from .solana import PrivySolanaService
 from .._types import Omit, omit
 from .._client import PrivyAPI
@@ -90,6 +91,7 @@ class PrivyWalletsService(WalletsResource):
         self._request_expiry_provider = request_expiry_provider
         self.ethereum = PrivyEthereumService(self)
         self.solana = PrivySolanaService(self)
+        self.swaps = PrivySwapsService(client, jwt_exchanger)
         self.tron = PrivyTronService(self)
         self._earn = PrivyEarnService(client, jwt_exchanger, request_expiry_provider)
 
