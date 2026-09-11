@@ -47,11 +47,7 @@ class SwapActionResponse(BaseModel):
     """The ID of the wallet involved in the action."""
 
     destination_address: Optional[str] = None
-    """Recipient address on the destination chain.
-
-    Present for cross-chain swaps. May differ from the source wallet address when
-    swapping between chain types (e.g. EVM to Solana).
-    """
+    """Recipient address for the swap."""
 
     destination_caip2: Optional[str] = None
     """Destination chain CAIP-2 identifier. Present for cross-chain swaps."""
