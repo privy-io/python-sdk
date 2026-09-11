@@ -47,7 +47,10 @@ class SwapActionResponse(BaseModel):
     """The ID of the wallet involved in the action."""
 
     destination_address: Optional[str] = None
-    """Recipient address for the swap."""
+    """Recipient address for the swap.
+
+    Present for newly created swaps; may be absent for older swap actions.
+    """
 
     destination_caip2: Optional[str] = None
     """Destination chain CAIP-2 identifier. Present for cross-chain swaps."""

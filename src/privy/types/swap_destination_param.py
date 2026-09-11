@@ -23,5 +23,6 @@ class SwapDestinationParam(TypedDict, total=False):
     destination_address: str
     """Address to receive the output tokens.
 
-    Required for swaps between different address types and for same-asset transfers.
+    Defaults to the swapping wallet address. Required when swapping between chains
+    with different address types (e.g. EVM to Solana) and for same-asset transfers.
     """
