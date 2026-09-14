@@ -538,6 +538,7 @@ from privy.types import (
     CurveSigningChainType,
     CurveType,
     CustodialWallet,
+    CustodialWalletChain,
     CustodialWalletChainType,
     CustodialWalletCreateInput,
     CustodialWalletProvider,

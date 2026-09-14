@@ -213,6 +213,7 @@ from .authorization_key_role import AuthorizationKeyRole as AuthorizationKeyRole
 from .bridge_onramp_provider import BridgeOnrampProvider as BridgeOnrampProvider
 from .bridge_refund_metadata import BridgeRefundMetadata as BridgeRefundMetadata
 from .cross_app_smart_wallet import CrossAppSmartWallet as CrossAppSmartWallet
+from .custodial_wallet_chain import CustodialWalletChain as CustodialWalletChain
 from .deposit_completed_data import DepositCompletedData as DepositCompletedData
 from .deposit_started_source import DepositStartedSource as DepositStartedSource
 from .first_class_chain_type import FirstClassChainType as FirstClassChainType
