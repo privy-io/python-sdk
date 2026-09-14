@@ -720,6 +720,9 @@ from .wallet_automation_reindex_asset_result import (
 from .wallet_automation_reindex_asset_status import (
     WalletAutomationReindexAssetStatus as WalletAutomationReindexAssetStatus,
 )
+from .wallet_automation_reindex_caip_2_param import (
+    WalletAutomationReindexCaip2Param as WalletAutomationReindexCaip2Param,
+)
 from .xrpl_sign_transaction_rpc_input_params import (
     XrplSignTransactionRpcInputParams as XrplSignTransactionRpcInputParams,
 )

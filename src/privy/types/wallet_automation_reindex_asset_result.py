@@ -16,9 +16,9 @@ class WalletAutomationReindexAssetResult(BaseModel):
     """Asset contract address; the native asset uses `native`."""
 
     caip2: WalletAutomationReindexCaip2
-    """EVM CAIP-2 chain identifier (e.g.
-
-    "eip155:4217" for Tempo, "eip155:1" for Ethereum).
+    """
+    An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation
+    reindex.
     """
 
     existing_execution_id: Optional[str] = None

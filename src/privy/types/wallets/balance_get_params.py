@@ -53,6 +53,7 @@ class BalanceGetParams(TypedDict, total=False):
             "megaeth",
             "hyperevm",
             "hypercore",
+            "arc",
             "tempo_testnet",
             "hoodi",
             "sepolia",

@@ -21,6 +21,7 @@ TransactionChainNameInputParam: TypeAlias = Union[
         "polygon",
         "solana",
         "sepolia",
+        "arc",
     ],
     str,
 ]

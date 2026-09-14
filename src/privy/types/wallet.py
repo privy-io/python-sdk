@@ -6,6 +6,7 @@ from .._models import BaseModel
 from .wallet_entity import WalletEntity
 from .wallet_custodian import WalletCustodian
 from .wallet_chain_type import WalletChainType
+from .custodial_wallet_chain import CustodialWalletChain
 from .wallet_additional_signer import WalletAdditionalSigner
 
 __all__ = ["Wallet"]
@@ -58,6 +59,9 @@ class Wallet(BaseModel):
 
     authorization_threshold: Optional[float] = None
     """The number of keys that must sign for an action to be valid."""
+
+    chain: Optional[CustodialWalletChain] = None
+    """The chain of the custodial wallet."""
 
     custody: Optional[WalletCustodian] = None
     """Information about the custodian managing this wallet."""

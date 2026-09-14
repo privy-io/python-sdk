@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import httpx
 
-from ..types import WalletAutomationReindexCaip2, wallet_automation_reindex_params
+from ..types import wallet_automation_reindex_params
 from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from .._utils import maybe_transform, async_maybe_transform
 from .._compat import cached_property
@@ -16,8 +16,8 @@ from .._response import (
     async_to_streamed_response_wrapper,
 )
 from .._base_client import make_request_options
-from ..types.wallet_automation_reindex_caip_2 import WalletAutomationReindexCaip2
 from ..types.wallet_automation_reindex_response import WalletAutomationReindexResponse
+from ..types.wallet_automation_reindex_caip_2_param import WalletAutomationReindexCaip2Param
 
 __all__ = ["WalletAutomationsResource", "AsyncWalletAutomationsResource"]
 
@@ -48,7 +48,7 @@ class WalletAutomationsResource(SyncAPIResource):
         self,
         *,
         asset_address: str,
-        caip2: WalletAutomationReindexCaip2 | Omit = omit,
+        caip2: WalletAutomationReindexCaip2Param | Omit = omit,
         chain: str | Omit = omit,
         deposit_address: str | Omit = omit,
         wallet_id: str | Omit = omit,
@@ -68,8 +68,8 @@ class WalletAutomationsResource(SyncAPIResource):
         Args:
           asset_address: Asset contract address to check; the native asset uses `native`.
 
-          caip2: EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
-              Ethereum).
+          caip2: An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation
+              reindex.
 
           chain: Human-readable chain name to check. Specify exactly one of `caip2` or `chain`.
 
@@ -132,7 +132,7 @@ class AsyncWalletAutomationsResource(AsyncAPIResource):
         self,
         *,
         asset_address: str,
-        caip2: WalletAutomationReindexCaip2 | Omit = omit,
+        caip2: WalletAutomationReindexCaip2Param | Omit = omit,
         chain: str | Omit = omit,
         deposit_address: str | Omit = omit,
         wallet_id: str | Omit = omit,
@@ -152,8 +152,8 @@ class AsyncWalletAutomationsResource(AsyncAPIResource):
         Args:
           asset_address: Asset contract address to check; the native asset uses `native`.
 
-          caip2: EVM CAIP-2 chain identifier (e.g. "eip155:4217" for Tempo, "eip155:1" for
-              Ethereum).
+          caip2: An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation
+              reindex.
 
           chain: Human-readable chain name to check. Specify exactly one of `caip2` or `chain`.
 

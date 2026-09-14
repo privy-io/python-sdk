@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing_extensions import Required, TypedDict
 
-from .wallet_automation_reindex_caip_2 import WalletAutomationReindexCaip2
+from .wallet_automation_reindex_caip_2_param import WalletAutomationReindexCaip2Param
 
 __all__ = ["WalletAutomationReindexParams"]
 
@@ -13,10 +13,10 @@ class WalletAutomationReindexParams(TypedDict, total=False):
     asset_address: Required[str]
     """Asset contract address to check; the native asset uses `native`."""
 
-    caip2: WalletAutomationReindexCaip2
-    """EVM CAIP-2 chain identifier (e.g.
-
-    "eip155:4217" for Tempo, "eip155:1" for Ethereum).
+    caip2: WalletAutomationReindexCaip2Param
+    """
+    An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation
+    reindex.
     """
 
     chain: str
