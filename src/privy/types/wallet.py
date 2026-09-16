@@ -8,6 +8,7 @@ from .wallet_custodian import WalletCustodian
 from .wallet_chain_type import WalletChainType
 from .custodial_wallet_chain import CustodialWalletChain
 from .wallet_additional_signer import WalletAdditionalSigner
+from .attached_wallet_automation import AttachedWalletAutomation
 
 __all__ = ["Wallet"]
 
@@ -59,6 +60,9 @@ class Wallet(BaseModel):
 
     authorization_threshold: Optional[float] = None
     """The number of keys that must sign for an action to be valid."""
+
+    automations: Optional[List[AttachedWalletAutomation]] = None
+    """Automations attached to the wallet, including disabled ones."""
 
     chain: Optional[CustodialWalletChain] = None
     """The chain of the custodial wallet."""

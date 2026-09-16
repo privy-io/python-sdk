@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from .bps import Bps as Bps
 from .gas import Gas as Gas
 from .hex import Hex as Hex
 from .user import User as User
@@ -315,6 +316,7 @@ from .wallet_funds_erc_20_asset import WalletFundsErc20Asset as WalletFundsErc20
 from .wallet_funds_trc_20_asset import WalletFundsTrc20Asset as WalletFundsTrc20Asset
 from .wallet_init_import_params import WalletInitImportParams as WalletInitImportParams
 from .wallet_invite_input_param import WalletInviteInputParam as WalletInviteInputParam
+from .attached_wallet_automation import AttachedWalletAutomation as AttachedWalletAutomation
 from .crypto_deposit_asset_param import CryptoDepositAssetParam as CryptoDepositAssetParam
 from .external_oauth_provider_id import ExternalOAuthProviderID as ExternalOAuthProviderID
 from .key_quorum_intent_response import KeyQuorumIntentResponse as KeyQuorumIntentResponse
@@ -377,6 +379,7 @@ from .wallet_submit_import_params import WalletSubmitImportParams as WalletSubmi
 from .additional_signer_item_input import AdditionalSignerItemInput as AdditionalSignerItemInput
 from .bridge_fiat_deposit_metadata import BridgeFiatDepositMetadata as BridgeFiatDepositMetadata
 from .client_session_update_action import ClientSessionUpdateAction as ClientSessionUpdateAction
+from .crypto_deposit_account_chain import CryptoDepositAccountChain as CryptoDepositAccountChain
 from .crypto_deposit_address_route import CryptoDepositAddressRoute as CryptoDepositAddressRoute
 from .custom_token_transfer_source import CustomTokenTransferSource as CustomTokenTransferSource
 from .embedded_wallet_chain_config import EmbeddedWalletChainConfig as EmbeddedWalletChainConfig
@@ -406,6 +409,7 @@ from .action_request_body_condition import ActionRequestBodyCondition as ActionR
 from .additional_signer_input_param import AdditionalSignerInputParam as AdditionalSignerInputParam
 from .blockchain_transaction_status import BlockchainTransactionStatus as BlockchainTransactionStatus
 from .bridge_fiat_transfer_metadata import BridgeFiatTransferMetadata as BridgeFiatTransferMetadata
+from .crypto_deposit_account_caip_2 import CryptoDepositAccountCaip2 as CryptoDepositAccountCaip2
 from .deposit_completed_destination import DepositCompletedDestination as DepositCompletedDestination
 from .embedded_wallet_config_schema import EmbeddedWalletConfigSchema as EmbeddedWalletConfigSchema
 from .ethereum_send_calls_rpc_input import EthereumSendCallsRpcInput as EthereumSendCallsRpcInput
@@ -567,6 +571,7 @@ from .xrpl_sign_transaction_rpc_response import XrplSignTransactionRpcResponse a
 from .action_request_body_condition_param import ActionRequestBodyConditionParam as ActionRequestBodyConditionParam
 from .aptos_sign_transaction_rpc_response import AptosSignTransactionRpcResponse as AptosSignTransactionRpcResponse
 from .bridge_static_memo_deposit_metadata import BridgeStaticMemoDepositMetadata as BridgeStaticMemoDepositMetadata
+from .crypto_deposit_account_source_chain import CryptoDepositAccountSourceChain as CryptoDepositAccountSourceChain
 from .crypto_deposit_asset_filter_exclude import CryptoDepositAssetFilterExclude as CryptoDepositAssetFilterExclude
 from .crypto_deposit_asset_filter_include import CryptoDepositAssetFilterInclude as CryptoDepositAssetFilterInclude
 from .ethereum_personal_sign_rpc_response import EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse
@@ -626,6 +631,9 @@ from .linked_account_custom_jwt_input_param import LinkedAccountCustomJwtInputPa
 from .linked_account_solana_embedded_wallet import (
     LinkedAccountSolanaEmbeddedWallet as LinkedAccountSolanaEmbeddedWallet,
 )
+from .list_crypto_deposit_accounts_response import (
+    ListCryptoDepositAccountsResponse as ListCryptoDepositAccountsResponse,
+)
 from .near_signed_transaction_borsh_base_64 import NearSignedTransactionBorshBase64 as NearSignedTransactionBorshBase64
 from .output_with_previous_transaction_data import (
     OutputWithPreviousTransactionData as OutputWithPreviousTransactionData,
@@ -661,6 +669,12 @@ from .aptos_sign_transaction_rpc_input_param import (
 )
 from .create_crypto_deposit_account_response import (
     CreateCryptoDepositAccountResponse as CreateCryptoDepositAccountResponse,
+)
+from .crypto_deposit_account_config_response import (
+    CryptoDepositAccountConfigResponse as CryptoDepositAccountConfigResponse,
+)
+from .crypto_deposit_account_source_currency import (
+    CryptoDepositAccountSourceCurrency as CryptoDepositAccountSourceCurrency,
 )
 from .encrypted_wallet_authenticate_response import (
     EncryptedWalletAuthenticateResponse as EncryptedWalletAuthenticateResponse,

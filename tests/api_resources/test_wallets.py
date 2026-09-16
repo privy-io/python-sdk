@@ -2958,7 +2958,7 @@ class TestWallets:
             destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
             source={
                 "asset": "usdc",
-                "chain": "base",
+                "chain": "tempo",
             },
         )
         assert_matches_type(TransferActionResponse, wallet, path=["response"])
@@ -2970,12 +2970,12 @@ class TestWallets:
             wallet_id="wallet_id",
             destination={
                 "address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2",
-                "asset": "usdc",
-                "chain": "base",
+                "asset": "ousd",
+                "chain": "tempo",
             },
             source={
                 "asset": "usdc",
-                "chain": "base",
+                "chain": "tempo",
                 "amount": "10.5",
             },
             amount="amount",
@@ -3001,7 +3001,7 @@ class TestWallets:
             destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
             source={
                 "asset": "usdc",
-                "chain": "base",
+                "chain": "tempo",
             },
         )
 
@@ -3018,7 +3018,7 @@ class TestWallets:
             destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
             source={
                 "asset": "usdc",
-                "chain": "base",
+                "chain": "tempo",
             },
         ) as response:
             assert not response.is_closed
@@ -3038,7 +3038,7 @@ class TestWallets:
                 destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
                 source={
                     "asset": "usdc",
-                    "chain": "base",
+                    "chain": "tempo",
                 },
             )
 
@@ -6363,7 +6363,7 @@ class TestAsyncWallets:
             destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
             source={
                 "asset": "usdc",
-                "chain": "base",
+                "chain": "tempo",
             },
         )
         assert_matches_type(TransferActionResponse, wallet, path=["response"])
@@ -6375,12 +6375,12 @@ class TestAsyncWallets:
             wallet_id="wallet_id",
             destination={
                 "address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2",
-                "asset": "usdc",
-                "chain": "base",
+                "asset": "ousd",
+                "chain": "tempo",
             },
             source={
                 "asset": "usdc",
-                "chain": "base",
+                "chain": "tempo",
                 "amount": "10.5",
             },
             amount="amount",
@@ -6406,7 +6406,7 @@ class TestAsyncWallets:
             destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
             source={
                 "asset": "usdc",
-                "chain": "base",
+                "chain": "tempo",
             },
         )
 
@@ -6423,7 +6423,7 @@ class TestAsyncWallets:
             destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
             source={
                 "asset": "usdc",
-                "chain": "base",
+                "chain": "tempo",
             },
         ) as response:
             assert not response.is_closed
@@ -6443,7 +6443,7 @@ class TestAsyncWallets:
                 destination={"address": "0xB00F0759DbeeF5E543Cc3E3B07A6442F5f3928a2"},
                 source={
                     "asset": "usdc",
-                    "chain": "base",
+                    "chain": "tempo",
                 },
             )
 

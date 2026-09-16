@@ -24,11 +24,14 @@ from ....._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ....._base_client import make_request_options
-from .....types.wallets.deposit_accounts import crypto_create_params
+from .....pagination import SyncCursor, AsyncCursor
+from ....._base_client import AsyncPaginator, make_request_options
+from .....types.wallets.deposit_accounts import crypto_list_params, crypto_create_params
 from .....types.crypto_deposit_asset_param import CryptoDepositAssetParam
+from .....types.crypto_deposit_address_route import CryptoDepositAddressRoute
 from .....types.crypto_deposit_asset_filter_param import CryptoDepositAssetFilterParam
 from .....types.create_crypto_deposit_account_response import CreateCryptoDepositAccountResponse
+from .....types.crypto_deposit_account_config_response import CryptoDepositAccountConfigResponse
 
 __all__ = ["CryptoResource", "AsyncCryptoResource"]
 
@@ -59,6 +62,56 @@ class CryptoResource(SyncAPIResource):
         For more information, see https://www.github.com/privy-io/python-sdk#with_streaming_response
         """
         return CryptoResourceWithStreamingResponse(self)
+
+    def list(
+        self,
+        wallet_id: str,
+        *,
+        cursor: str | Omit = omit,
+        limit: int | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SyncCursor[CryptoDepositAddressRoute]:
+        """Returns active crypto deposit accounts that sweep into the path wallet.
+
+        Requires
+        an app secret or a JWT for a wallet signer, plus `privy-app-id`.
+
+        Args:
+          wallet_id: ID of the wallet.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not wallet_id:
+            raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
+        return self._get_api_list(
+            path_template("/v1/wallets/{wallet_id}/deposit_accounts/crypto", wallet_id=wallet_id),
+            page=SyncCursor[CryptoDepositAddressRoute],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "cursor": cursor,
+                        "limit": limit,
+                    },
+                    crypto_list_params.CryptoListParams,
+                ),
+            ),
+            model=CryptoDepositAddressRoute,
+        )
 
     @overload
     def _create(
@@ -134,7 +187,7 @@ class CryptoResource(SyncAPIResource):
         Args:
           wallet_id: ID of the wallet.
 
-          destination: An asset on a chain. Uses a human-readable alias (usdc, base) when one is on
+          destination: An asset on a chain. Uses a human-readable alias (usdc, tempo) when one is on
               file, otherwise the raw asset address and CAIP-2.
 
           source: Which assets a deposit address accepts. Asset and chain use human-readable
@@ -207,6 +260,28 @@ class CryptoResource(SyncAPIResource):
             cast_to=CreateCryptoDepositAccountResponse,
         )
 
+    def get_config(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CryptoDepositAccountConfigResponse:
+        """
+        Returns the tokens and chains a user can send from when creating a crypto
+        deposit account.
+        """
+        return self._get(
+            "/v1/deposit_accounts/crypto/config",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=CryptoDepositAccountConfigResponse,
+        )
+
 
 class AsyncCryptoResource(AsyncAPIResource):
     """Operations related to wallets"""
@@ -234,6 +309,56 @@ class AsyncCryptoResource(AsyncAPIResource):
         For more information, see https://www.github.com/privy-io/python-sdk#with_streaming_response
         """
         return AsyncCryptoResourceWithStreamingResponse(self)
+
+    def list(
+        self,
+        wallet_id: str,
+        *,
+        cursor: str | Omit = omit,
+        limit: int | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AsyncPaginator[CryptoDepositAddressRoute, AsyncCursor[CryptoDepositAddressRoute]]:
+        """Returns active crypto deposit accounts that sweep into the path wallet.
+
+        Requires
+        an app secret or a JWT for a wallet signer, plus `privy-app-id`.
+
+        Args:
+          wallet_id: ID of the wallet.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not wallet_id:
+            raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
+        return self._get_api_list(
+            path_template("/v1/wallets/{wallet_id}/deposit_accounts/crypto", wallet_id=wallet_id),
+            page=AsyncCursor[CryptoDepositAddressRoute],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "cursor": cursor,
+                        "limit": limit,
+                    },
+                    crypto_list_params.CryptoListParams,
+                ),
+            ),
+            model=CryptoDepositAddressRoute,
+        )
 
     @overload
     async def _create(
@@ -309,7 +434,7 @@ class AsyncCryptoResource(AsyncAPIResource):
         Args:
           wallet_id: ID of the wallet.
 
-          destination: An asset on a chain. Uses a human-readable alias (usdc, base) when one is on
+          destination: An asset on a chain. Uses a human-readable alias (usdc, tempo) when one is on
               file, otherwise the raw asset address and CAIP-2.
 
           source: Which assets a deposit address accepts. Asset and chain use human-readable
@@ -382,13 +507,41 @@ class AsyncCryptoResource(AsyncAPIResource):
             cast_to=CreateCryptoDepositAccountResponse,
         )
 
+    async def get_config(
+        self,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CryptoDepositAccountConfigResponse:
+        """
+        Returns the tokens and chains a user can send from when creating a crypto
+        deposit account.
+        """
+        return await self._get(
+            "/v1/deposit_accounts/crypto/config",
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=CryptoDepositAccountConfigResponse,
+        )
+
 
 class CryptoResourceWithRawResponse:
     def __init__(self, crypto: CryptoResource) -> None:
         self._crypto = crypto
 
+        self.list = to_raw_response_wrapper(
+            crypto.list,
+        )
         self._create = to_raw_response_wrapper(
             crypto._create,
+        )
+        self.get_config = to_raw_response_wrapper(
+            crypto.get_config,
         )
 
     @cached_property
@@ -401,8 +554,14 @@ class AsyncCryptoResourceWithRawResponse:
     def __init__(self, crypto: AsyncCryptoResource) -> None:
         self._crypto = crypto
 
+        self.list = async_to_raw_response_wrapper(
+            crypto.list,
+        )
         self._create = async_to_raw_response_wrapper(
             crypto._create,
+        )
+        self.get_config = async_to_raw_response_wrapper(
+            crypto.get_config,
         )
 
     @cached_property
@@ -415,8 +574,14 @@ class CryptoResourceWithStreamingResponse:
     def __init__(self, crypto: CryptoResource) -> None:
         self._crypto = crypto
 
+        self.list = to_streamed_response_wrapper(
+            crypto.list,
+        )
         self._create = to_streamed_response_wrapper(
             crypto._create,
+        )
+        self.get_config = to_streamed_response_wrapper(
+            crypto.get_config,
         )
 
     @cached_property
@@ -429,8 +594,14 @@ class AsyncCryptoResourceWithStreamingResponse:
     def __init__(self, crypto: AsyncCryptoResource) -> None:
         self._crypto = crypto
 
+        self.list = async_to_streamed_response_wrapper(
+            crypto.list,
+        )
         self._create = async_to_streamed_response_wrapper(
             crypto._create,
+        )
+        self.get_config = async_to_streamed_response_wrapper(
+            crypto.get_config,
         )
 
     @cached_property

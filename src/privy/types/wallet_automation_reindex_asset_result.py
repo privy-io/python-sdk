@@ -31,7 +31,7 @@ class WalletAutomationReindexAssetResult(BaseModel):
     """On-chain balance in base units.
 
     Populated when `status` is `triggered` or `skipped_zero_balance`; `null`
-    otherwise. For example, 1 USDC is `1000000`.
+    otherwise. For example, 1 OUSD is `1000000`.
     """
 
     status: WalletAutomationReindexAssetStatus

@@ -522,6 +522,7 @@ from privy.types import (
     AptosSignTransactionRpcResponseData,
     AptosSignedTransactionBcsHex,
     AttachWalletAutomationRequestBody,
+    AttachedWalletAutomation,
     AuthorizationKeyDashboardResponse,
     AuthorizationKeyResponse,
     AuthorizationKeyRole,
@@ -529,6 +530,11 @@ from privy.types import (
     CreateCryptoDepositAccountResponse,
     CreateCryptoDepositAccountWithConfigRequestBody,
     CreateCryptoDepositAccountWithRouteRequestBody,
+    CryptoDepositAccountCaip2,
+    CryptoDepositAccountChain,
+    CryptoDepositAccountConfigResponse,
+    CryptoDepositAccountSourceChain,
+    CryptoDepositAccountSourceCurrency,
     CryptoDepositAddressRoute,
     CryptoDepositAsset,
     CryptoDepositAssetFilter,
@@ -607,6 +613,7 @@ from privy.types import (
     HpkeImportConfig,
     Hex,
     IntentBinding,
+    ListCryptoDepositAccountsResponse,
     NamedTokenTransferSource,
     NearRpcRequestBody,
     NearRpcResponse,
@@ -900,7 +907,9 @@ Methods:
 
 Methods:
 
+- <code title="get /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.deposit_accounts.crypto.<a href="./src/privy/resources/wallets/deposit_accounts/crypto/crypto.py">list</a>(wallet_id, \*\*<a href="src/privy/types/wallets/deposit_accounts/crypto_list_params.py">params</a>) -> <a href="./src/privy/types/crypto_deposit_address_route.py">SyncCursor[CryptoDepositAddressRoute]</a></code>
 - <code title="post /v1/wallets/{wallet_id}/deposit_accounts/crypto">client.wallets.deposit_accounts.crypto.<a href="./src/privy/resources/wallets/deposit_accounts/crypto/crypto.py">\_create</a>(wallet_id, \*\*<a href="src/privy/types/wallets/deposit_accounts/crypto_create_params.py">params</a>) -> <a href="./src/privy/types/create_crypto_deposit_account_response.py">CreateCryptoDepositAccountResponse</a></code>
+- <code title="get /v1/deposit_accounts/crypto/config">client.wallets.deposit_accounts.crypto.<a href="./src/privy/resources/wallets/deposit_accounts/crypto/crypto.py">get_config</a>() -> <a href="./src/privy/types/crypto_deposit_account_config_response.py">CryptoDepositAccountConfigResponse</a></code>
 
 #### Orders
 
@@ -1355,6 +1364,7 @@ Types:
 from privy.types import (
     BitcoinAddress,
     BitcoinCaip2,
+    Bps,
     CurrencyAmount,
     Environment,
     EvmAddress,

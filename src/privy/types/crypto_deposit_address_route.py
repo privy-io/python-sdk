@@ -15,7 +15,7 @@ class CryptoDepositAddressRoute(BaseModel):
     destination: CryptoDepositAsset
     """An asset on a chain.
 
-    Uses a human-readable alias (usdc, base) when one is on file, otherwise the raw
+    Uses a human-readable alias (usdc, tempo) when one is on file, otherwise the raw
     asset address and CAIP-2.
     """
 

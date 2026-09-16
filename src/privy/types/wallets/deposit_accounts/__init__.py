@@ -3,5 +3,6 @@
 from __future__ import annotations
 
 from .fiat_list_params import FiatListParams as FiatListParams
+from .crypto_list_params import CryptoListParams as CryptoListParams
 from .fiat_create_params import FiatCreateParams as FiatCreateParams
 from .crypto_create_params import CryptoCreateParams as CryptoCreateParams
