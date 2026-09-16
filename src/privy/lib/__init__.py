@@ -1,6 +1,16 @@
 """Hand-written public API layered on top of the generated client."""
 
 from .apps import PrivyAppsService
+from .auth import (
+    PrivyAppJWKS,
+    PrivyAuthService,
+    InvalidAuthTokenError,
+    InvalidIdentityTokenError,
+    VerifyAccessTokenResponse,
+    verify_access_token,
+    create_privy_app_jwks,
+    verify_identity_token,
+)
 from .earn import PrivyEarnService, PrivyEarnEthereumService, PrivyEarnEthereumIncentiveService
 from .tron import PrivyTronService
 from .swaps import PrivySwapsService
@@ -40,6 +50,10 @@ __all__ = [
     "AuthorizationContext",
     "ExportPrivateKeyResponse",
     "ExportSeedPhraseResponse",
+    "InvalidAuthTokenError",
+    "InvalidIdentityTokenError",
+    "PrivyAppJWKS",
+    "PrivyAuthService",
     "PrivyAppsService",
     "PrivyKeyQuorumsService",
     "PrivyIntentsService",
@@ -58,6 +72,7 @@ __all__ = [
     "PrivySwapsService",
     "PrivyPoliciesService",
     "PrivyTronService",
+    "VerifyAccessTokenResponse",
     "WalletAPIRequestSignatureInput",
     "HDWalletImport",
     "PrivateKeyWalletImport",
@@ -67,9 +82,12 @@ __all__ = [
     "PrivyWebhooksService",
     "WebhookPayload",
     "PrivyUsersService",
+    "create_privy_app_jwks",
     "format_request_for_authorization_signature",
     "generate_authorization_signature",
     "generate_authorization_signatures",
     "generate_p256_key_pair",
     "prepare_request",
+    "verify_access_token",
+    "verify_identity_token",
 ]
