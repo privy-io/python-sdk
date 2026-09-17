@@ -4,4 +4,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["WalletAutomationExecutionStatus"]
 
-WalletAutomationExecutionStatus: TypeAlias = Literal["pending", "triggered", "completed", "failed", "skipped"]
+WalletAutomationExecutionStatus: TypeAlias = Literal["pending", "submitted", "completed", "failed", "skipped"]

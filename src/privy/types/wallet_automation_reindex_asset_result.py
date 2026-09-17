@@ -30,13 +30,14 @@ class WalletAutomationReindexAssetResult(BaseModel):
     raw_balance: Optional[str] = None
     """On-chain balance in base units.
 
-    Populated when `status` is `triggered` or `skipped_zero_balance`; `null`
+    Populated when `status` is `submitted` or `skipped_zero_balance`; `null`
     otherwise. For example, 1 OUSD is `1000000`.
     """
 
     status: WalletAutomationReindexAssetStatus
     """Outcome of checking a single asset during a wallet automation reindex.
 
-    One of `triggered`, `skipped_zero_balance`, `skipped_no_match`,
-    `skipped_existing_execution`, or `failed`.
+    One of `submitted`, `skipped_zero_balance`, `skipped_no_match`,
+    `skipped_existing_execution`, or `failed`. `submitted` confirms that an
+    execution was enqueued.
     """

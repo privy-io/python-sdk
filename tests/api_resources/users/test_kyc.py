@@ -8,7 +8,11 @@ from typing import Any, cast
 import pytest
 
 from privy import PrivyAPI, AsyncPrivyAPI
-from privy.types import KyxTosResponse, KYCStatusResponse, KYCStatusListResponse
+from privy.types import (
+    KyxTosResponse,
+    KYCStatusResponse,
+    KYCStatusListResponse,
+)
 from tests.utils import assert_matches_type
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -176,6 +180,94 @@ class TestKYC:
                 provider="bridge",
             )
 
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_submit(self, client: PrivyAPI) -> None:
+        kyc = client.users.kyc.submit(
+            user_id="user_id",
+            data={},
+            provider="bridge",
+        )
+        assert_matches_type(KYCStatusResponse, kyc, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_submit_with_all_params(self, client: PrivyAPI) -> None:
+        kyc = client.users.kyc.submit(
+            user_id="user_id",
+            data={
+                "date_of_birth": "7321-69-10",
+                "email": "dev@stainless.com",
+                "first_name": "x",
+                "identifying_information": [
+                    {
+                        "issuing_country": "xxx",
+                        "type": "type",
+                        "description": "description",
+                        "expiration": "expiration",
+                        "image_back": "image_back",
+                        "image_front": "image_front",
+                        "number": "number",
+                    }
+                ],
+                "last_name": "x",
+                "phone": "phone",
+                "residential_address": {
+                    "city": "x",
+                    "country": "xxx",
+                    "street_line_1": "xxxx",
+                    "postal_code": "x",
+                    "street_line_2": "x",
+                    "subdivision": "x",
+                },
+            },
+            provider="bridge",
+            client_agreement_id="client_agreement_id",
+            endorsements=["sepa"],
+            environment="production",
+        )
+        assert_matches_type(KYCStatusResponse, kyc, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_submit(self, client: PrivyAPI) -> None:
+        response = client.users.kyc.with_raw_response.submit(
+            user_id="user_id",
+            data={},
+            provider="bridge",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        kyc = response.parse()
+        assert_matches_type(KYCStatusResponse, kyc, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_submit(self, client: PrivyAPI) -> None:
+        with client.users.kyc.with_streaming_response.submit(
+            user_id="user_id",
+            data={},
+            provider="bridge",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            kyc = response.parse()
+            assert_matches_type(KYCStatusResponse, kyc, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_submit(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
+            client.users.kyc.with_raw_response.submit(
+                user_id="",
+                data={},
+                provider="bridge",
+            )
+
 
 class TestAsyncKYC:
     parametrize = pytest.mark.parametrize(
@@ -338,5 +430,93 @@ class TestAsyncKYC:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
             await async_client.users.kyc.with_raw_response.initiate_tos(
                 user_id="",
+                provider="bridge",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_submit(self, async_client: AsyncPrivyAPI) -> None:
+        kyc = await async_client.users.kyc.submit(
+            user_id="user_id",
+            data={},
+            provider="bridge",
+        )
+        assert_matches_type(KYCStatusResponse, kyc, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_submit_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        kyc = await async_client.users.kyc.submit(
+            user_id="user_id",
+            data={
+                "date_of_birth": "7321-69-10",
+                "email": "dev@stainless.com",
+                "first_name": "x",
+                "identifying_information": [
+                    {
+                        "issuing_country": "xxx",
+                        "type": "type",
+                        "description": "description",
+                        "expiration": "expiration",
+                        "image_back": "image_back",
+                        "image_front": "image_front",
+                        "number": "number",
+                    }
+                ],
+                "last_name": "x",
+                "phone": "phone",
+                "residential_address": {
+                    "city": "x",
+                    "country": "xxx",
+                    "street_line_1": "xxxx",
+                    "postal_code": "x",
+                    "street_line_2": "x",
+                    "subdivision": "x",
+                },
+            },
+            provider="bridge",
+            client_agreement_id="client_agreement_id",
+            endorsements=["sepa"],
+            environment="production",
+        )
+        assert_matches_type(KYCStatusResponse, kyc, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_submit(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.users.kyc.with_raw_response.submit(
+            user_id="user_id",
+            data={},
+            provider="bridge",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        kyc = await response.parse()
+        assert_matches_type(KYCStatusResponse, kyc, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_submit(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.users.kyc.with_streaming_response.submit(
+            user_id="user_id",
+            data={},
+            provider="bridge",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            kyc = await response.parse()
+            assert_matches_type(KYCStatusResponse, kyc, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_submit(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
+            await async_client.users.kyc.with_raw_response.submit(
+                user_id="",
+                data={},
                 provider="bridge",
             )

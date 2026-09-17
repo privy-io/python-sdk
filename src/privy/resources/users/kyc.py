@@ -15,13 +15,14 @@ from ..._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from ...types.users import kyc_initiate_tos_params, kyc_initiate_links_params
+from ...types.users import kyc_submit_params, kyc_initiate_tos_params, kyc_initiate_links_params
 from ..._base_client import make_request_options
 from ...types.kyx_provider import KyxProvider
 from ...types.kyx_environment import KyxEnvironment
 from ...types.kyx_tos_response import KyxTosResponse
 from ...types.kyc_status_response import KYCStatusResponse
 from ...types.kyx_endorsement_name import KyxEndorsementName
+from ...types.kyc_submit_data_param import KYCSubmitDataParam
 from ...types.kyc_status_list_response import KYCStatusListResponse
 
 __all__ = ["KYCResource", "AsyncKYCResource"]
@@ -201,6 +202,72 @@ class KYCResource(SyncAPIResource):
             cast_to=KyxTosResponse,
         )
 
+    def submit(
+        self,
+        user_id: str,
+        *,
+        data: KYCSubmitDataParam,
+        provider: KyxProvider,
+        client_agreement_id: str | Omit = omit,
+        endorsements: SequenceNotStr[KyxEndorsementName] | Omit = omit,
+        environment: KyxEnvironment | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> KYCStatusResponse:
+        """Submits KYC verification data for the user.
+
+        Safe to call more than once: the
+        first call creates the provider customer and later calls update it, so a partial
+        submission can be completed incrementally. The first submission must carry
+        enough to begin verification — name, date of birth, residential address and at
+        least one identifying document; later calls may send only the fields that
+        change.
+
+        Args:
+          user_id: The ID of the user.
+
+          data: KYC verification data for headless submission.
+
+          provider: KYC/KYB provider identifier.
+
+          client_agreement_id: Client-side agreement ID for ToS acceptance.
+
+          endorsements: Endorsements to request during KYC.
+
+          environment: Provider environment (production or sandbox).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not user_id:
+            raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
+        return self._post(
+            path_template("/v1/users/{user_id}/kyc/submit", user_id=user_id),
+            body=maybe_transform(
+                {
+                    "data": data,
+                    "provider": provider,
+                    "client_agreement_id": client_agreement_id,
+                    "endorsements": endorsements,
+                    "environment": environment,
+                },
+                kyc_submit_params.KYCSubmitParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=KYCStatusResponse,
+        )
+
 
 class AsyncKYCResource(AsyncAPIResource):
     """Operations related to fiat onramping and offramping"""
@@ -376,6 +443,72 @@ class AsyncKYCResource(AsyncAPIResource):
             cast_to=KyxTosResponse,
         )
 
+    async def submit(
+        self,
+        user_id: str,
+        *,
+        data: KYCSubmitDataParam,
+        provider: KyxProvider,
+        client_agreement_id: str | Omit = omit,
+        endorsements: SequenceNotStr[KyxEndorsementName] | Omit = omit,
+        environment: KyxEnvironment | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> KYCStatusResponse:
+        """Submits KYC verification data for the user.
+
+        Safe to call more than once: the
+        first call creates the provider customer and later calls update it, so a partial
+        submission can be completed incrementally. The first submission must carry
+        enough to begin verification — name, date of birth, residential address and at
+        least one identifying document; later calls may send only the fields that
+        change.
+
+        Args:
+          user_id: The ID of the user.
+
+          data: KYC verification data for headless submission.
+
+          provider: KYC/KYB provider identifier.
+
+          client_agreement_id: Client-side agreement ID for ToS acceptance.
+
+          endorsements: Endorsements to request during KYC.
+
+          environment: Provider environment (production or sandbox).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not user_id:
+            raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
+        return await self._post(
+            path_template("/v1/users/{user_id}/kyc/submit", user_id=user_id),
+            body=await async_maybe_transform(
+                {
+                    "data": data,
+                    "provider": provider,
+                    "client_agreement_id": client_agreement_id,
+                    "endorsements": endorsements,
+                    "environment": environment,
+                },
+                kyc_submit_params.KYCSubmitParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=KYCStatusResponse,
+        )
+
 
 class KYCResourceWithRawResponse:
     def __init__(self, kyc: KYCResource) -> None:
@@ -389,6 +522,9 @@ class KYCResourceWithRawResponse:
         )
         self.initiate_tos = to_raw_response_wrapper(
             kyc.initiate_tos,
+        )
+        self.submit = to_raw_response_wrapper(
+            kyc.submit,
         )
 
 
@@ -405,6 +541,9 @@ class AsyncKYCResourceWithRawResponse:
         self.initiate_tos = async_to_raw_response_wrapper(
             kyc.initiate_tos,
         )
+        self.submit = async_to_raw_response_wrapper(
+            kyc.submit,
+        )
 
 
 class KYCResourceWithStreamingResponse:
@@ -420,6 +559,9 @@ class KYCResourceWithStreamingResponse:
         self.initiate_tos = to_streamed_response_wrapper(
             kyc.initiate_tos,
         )
+        self.submit = to_streamed_response_wrapper(
+            kyc.submit,
+        )
 
 
 class AsyncKYCResourceWithStreamingResponse:
@@ -434,4 +576,7 @@ class AsyncKYCResourceWithStreamingResponse:
         )
         self.initiate_tos = async_to_streamed_response_wrapper(
             kyc.initiate_tos,
+        )
+        self.submit = async_to_streamed_response_wrapper(
+            kyc.submit,
         )

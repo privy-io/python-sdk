@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from .kyb_submit_params import KYBSubmitParams as KYBSubmitParams
 from .kyb_initiate_tos_params import KYBInitiateTosParams as KYBInitiateTosParams
 from .kyb_initiate_links_params import KYBInitiateLinksParams as KYBInitiateLinksParams
 from .external_fiat_account_list_params import ExternalFiatAccountListParams as ExternalFiatAccountListParams

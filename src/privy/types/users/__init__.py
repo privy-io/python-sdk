@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from .kyc_submit_params import KYCSubmitParams as KYCSubmitParams
 from .kyc_initiate_tos_params import KYCInitiateTosParams as KYCInitiateTosParams
 from .kyc_initiate_links_params import KYCInitiateLinksParams as KYCInitiateLinksParams
 from .external_fiat_account_list_params import ExternalFiatAccountListParams as ExternalFiatAccountListParams

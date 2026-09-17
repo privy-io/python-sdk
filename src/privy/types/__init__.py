@@ -107,6 +107,7 @@ from .authorization_key import AuthorizationKey as AuthorizationKey
 from .fee_configuration import FeeConfiguration as FeeConfiguration
 from .fiat_payment_rail import FiatPaymentRail as FiatPaymentRail
 from .intent_rpc_params import IntentRpcParams as IntentRpcParams
+from .kyb_business_type import KYBBusinessType as KYBBusinessType
 from .linked_mfa_method import LinkedMfaMethod as LinkedMfaMethod
 from .onramp_kyc_status import OnrampKYCStatus as OnrampKYCStatus
 from .owner_input_param import OwnerInputParam as OwnerInputParam
@@ -152,6 +153,8 @@ from .extended_chain_type import ExtendedChainType as ExtendedChainType
 from .funding_method_enum import FundingMethodEnum as FundingMethodEnum
 from .hd_init_input_param import HDInitInputParam as HDInitInputParam
 from .hpke_aead_algorithm import HpkeAeadAlgorithm as HpkeAeadAlgorithm
+from .kyb_account_purpose import KYBAccountPurpose as KYBAccountPurpose
+from .kyb_source_of_funds import KYBSourceOfFunds as KYBSourceOfFunds
 from .kyb_status_response import KYBStatusResponse as KYBStatusResponse
 from .kyc_status_response import KYCStatusResponse as KYCStatusResponse
 from .kyx_provider_status import KyxProviderStatus as KyxProviderStatus
@@ -178,6 +181,7 @@ from .evm_checksum_address import EvmChecksumAddress as EvmChecksumAddress
 from .fiat_deposit_account import FiatDepositAccount as FiatDepositAccount
 from .fiat_onramp_provider import FiatOnrampProvider as FiatOnrampProvider
 from .intent_authorization import IntentAuthorization as IntentAuthorization
+from .kyb_document_purpose import KYBDocumentPurpose as KYBDocumentPurpose
 from .kyx_endorsement_name import KyxEndorsementName as KyxEndorsementName
 from .linked_account_email import LinkedAccountEmail as LinkedAccountEmail
 from .linked_account_phone import LinkedAccountPhone as LinkedAccountPhone
@@ -198,6 +202,8 @@ from .custom_metadata_param import CustomMetadataParam as CustomMetadataParam
 from .external_fiat_account import ExternalFiatAccount as ExternalFiatAccount
 from .fiat_deposit_currency import FiatDepositCurrency as FiatDepositCurrency
 from .hd_submit_input_param import HDSubmitInputParam as HDSubmitInputParam
+from .kyb_submit_data_param import KYBSubmitDataParam as KYBSubmitDataParam
+from .kyc_submit_data_param import KYCSubmitDataParam as KYCSubmitDataParam
 from .kyx_capability_status import KyxCapabilityStatus as KyxCapabilityStatus
 from .kyx_tos_status_detail import KyxTosStatusDetail as KyxTosStatusDetail
 from .linked_account_solana import LinkedAccountSolana as LinkedAccountSolana
@@ -219,6 +225,7 @@ from .deposit_completed_data import DepositCompletedData as DepositCompletedData
 from .deposit_started_source import DepositStartedSource as DepositStartedSource
 from .first_class_chain_type import FirstClassChainType as FirstClassChainType
 from .intent_transfer_params import IntentTransferParams as IntentTransferParams
+from .kyb_high_risk_activity import KYBHighRiskActivity as KYBHighRiskActivity
 from .kyx_endorsement_status import KyxEndorsementStatus as KyxEndorsementStatus
 from .linked_account_passkey import LinkedAccountPasskey as LinkedAccountPasskey
 from .moonpay_payment_method import MoonpayPaymentMethod as MoonpayPaymentMethod
@@ -276,6 +283,7 @@ from .ethereum_send_calls_call import EthereumSendCallsCall as EthereumSendCalls
 from .hpke_import_config_param import HpkeImportConfigParam as HpkeImportConfigParam
 from .key_quorum_create_params import KeyQuorumCreateParams as KeyQuorumCreateParams
 from .key_quorum_update_params import KeyQuorumUpdateParams as KeyQuorumUpdateParams
+from .kyb_place_of_birth_param import KYBPlaceOfBirthParam as KYBPlaceOfBirthParam
 from .kyb_status_list_response import KYBStatusListResponse as KYBStatusListResponse
 from .kyc_status_list_response import KYCStatusListResponse as KYCStatusListResponse
 from .linked_account_cross_app import LinkedAccountCrossApp as LinkedAccountCrossApp
@@ -332,6 +340,7 @@ from .tron_transaction_condition import TronTransactionCondition as TronTransact
 from .unsigned_tempo_transaction import UnsignedTempoTransaction as UnsignedTempoTransaction
 from .user_operation_input_param import UserOperationInputParam as UserOperationInputParam
 from .user_owned_recovery_option import UserOwnedRecoveryOption as UserOwnedRecoveryOption
+from .verification_address_param import VerificationAddressParam as VerificationAddressParam
 from .wallet_batch_create_result import WalletBatchCreateResult as WalletBatchCreateResult
 from .wallet_create_batch_params import WalletCreateBatchParams as WalletCreateBatchParams
 from .xrpl_transaction_condition import XrplTransactionCondition as XrplTransactionCondition
@@ -349,6 +358,8 @@ from .fiat_deposit_account_status import FiatDepositAccountStatus as FiatDeposit
 from .intent_authorization_member import IntentAuthorizationMember as IntentAuthorizationMember
 from .intent_update_policy_params import IntentUpdatePolicyParams as IntentUpdatePolicyParams
 from .intent_update_wallet_params import IntentUpdateWalletParams as IntentUpdateWalletParams
+from .kyb_associated_person_param import KYBAssociatedPersonParam as KYBAssociatedPersonParam
+from .kyb_business_document_param import KYBBusinessDocumentParam as KYBBusinessDocumentParam
 from .linked_account_custom_oauth import LinkedAccountCustomOAuth as LinkedAccountCustomOAuth
 from .linked_account_github_oauth import LinkedAccountGitHubOAuth as LinkedAccountGitHubOAuth
 from .linked_account_google_oauth import LinkedAccountGoogleOAuth as LinkedAccountGoogleOAuth
@@ -371,6 +382,7 @@ from .token_transfer_source_param import TokenTransferSourceParam as TokenTransf
 from .tron_trigger_smart_contract import TronTriggerSmartContract as TronTriggerSmartContract
 from .typed_data_type_field_input import TypedDataTypeFieldInput as TypedDataTypeFieldInput
 from .unsafe_unwrap_webhook_event import UnsafeUnwrapWebhookEvent as UnsafeUnwrapWebhookEvent
+from .verification_document_param import VerificationDocumentParam as VerificationDocumentParam
 from .wallet_assign_entity_params import WalletAssignEntityParams as WalletAssignEntityParams
 from .wallet_creation_input_param import WalletCreationInputParam as WalletCreationInputParam
 from .wallet_export_response_body import WalletExportResponseBody as WalletExportResponseBody
@@ -386,6 +398,8 @@ from .embedded_wallet_chain_config import EmbeddedWalletChainConfig as EmbeddedW
 from .embedded_wallet_input_schema import EmbeddedWalletInputSchema as EmbeddedWalletInputSchema
 from .export_private_key_rpc_input import ExportPrivateKeyRpcInput as ExportPrivateKeyRpcInput
 from .export_seed_phrase_rpc_input import ExportSeedPhraseRpcInput as ExportSeedPhraseRpcInput
+from .kyb_estimated_annual_revenue import KYBEstimatedAnnualRevenue as KYBEstimatedAnnualRevenue
+from .kyb_regulated_activity_param import KYBRegulatedActivityParam as KYBRegulatedActivityParam
 from .linked_account_discord_oauth import LinkedAccountDiscordOAuth as LinkedAccountDiscordOAuth
 from .linked_account_spotify_oauth import LinkedAccountSpotifyOAuth as LinkedAccountSpotifyOAuth
 from .linked_account_twitter_oauth import LinkedAccountTwitterOAuth as LinkedAccountTwitterOAuth
@@ -416,6 +430,7 @@ from .ethereum_send_calls_rpc_input import EthereumSendCallsRpcInput as Ethereum
 from .fiat_deposit_account_response import FiatDepositAccountResponse as FiatDepositAccountResponse
 from .intent_failed_webhook_payload import IntentFailedWebhookPayload as IntentFailedWebhookPayload
 from .kraken_embed_transaction_type import KrakenEmbedTransactionType as KrakenEmbedTransactionType
+from .kyb_individual_document_param import KYBIndividualDocumentParam as KYBIndividualDocumentParam
 from .organization_kyb_updated_data import OrganizationKYBUpdatedData as OrganizationKYBUpdatedData
 from .solana_sign_message_rpc_input import SolanaSignMessageRpcInput as SolanaSignMessageRpcInput
 from .tron_calldata_condition_param import TronCalldataConditionParam as TronCalldataConditionParam
@@ -466,6 +481,7 @@ from .intent_executed_webhook_payload import IntentExecutedWebhookPayload as Int
 from .intent_rejected_webhook_payload import IntentRejectedWebhookPayload as IntentRejectedWebhookPayload
 from .intent_update_key_quorum_params import IntentUpdateKeyQuorumParams as IntentUpdateKeyQuorumParams
 from .kraken_embed_transaction_status import KrakenEmbedTransactionStatus as KrakenEmbedTransactionStatus
+from .kyb_individual_document_purpose import KYBIndividualDocumentPurpose as KYBIndividualDocumentPurpose
 from .linked_account_base_wallet_type import LinkedAccountBaseWalletType as LinkedAccountBaseWalletType
 from .linked_account_line_input_param import LinkedAccountLineInputParam as LinkedAccountLineInputParam
 from .message_signing_condition_param import MessageSigningConditionParam as MessageSigningConditionParam
@@ -519,6 +535,7 @@ from .xrpl_transaction_condition_param import XrplTransactionConditionParam as X
 from .crypto_deposit_asset_filter_param import CryptoDepositAssetFilterParam as CryptoDepositAssetFilterParam
 from .ethereum_calldata_condition_param import EthereumCalldataConditionParam as EthereumCalldataConditionParam
 from .intent_authorized_webhook_payload import IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload
+from .kyb_publicly_traded_listing_param import KYBPubliclyTradedListingParam as KYBPubliclyTradedListingParam
 from .linked_account_github_input_param import LinkedAccountGitHubInputParam as LinkedAccountGitHubInputParam
 from .linked_account_google_input_param import LinkedAccountGoogleInputParam as LinkedAccountGoogleInputParam
 from .linked_account_tiktok_input_param import LinkedAccountTiktokInputParam as LinkedAccountTiktokInputParam

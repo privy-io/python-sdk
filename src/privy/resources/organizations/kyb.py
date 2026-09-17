@@ -17,11 +17,12 @@ from ..._response import (
 )
 from ..._base_client import make_request_options
 from ...types.kyx_provider import KyxProvider
-from ...types.organizations import kyb_initiate_tos_params, kyb_initiate_links_params
+from ...types.organizations import kyb_submit_params, kyb_initiate_tos_params, kyb_initiate_links_params
 from ...types.kyx_environment import KyxEnvironment
 from ...types.kyx_tos_response import KyxTosResponse
 from ...types.kyb_status_response import KYBStatusResponse
 from ...types.kyx_endorsement_name import KyxEndorsementName
+from ...types.kyb_submit_data_param import KYBSubmitDataParam
 from ...types.kyb_status_list_response import KYBStatusListResponse
 
 __all__ = ["KYBResource", "AsyncKYBResource"]
@@ -209,6 +210,72 @@ class KYBResource(SyncAPIResource):
             cast_to=KyxTosResponse,
         )
 
+    def submit(
+        self,
+        organization_id: str,
+        *,
+        data: KYBSubmitDataParam,
+        provider: KyxProvider,
+        client_agreement_id: str | Omit = omit,
+        endorsements: SequenceNotStr[KyxEndorsementName] | Omit = omit,
+        environment: KyxEnvironment | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> KYBStatusResponse:
+        """Submits KYB verification data for the organization.
+
+        Safe to call more than once:
+        the first call creates the provider customer and later calls update it, so a
+        partial submission can be completed incrementally.
+
+        Args:
+          organization_id: The ID of the organization.
+
+          data: KYB verification data for headless submission. Fields are individually optional
+              because the provider accepts partial submissions and grants endorsements once
+              enough data has arrived; a partial submission can be completed by calling the
+              endpoint again.
+
+          provider: KYC/KYB provider identifier.
+
+          client_agreement_id: Client-side agreement ID for ToS acceptance.
+
+          endorsements: Endorsements to request during KYB.
+
+          environment: Provider environment (production or sandbox).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not organization_id:
+            raise ValueError(f"Expected a non-empty value for `organization_id` but received {organization_id!r}")
+        return self._post(
+            path_template("/v1/organizations/{organization_id}/kyb/submit", organization_id=organization_id),
+            body=maybe_transform(
+                {
+                    "data": data,
+                    "provider": provider,
+                    "client_agreement_id": client_agreement_id,
+                    "endorsements": endorsements,
+                    "environment": environment,
+                },
+                kyb_submit_params.KYBSubmitParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=KYBStatusResponse,
+        )
+
 
 class AsyncKYBResource(AsyncAPIResource):
     """Operations related to fiat onramping and offramping"""
@@ -392,6 +459,72 @@ class AsyncKYBResource(AsyncAPIResource):
             cast_to=KyxTosResponse,
         )
 
+    async def submit(
+        self,
+        organization_id: str,
+        *,
+        data: KYBSubmitDataParam,
+        provider: KyxProvider,
+        client_agreement_id: str | Omit = omit,
+        endorsements: SequenceNotStr[KyxEndorsementName] | Omit = omit,
+        environment: KyxEnvironment | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> KYBStatusResponse:
+        """Submits KYB verification data for the organization.
+
+        Safe to call more than once:
+        the first call creates the provider customer and later calls update it, so a
+        partial submission can be completed incrementally.
+
+        Args:
+          organization_id: The ID of the organization.
+
+          data: KYB verification data for headless submission. Fields are individually optional
+              because the provider accepts partial submissions and grants endorsements once
+              enough data has arrived; a partial submission can be completed by calling the
+              endpoint again.
+
+          provider: KYC/KYB provider identifier.
+
+          client_agreement_id: Client-side agreement ID for ToS acceptance.
+
+          endorsements: Endorsements to request during KYB.
+
+          environment: Provider environment (production or sandbox).
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not organization_id:
+            raise ValueError(f"Expected a non-empty value for `organization_id` but received {organization_id!r}")
+        return await self._post(
+            path_template("/v1/organizations/{organization_id}/kyb/submit", organization_id=organization_id),
+            body=await async_maybe_transform(
+                {
+                    "data": data,
+                    "provider": provider,
+                    "client_agreement_id": client_agreement_id,
+                    "endorsements": endorsements,
+                    "environment": environment,
+                },
+                kyb_submit_params.KYBSubmitParams,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=KYBStatusResponse,
+        )
+
 
 class KYBResourceWithRawResponse:
     def __init__(self, kyb: KYBResource) -> None:
@@ -405,6 +538,9 @@ class KYBResourceWithRawResponse:
         )
         self.initiate_tos = to_raw_response_wrapper(
             kyb.initiate_tos,
+        )
+        self.submit = to_raw_response_wrapper(
+            kyb.submit,
         )
 
 
@@ -421,6 +557,9 @@ class AsyncKYBResourceWithRawResponse:
         self.initiate_tos = async_to_raw_response_wrapper(
             kyb.initiate_tos,
         )
+        self.submit = async_to_raw_response_wrapper(
+            kyb.submit,
+        )
 
 
 class KYBResourceWithStreamingResponse:
@@ -436,6 +575,9 @@ class KYBResourceWithStreamingResponse:
         self.initiate_tos = to_streamed_response_wrapper(
             kyb.initiate_tos,
         )
+        self.submit = to_streamed_response_wrapper(
+            kyb.submit,
+        )
 
 
 class AsyncKYBResourceWithStreamingResponse:
@@ -450,4 +592,7 @@ class AsyncKYBResourceWithStreamingResponse:
         )
         self.initiate_tos = async_to_streamed_response_wrapper(
             kyb.initiate_tos,
+        )
+        self.submit = async_to_streamed_response_wrapper(
+            kyb.submit,
         )

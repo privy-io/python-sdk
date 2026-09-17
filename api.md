@@ -223,6 +223,7 @@ Methods:
 - <code title="get /v1/organizations/{organization_id}/kyb">client.organizations.kyb.<a href="./src/privy/resources/organizations/kyb.py">list</a>(organization_id) -> <a href="./src/privy/types/kyb_status_list_response.py">KYBStatusListResponse</a></code>
 - <code title="post /v1/organizations/{organization_id}/kyb/links">client.organizations.kyb.<a href="./src/privy/resources/organizations/kyb.py">initiate_links</a>(organization_id, \*\*<a href="src/privy/types/organizations/kyb_initiate_links_params.py">params</a>) -> <a href="./src/privy/types/kyb_status_response.py">KYBStatusResponse</a></code>
 - <code title="post /v1/organizations/{organization_id}/kyb/tos">client.organizations.kyb.<a href="./src/privy/resources/organizations/kyb.py">initiate_tos</a>(organization_id, \*\*<a href="src/privy/types/organizations/kyb_initiate_tos_params.py">params</a>) -> <a href="./src/privy/types/kyx_tos_response.py">KyxTosResponse</a></code>
+- <code title="post /v1/organizations/{organization_id}/kyb/submit">client.organizations.kyb.<a href="./src/privy/resources/organizations/kyb.py">submit</a>(organization_id, \*\*<a href="src/privy/types/organizations/kyb_submit_params.py">params</a>) -> <a href="./src/privy/types/kyb_status_response.py">KYBStatusResponse</a></code>
 
 # Policies
 
@@ -447,6 +448,7 @@ Methods:
 - <code title="get /v1/users/{user_id}/kyc">client.users.kyc.<a href="./src/privy/resources/users/kyc.py">list</a>(user_id) -> <a href="./src/privy/types/kyc_status_list_response.py">KYCStatusListResponse</a></code>
 - <code title="post /v1/users/{user_id}/kyc/links">client.users.kyc.<a href="./src/privy/resources/users/kyc.py">initiate_links</a>(user_id, \*\*<a href="src/privy/types/users/kyc_initiate_links_params.py">params</a>) -> <a href="./src/privy/types/kyc_status_response.py">KYCStatusResponse</a></code>
 - <code title="post /v1/users/{user_id}/kyc/tos">client.users.kyc.<a href="./src/privy/resources/users/kyc.py">initiate_tos</a>(user_id, \*\*<a href="src/privy/types/users/kyc_initiate_tos_params.py">params</a>) -> <a href="./src/privy/types/kyx_tos_response.py">KyxTosResponse</a></code>
+- <code title="post /v1/users/{user_id}/kyc/submit">client.users.kyc.<a href="./src/privy/resources/users/kyc.py">submit</a>(user_id, \*\*<a href="src/privy/types/users/kyc_submit_params.py">params</a>) -> <a href="./src/privy/types/kyc_status_response.py">KYCStatusResponse</a></code>
 
 # WalletAutomations
 
@@ -1422,13 +1424,26 @@ from privy.types import (
     FiatDepositAccountStatus,
     FiatDepositInstructions,
     FiatPaymentRail,
+    KYBAccountPurpose,
+    KYBAssociatedPerson,
+    KYBBusinessDocument,
+    KYBBusinessType,
+    KYBDocumentPurpose,
+    KYBEstimatedAnnualRevenue,
+    KYBHighRiskActivity,
+    KYBIndividualDocument,
+    KYBIndividualDocumentPurpose,
     KYBLinksRequestBody,
+    KYBPlaceOfBirth,
+    KYBPubliclyTradedListing,
+    KYBRegulatedActivity,
+    KYBSourceOfFunds,
     KYBStatusListResponse,
     KYBStatusResponse,
+    KYBSubmitData,
+    KYBSubmitRequestBody,
     KYBTosRequestBody,
-    KYCIdentifyingDocument,
     KYCLinksRequestBody,
-    KYCResidentialAddress,
     KYCStatusListResponse,
     KYCStatusResponse,
     KYCSubmitData,
@@ -1463,6 +1478,8 @@ from privy.types import (
     OrganizationExternalFiatAccountResponse,
     PayoutDestination,
     PayoutSource,
+    VerificationAddress,
+    VerificationDocument,
 )
 ```
 
