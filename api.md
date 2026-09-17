@@ -538,6 +538,7 @@ from privy.types import (
     CryptoDepositAccountSourceChain,
     CryptoDepositAccountSourceCurrency,
     CryptoDepositAddressRoute,
+    CryptoDepositAddressStrategy,
     CryptoDepositAsset,
     CryptoDepositAssetFilter,
     CryptoDepositAssetFilterAll,

@@ -14,6 +14,7 @@ from .orders import (
     OrdersResourceWithStreamingResponse,
     AsyncOrdersResourceWithStreamingResponse,
 )
+from .....types import CryptoDepositAddressStrategy
 from ....._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ....._utils import path_template, required_args, maybe_transform, strip_not_given, async_maybe_transform
 from ....._compat import cached_property
@@ -29,6 +30,7 @@ from ....._base_client import AsyncPaginator, make_request_options
 from .....types.wallets.deposit_accounts import crypto_list_params, crypto_create_params
 from .....types.crypto_deposit_asset_param import CryptoDepositAssetParam
 from .....types.crypto_deposit_address_route import CryptoDepositAddressRoute
+from .....types.crypto_deposit_address_strategy import CryptoDepositAddressStrategy
 from .....types.crypto_deposit_asset_filter_param import CryptoDepositAssetFilterParam
 from .....types.create_crypto_deposit_account_response import CreateCryptoDepositAccountResponse
 from .....types.crypto_deposit_account_config_response import CryptoDepositAccountConfigResponse
@@ -120,6 +122,7 @@ class CryptoResource(SyncAPIResource):
         *,
         deposit_config_id: str,
         type: Literal["deposit_config"],
+        deposit_address_strategy: CryptoDepositAddressStrategy | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -130,15 +133,31 @@ class CryptoResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> CreateCryptoDepositAccountResponse:
-        """Creates deposit source wallets and attaches them to a sweep into the path
-        wallet.
-
-        Requires a dest-owner privy-authorization-signature. Accepts a
-        dest-owner user JWT or an app secret (app-secret callers use the dest owner).
-        JWT-only requests 401 when the app requires an app secret for wallet actions.
+        """
+        Creates or reuses deposit source wallets and attaches them to a sweep into the
+        path wallet. The optional top-level deposit_address_strategy defaults to
+        dedicated, including for existing routes. Use prefer_destination to reuse the
+        path wallet when eligible, or require_destination to require it for its own
+        requested source chain family without fallback. Other requested families still
+        use dedicated wallets. Include any explicit strategy in the signed request body.
+        Requires a dest-owner privy-authorization-signature. Accepts a dest-owner user
+        JWT or an app secret (app-secret callers use the dest owner). JWT-only requests
+        401 when the app requires an app secret for wallet actions.
 
         Args:
           wallet_id: ID of the wallet.
+
+          deposit_address_strategy: Controls deposit source selection. `dedicated` creates or reuses eligible
+              dedicated source wallets, never the destination wallet. This is the default when
+              omitted, including for existing routes. `prefer_destination` uses the
+              destination wallet when it is eligible and its chain family is requested;
+              otherwise it uses dedicated source wallets. `require_destination` requires the
+              destination wallet to serve its own chain family when that family is requested
+              and fails without fallback if it cannot; other requested families still use
+              dedicated source wallets. On destination reuse, all strategies remove all
+              existing automation attachments, including matching and disabled ones, then
+              attach the requested automation. Exported wallets cannot serve as deposit
+              sources.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -167,6 +186,7 @@ class CryptoResource(SyncAPIResource):
         destination: CryptoDepositAssetParam,
         source: CryptoDepositAssetFilterParam,
         type: Literal["inline_route"],
+        deposit_address_strategy: CryptoDepositAddressStrategy | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -177,12 +197,16 @@ class CryptoResource(SyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> CreateCryptoDepositAccountResponse:
-        """Creates deposit source wallets and attaches them to a sweep into the path
-        wallet.
-
-        Requires a dest-owner privy-authorization-signature. Accepts a
-        dest-owner user JWT or an app secret (app-secret callers use the dest owner).
-        JWT-only requests 401 when the app requires an app secret for wallet actions.
+        """
+        Creates or reuses deposit source wallets and attaches them to a sweep into the
+        path wallet. The optional top-level deposit_address_strategy defaults to
+        dedicated, including for existing routes. Use prefer_destination to reuse the
+        path wallet when eligible, or require_destination to require it for its own
+        requested source chain family without fallback. Other requested families still
+        use dedicated wallets. Include any explicit strategy in the signed request body.
+        Requires a dest-owner privy-authorization-signature. Accepts a dest-owner user
+        JWT or an app secret (app-secret callers use the dest owner). JWT-only requests
+        401 when the app requires an app secret for wallet actions.
 
         Args:
           wallet_id: ID of the wallet.
@@ -192,6 +216,18 @@ class CryptoResource(SyncAPIResource):
 
           source: Which assets a deposit address accepts. Asset and chain use human-readable
               aliases when known.
+
+          deposit_address_strategy: Controls deposit source selection. `dedicated` creates or reuses eligible
+              dedicated source wallets, never the destination wallet. This is the default when
+              omitted, including for existing routes. `prefer_destination` uses the
+              destination wallet when it is eligible and its chain family is requested;
+              otherwise it uses dedicated source wallets. `require_destination` requires the
+              destination wallet to serve its own chain family when that family is requested
+              and fails without fallback if it cannot; other requested families still use
+              dedicated source wallets. On destination reuse, all strategies remove all
+              existing automation attachments, including matching and disabled ones, then
+              attach the requested automation. Exported wallets cannot serve as deposit
+              sources.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -219,6 +255,7 @@ class CryptoResource(SyncAPIResource):
         *,
         deposit_config_id: str | Omit = omit,
         type: Literal["deposit_config"] | Literal["inline_route"],
+        deposit_address_strategy: CryptoDepositAddressStrategy | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -249,6 +286,7 @@ class CryptoResource(SyncAPIResource):
                 {
                     "deposit_config_id": deposit_config_id,
                     "type": type,
+                    "deposit_address_strategy": deposit_address_strategy,
                     "destination": destination,
                     "source": source,
                 },
@@ -367,6 +405,7 @@ class AsyncCryptoResource(AsyncAPIResource):
         *,
         deposit_config_id: str,
         type: Literal["deposit_config"],
+        deposit_address_strategy: CryptoDepositAddressStrategy | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -377,15 +416,31 @@ class AsyncCryptoResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> CreateCryptoDepositAccountResponse:
-        """Creates deposit source wallets and attaches them to a sweep into the path
-        wallet.
-
-        Requires a dest-owner privy-authorization-signature. Accepts a
-        dest-owner user JWT or an app secret (app-secret callers use the dest owner).
-        JWT-only requests 401 when the app requires an app secret for wallet actions.
+        """
+        Creates or reuses deposit source wallets and attaches them to a sweep into the
+        path wallet. The optional top-level deposit_address_strategy defaults to
+        dedicated, including for existing routes. Use prefer_destination to reuse the
+        path wallet when eligible, or require_destination to require it for its own
+        requested source chain family without fallback. Other requested families still
+        use dedicated wallets. Include any explicit strategy in the signed request body.
+        Requires a dest-owner privy-authorization-signature. Accepts a dest-owner user
+        JWT or an app secret (app-secret callers use the dest owner). JWT-only requests
+        401 when the app requires an app secret for wallet actions.
 
         Args:
           wallet_id: ID of the wallet.
+
+          deposit_address_strategy: Controls deposit source selection. `dedicated` creates or reuses eligible
+              dedicated source wallets, never the destination wallet. This is the default when
+              omitted, including for existing routes. `prefer_destination` uses the
+              destination wallet when it is eligible and its chain family is requested;
+              otherwise it uses dedicated source wallets. `require_destination` requires the
+              destination wallet to serve its own chain family when that family is requested
+              and fails without fallback if it cannot; other requested families still use
+              dedicated source wallets. On destination reuse, all strategies remove all
+              existing automation attachments, including matching and disabled ones, then
+              attach the requested automation. Exported wallets cannot serve as deposit
+              sources.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -414,6 +469,7 @@ class AsyncCryptoResource(AsyncAPIResource):
         destination: CryptoDepositAssetParam,
         source: CryptoDepositAssetFilterParam,
         type: Literal["inline_route"],
+        deposit_address_strategy: CryptoDepositAddressStrategy | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -424,12 +480,16 @@ class AsyncCryptoResource(AsyncAPIResource):
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
     ) -> CreateCryptoDepositAccountResponse:
-        """Creates deposit source wallets and attaches them to a sweep into the path
-        wallet.
-
-        Requires a dest-owner privy-authorization-signature. Accepts a
-        dest-owner user JWT or an app secret (app-secret callers use the dest owner).
-        JWT-only requests 401 when the app requires an app secret for wallet actions.
+        """
+        Creates or reuses deposit source wallets and attaches them to a sweep into the
+        path wallet. The optional top-level deposit_address_strategy defaults to
+        dedicated, including for existing routes. Use prefer_destination to reuse the
+        path wallet when eligible, or require_destination to require it for its own
+        requested source chain family without fallback. Other requested families still
+        use dedicated wallets. Include any explicit strategy in the signed request body.
+        Requires a dest-owner privy-authorization-signature. Accepts a dest-owner user
+        JWT or an app secret (app-secret callers use the dest owner). JWT-only requests
+        401 when the app requires an app secret for wallet actions.
 
         Args:
           wallet_id: ID of the wallet.
@@ -439,6 +499,18 @@ class AsyncCryptoResource(AsyncAPIResource):
 
           source: Which assets a deposit address accepts. Asset and chain use human-readable
               aliases when known.
+
+          deposit_address_strategy: Controls deposit source selection. `dedicated` creates or reuses eligible
+              dedicated source wallets, never the destination wallet. This is the default when
+              omitted, including for existing routes. `prefer_destination` uses the
+              destination wallet when it is eligible and its chain family is requested;
+              otherwise it uses dedicated source wallets. `require_destination` requires the
+              destination wallet to serve its own chain family when that family is requested
+              and fails without fallback if it cannot; other requested families still use
+              dedicated source wallets. On destination reuse, all strategies remove all
+              existing automation attachments, including matching and disabled ones, then
+              attach the requested automation. Exported wallets cannot serve as deposit
+              sources.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -466,6 +538,7 @@ class AsyncCryptoResource(AsyncAPIResource):
         *,
         deposit_config_id: str | Omit = omit,
         type: Literal["deposit_config"] | Literal["inline_route"],
+        deposit_address_strategy: CryptoDepositAddressStrategy | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -496,6 +569,7 @@ class AsyncCryptoResource(AsyncAPIResource):
                 {
                     "deposit_config_id": deposit_config_id,
                     "type": type,
+                    "deposit_address_strategy": deposit_address_strategy,
                     "destination": destination,
                     "source": source,
                 },
