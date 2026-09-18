@@ -78,7 +78,7 @@ class TestKYC:
         kyc = client.users.kyc.initiate_links(
             user_id="user_id",
             provider="bridge",
-            client_agreement_id="client_agreement_id",
+            client_agreement_id="x",
             email="dev@stainless.com",
             endorsements=["sepa"],
             environment="production",
@@ -222,7 +222,7 @@ class TestKYC:
                 },
             },
             provider="bridge",
-            client_agreement_id="client_agreement_id",
+            client_agreement_id="x",
             endorsements=["sepa"],
             environment="production",
         )
@@ -331,7 +331,7 @@ class TestAsyncKYC:
         kyc = await async_client.users.kyc.initiate_links(
             user_id="user_id",
             provider="bridge",
-            client_agreement_id="client_agreement_id",
+            client_agreement_id="x",
             email="dev@stainless.com",
             endorsements=["sepa"],
             environment="production",
@@ -475,7 +475,7 @@ class TestAsyncKYC:
                 },
             },
             provider="bridge",
-            client_agreement_id="client_agreement_id",
+            client_agreement_id="x",
             endorsements=["sepa"],
             environment="production",
         )
