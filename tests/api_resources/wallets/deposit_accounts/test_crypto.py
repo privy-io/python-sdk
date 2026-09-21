@@ -10,10 +10,13 @@ import pytest
 from privy import PrivyAPI, AsyncPrivyAPI
 from privy.types import (
     CryptoDepositAddressRoute,
+    DepositAccountCryptoQuoteResponse,
     CreateCryptoDepositAccountResponse,
     CryptoDepositAccountConfigResponse,
+    GetCryptoDepositAccountNextOrderResponse,
 )
 from tests.utils import assert_matches_type
+from privy._utils import parse_datetime
 from privy.pagination import SyncCursor, AsyncCursor
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -238,6 +241,124 @@ class TestCrypto:
 
         assert cast(Any, response.is_closed) is True
 
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_get_next_order(self, client: PrivyAPI) -> None:
+        crypto = client.wallets.deposit_accounts.crypto.get_next_order(
+            wallet_id="wallet_id",
+            after=parse_datetime("2019-12-27T18:11:19.117Z"),
+        )
+        assert_matches_type(GetCryptoDepositAccountNextOrderResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_get_next_order(self, client: PrivyAPI) -> None:
+        response = client.wallets.deposit_accounts.crypto.with_raw_response.get_next_order(
+            wallet_id="wallet_id",
+            after=parse_datetime("2019-12-27T18:11:19.117Z"),
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        crypto = response.parse()
+        assert_matches_type(GetCryptoDepositAccountNextOrderResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_get_next_order(self, client: PrivyAPI) -> None:
+        with client.wallets.deposit_accounts.crypto.with_streaming_response.get_next_order(
+            wallet_id="wallet_id",
+            after=parse_datetime("2019-12-27T18:11:19.117Z"),
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            crypto = response.parse()
+            assert_matches_type(GetCryptoDepositAccountNextOrderResponse, crypto, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_get_next_order(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            client.wallets.deposit_accounts.crypto.with_raw_response.get_next_order(
+                wallet_id="",
+                after=parse_datetime("2019-12-27T18:11:19.117Z"),
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_quote(self, client: PrivyAPI) -> None:
+        crypto = client.wallets.deposit_accounts.crypto.quote(
+            destination={
+                "asset": "usdc",
+                "chain": "base",
+            },
+            source={
+                "asset": "eth",
+                "chain": "ethereum",
+            },
+        )
+        assert_matches_type(DepositAccountCryptoQuoteResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_quote_with_all_params(self, client: PrivyAPI) -> None:
+        crypto = client.wallets.deposit_accounts.crypto.quote(
+            destination={
+                "asset": "usdc",
+                "chain": "base",
+            },
+            source={
+                "asset": "eth",
+                "chain": "ethereum",
+            },
+            input_amount="0.02",
+            slippage_bps=50,
+        )
+        assert_matches_type(DepositAccountCryptoQuoteResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_quote(self, client: PrivyAPI) -> None:
+        response = client.wallets.deposit_accounts.crypto.with_raw_response.quote(
+            destination={
+                "asset": "usdc",
+                "chain": "base",
+            },
+            source={
+                "asset": "eth",
+                "chain": "ethereum",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        crypto = response.parse()
+        assert_matches_type(DepositAccountCryptoQuoteResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_quote(self, client: PrivyAPI) -> None:
+        with client.wallets.deposit_accounts.crypto.with_streaming_response.quote(
+            destination={
+                "asset": "usdc",
+                "chain": "base",
+            },
+            source={
+                "asset": "eth",
+                "chain": "ethereum",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            crypto = response.parse()
+            assert_matches_type(DepositAccountCryptoQuoteResponse, crypto, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
 
 class TestAsyncCrypto:
     parametrize = pytest.mark.parametrize(
@@ -457,5 +578,123 @@ class TestAsyncCrypto:
 
             crypto = await response.parse()
             assert_matches_type(CryptoDepositAccountConfigResponse, crypto, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_get_next_order(self, async_client: AsyncPrivyAPI) -> None:
+        crypto = await async_client.wallets.deposit_accounts.crypto.get_next_order(
+            wallet_id="wallet_id",
+            after=parse_datetime("2019-12-27T18:11:19.117Z"),
+        )
+        assert_matches_type(GetCryptoDepositAccountNextOrderResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_get_next_order(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.deposit_accounts.crypto.with_raw_response.get_next_order(
+            wallet_id="wallet_id",
+            after=parse_datetime("2019-12-27T18:11:19.117Z"),
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        crypto = await response.parse()
+        assert_matches_type(GetCryptoDepositAccountNextOrderResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_get_next_order(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.deposit_accounts.crypto.with_streaming_response.get_next_order(
+            wallet_id="wallet_id",
+            after=parse_datetime("2019-12-27T18:11:19.117Z"),
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            crypto = await response.parse()
+            assert_matches_type(GetCryptoDepositAccountNextOrderResponse, crypto, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_get_next_order(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `wallet_id` but received ''"):
+            await async_client.wallets.deposit_accounts.crypto.with_raw_response.get_next_order(
+                wallet_id="",
+                after=parse_datetime("2019-12-27T18:11:19.117Z"),
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_quote(self, async_client: AsyncPrivyAPI) -> None:
+        crypto = await async_client.wallets.deposit_accounts.crypto.quote(
+            destination={
+                "asset": "usdc",
+                "chain": "base",
+            },
+            source={
+                "asset": "eth",
+                "chain": "ethereum",
+            },
+        )
+        assert_matches_type(DepositAccountCryptoQuoteResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_quote_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        crypto = await async_client.wallets.deposit_accounts.crypto.quote(
+            destination={
+                "asset": "usdc",
+                "chain": "base",
+            },
+            source={
+                "asset": "eth",
+                "chain": "ethereum",
+            },
+            input_amount="0.02",
+            slippage_bps=50,
+        )
+        assert_matches_type(DepositAccountCryptoQuoteResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_quote(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.deposit_accounts.crypto.with_raw_response.quote(
+            destination={
+                "asset": "usdc",
+                "chain": "base",
+            },
+            source={
+                "asset": "eth",
+                "chain": "ethereum",
+            },
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        crypto = await response.parse()
+        assert_matches_type(DepositAccountCryptoQuoteResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_quote(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.deposit_accounts.crypto.with_streaming_response.quote(
+            destination={
+                "asset": "usdc",
+                "chain": "base",
+            },
+            source={
+                "asset": "eth",
+                "chain": "ethereum",
+            },
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            crypto = await response.parse()
+            assert_matches_type(DepositAccountCryptoQuoteResponse, crypto, path=["response"])
 
         assert cast(Any, response.is_closed) is True

@@ -633,6 +633,7 @@ from .bridge_static_memo_deposit_metadata import BridgeStaticMemoDepositMetadata
 from .crypto_deposit_account_source_chain import CryptoDepositAccountSourceChain as CryptoDepositAccountSourceChain
 from .crypto_deposit_asset_filter_exclude import CryptoDepositAssetFilterExclude as CryptoDepositAssetFilterExclude
 from .crypto_deposit_asset_filter_include import CryptoDepositAssetFilterInclude as CryptoDepositAssetFilterInclude
+from .deposit_account_crypto_quote_amount import DepositAccountCryptoQuoteAmount as DepositAccountCryptoQuoteAmount
 from .ethereum_personal_sign_rpc_response import EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse
 from .ethereum_secp_256k_1_sign_rpc_input import EthereumSecp256k1SignRpcInput as EthereumSecp256k1SignRpcInput
 from .ethereum_send_calls_rpc_input_param import EthereumSendCallsRpcInputParam as EthereumSendCallsRpcInputParam
@@ -686,6 +687,9 @@ from .automation_trigger_config_input_param import (
     AutomationTriggerConfigInputParam as AutomationTriggerConfigInputParam,
 )
 from .crypto_deposit_asset_filter_all_param import CryptoDepositAssetFilterAllParam as CryptoDepositAssetFilterAllParam
+from .deposit_account_crypto_quote_response import (
+    DepositAccountCryptoQuoteResponse as DepositAccountCryptoQuoteResponse,
+)
 from .ethereum_7702_authorization_condition import (
     Ethereum7702AuthorizationCondition as Ethereum7702AuthorizationCondition,
 )
@@ -870,6 +874,9 @@ from .automation_destination_asset_input_param import (
 )
 from .create_fiat_deposit_account_source_param import (
     CreateFiatDepositAccountSourceParam as CreateFiatDepositAccountSourceParam,
+)
+from .deposit_account_crypto_quote_asset_param import (
+    DepositAccountCryptoQuoteAssetParam as DepositAccountCryptoQuoteAssetParam,
 )
 from .ethereum_personal_sign_rpc_response_data import (
     EthereumPersonalSignRpcResponseData as EthereumPersonalSignRpcResponseData,
@@ -1140,6 +1147,9 @@ from .wallet_action_transfer_failed_webhook_payload import (
 )
 from .ethereum_sign_user_operation_rpc_response_data import (
     EthereumSignUserOperationRpcResponseData as EthereumSignUserOperationRpcResponseData,
+)
+from .get_crypto_deposit_account_next_order_response import (
+    GetCryptoDepositAccountNextOrderResponse as GetCryptoDepositAccountNextOrderResponse,
 )
 from .kraken_embed_portfolio_transaction_ref_id_type import (
     KrakenEmbedPortfolioTransactionRefIDType as KrakenEmbedPortfolioTransactionRefIDType,
