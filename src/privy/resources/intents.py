@@ -67,6 +67,7 @@ from ..types.additional_signer_input_param import AdditionalSignerInputParam
 from ..types.policy_rule_request_body_param import PolicyRuleRequestBodyParam
 from ..types.private_key_export_input_param import PrivateKeyExportInputParam
 from ..types.seed_phrase_export_input_param import SeedPhraseExportInputParam
+from ..types.transfer_custody_options_param import TransferCustodyOptionsParam
 from ..types.token_transfer_destination_param import TokenTransferDestinationParam
 from ..types.spark_transfer_rpc_input_params_param import SparkTransferRpcInputParamsParam
 from ..types.spark_withdraw_rpc_input_params_param import SparkWithdrawRpcInputParamsParam
@@ -1727,6 +1728,7 @@ class IntentsResource(SyncAPIResource):
         source: TokenTransferSourceParam,
         amount: str | Omit = omit,
         amount_type: AmountType | Omit = omit,
+        custody_options: TransferCustodyOptionsParam | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
         nonce: WalletActionNonce | Omit = omit,
         reference_id: str | Omit = omit,
@@ -1758,6 +1760,8 @@ class IntentsResource(SyncAPIResource):
               to receive. Takes precedence over source.amount when both are provided.
 
           amount_type: Whether the amount refers to the input token or output token.
+
+          custody_options: Options for a transfer from a custodial wallet.
 
           fee_configuration: Total fees assessed on a transfer, in BPS
 
@@ -1791,6 +1795,7 @@ class IntentsResource(SyncAPIResource):
                     "source": source,
                     "amount": amount,
                     "amount_type": amount_type,
+                    "custody_options": custody_options,
                     "fee_configuration": fee_configuration,
                     "nonce": nonce,
                     "reference_id": reference_id,
@@ -3699,6 +3704,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         source: TokenTransferSourceParam,
         amount: str | Omit = omit,
         amount_type: AmountType | Omit = omit,
+        custody_options: TransferCustodyOptionsParam | Omit = omit,
         fee_configuration: FeeConfigurationParam | Omit = omit,
         nonce: WalletActionNonce | Omit = omit,
         reference_id: str | Omit = omit,
@@ -3730,6 +3736,8 @@ class AsyncIntentsResource(AsyncAPIResource):
               to receive. Takes precedence over source.amount when both are provided.
 
           amount_type: Whether the amount refers to the input token or output token.
+
+          custody_options: Options for a transfer from a custodial wallet.
 
           fee_configuration: Total fees assessed on a transfer, in BPS
 
@@ -3763,6 +3771,7 @@ class AsyncIntentsResource(AsyncAPIResource):
                     "source": source,
                     "amount": amount,
                     "amount_type": amount_type,
+                    "custody_options": custody_options,
                     "fee_configuration": fee_configuration,
                     "nonce": nonce,
                     "reference_id": reference_id,

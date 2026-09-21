@@ -5,12 +5,12 @@ from typing_extensions import Literal
 from .._models import BaseModel
 from .usage_source_type import UsageSourceType
 
-__all__ = ["UsageCrossChainFeeRecordedWebhookPayload"]
+__all__ = ["UsageSwapProviderFeeRecordedWebhookPayload"]
 
 
-class UsageCrossChainFeeRecordedWebhookPayload(BaseModel):
+class UsageSwapProviderFeeRecordedWebhookPayload(BaseModel):
     """
-    Payload for the usage.cross_chain_fee.recorded webhook event (Privy fee on a cross-chain transfer or swap).
+    Payload for the usage.swap_provider_fee.recorded webhook event (swap provider fee on a cross-chain transfer or swap).
     """
 
     amount_usd: str
@@ -28,5 +28,5 @@ class UsageCrossChainFeeRecordedWebhookPayload(BaseModel):
     source_type: UsageSourceType
     """The type of operation that incurred a usage charge."""
 
-    type: Literal["usage.cross_chain_fee.recorded"]
+    type: Literal["usage.swap_provider_fee.recorded"]
     """The type of webhook event."""

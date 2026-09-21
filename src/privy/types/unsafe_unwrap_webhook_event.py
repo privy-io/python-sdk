@@ -48,11 +48,11 @@ from .wallet_action_swap_succeeded_webhook_payload import WalletActionSwapSuccee
 from .wallet_action_payout_rejected_webhook_payload import WalletActionPayoutRejectedWebhookPayload
 from .wallet_action_transfer_failed_webhook_payload import WalletActionTransferFailedWebhookPayload
 from .transaction_execution_reverted_webhook_payload import TransactionExecutionRevertedWebhookPayload
-from .usage_cross_chain_fee_recorded_webhook_payload import UsageCrossChainFeeRecordedWebhookPayload
 from .usage_gas_sponsorship_recorded_webhook_payload import UsageGasSponsorshipRecordedWebhookPayload
 from .wallet_action_payout_succeeded_webhook_payload import WalletActionPayoutSucceededWebhookPayload
 from .wallet_action_transfer_created_webhook_payload import WalletActionTransferCreatedWebhookPayload
 from .wallet_action_transfer_rejected_webhook_payload import WalletActionTransferRejectedWebhookPayload
+from .usage_swap_provider_fee_recorded_webhook_payload import UsageSwapProviderFeeRecordedWebhookPayload
 from .wallet_action_transfer_succeeded_webhook_payload import WalletActionTransferSucceededWebhookPayload
 from .wallet_action_earn_deposit_failed_webhook_payload import WalletActionEarnDepositFailedWebhookPayload
 from .wallet_action_earn_deposit_created_webhook_payload import WalletActionEarnDepositCreatedWebhookPayload
@@ -101,8 +101,8 @@ UnsafeUnwrapWebhookEvent: TypeAlias = Annotated[
         TransactionProviderErrorWebhookPayload,
         TransactionReplacedWebhookPayload,
         TransactionStillPendingWebhookPayload,
-        UsageCrossChainFeeRecordedWebhookPayload,
         UsageGasSponsorshipRecordedWebhookPayload,
+        UsageSwapProviderFeeRecordedWebhookPayload,
         UserAuthenticatedWebhookPayload,
         UserCreatedWebhookPayload,
         UserDeletedWebhookPayload,

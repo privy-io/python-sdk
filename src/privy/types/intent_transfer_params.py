@@ -9,6 +9,7 @@ from .amount_type import AmountType
 from .wallet_action_nonce import WalletActionNonce
 from .fee_configuration_param import FeeConfigurationParam
 from .token_transfer_source_param import TokenTransferSourceParam
+from .transfer_custody_options_param import TransferCustodyOptionsParam
 from .token_transfer_destination_param import TokenTransferDestinationParam
 
 __all__ = ["IntentTransferParams"]
@@ -38,6 +39,9 @@ class IntentTransferParams(TypedDict, total=False):
 
     amount_type: AmountType
     """Whether the amount refers to the input token or output token."""
+
+    custody_options: TransferCustodyOptionsParam
+    """Options for a transfer from a custodial wallet."""
 
     fee_configuration: FeeConfigurationParam
     """Total fees assessed on a transfer, in BPS"""

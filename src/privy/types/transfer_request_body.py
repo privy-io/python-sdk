@@ -7,6 +7,7 @@ from .amount_type import AmountType
 from .fee_configuration import FeeConfiguration
 from .wallet_action_nonce import WalletActionNonce
 from .token_transfer_source import TokenTransferSource
+from .transfer_custody_options import TransferCustodyOptions
 from .token_transfer_destination import TokenTransferDestination
 
 __all__ = ["TransferRequestBody"]
@@ -38,6 +39,9 @@ class TransferRequestBody(BaseModel):
 
     amount_type: Optional[AmountType] = None
     """Whether the amount refers to the input token or output token."""
+
+    custody_options: Optional[TransferCustodyOptions] = None
+    """Options for a transfer from a custodial wallet."""
 
     fee_configuration: Optional[FeeConfiguration] = None
     """Total fees assessed on a transfer, in BPS"""

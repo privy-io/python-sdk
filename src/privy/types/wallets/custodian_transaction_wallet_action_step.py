@@ -22,6 +22,14 @@ class CustodianTransactionWalletActionStep(BaseModel):
     status: CustodianTransactionWalletActionStepStatus
     """Status of a custodian transaction step in a wallet action."""
 
+    transaction_hash: Optional[str] = None
+    """
+    Identifier of the transaction the custodian last reported on the destination
+    chain. Set on a settled transfer, and also on a failed one when the custodian
+    had already broadcast a payout that was later returned. Null until the custodian
+    reports one.
+    """
+
     type: Literal["custodian_transaction"]
 
     failure_reason: Optional[FailureReason] = None

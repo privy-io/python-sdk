@@ -19,6 +19,7 @@ from privy.types import (
     RuleMutateIntentResponse,
 )
 from tests.utils import assert_matches_type
+from privy._utils import parse_datetime
 from privy.pagination import SyncCursor, AsyncCursor
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
@@ -2792,6 +2793,29 @@ class TestIntents:
             },
             amount="10.5",
             amount_type="exact_input",
+            custody_options={
+                "initiation": {
+                    "attestations": {
+                        "sca": {
+                            "outcome": "not_applicable",
+                            "auth_factors": [
+                                {
+                                    "authenticated_at": parse_datetime("2026-01-15T10:30:00Z"),
+                                    "category": "possession",
+                                    "reference": "auth_event_123",
+                                },
+                                {
+                                    "authenticated_at": parse_datetime("2026-01-15T10:30:00Z"),
+                                    "category": "knowledge",
+                                    "reference": "auth_event_456",
+                                },
+                            ],
+                        }
+                    },
+                    "channel": "other_mobile_payment",
+                    "subchannel": "remote",
+                }
+            },
             fee_configuration={
                 "type": "total_fee_bps",
                 "value": 50,
@@ -5938,6 +5962,29 @@ class TestAsyncIntents:
             },
             amount="10.5",
             amount_type="exact_input",
+            custody_options={
+                "initiation": {
+                    "attestations": {
+                        "sca": {
+                            "outcome": "not_applicable",
+                            "auth_factors": [
+                                {
+                                    "authenticated_at": parse_datetime("2026-01-15T10:30:00Z"),
+                                    "category": "possession",
+                                    "reference": "auth_event_123",
+                                },
+                                {
+                                    "authenticated_at": parse_datetime("2026-01-15T10:30:00Z"),
+                                    "category": "knowledge",
+                                    "reference": "auth_event_456",
+                                },
+                            ],
+                        }
+                    },
+                    "channel": "other_mobile_payment",
+                    "subchannel": "remote",
+                }
+            },
             fee_configuration={
                 "type": "total_fee_bps",
                 "value": 50,

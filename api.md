@@ -499,6 +499,12 @@ from privy.types import (
 
 Methods:
 
+- <code title="post /v1/wallet_automations">client.wallet_automations.<a href="./src/privy/resources/wallet_automations.py">create</a>(\*\*<a href="src/privy/types/wallet_automation_create_params.py">params</a>) -> <a href="./src/privy/types/wallet_automation_response.py">WalletAutomationResponse</a></code>
+- <code title="patch /v1/wallet_automations/{automation_id}">client.wallet_automations.<a href="./src/privy/resources/wallet_automations.py">update</a>(automation_id, \*\*<a href="src/privy/types/wallet_automation_update_params.py">params</a>) -> <a href="./src/privy/types/wallet_automation_response.py">WalletAutomationResponse</a></code>
+- <code title="get /v1/wallet_automations">client.wallet_automations.<a href="./src/privy/resources/wallet_automations.py">list</a>(\*\*<a href="src/privy/types/wallet_automation_list_params.py">params</a>) -> <a href="./src/privy/types/wallet_automation_response.py">SyncCursor[WalletAutomationResponse]</a></code>
+- <code title="delete /v1/wallet_automations/{automation_id}">client.wallet_automations.<a href="./src/privy/resources/wallet_automations.py">delete</a>(automation_id) -> <a href="./src/privy/types/wallet_automation_success_response.py">WalletAutomationSuccessResponse</a></code>
+- <code title="get /v1/wallet_automations/{automation_id}">client.wallet_automations.<a href="./src/privy/resources/wallet_automations.py">get</a>(automation_id) -> <a href="./src/privy/types/wallet_automation_response.py">WalletAutomationResponse</a></code>
+- <code title="get /v1/wallet_automations/executions">client.wallet_automations.<a href="./src/privy/resources/wallet_automations.py">list_executions</a>(\*\*<a href="src/privy/types/wallet_automation_list_executions_params.py">params</a>) -> <a href="./src/privy/types/wallet_automation_execution_response.py">SyncCursor[WalletAutomationExecutionResponse]</a></code>
 - <code title="post /v1/wallet_automations/reindex">client.wallet_automations.<a href="./src/privy/resources/wallet_automations.py">reindex</a>(\*\*<a href="src/privy/types/wallet_automation_reindex_params.py">params</a>) -> <a href="./src/privy/types/wallet_automation_reindex_response.py">WalletAutomationReindexResponse</a></code>
 
 # Wallets
@@ -734,10 +740,19 @@ from privy.types import (
     TransactionChainNameInput,
     TransactionDetail,
     TransactionTokenAddressInput,
+    TransferCustodyOptions,
+    TransferInitiation,
+    TransferInitiationAttestations,
+    TransferInitiationChannel,
+    TransferInitiationSubchannel,
     TransferQuoteRequestBody,
     TransferQuoteResponse,
     TransferReceivedTransactionDetail,
     TransferRequestBody,
+    TransferScaAttestation,
+    TransferScaAuthFactor,
+    TransferScaAuthFactorCategory,
+    TransferScaOutcome,
     TransferSentTransactionDetail,
     TronContract,
     TronRawDataForSend,
@@ -817,6 +832,8 @@ Methods:
 
 - <code title="post /v1/wallets">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">create</a>(\*\*<a href="src/privy/types/wallet_create_params.py">params</a>) -> <a href="./src/privy/types/wallet.py">Wallet</a></code>
 - <code title="get /v1/wallets">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">list</a>(\*\*<a href="src/privy/types/wallet_list_params.py">params</a>) -> <a href="./src/privy/types/wallet.py">SyncCursor[Wallet]</a></code>
+- <code title="post /v1/wallets/{wallet_id}/automations/attach">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">\_attach_automations</a>(wallet_id, \*\*<a href="src/privy/types/wallet_attach_automations_params.py">params</a>) -> <a href="./src/privy/types/wallet_automation_attachment_list_response.py">WalletAutomationAttachmentListResponse</a></code>
+- <code title="post /v1/wallets/{wallet_id}/automations/detach">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">\_detach_automations</a>(wallet_id, \*\*<a href="src/privy/types/wallet_detach_automations_params.py">params</a>) -> <a href="./src/privy/types/wallet_automation_success_response.py">WalletAutomationSuccessResponse</a></code>
 - <code title="post /v1/wallets/{wallet_id}/export">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">\_export</a>(wallet_id, \*\*<a href="src/privy/types/wallet_export_params.py">params</a>) -> <a href="./src/privy/types/wallet_export_response_body.py">WalletExportResponseBody</a></code>
 - <code title="post /v1/wallets/import/init">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">\_init_import</a>(\*\*<a href="src/privy/types/wallet_init_import_params.py">params</a>) -> <a href="./src/privy/types/wallet_init_import_response.py">WalletInitImportResponse</a></code>
 - <code title="post /v1/wallets/{wallet_id}/raw_sign">client.wallets.<a href="./src/privy/resources/wallets/wallets.py">\_raw_sign</a>(wallet_id, \*\*<a href="src/privy/types/wallet_raw_sign_params.py">params</a>) -> <a href="./src/privy/types/raw_sign_response.py">RawSignResponse</a></code>
@@ -1024,9 +1041,9 @@ from privy.types import (
     TransactionProviderErrorWebhookPayload,
     TransactionReplacedWebhookPayload,
     TransactionStillPendingWebhookPayload,
-    UsageCrossChainFeeRecordedWebhookPayload,
     UsageGasSponsorshipRecordedWebhookPayload,
     UsageSourceType,
+    UsageSwapProviderFeeRecordedWebhookPayload,
     UserAuthenticatedWebhookPayload,
     UserCreatedWebhookPayload,
     UserDeletedWebhookPayload,
