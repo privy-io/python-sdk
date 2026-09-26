@@ -6,6 +6,7 @@ from typing_extensions import Literal
 from .._models import BaseModel
 from .block_info import BlockInfo
 from .bridge_metadata import BridgeMetadata
+from .deposit_metadata import DepositMetadata
 from .wallet_funds_asset import WalletFundsAsset
 
 __all__ = ["FundsDepositedWebhookPayload"]
@@ -46,6 +47,9 @@ class FundsDepositedWebhookPayload(BaseModel):
 
     bridge_metadata: Optional[BridgeMetadata] = None
     """Metadata about a Bridge transaction associated with a wallet event."""
+
+    deposit_metadata: Optional[DepositMetadata] = None
+    """Metadata identifying a refunded wallet deposit."""
 
     transaction_fee: Optional[str] = None
     """The transaction fee paid, as a stringified bigint in the chain's native token."""

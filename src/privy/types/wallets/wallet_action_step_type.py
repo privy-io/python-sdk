@@ -11,4 +11,5 @@ WalletActionStepType: TypeAlias = Literal[
     "tvm_transaction",
     "external_transaction",
     "custodian_transaction",
+    "tempo_zone_settlement",
 ]

@@ -50,6 +50,9 @@ from .external_transaction_wallet_action_step import (
 from .custodian_transaction_wallet_action_step import (
     CustodianTransactionWalletActionStep as CustodianTransactionWalletActionStep,
 )
+from .tempo_zone_settlement_wallet_action_step import (
+    TempoZoneSettlementWalletActionStep as TempoZoneSettlementWalletActionStep,
+)
 from .external_transaction_wallet_action_step_status import (
     ExternalTransactionWalletActionStepStatus as ExternalTransactionWalletActionStepStatus,
 )

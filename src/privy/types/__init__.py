@@ -65,6 +65,7 @@ from .kyx_tos_status import KyxTosStatus as KyxTosStatus
 from .linked_account import LinkedAccount as LinkedAccount
 from .owner_id_input import OwnerIDInput as OwnerIDInput
 from .quantity_param import QuantityParam as QuantityParam
+from .refund_details import RefundDetails as RefundDetails
 from .signature_type import SignatureType as SignatureType
 from .sms_mfa_method import SMSMfaMethod as SMSMfaMethod
 from .solana_address import SolanaAddress as SolanaAddress
@@ -85,6 +86,7 @@ from .onramp_provider import OnrampProvider as OnrampProvider
 from .totp_mfa_method import TotpMfaMethod as TotpMfaMethod
 from .abi_schema_param import AbiSchemaParam as AbiSchemaParam
 from .captcha_provider import CaptchaProvider as CaptchaProvider
+from .deposit_metadata import DepositMetadata as DepositMetadata
 from .email_mfa_method import EmailMfaMethod as EmailMfaMethod
 from .kyx_capabilities import KyxCapabilities as KyxCapabilities
 from .kyx_tos_response import KyxTosResponse as KyxTosResponse
