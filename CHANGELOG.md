@@ -1,5 +1,43 @@
 # Changelog
 
+## [0.8.0](https://github.com/privy-io/python-sdk/compare/v0.7.0...v0.8.0) (2026-09-26)
+
+
+### Features
+
+* add authorized Ethereum earn helpers 🪿✨ ([#73](https://github.com/privy-io/python-sdk/issues/73)) ([d52370e](https://github.com/privy-io/python-sdk/commit/d52370e2642e727e7a6a8327ea56e18b7f7fc97f))
+* add authorized wallet swap helpers 🪿✨ ([#74](https://github.com/privy-io/python-sdk/issues/74)) ([2d171a3](https://github.com/privy-io/python-sdk/commit/2d171a356e1c316d7978d2c5b1d3b3bbace13118))
+* add authorized wallet transfers 🪿✨ ([#69](https://github.com/privy-io/python-sdk/issues/69)) ([4d72570](https://github.com/privy-io/python-sdk/commit/4d72570a0573d5bc5ee4247fe5759c1401018a98))
+* add HPKE wallet export helpers 🪿✨ ([#70](https://github.com/privy-io/python-sdk/issues/70)) ([ed34bcd](https://github.com/privy-io/python-sdk/commit/ed34bcd6da0b0602df1721ea23aad7d7e9781850))
+* add HPKE-backed wallet import helpers 🪿✨ ([#71](https://github.com/privy-io/python-sdk/issues/71)) ([1b3ce3e](https://github.com/privy-io/python-sdk/commit/1b3ce3ec18c8fe502b5dafac0066e4706a756add))
+* add Privy token verification and cached JWKS discovery 🪿✨ ([#76](https://github.com/privy-io/python-sdk/issues/76)) ([cb9eab2](https://github.com/privy-io/python-sdk/commit/cb9eab2d48d1bbacbe4b0ae6065b1b4ac4c3abcb))
+* **api:** api update ([9b8f462](https://github.com/privy-io/python-sdk/commit/9b8f4627f04e908b18bd5e18bb0577eef3f27fa4))
+* **api:** api update ([29fee43](https://github.com/privy-io/python-sdk/commit/29fee431bc33a8db25cf200753fb25ee6e76b348))
+* **api:** api update ([f4dc7a9](https://github.com/privy-io/python-sdk/commit/f4dc7a9934784267bad011aaed6fae917c985f02))
+* **api:** api update ([52c9d25](https://github.com/privy-io/python-sdk/commit/52c9d2595f8c9689d352d93c60a46f5ba9494266))
+* **api:** api update ([373b1d1](https://github.com/privy-io/python-sdk/commit/373b1d145fb821a15f25eaefb1b299247916b312))
+* **api:** api update ([6b012ba](https://github.com/privy-io/python-sdk/commit/6b012baa904b3252f995956f116f51189ad19299))
+* **api:** api update ([0d24c9d](https://github.com/privy-io/python-sdk/commit/0d24c9dba6f9749f5a9868ea80ef0d31583ebdd2))
+* **api:** api update ([b32997b](https://github.com/privy-io/python-sdk/commit/b32997bd77aefb328590737ecdaf36f02e5bcd99))
+* **api:** api update ([cb77b6b](https://github.com/privy-io/python-sdk/commit/cb77b6b83395c24aa85ecc1a3b1d6b313479ed86))
+* **api:** api update ([a32eaca](https://github.com/privy-io/python-sdk/commit/a32eacaa0cb807b44a64425b5b3bcbdf40bf5754))
+* **api:** api update ([fb20376](https://github.com/privy-io/python-sdk/commit/fb20376c056e99d149e19807b2c7ff619bdcabf3))
+* **api:** api update ([eb282f6](https://github.com/privy-io/python-sdk/commit/eb282f6887468f5d94d8f77d3feeffcbecaab987))
+* **api:** api update ([ab73d3a](https://github.com/privy-io/python-sdk/commit/ab73d3ac259cb0cb54d518629687101543e54c18))
+* **api:** api update ([aadaf38](https://github.com/privy-io/python-sdk/commit/aadaf3894129508732383c672898f732b1e39bc4))
+* **api:** api update ([a30c60a](https://github.com/privy-io/python-sdk/commit/a30c60a1e866905d58c70c297ca3a4ee6ca713b0))
+* **webhooks:** add signed payload verification 🪿✨ ([#75](https://github.com/privy-io/python-sdk/issues/75)) ([ddc5cd7](https://github.com/privy-io/python-sdk/commit/ddc5cd7dc068125e586e1b526e2c327254d082e5))
+
+
+### Bug Fixes
+
+* **ci:** allow back-sync to update workflows ([#72](https://github.com/privy-io/python-sdk/issues/72)) ([f8e36e9](https://github.com/privy-io/python-sdk/commit/f8e36e91edc53e8cbd5864026f4b986934367057))
+
+
+### Documentation
+
+* add agent guidance ([#67](https://github.com/privy-io/python-sdk/issues/67)) ([1fc70c5](https://github.com/privy-io/python-sdk/commit/1fc70c564aa8b172499ba70a6b571ec191c5930b))
+
 ## [0.7.0](https://github.com/privy-io/python-sdk/compare/v0.6.0...v0.7.0) (2026-09-04)
 
 
