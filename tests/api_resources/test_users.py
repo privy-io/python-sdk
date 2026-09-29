@@ -10,6 +10,7 @@ import pytest
 from privy import PrivyAPI, AsyncPrivyAPI
 from privy.types import (
     User,
+    SuccessResponse,
 )
 from tests.utils import assert_matches_type
 from privy.pagination import SyncCursor, AsyncCursor
@@ -172,6 +173,48 @@ class TestUsers:
     def test_path_params_delete(self, client: PrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
             client.users.with_raw_response.delete(
+                "",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_freeze(self, client: PrivyAPI) -> None:
+        user = client.users.freeze(
+            "user_id",
+        )
+        assert_matches_type(SuccessResponse, user, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_freeze(self, client: PrivyAPI) -> None:
+        response = client.users.with_raw_response.freeze(
+            "user_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        user = response.parse()
+        assert_matches_type(SuccessResponse, user, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_freeze(self, client: PrivyAPI) -> None:
+        with client.users.with_streaming_response.freeze(
+            "user_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            user = response.parse()
+            assert_matches_type(SuccessResponse, user, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_freeze(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
+            client.users.with_raw_response.freeze(
                 "",
             )
 
@@ -793,6 +836,48 @@ class TestUsers:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
+    def test_method_unfreeze(self, client: PrivyAPI) -> None:
+        user = client.users.unfreeze(
+            "user_id",
+        )
+        assert_matches_type(SuccessResponse, user, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_unfreeze(self, client: PrivyAPI) -> None:
+        response = client.users.with_raw_response.unfreeze(
+            "user_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        user = response.parse()
+        assert_matches_type(SuccessResponse, user, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_unfreeze(self, client: PrivyAPI) -> None:
+        with client.users.with_streaming_response.unfreeze(
+            "user_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            user = response.parse()
+            assert_matches_type(SuccessResponse, user, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_unfreeze(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
+            client.users.with_raw_response.unfreeze(
+                "",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
     def test_method_unlink_linked_account(self, client: PrivyAPI) -> None:
         user = client.users.unlink_linked_account(
             user_id="user_id",
@@ -1010,6 +1095,48 @@ class TestAsyncUsers:
     async def test_path_params_delete(self, async_client: AsyncPrivyAPI) -> None:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
             await async_client.users.with_raw_response.delete(
+                "",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_freeze(self, async_client: AsyncPrivyAPI) -> None:
+        user = await async_client.users.freeze(
+            "user_id",
+        )
+        assert_matches_type(SuccessResponse, user, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_freeze(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.users.with_raw_response.freeze(
+            "user_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        user = await response.parse()
+        assert_matches_type(SuccessResponse, user, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_freeze(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.users.with_streaming_response.freeze(
+            "user_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            user = await response.parse()
+            assert_matches_type(SuccessResponse, user, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_freeze(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
+            await async_client.users.with_raw_response.freeze(
                 "",
             )
 
@@ -1627,6 +1754,48 @@ class TestAsyncUsers:
             await async_client.users.with_raw_response.set_custom_metadata(
                 user_id="",
                 custom_metadata={"key": "value"},
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_unfreeze(self, async_client: AsyncPrivyAPI) -> None:
+        user = await async_client.users.unfreeze(
+            "user_id",
+        )
+        assert_matches_type(SuccessResponse, user, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_unfreeze(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.users.with_raw_response.unfreeze(
+            "user_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        user = await response.parse()
+        assert_matches_type(SuccessResponse, user, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_unfreeze(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.users.with_streaming_response.unfreeze(
+            "user_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            user = await response.parse()
+            assert_matches_type(SuccessResponse, user, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_unfreeze(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
+            await async_client.users.with_raw_response.unfreeze(
+                "",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")

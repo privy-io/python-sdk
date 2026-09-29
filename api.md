@@ -414,6 +414,7 @@ Methods:
 - <code title="post /v1/users">client.users.<a href="./src/privy/resources/users/users.py">create</a>(\*\*<a href="src/privy/types/user_create_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
 - <code title="get /v1/users">client.users.<a href="./src/privy/resources/users/users.py">list</a>(\*\*<a href="src/privy/types/user_list_params.py">params</a>) -> <a href="./src/privy/types/user.py">SyncCursor[User]</a></code>
 - <code title="delete /v1/users/{user_id}">client.users.<a href="./src/privy/resources/users/users.py">delete</a>(user_id) -> None</code>
+- <code title="post /v1/users/{user_id}/freeze">client.users.<a href="./src/privy/resources/users/users.py">freeze</a>(user_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
 - <code title="get /v1/users/{user_id}">client.users.<a href="./src/privy/resources/users/users.py">get</a>(user_id) -> <a href="./src/privy/types/user.py">User</a></code>
 - <code title="post /v1/users/custom_auth/id">client.users.<a href="./src/privy/resources/users/users.py">get_by_custom_auth_id</a>(\*\*<a href="src/privy/types/user_get_by_custom_auth_id_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
 - <code title="post /v1/users/discord/username">client.users.<a href="./src/privy/resources/users/users.py">get_by_discord_username</a>(\*\*<a href="src/privy/types/user_get_by_discord_username_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
@@ -430,6 +431,7 @@ Methods:
 - <code title="post /v1/users/{user_id}/wallets">client.users.<a href="./src/privy/resources/users/users.py">pregenerate_wallets</a>(user_id, \*\*<a href="src/privy/types/user_pregenerate_wallets_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
 - <code title="post /v1/users/search">client.users.<a href="./src/privy/resources/users/users.py">search</a>(\*\*<a href="src/privy/types/user_search_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
 - <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/privy/resources/users/users.py">set_custom_metadata</a>(user_id, \*\*<a href="src/privy/types/user_set_custom_metadata_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+- <code title="delete /v1/users/{user_id}/freeze">client.users.<a href="./src/privy/resources/users/users.py">unfreeze</a>(user_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
 - <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/privy/resources/users/users.py">unlink_linked_account</a>(user_id, \*\*<a href="src/privy/types/user_unlink_linked_account_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
 
 ## ExternalFiatAccounts

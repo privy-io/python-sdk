@@ -56,6 +56,7 @@ from .external_fiat_accounts import (
     ExternalFiatAccountsResourceWithStreamingResponse,
     AsyncExternalFiatAccountsResourceWithStreamingResponse,
 )
+from ...types.success_response import SuccessResponse
 from ...types.custom_metadata_param import CustomMetadataParam
 from ...types.linked_account_type_param import LinkedAccountTypeParam
 from ...types.linked_account_input_param import LinkedAccountInputParam
@@ -220,6 +221,41 @@ class UsersResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=NoneType,
+        )
+
+    def freeze(
+        self,
+        user_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
+        """
+        Freezes a user by user ID, blocking new logins and revoking active sessions.
+
+        Args:
+          user_id: ID of the user.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not user_id:
+            raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
+        return self._post(
+            path_template("/v1/users/{user_id}/freeze", user_id=user_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SuccessResponse,
         )
 
     def get(
@@ -822,6 +858,41 @@ class UsersResource(SyncAPIResource):
             cast_to=User,
         )
 
+    def unfreeze(
+        self,
+        user_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
+        """
+        Unfreezes a user by user ID, restoring their ability to log in.
+
+        Args:
+          user_id: ID of the user.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not user_id:
+            raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
+        return self._delete(
+            path_template("/v1/users/{user_id}/freeze", user_id=user_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SuccessResponse,
+        )
+
     def unlink_linked_account(
         self,
         user_id: str,
@@ -1027,6 +1098,41 @@ class AsyncUsersResource(AsyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=NoneType,
+        )
+
+    async def freeze(
+        self,
+        user_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
+        """
+        Freezes a user by user ID, blocking new logins and revoking active sessions.
+
+        Args:
+          user_id: ID of the user.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not user_id:
+            raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
+        return await self._post(
+            path_template("/v1/users/{user_id}/freeze", user_id=user_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SuccessResponse,
         )
 
     async def get(
@@ -1637,6 +1743,41 @@ class AsyncUsersResource(AsyncAPIResource):
             cast_to=User,
         )
 
+    async def unfreeze(
+        self,
+        user_id: str,
+        *,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SuccessResponse:
+        """
+        Unfreezes a user by user ID, restoring their ability to log in.
+
+        Args:
+          user_id: ID of the user.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not user_id:
+            raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
+        return await self._delete(
+            path_template("/v1/users/{user_id}/freeze", user_id=user_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=SuccessResponse,
+        )
+
     async def unlink_linked_account(
         self,
         user_id: str,
@@ -1699,6 +1840,9 @@ class UsersResourceWithRawResponse:
         self.delete = to_raw_response_wrapper(
             users.delete,
         )
+        self.freeze = to_raw_response_wrapper(
+            users.freeze,
+        )
         self.get = to_raw_response_wrapper(
             users.get,
         )
@@ -1747,6 +1891,9 @@ class UsersResourceWithRawResponse:
         self.set_custom_metadata = to_raw_response_wrapper(
             users.set_custom_metadata,
         )
+        self.unfreeze = to_raw_response_wrapper(
+            users.unfreeze,
+        )
         self.unlink_linked_account = to_raw_response_wrapper(
             users.unlink_linked_account,
         )
@@ -1774,6 +1921,9 @@ class AsyncUsersResourceWithRawResponse:
         )
         self.delete = async_to_raw_response_wrapper(
             users.delete,
+        )
+        self.freeze = async_to_raw_response_wrapper(
+            users.freeze,
         )
         self.get = async_to_raw_response_wrapper(
             users.get,
@@ -1823,6 +1973,9 @@ class AsyncUsersResourceWithRawResponse:
         self.set_custom_metadata = async_to_raw_response_wrapper(
             users.set_custom_metadata,
         )
+        self.unfreeze = async_to_raw_response_wrapper(
+            users.unfreeze,
+        )
         self.unlink_linked_account = async_to_raw_response_wrapper(
             users.unlink_linked_account,
         )
@@ -1850,6 +2003,9 @@ class UsersResourceWithStreamingResponse:
         )
         self.delete = to_streamed_response_wrapper(
             users.delete,
+        )
+        self.freeze = to_streamed_response_wrapper(
+            users.freeze,
         )
         self.get = to_streamed_response_wrapper(
             users.get,
@@ -1899,6 +2055,9 @@ class UsersResourceWithStreamingResponse:
         self.set_custom_metadata = to_streamed_response_wrapper(
             users.set_custom_metadata,
         )
+        self.unfreeze = to_streamed_response_wrapper(
+            users.unfreeze,
+        )
         self.unlink_linked_account = to_streamed_response_wrapper(
             users.unlink_linked_account,
         )
@@ -1926,6 +2085,9 @@ class AsyncUsersResourceWithStreamingResponse:
         )
         self.delete = async_to_streamed_response_wrapper(
             users.delete,
+        )
+        self.freeze = async_to_streamed_response_wrapper(
+            users.freeze,
         )
         self.get = async_to_streamed_response_wrapper(
             users.get,
@@ -1974,6 +2136,9 @@ class AsyncUsersResourceWithStreamingResponse:
         )
         self.set_custom_metadata = async_to_streamed_response_wrapper(
             users.set_custom_metadata,
+        )
+        self.unfreeze = async_to_streamed_response_wrapper(
+            users.unfreeze,
         )
         self.unlink_linked_account = async_to_streamed_response_wrapper(
             users.unlink_linked_account,
