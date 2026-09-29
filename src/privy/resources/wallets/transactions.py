@@ -87,6 +87,8 @@ class TransactionsResource(SyncAPIResource):
           asset: Exactly one of `asset` or `token` is required. Cannot be used together with
               `token`.
 
+          cursor: Cursor returned by the previous page.
+
           include_archived: Include archived wallets in lookup. Defaults to false.
 
           extra_headers: Send extra headers
@@ -182,6 +184,8 @@ class AsyncTransactionsResource(AsyncAPIResource):
 
           asset: Exactly one of `asset` or `token` is required. Cannot be used together with
               `token`.
+
+          cursor: Cursor returned by the previous page.
 
           include_archived: Include archived wallets in lookup. Defaults to false.
 

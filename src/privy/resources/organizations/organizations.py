@@ -176,6 +176,8 @@ class OrganizationsResource(SyncAPIResource):
         List organizations in an app.
 
         Args:
+          cursor: Cursor returned by the previous page.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -410,6 +412,8 @@ class AsyncOrganizationsResource(AsyncAPIResource):
         List organizations in an app.
 
         Args:
+          cursor: Cursor returned by the previous page.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request

@@ -102,6 +102,8 @@ class CryptoResource(SyncAPIResource):
         Args:
           wallet_id: ID of the wallet.
 
+          cursor: Cursor returned by the previous page.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -449,6 +451,8 @@ class AsyncCryptoResource(AsyncAPIResource):
 
         Args:
           wallet_id: ID of the wallet.
+
+          cursor: Cursor returned by the previous page.
 
           extra_headers: Send extra headers
 

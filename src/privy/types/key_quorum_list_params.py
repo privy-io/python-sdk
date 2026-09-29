@@ -5,10 +5,10 @@ from __future__ import annotations
 from typing import Optional
 from typing_extensions import TypedDict
 
-__all__ = ["UserListParams"]
+__all__ = ["KeyQuorumListParams"]
 
 
-class UserListParams(TypedDict, total=False):
+class KeyQuorumListParams(TypedDict, total=False):
     cursor: str
     """Cursor returned by the previous page."""
 

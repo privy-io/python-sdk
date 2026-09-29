@@ -33,6 +33,7 @@ class TransactionGetParams(TypedDict, total=False):
     """
 
     cursor: str
+    """Cursor returned by the previous page."""
 
     include_archived: bool
     """Include archived wallets in lookup. Defaults to false."""

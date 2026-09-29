@@ -5,10 +5,10 @@ from __future__ import annotations
 from typing import Optional
 from typing_extensions import TypedDict
 
-__all__ = ["UserListParams"]
+__all__ = ["ConditionSetListParams"]
 
 
-class UserListParams(TypedDict, total=False):
+class ConditionSetListParams(TypedDict, total=False):
     cursor: str
     """Cursor returned by the previous page."""
 

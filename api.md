@@ -171,12 +171,14 @@ from privy.types import (
     KeyQuorumAuthorizationHeaders,
     KeyQuorumCreateRequestBody,
     KeyQuorumUpdateRequestBody,
+    KeyQuorumsResponse,
 )
 ```
 
 Methods:
 
 - <code title="post /v1/key_quorums">client.key_quorums.<a href="./src/privy/resources/key_quorums.py">create</a>(\*\*<a href="src/privy/types/key_quorum_create_params.py">params</a>) -> <a href="./src/privy/types/key_quorum.py">KeyQuorum</a></code>
+- <code title="get /v1/key_quorums">client.key_quorums.<a href="./src/privy/resources/key_quorums.py">list</a>(\*\*<a href="src/privy/types/key_quorum_list_params.py">params</a>) -> <a href="./src/privy/types/key_quorum.py">SyncCursor[KeyQuorum]</a></code>
 - <code title="delete /v1/key_quorums/{key_quorum_id}">client.key_quorums.<a href="./src/privy/resources/key_quorums.py">\_delete_key_quorum</a>(key_quorum_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
 - <code title="patch /v1/key_quorums/{key_quorum_id}">client.key_quorums.<a href="./src/privy/resources/key_quorums.py">\_update</a>(key_quorum_id, \*\*<a href="src/privy/types/key_quorum_update_params.py">params</a>) -> <a href="./src/privy/types/key_quorum.py">KeyQuorum</a></code>
 - <code title="get /v1/key_quorums/{key_quorum_id}">client.key_quorums.<a href="./src/privy/resources/key_quorums.py">get</a>(key_quorum_id) -> <a href="./src/privy/types/key_quorum.py">KeyQuorum</a></code>
@@ -256,10 +258,12 @@ from privy.types import (
     EthereumTypedDataMessageCondition,
     MessageSigningCondition,
     MessageSigningField,
+    PoliciesResponse,
     Policy,
     PolicyAction,
     PolicyAuthorizationHeaders,
     PolicyCondition,
+    PolicyListItem,
     PolicyMethod,
     PolicyRequestBody,
     PolicyRuleRequestBody,
@@ -289,14 +293,27 @@ from privy.types import (
 
 Methods:
 
-- <code title="post /v1/policies">client.policies.<a href="./src/privy/resources/policies.py">create</a>(\*\*<a href="src/privy/types/policy_create_params.py">params</a>) -> <a href="./src/privy/types/policy.py">Policy</a></code>
-- <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/privy/resources/policies.py">\_create_rule</a>(policy_id, \*\*<a href="src/privy/types/policy_create_rule_params.py">params</a>) -> <a href="./src/privy/types/policy_rule_response.py">PolicyRuleResponse</a></code>
-- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/privy/resources/policies.py">\_delete_policy</a>(policy_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
-- <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/privy/resources/policies.py">\_delete_rule</a>(rule_id, \*, policy_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
-- <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/privy/resources/policies.py">\_update</a>(policy_id, \*\*<a href="src/privy/types/policy_update_params.py">params</a>) -> <a href="./src/privy/types/policy.py">Policy</a></code>
-- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/privy/resources/policies.py">\_update_rule</a>(rule_id, \*, policy_id, \*\*<a href="src/privy/types/policy_update_rule_params.py">params</a>) -> <a href="./src/privy/types/policy_rule_response.py">PolicyRuleResponse</a></code>
-- <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/privy/resources/policies.py">get</a>(policy_id) -> <a href="./src/privy/types/policy.py">Policy</a></code>
-- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/privy/resources/policies.py">get_rule</a>(rule_id, \*, policy_id) -> <a href="./src/privy/types/policy_rule_response.py">PolicyRuleResponse</a></code>
+- <code title="post /v1/policies">client.policies.<a href="./src/privy/resources/policies/policies.py">create</a>(\*\*<a href="src/privy/types/policy_create_params.py">params</a>) -> <a href="./src/privy/types/policy.py">Policy</a></code>
+- <code title="get /v1/policies">client.policies.<a href="./src/privy/resources/policies/policies.py">list</a>(\*\*<a href="src/privy/types/policy_list_params.py">params</a>) -> <a href="./src/privy/types/policy_list_item.py">SyncCursor[PolicyListItem]</a></code>
+- <code title="post /v1/policies/{policy_id}/rules">client.policies.<a href="./src/privy/resources/policies/policies.py">\_create_rule</a>(policy_id, \*\*<a href="src/privy/types/policy_create_rule_params.py">params</a>) -> <a href="./src/privy/types/policy_rule_response.py">PolicyRuleResponse</a></code>
+- <code title="delete /v1/policies/{policy_id}">client.policies.<a href="./src/privy/resources/policies/policies.py">\_delete_policy</a>(policy_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
+- <code title="delete /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/privy/resources/policies/policies.py">\_delete_rule</a>(rule_id, \*, policy_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
+- <code title="patch /v1/policies/{policy_id}">client.policies.<a href="./src/privy/resources/policies/policies.py">\_update</a>(policy_id, \*\*<a href="src/privy/types/policy_update_params.py">params</a>) -> <a href="./src/privy/types/policy.py">Policy</a></code>
+- <code title="patch /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/privy/resources/policies/policies.py">\_update_rule</a>(rule_id, \*, policy_id, \*\*<a href="src/privy/types/policy_update_rule_params.py">params</a>) -> <a href="./src/privy/types/policy_rule_response.py">PolicyRuleResponse</a></code>
+- <code title="get /v1/policies/{policy_id}">client.policies.<a href="./src/privy/resources/policies/policies.py">get</a>(policy_id) -> <a href="./src/privy/types/policy.py">Policy</a></code>
+- <code title="get /v1/policies/{policy_id}/rules/{rule_id}">client.policies.<a href="./src/privy/resources/policies/policies.py">get_rule</a>(rule_id, \*, policy_id) -> <a href="./src/privy/types/policy_rule_response.py">PolicyRuleResponse</a></code>
+
+## ConditionSets
+
+Types:
+
+```python
+from privy.types.policies import ConditionSetsResponse
+```
+
+Methods:
+
+- <code title="get /v1/condition_sets">client.policies.condition_sets.<a href="./src/privy/resources/policies/condition_sets.py">list</a>(\*\*<a href="src/privy/types/policies/condition_set_list_params.py">params</a>) -> <a href="./src/privy/types/condition_set.py">SyncCursor[ConditionSet]</a></code>
 
 # Transactions
 

@@ -10,10 +10,12 @@ import pytest
 from privy import PrivyAPI, AsyncPrivyAPI
 from privy.types import (
     Policy,
+    PolicyListItem,
     SuccessResponse,
     PolicyRuleResponse,
 )
 from tests.utils import assert_matches_type
+from privy.pagination import SyncCursor, AsyncCursor
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -132,6 +134,43 @@ class TestPolicies:
 
             policy = response.parse()
             assert_matches_type(Policy, policy, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_list(self, client: PrivyAPI) -> None:
+        policy = client.policies.list()
+        assert_matches_type(SyncCursor[PolicyListItem], policy, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_list_with_all_params(self, client: PrivyAPI) -> None:
+        policy = client.policies.list(
+            cursor="x",
+            limit=100,
+        )
+        assert_matches_type(SyncCursor[PolicyListItem], policy, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_list(self, client: PrivyAPI) -> None:
+        response = client.policies.with_raw_response.list()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        policy = response.parse()
+        assert_matches_type(SyncCursor[PolicyListItem], policy, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_list(self, client: PrivyAPI) -> None:
+        with client.policies.with_streaming_response.list() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            policy = response.parse()
+            assert_matches_type(SyncCursor[PolicyListItem], policy, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -767,6 +806,43 @@ class TestAsyncPolicies:
 
             policy = await response.parse()
             assert_matches_type(Policy, policy, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_list(self, async_client: AsyncPrivyAPI) -> None:
+        policy = await async_client.policies.list()
+        assert_matches_type(AsyncCursor[PolicyListItem], policy, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_list_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        policy = await async_client.policies.list(
+            cursor="x",
+            limit=100,
+        )
+        assert_matches_type(AsyncCursor[PolicyListItem], policy, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_list(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.policies.with_raw_response.list()
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        policy = await response.parse()
+        assert_matches_type(AsyncCursor[PolicyListItem], policy, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_list(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.policies.with_streaming_response.list() as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            policy = await response.parse()
+            assert_matches_type(AsyncCursor[PolicyListItem], policy, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

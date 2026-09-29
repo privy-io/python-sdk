@@ -31,6 +31,7 @@ class WalletListParams(TypedDict, total=False):
     """The wallet chain types."""
 
     cursor: str
+    """Cursor returned by the previous page."""
 
     entity_id: str
     """Filter wallets by the entity ID the wallet is attributed to."""

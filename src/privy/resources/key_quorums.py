@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+from typing import Optional
+
 import httpx
 
-from ..types import KeyQuorumID, key_quorum_create_params, key_quorum_update_params
+from ..types import KeyQuorumID, key_quorum_list_params, key_quorum_create_params, key_quorum_update_params
 from .._types import Body, Omit, Query, Headers, NotGiven, SequenceNotStr, omit, not_given
 from .._utils import path_template, maybe_transform, strip_not_given, async_maybe_transform
 from .._compat import cached_property
@@ -15,7 +17,8 @@ from .._response import (
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
+from ..pagination import SyncCursor, AsyncCursor
+from .._base_client import AsyncPaginator, make_request_options
 from ..types.key_quorum import KeyQuorum
 from ..types.key_quorum_id import KeyQuorumID
 from ..types.success_response import SuccessResponse
@@ -103,6 +106,51 @@ class KeyQuorumsResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=KeyQuorum,
+        )
+
+    def list(
+        self,
+        *,
+        cursor: str | Omit = omit,
+        limit: Optional[float] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SyncCursor[KeyQuorum]:
+        """
+        List key quorums in an app.
+
+        Args:
+          cursor: Cursor returned by the previous page.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/key_quorums",
+            page=SyncCursor[KeyQuorum],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "cursor": cursor,
+                        "limit": limit,
+                    },
+                    key_quorum_list_params.KeyQuorumListParams,
+                ),
+            ),
+            model=KeyQuorum,
         )
 
     def _delete_key_quorum(
@@ -354,6 +402,51 @@ class AsyncKeyQuorumsResource(AsyncAPIResource):
             cast_to=KeyQuorum,
         )
 
+    def list(
+        self,
+        *,
+        cursor: str | Omit = omit,
+        limit: Optional[float] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AsyncPaginator[KeyQuorum, AsyncCursor[KeyQuorum]]:
+        """
+        List key quorums in an app.
+
+        Args:
+          cursor: Cursor returned by the previous page.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/key_quorums",
+            page=AsyncCursor[KeyQuorum],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "cursor": cursor,
+                        "limit": limit,
+                    },
+                    key_quorum_list_params.KeyQuorumListParams,
+                ),
+            ),
+            model=KeyQuorum,
+        )
+
     async def _delete_key_quorum(
         self,
         key_quorum_id: KeyQuorumID,
@@ -528,6 +621,9 @@ class KeyQuorumsResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             key_quorums.create,
         )
+        self.list = to_raw_response_wrapper(
+            key_quorums.list,
+        )
         self._delete_key_quorum = to_raw_response_wrapper(
             key_quorums._delete_key_quorum,
         )
@@ -545,6 +641,9 @@ class AsyncKeyQuorumsResourceWithRawResponse:
 
         self.create = async_to_raw_response_wrapper(
             key_quorums.create,
+        )
+        self.list = async_to_raw_response_wrapper(
+            key_quorums.list,
         )
         self._delete_key_quorum = async_to_raw_response_wrapper(
             key_quorums._delete_key_quorum,
@@ -564,6 +663,9 @@ class KeyQuorumsResourceWithStreamingResponse:
         self.create = to_streamed_response_wrapper(
             key_quorums.create,
         )
+        self.list = to_streamed_response_wrapper(
+            key_quorums.list,
+        )
         self._delete_key_quorum = to_streamed_response_wrapper(
             key_quorums._delete_key_quorum,
         )
@@ -581,6 +683,9 @@ class AsyncKeyQuorumsResourceWithStreamingResponse:
 
         self.create = async_to_streamed_response_wrapper(
             key_quorums.create,
+        )
+        self.list = async_to_streamed_response_wrapper(
+            key_quorums.list,
         )
         self._delete_key_quorum = async_to_streamed_response_wrapper(
             key_quorums._delete_key_quorum,

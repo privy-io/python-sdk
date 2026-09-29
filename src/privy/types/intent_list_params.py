@@ -22,6 +22,7 @@ class IntentListParams(TypedDict, total=False):
     current_user_has_signed: Literal["true", "false"]
 
     cursor: str
+    """Cursor returned by the previous page."""
 
     intent_type: IntentType
     """Type of intent."""

@@ -7,43 +7,59 @@ from typing_extensions import Literal
 
 import httpx
 
-from ..types import (
+from ...types import (
     OwnerIDInput,
     PolicyAction,
     PolicyMethod,
     WalletChainType,
+    policy_list_params,
     policy_create_params,
     policy_update_params,
     policy_create_rule_params,
     policy_update_rule_params,
 )
-from .._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
-from .._utils import path_template, maybe_transform, strip_not_given, async_maybe_transform
-from .._compat import cached_property
-from .._resource import SyncAPIResource, AsyncAPIResource
-from .._response import (
+from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
+from ..._utils import path_template, maybe_transform, strip_not_given, async_maybe_transform
+from ..._compat import cached_property
+from ..._resource import SyncAPIResource, AsyncAPIResource
+from ..._response import (
     to_raw_response_wrapper,
     to_streamed_response_wrapper,
     async_to_raw_response_wrapper,
     async_to_streamed_response_wrapper,
 )
-from .._base_client import make_request_options
-from ..types.policy import Policy
-from ..types.policy_action import PolicyAction
-from ..types.policy_method import PolicyMethod
-from ..types.owner_id_input import OwnerIDInput
-from ..types.success_response import SuccessResponse
-from ..types.owner_input_param import OwnerInputParam
-from ..types.wallet_chain_type import WalletChainType
-from ..types.policy_rule_response import PolicyRuleResponse
-from ..types.policy_condition_param import PolicyConditionParam
-from ..types.policy_rule_request_body_param import PolicyRuleRequestBodyParam
+from ...pagination import SyncCursor, AsyncCursor
+from ..._base_client import AsyncPaginator, make_request_options
+from ...types.policy import Policy
+from .condition_sets import (
+    ConditionSetsResource,
+    AsyncConditionSetsResource,
+    ConditionSetsResourceWithRawResponse,
+    AsyncConditionSetsResourceWithRawResponse,
+    ConditionSetsResourceWithStreamingResponse,
+    AsyncConditionSetsResourceWithStreamingResponse,
+)
+from ...types.policy_action import PolicyAction
+from ...types.policy_method import PolicyMethod
+from ...types.owner_id_input import OwnerIDInput
+from ...types.policy_list_item import PolicyListItem
+from ...types.success_response import SuccessResponse
+from ...types.owner_input_param import OwnerInputParam
+from ...types.wallet_chain_type import WalletChainType
+from ...types.policy_rule_response import PolicyRuleResponse
+from ...types.policy_condition_param import PolicyConditionParam
+from ...types.policy_rule_request_body_param import PolicyRuleRequestBodyParam
 
 __all__ = ["PoliciesResource", "AsyncPoliciesResource"]
 
 
 class PoliciesResource(SyncAPIResource):
     """Operations related to policies"""
+
+    @cached_property
+    def condition_sets(self) -> ConditionSetsResource:
+        """Operations related to policies"""
+        return ConditionSetsResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> PoliciesResourceWithRawResponse:
@@ -126,6 +142,51 @@ class PoliciesResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=Policy,
+        )
+
+    def list(
+        self,
+        *,
+        cursor: str | Omit = omit,
+        limit: Optional[float] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> SyncCursor[PolicyListItem]:
+        """
+        List policies in an app, excluding rules.
+
+        Args:
+          cursor: Cursor returned by the previous page.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/policies",
+            page=SyncCursor[PolicyListItem],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "cursor": cursor,
+                        "limit": limit,
+                    },
+                    policy_list_params.PolicyListParams,
+                ),
+            ),
+            model=PolicyListItem,
         )
 
     def _create_rule(
@@ -513,6 +574,11 @@ class AsyncPoliciesResource(AsyncAPIResource):
     """Operations related to policies"""
 
     @cached_property
+    def condition_sets(self) -> AsyncConditionSetsResource:
+        """Operations related to policies"""
+        return AsyncConditionSetsResource(self._client)
+
+    @cached_property
     def with_raw_response(self) -> AsyncPoliciesResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
@@ -593,6 +659,51 @@ class AsyncPoliciesResource(AsyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=Policy,
+        )
+
+    def list(
+        self,
+        *,
+        cursor: str | Omit = omit,
+        limit: Optional[float] | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> AsyncPaginator[PolicyListItem, AsyncCursor[PolicyListItem]]:
+        """
+        List policies in an app, excluding rules.
+
+        Args:
+          cursor: Cursor returned by the previous page.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get_api_list(
+            "/v1/policies",
+            page=AsyncCursor[PolicyListItem],
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform(
+                    {
+                        "cursor": cursor,
+                        "limit": limit,
+                    },
+                    policy_list_params.PolicyListParams,
+                ),
+            ),
+            model=PolicyListItem,
         )
 
     async def _create_rule(
@@ -983,6 +1094,9 @@ class PoliciesResourceWithRawResponse:
         self.create = to_raw_response_wrapper(
             policies.create,
         )
+        self.list = to_raw_response_wrapper(
+            policies.list,
+        )
         self._create_rule = to_raw_response_wrapper(
             policies._create_rule,
         )
@@ -1005,6 +1119,11 @@ class PoliciesResourceWithRawResponse:
             policies.get_rule,
         )
 
+    @cached_property
+    def condition_sets(self) -> ConditionSetsResourceWithRawResponse:
+        """Operations related to policies"""
+        return ConditionSetsResourceWithRawResponse(self._policies.condition_sets)
+
 
 class AsyncPoliciesResourceWithRawResponse:
     def __init__(self, policies: AsyncPoliciesResource) -> None:
@@ -1012,6 +1131,9 @@ class AsyncPoliciesResourceWithRawResponse:
 
         self.create = async_to_raw_response_wrapper(
             policies.create,
+        )
+        self.list = async_to_raw_response_wrapper(
+            policies.list,
         )
         self._create_rule = async_to_raw_response_wrapper(
             policies._create_rule,
@@ -1035,6 +1157,11 @@ class AsyncPoliciesResourceWithRawResponse:
             policies.get_rule,
         )
 
+    @cached_property
+    def condition_sets(self) -> AsyncConditionSetsResourceWithRawResponse:
+        """Operations related to policies"""
+        return AsyncConditionSetsResourceWithRawResponse(self._policies.condition_sets)
+
 
 class PoliciesResourceWithStreamingResponse:
     def __init__(self, policies: PoliciesResource) -> None:
@@ -1042,6 +1169,9 @@ class PoliciesResourceWithStreamingResponse:
 
         self.create = to_streamed_response_wrapper(
             policies.create,
+        )
+        self.list = to_streamed_response_wrapper(
+            policies.list,
         )
         self._create_rule = to_streamed_response_wrapper(
             policies._create_rule,
@@ -1065,6 +1195,11 @@ class PoliciesResourceWithStreamingResponse:
             policies.get_rule,
         )
 
+    @cached_property
+    def condition_sets(self) -> ConditionSetsResourceWithStreamingResponse:
+        """Operations related to policies"""
+        return ConditionSetsResourceWithStreamingResponse(self._policies.condition_sets)
+
 
 class AsyncPoliciesResourceWithStreamingResponse:
     def __init__(self, policies: AsyncPoliciesResource) -> None:
@@ -1072,6 +1207,9 @@ class AsyncPoliciesResourceWithStreamingResponse:
 
         self.create = async_to_streamed_response_wrapper(
             policies.create,
+        )
+        self.list = async_to_streamed_response_wrapper(
+            policies.list,
         )
         self._create_rule = async_to_streamed_response_wrapper(
             policies._create_rule,
@@ -1094,3 +1232,8 @@ class AsyncPoliciesResourceWithStreamingResponse:
         self.get_rule = async_to_streamed_response_wrapper(
             policies.get_rule,
         )
+
+    @cached_property
+    def condition_sets(self) -> AsyncConditionSetsResourceWithStreamingResponse:
+        """Operations related to policies"""
+        return AsyncConditionSetsResourceWithStreamingResponse(self._policies.condition_sets)

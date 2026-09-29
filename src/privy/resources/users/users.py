@@ -160,6 +160,8 @@ class UsersResource(SyncAPIResource):
         Get all users in your app.
 
         Args:
+          cursor: Cursor returned by the previous page.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -1037,6 +1039,8 @@ class AsyncUsersResource(AsyncAPIResource):
         Get all users in your app.
 
         Args:
+          cursor: Cursor returned by the previous page.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request

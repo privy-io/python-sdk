@@ -9,5 +9,6 @@ __all__ = ["CryptoListParams"]
 
 class CryptoListParams(TypedDict, total=False):
     cursor: str
+    """Cursor returned by the previous page."""
 
     limit: int

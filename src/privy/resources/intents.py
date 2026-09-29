@@ -159,6 +159,8 @@ class IntentsResource(SyncAPIResource):
           created_by_id: Filter by creator user ID. For user-token requests, Privy uses the authenticated
               user ID to scope intent visibility. This filter only narrows that scoped result.
 
+          cursor: Cursor returned by the previous page.
+
           intent_type: Type of intent.
 
           pending_member_id: Filter by a user whose approval is still pending. For user-token requests, Privy
@@ -2134,6 +2136,8 @@ class AsyncIntentsResource(AsyncAPIResource):
         Args:
           created_by_id: Filter by creator user ID. For user-token requests, Privy uses the authenticated
               user ID to scope intent visibility. This filter only narrows that scoped result.
+
+          cursor: Cursor returned by the previous page.
 
           intent_type: Type of intent.
 

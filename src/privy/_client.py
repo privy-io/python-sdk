@@ -48,13 +48,13 @@ if TYPE_CHECKING:
         wallet_automations,
     )
     from .resources.intents import IntentsResource, AsyncIntentsResource
-    from .resources.policies import PoliciesResource, AsyncPoliciesResource
     from .resources.webhooks import WebhooksResource, AsyncWebhooksResource
     from .resources.apps.apps import AppsResource, AsyncAppsResource
     from .resources.key_quorums import KeyQuorumsResource, AsyncKeyQuorumsResource
     from .resources.users.users import UsersResource, AsyncUsersResource
     from .resources.transactions import TransactionsResource, AsyncTransactionsResource
     from .resources.wallets.wallets import WalletsResource, AsyncWalletsResource
+    from .resources.policies.policies import PoliciesResource, AsyncPoliciesResource
     from .resources.wallet_automations import WalletAutomationsResource, AsyncWalletAutomationsResource
     from .resources.organizations.organizations import OrganizationsResource, AsyncOrganizationsResource
 

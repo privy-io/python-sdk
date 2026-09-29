@@ -348,6 +348,8 @@ class WalletsResource(SyncAPIResource):
 
           chain_type: The wallet chain types.
 
+          cursor: Cursor returned by the previous page.
+
           entity_id: Filter wallets by the entity ID the wallet is attributed to.
 
           external_id: Filter wallets by external ID.
@@ -3004,6 +3006,8 @@ class AsyncWalletsResource(AsyncAPIResource):
               be used together with user_id.
 
           chain_type: The wallet chain types.
+
+          cursor: Cursor returned by the previous page.
 
           entity_id: Filter wallets by the entity ID the wallet is attributed to.
 

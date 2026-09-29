@@ -10,5 +10,6 @@ __all__ = ["OrganizationListParams"]
 
 class OrganizationListParams(TypedDict, total=False):
     cursor: str
+    """Cursor returned by the previous page."""
 
     limit: Optional[float]

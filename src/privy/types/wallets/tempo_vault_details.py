@@ -25,10 +25,7 @@ class TempoVaultDetails(BaseModel):
     """
 
     app_apy: Optional[float] = None
-    """
-    Annual percentage yield earned by the app from fee wrapper fees, in basis
-    points.
-    """
+    """Annual percentage yield earned by the app from vault fees, in basis points."""
 
     asset: EarnAsset
     """Asset metadata for an earn vault position."""
