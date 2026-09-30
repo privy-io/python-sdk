@@ -4,4 +4,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["BridgeDestinationAsset"]
 
-BridgeDestinationAsset: TypeAlias = Literal["usdb", "usdc", "usdt", "dai", "pyusd", "eurc"]
+BridgeDestinationAsset: TypeAlias = Literal["usdb", "usdc", "usdt", "dai", "pyusd", "eurc", "ousd"]
