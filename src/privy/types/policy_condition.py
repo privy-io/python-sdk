@@ -14,6 +14,7 @@ from .ethereum_calldata_condition import EthereumCalldataCondition
 from .tempo_transaction_condition import TempoTransactionCondition
 from .action_request_body_condition import ActionRequestBodyCondition
 from .ethereum_transaction_condition import EthereumTransactionCondition
+from .solana_instruction_data_condition import SolanaInstructionDataCondition
 from .sui_transaction_command_condition import SuiTransactionCommandCondition
 from .ethereum_typed_data_domain_condition import EthereumTypedDataDomainCondition
 from .solana_program_instruction_condition import SolanaProgramInstructionCondition
@@ -34,6 +35,7 @@ PolicyCondition: TypeAlias = Annotated[
         Ethereum7702AuthorizationCondition,
         TempoTransactionCondition,
         SolanaProgramInstructionCondition,
+        SolanaInstructionDataCondition,
         SolanaSystemProgramInstructionCondition,
         SolanaTokenProgramInstructionCondition,
         SystemCondition,

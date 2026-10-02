@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing_extensions import Literal, Required, TypedDict
 
 from ...environment import Environment
+from ...developer_fee_percent import DeveloperFeePercent
 from ...fiat_deposit_account_destination_param import FiatDepositAccountDestinationParam
 from ...create_fiat_deposit_account_source_param import CreateFiatDepositAccountSourceParam
 
@@ -20,6 +21,12 @@ class FiatCreateParams(TypedDict, total=False):
 
     source: Required[CreateFiatDepositAccountSourceParam]
     """The source fiat currency for a fiat deposit account."""
+
+    developer_fee_percent: DeveloperFeePercent
+    """A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+
+    "1.5" for 1.5%.
+    """
 
     environment: Environment
     """The Privy API environment."""

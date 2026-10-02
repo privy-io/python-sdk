@@ -6,7 +6,11 @@ from typing_extensions import Literal
 
 import httpx
 
-from ....types import Environment, OrchestrationProvider
+from ....types import (
+    Environment,
+    DeveloperFeePercent,
+    OrchestrationProvider,
+)
 from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ...._utils import path_template, maybe_transform, async_maybe_transform
 from ...._compat import cached_property
@@ -19,6 +23,7 @@ from ...._response import (
 )
 from ...._base_client import make_request_options
 from ....types.environment import Environment
+from ....types.developer_fee_percent import DeveloperFeePercent
 from ....types.orchestration_provider import OrchestrationProvider
 from ....types.wallets.deposit_accounts import fiat_list_params, fiat_create_params
 from ....types.fiat_deposit_account_response import FiatDepositAccountResponse
@@ -58,6 +63,7 @@ class FiatResource(SyncAPIResource):
         destination: FiatDepositAccountDestinationParam,
         provider: Literal["bridge"],
         source: CreateFiatDepositAccountSourceParam,
+        developer_fee_percent: DeveloperFeePercent | Omit = omit,
         environment: Environment | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -81,6 +87,9 @@ class FiatResource(SyncAPIResource):
 
           source: The source fiat currency for a fiat deposit account.
 
+          developer_fee_percent: A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+              "1.5" for 1.5%.
+
           environment: The Privy API environment.
 
           extra_headers: Send extra headers
@@ -100,6 +109,7 @@ class FiatResource(SyncAPIResource):
                     "destination": destination,
                     "provider": provider,
                     "source": source,
+                    "developer_fee_percent": developer_fee_percent,
                     "environment": environment,
                 },
                 fiat_create_params.FiatCreateParams,
@@ -235,6 +245,7 @@ class AsyncFiatResource(AsyncAPIResource):
         destination: FiatDepositAccountDestinationParam,
         provider: Literal["bridge"],
         source: CreateFiatDepositAccountSourceParam,
+        developer_fee_percent: DeveloperFeePercent | Omit = omit,
         environment: Environment | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -258,6 +269,9 @@ class AsyncFiatResource(AsyncAPIResource):
 
           source: The source fiat currency for a fiat deposit account.
 
+          developer_fee_percent: A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+              "1.5" for 1.5%.
+
           environment: The Privy API environment.
 
           extra_headers: Send extra headers
@@ -277,6 +291,7 @@ class AsyncFiatResource(AsyncAPIResource):
                     "destination": destination,
                     "provider": provider,
                     "source": source,
+                    "developer_fee_percent": developer_fee_percent,
                     "environment": environment,
                 },
                 fiat_create_params.FiatCreateParams,

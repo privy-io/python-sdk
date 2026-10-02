@@ -45,6 +45,7 @@ class TestFiat:
             },
             provider="bridge",
             source={"currency": "currency"},
+            developer_fee_percent="1.5",
             environment="sandbox",
         )
         assert_matches_type(FiatDepositAccountResponse, fiat, path=["response"])
@@ -240,6 +241,7 @@ class TestAsyncFiat:
             },
             provider="bridge",
             source={"currency": "currency"},
+            developer_fee_percent="1.5",
             environment="sandbox",
         )
         assert_matches_type(FiatDepositAccountResponse, fiat, path=["response"])

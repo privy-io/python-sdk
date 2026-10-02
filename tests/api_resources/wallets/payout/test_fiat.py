@@ -36,12 +36,16 @@ class TestFiat:
     def test_method_create_with_all_params(self, client: PrivyAPI) -> None:
         fiat = client.wallets.payout.fiat._create(
             wallet_id="wallet_id",
-            destination={"fiat_account_id": "fiat_account_id"},
+            destination={
+                "fiat_account_id": "fiat_account_id",
+                "payment_rail": "ach",
+            },
             source={
                 "amount": "amount",
                 "asset": "asset",
                 "chain": "chain",
             },
+            developer_fee_percent="1.5",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
             privy_request_expiry="privy-request-expiry",
@@ -125,12 +129,16 @@ class TestAsyncFiat:
     async def test_method_create_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
         fiat = await async_client.wallets.payout.fiat._create(
             wallet_id="wallet_id",
-            destination={"fiat_account_id": "fiat_account_id"},
+            destination={
+                "fiat_account_id": "fiat_account_id",
+                "payment_rail": "ach",
+            },
             source={
                 "amount": "amount",
                 "asset": "asset",
                 "chain": "chain",
             },
+            developer_fee_percent="1.5",
             privy_authorization_signature="privy-authorization-signature",
             privy_idempotency_key="privy-idempotency-key",
             privy_request_expiry="privy-request-expiry",

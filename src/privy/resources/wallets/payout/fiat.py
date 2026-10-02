@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import httpx
 
+from ....types import DeveloperFeePercent
 from ...._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ...._utils import path_template, maybe_transform, strip_not_given, async_maybe_transform
 from ...._compat import cached_property
@@ -17,6 +18,7 @@ from ...._response import (
 from ...._base_client import make_request_options
 from ....types.wallets.payout import fiat_create_params
 from ....types.payout_source_param import PayoutSourceParam
+from ....types.developer_fee_percent import DeveloperFeePercent
 from ....types.wallets.payout_response import PayoutResponse
 from ....types.payout_destination_param import PayoutDestinationParam
 
@@ -51,6 +53,7 @@ class FiatResource(SyncAPIResource):
         *,
         destination: PayoutDestinationParam,
         source: PayoutSourceParam,
+        developer_fee_percent: DeveloperFeePercent | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -72,6 +75,9 @@ class FiatResource(SyncAPIResource):
           destination: The destination bank account for a payout.
 
           source: The source crypto asset, chain, and amount for a payout.
+
+          developer_fee_percent: A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+              "1.5" for 1.5%.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -108,6 +114,7 @@ class FiatResource(SyncAPIResource):
                 {
                     "destination": destination,
                     "source": source,
+                    "developer_fee_percent": developer_fee_percent,
                 },
                 fiat_create_params.FiatCreateParams,
             ),
@@ -146,6 +153,7 @@ class AsyncFiatResource(AsyncAPIResource):
         *,
         destination: PayoutDestinationParam,
         source: PayoutSourceParam,
+        developer_fee_percent: DeveloperFeePercent | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -167,6 +175,9 @@ class AsyncFiatResource(AsyncAPIResource):
           destination: The destination bank account for a payout.
 
           source: The source crypto asset, chain, and amount for a payout.
+
+          developer_fee_percent: A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+              "1.5" for 1.5%.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -203,6 +214,7 @@ class AsyncFiatResource(AsyncAPIResource):
                 {
                     "destination": destination,
                     "source": source,
+                    "developer_fee_percent": developer_fee_percent,
                 },
                 fiat_create_params.FiatCreateParams,
             ),

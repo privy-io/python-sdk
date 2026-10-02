@@ -11,6 +11,7 @@ from .failure_reason import FailureReason
 from .wallet_action_step import WalletActionStep
 from ..payout_destination import PayoutDestination
 from .wallet_action_status import WalletActionStatus
+from ..developer_fee_percent import DeveloperFeePercent
 from ..orchestration_provider import OrchestrationProvider
 
 __all__ = ["PayoutResponse"]
@@ -30,6 +31,12 @@ class PayoutResponse(BaseModel):
 
     destination: PayoutDestination
     """The destination bank account for a payout."""
+
+    developer_fee_percent: DeveloperFeePercent
+    """A developer fee as a percentage string from 0 up to (not including) 100, e.g.
+
+    "1.5" for 1.5%.
+    """
 
     environment: Environment
     """The Privy API environment."""

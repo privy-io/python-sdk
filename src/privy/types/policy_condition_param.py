@@ -15,6 +15,7 @@ from .ethereum_calldata_condition_param import EthereumCalldataConditionParam
 from .tempo_transaction_condition_param import TempoTransactionConditionParam
 from .action_request_body_condition_param import ActionRequestBodyConditionParam
 from .ethereum_transaction_condition_param import EthereumTransactionConditionParam
+from .solana_instruction_data_condition_param import SolanaInstructionDataConditionParam
 from .sui_transaction_command_condition_param import SuiTransactionCommandConditionParam
 from .ethereum_typed_data_domain_condition_param import EthereumTypedDataDomainConditionParam
 from .solana_program_instruction_condition_param import SolanaProgramInstructionConditionParam
@@ -34,6 +35,7 @@ PolicyConditionParam: TypeAlias = Union[
     Ethereum7702AuthorizationConditionParam,
     TempoTransactionConditionParam,
     SolanaProgramInstructionConditionParam,
+    SolanaInstructionDataConditionParam,
     SolanaSystemProgramInstructionConditionParam,
     SolanaTokenProgramInstructionConditionParam,
     SystemConditionParam,

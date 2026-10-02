@@ -30,3 +30,9 @@ class User(BaseModel):
 
     custom_metadata: Optional[CustomMetadata] = None
     """Custom metadata associated with the user."""
+
+    frozen_at: Optional[int] = None
+    """Unix timestamp in seconds of when the user was frozen, or `null` if not frozen.
+
+    Not included in every user response.
+    """
