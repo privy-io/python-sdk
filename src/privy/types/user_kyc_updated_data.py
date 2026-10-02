@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 
 from .._models import BaseModel
 from .kyx_endorsement import KyxEndorsement
@@ -28,3 +28,6 @@ class UserKYCUpdatedData(BaseModel):
 
     tos: UserKYCUpdatedTosData
     """Terms of service status in a KYC update event."""
+
+    stripe_cardholder_id: Optional[str] = None
+    """Stripe Issuing cardholder ID assigned by Bridge for this user."""

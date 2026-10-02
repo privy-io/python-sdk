@@ -1,6 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from typing import List
+from typing import List, Optional
 
 from .._models import BaseModel
 from .kyx_provider import KyxProvider
@@ -42,3 +42,6 @@ class KYCStatusResponse(BaseModel):
 
     tos: KyxTosStatusDetail
     """Terms of Service acceptance status for a KYC or KYB flow."""
+
+    stripe_cardholder_id: Optional[str] = None
+    """Stripe Issuing cardholder ID assigned by Bridge for this user."""
