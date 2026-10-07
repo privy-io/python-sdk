@@ -988,6 +988,7 @@ Methods:
 
 Methods:
 
+- <code title="get /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/privy/resources/wallets/earn/ethereum/incentive.py">list</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/ethereum/incentive_list_params.py">params</a>) -> <a href="./src/privy/types/wallets/earn_incentive_rewards_response.py">EarnIncentiveRewardsResponse</a></code>
 - <code title="post /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/privy/resources/wallets/earn/ethereum/incentive.py">\_claim</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/ethereum/incentive_claim_params.py">params</a>) -> <a href="./src/privy/types/wallets/earn_incentive_claim_action_response.py">EarnIncentiveClaimActionResponse</a></code>
 
 ## Payout

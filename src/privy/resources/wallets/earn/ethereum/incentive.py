@@ -17,7 +17,8 @@ from ....._response import (
 )
 from ....._base_client import make_request_options
 from .....types.wallet_action_nonce import WalletActionNonce
-from .....types.wallets.earn.ethereum import incentive_claim_params
+from .....types.wallets.earn.ethereum import incentive_list_params, incentive_claim_params
+from .....types.wallets.earn_incentive_rewards_response import EarnIncentiveRewardsResponse
 from .....types.wallets.earn_incentive_claim_action_response import EarnIncentiveClaimActionResponse
 
 __all__ = ["IncentiveResource", "AsyncIncentiveResource"]
@@ -44,6 +45,49 @@ class IncentiveResource(SyncAPIResource):
         For more information, see https://www.github.com/privy-io/python-sdk#with_streaming_response
         """
         return IncentiveResourceWithStreamingResponse(self)
+
+    def list(
+        self,
+        wallet_id: str,
+        *,
+        chain: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> EarnIncentiveRewardsResponse:
+        """
+        Retrieve all incentive rewards for a wallet on a given chain, with claimed and
+        claimable amounts per token.
+
+        Args:
+          wallet_id: ID of the wallet.
+
+          chain: Chain name to fetch rewards for (e.g. "tempo", "base").
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not wallet_id:
+            raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
+        return self._get(
+            path_template("/v1/wallets/{wallet_id}/earn/ethereum/incentive/claim", wallet_id=wallet_id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform({"chain": chain}, incentive_list_params.IncentiveListParams),
+            ),
+            cast_to=EarnIncentiveRewardsResponse,
+        )
 
     def _claim(
         self,
@@ -145,6 +189,49 @@ class AsyncIncentiveResource(AsyncAPIResource):
         """
         return AsyncIncentiveResourceWithStreamingResponse(self)
 
+    async def list(
+        self,
+        wallet_id: str,
+        *,
+        chain: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> EarnIncentiveRewardsResponse:
+        """
+        Retrieve all incentive rewards for a wallet on a given chain, with claimed and
+        claimable amounts per token.
+
+        Args:
+          wallet_id: ID of the wallet.
+
+          chain: Chain name to fetch rewards for (e.g. "tempo", "base").
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not wallet_id:
+            raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
+        return await self._get(
+            path_template("/v1/wallets/{wallet_id}/earn/ethereum/incentive/claim", wallet_id=wallet_id),
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform({"chain": chain}, incentive_list_params.IncentiveListParams),
+            ),
+            cast_to=EarnIncentiveRewardsResponse,
+        )
+
     async def _claim(
         self,
         wallet_id: str,
@@ -227,6 +314,9 @@ class IncentiveResourceWithRawResponse:
     def __init__(self, incentive: IncentiveResource) -> None:
         self._incentive = incentive
 
+        self.list = to_raw_response_wrapper(
+            incentive.list,
+        )
         self._claim = to_raw_response_wrapper(
             incentive._claim,
         )
@@ -236,6 +326,9 @@ class AsyncIncentiveResourceWithRawResponse:
     def __init__(self, incentive: AsyncIncentiveResource) -> None:
         self._incentive = incentive
 
+        self.list = async_to_raw_response_wrapper(
+            incentive.list,
+        )
         self._claim = async_to_raw_response_wrapper(
             incentive._claim,
         )
@@ -245,6 +338,9 @@ class IncentiveResourceWithStreamingResponse:
     def __init__(self, incentive: IncentiveResource) -> None:
         self._incentive = incentive
 
+        self.list = to_streamed_response_wrapper(
+            incentive.list,
+        )
         self._claim = to_streamed_response_wrapper(
             incentive._claim,
         )
@@ -254,6 +350,9 @@ class AsyncIncentiveResourceWithStreamingResponse:
     def __init__(self, incentive: AsyncIncentiveResource) -> None:
         self._incentive = incentive
 
+        self.list = async_to_streamed_response_wrapper(
+            incentive.list,
+        )
         self._claim = async_to_streamed_response_wrapper(
             incentive._claim,
         )
