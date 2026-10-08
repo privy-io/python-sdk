@@ -94,6 +94,9 @@ from privy.types import (
     CardIssuingEphemeralKey,
     CardIssuingEphemeralKeyRequestBody,
     CardIssuingEphemeralKeyResponse,
+    CardIssuingErc4626VaultFundingSource,
+    CardIssuingErc4626VaultProvider,
+    CardIssuingFundingSource,
     CardIssuingListCardsInput,
     CardIssuingListTransactionsInput,
     CardIssuingMerchant,
@@ -101,10 +104,12 @@ from privy.types import (
     CardIssuingReplaceCardRequestBody,
     CardIssuingReplacementReason,
     CardIssuingStatementQueryParams,
+    CardIssuingTempoEarnVaultFundingSource,
     CardIssuingTransactionResponse,
     CardIssuingTransactionStatus,
     CardIssuingTransactionsResponse,
     CardIssuingUpdateCardInput,
+    CardIssuingWalletFundingSource,
 )
 ```
 
