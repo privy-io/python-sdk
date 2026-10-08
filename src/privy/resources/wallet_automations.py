@@ -320,6 +320,7 @@ class WalletAutomationsResource(SyncAPIResource):
         self,
         *,
         asset_address: str,
+        automation_id: str | Omit = omit,
         caip2: WalletAutomationReindexCaip2Param | Omit = omit,
         chain: str | Omit = omit,
         deposit_address: str | Omit = omit,
@@ -339,6 +340,8 @@ class WalletAutomationsResource(SyncAPIResource):
 
         Args:
           asset_address: Asset contract address to check; the native asset uses `native`.
+
+          automation_id: Automation to target when more than one active automation matches the asset.
 
           caip2: An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation
               reindex.
@@ -364,6 +367,7 @@ class WalletAutomationsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "asset_address": asset_address,
+                    "automation_id": automation_id,
                     "caip2": caip2,
                     "chain": chain,
                     "deposit_address": deposit_address,
@@ -661,6 +665,7 @@ class AsyncWalletAutomationsResource(AsyncAPIResource):
         self,
         *,
         asset_address: str,
+        automation_id: str | Omit = omit,
         caip2: WalletAutomationReindexCaip2Param | Omit = omit,
         chain: str | Omit = omit,
         deposit_address: str | Omit = omit,
@@ -680,6 +685,8 @@ class AsyncWalletAutomationsResource(AsyncAPIResource):
 
         Args:
           asset_address: Asset contract address to check; the native asset uses `native`.
+
+          automation_id: Automation to target when more than one active automation matches the asset.
 
           caip2: An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation
               reindex.
@@ -705,6 +712,7 @@ class AsyncWalletAutomationsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "asset_address": asset_address,
+                    "automation_id": automation_id,
                     "caip2": caip2,
                     "chain": chain,
                     "deposit_address": deposit_address,

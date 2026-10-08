@@ -583,6 +583,7 @@ from .automation_asset_filter_all_param import AutomationAssetFilterAllParam as 
 from .automation_asset_spec_input_param import AutomationAssetSpecInputParam as AutomationAssetSpecInputParam
 from .crypto_deposit_asset_filter_param import CryptoDepositAssetFilterParam as CryptoDepositAssetFilterParam
 from .ethereum_calldata_condition_param import EthereumCalldataConditionParam as EthereumCalldataConditionParam
+from .external_fiat_account_owner_param import ExternalFiatAccountOwnerParam as ExternalFiatAccountOwnerParam
 from .intent_authorized_webhook_payload import IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload
 from .kyb_publicly_traded_listing_param import KYBPubliclyTradedListingParam as KYBPubliclyTradedListingParam
 from .linked_account_github_input_param import LinkedAccountGitHubInputParam as LinkedAccountGitHubInputParam
@@ -988,6 +989,9 @@ from .ethereum_typed_data_domain_condition_field import (
 from .ethereum_typed_data_domain_condition_param import (
     EthereumTypedDataDomainConditionParam as EthereumTypedDataDomainConditionParam,
 )
+from .external_fiat_account_business_owner_param import (
+    ExternalFiatAccountBusinessOwnerParam as ExternalFiatAccountBusinessOwnerParam,
+)
 from .oauth_token_device_code_pending_error_code import (
     OAuthTokenDeviceCodePendingErrorCode as OAuthTokenDeviceCodePendingErrorCode,
 )
@@ -1083,6 +1087,9 @@ from .wallet_entity_assignment_request_body_param import (
 )
 from .ethereum_sign_user_operation_rpc_input_param import (
     EthereumSignUserOperationRpcInputParam as EthereumSignUserOperationRpcInputParam,
+)
+from .external_fiat_account_individual_owner_param import (
+    ExternalFiatAccountIndividualOwnerParam as ExternalFiatAccountIndividualOwnerParam,
 )
 from .external_fiat_account_swift_purpose_of_funds import (
     ExternalFiatAccountSwiftPurposeOfFunds as ExternalFiatAccountSwiftPurposeOfFunds,

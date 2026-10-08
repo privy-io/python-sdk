@@ -6,7 +6,10 @@ from typing_extensions import Literal
 
 import httpx
 
-from ...types import Environment, OrchestrationProvider
+from ...types import (
+    Environment,
+    OrchestrationProvider,
+)
 from ..._types import Body, Omit, Query, Headers, NotGiven, omit, not_given
 from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
@@ -23,6 +26,7 @@ from ...types.organizations import external_fiat_account_list_params, external_f
 from ...types.success_response import SuccessResponse
 from ...types.orchestration_provider import OrchestrationProvider
 from ...types.external_fiat_account_data_param import ExternalFiatAccountDataParam
+from ...types.external_fiat_account_owner_param import ExternalFiatAccountOwnerParam
 from ...types.external_fiat_account_address_param import ExternalFiatAccountAddressParam
 from ...types.organization_external_fiat_account_response import OrganizationExternalFiatAccountResponse
 from ...types.list_organization_external_fiat_accounts_response import ListOrganizationExternalFiatAccountsResponse
@@ -60,6 +64,7 @@ class ExternalFiatAccountsResource(SyncAPIResource):
         account_owner_name: str,
         currency: str,
         provider: Literal["bridge"],
+        account_owner: ExternalFiatAccountOwnerParam | Omit = omit,
         address: ExternalFiatAccountAddressParam | Omit = omit,
         bank_name: str | Omit = omit,
         environment: Environment | Omit = omit,
@@ -80,6 +85,9 @@ class ExternalFiatAccountsResource(SyncAPIResource):
           account: Bank account details. The `type` field discriminates which shape applies.
 
           provider: Discriminator: the external fiat account is orchestrated via Bridge.
+
+          account_owner: The individual or business that owns the account. Required for `iban`, `gb`, and
+              `swift` accounts.
 
           address: Physical address associated with an external fiat account.
 
@@ -105,6 +113,7 @@ class ExternalFiatAccountsResource(SyncAPIResource):
                     "account_owner_name": account_owner_name,
                     "currency": currency,
                     "provider": provider,
+                    "account_owner": account_owner,
                     "address": address,
                     "bank_name": bank_name,
                     "environment": environment,
@@ -289,6 +298,7 @@ class AsyncExternalFiatAccountsResource(AsyncAPIResource):
         account_owner_name: str,
         currency: str,
         provider: Literal["bridge"],
+        account_owner: ExternalFiatAccountOwnerParam | Omit = omit,
         address: ExternalFiatAccountAddressParam | Omit = omit,
         bank_name: str | Omit = omit,
         environment: Environment | Omit = omit,
@@ -309,6 +319,9 @@ class AsyncExternalFiatAccountsResource(AsyncAPIResource):
           account: Bank account details. The `type` field discriminates which shape applies.
 
           provider: Discriminator: the external fiat account is orchestrated via Bridge.
+
+          account_owner: The individual or business that owns the account. Required for `iban`, `gb`, and
+              `swift` accounts.
 
           address: Physical address associated with an external fiat account.
 
@@ -334,6 +347,7 @@ class AsyncExternalFiatAccountsResource(AsyncAPIResource):
                     "account_owner_name": account_owner_name,
                     "currency": currency,
                     "provider": provider,
+                    "account_owner": account_owner,
                     "address": address,
                     "bank_name": bank_name,
                     "environment": environment,

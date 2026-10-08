@@ -6,6 +6,7 @@ from typing_extensions import Literal, Required, TypedDict
 
 from ..environment import Environment
 from ..external_fiat_account_data_param import ExternalFiatAccountDataParam
+from ..external_fiat_account_owner_param import ExternalFiatAccountOwnerParam
 from ..external_fiat_account_address_param import ExternalFiatAccountAddressParam
 
 __all__ = ["ExternalFiatAccountCreateParams"]
@@ -21,6 +22,12 @@ class ExternalFiatAccountCreateParams(TypedDict, total=False):
 
     provider: Required[Literal["bridge"]]
     """Discriminator: the external fiat account is orchestrated via Bridge."""
+
+    account_owner: ExternalFiatAccountOwnerParam
+    """The individual or business that owns the account.
+
+    Required for `iban`, `gb`, and `swift` accounts.
+    """
 
     address: ExternalFiatAccountAddressParam
     """Physical address associated with an external fiat account."""

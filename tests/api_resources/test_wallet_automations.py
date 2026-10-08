@@ -361,6 +361,7 @@ class TestWalletAutomations:
     def test_method_reindex_with_all_params(self, client: PrivyAPI) -> None:
         wallet_automation = client.wallet_automations.reindex(
             asset_address="x",
+            automation_id="x",
             caip2="tron:mainnet",
             chain="x",
             deposit_address="x",
@@ -738,6 +739,7 @@ class TestAsyncWalletAutomations:
     async def test_method_reindex_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
         wallet_automation = await async_client.wallet_automations.reindex(
             asset_address="x",
+            automation_id="x",
             caip2="tron:mainnet",
             chain="x",
             deposit_address="x",

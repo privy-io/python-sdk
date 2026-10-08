@@ -13,6 +13,9 @@ class WalletAutomationReindexParams(TypedDict, total=False):
     asset_address: Required[str]
     """Asset contract address to check; the native asset uses `native`."""
 
+    automation_id: str
+    """Automation to target when more than one active automation matches the asset."""
+
     caip2: WalletAutomationReindexCaip2Param
     """
     An EVM, Solana, or Tron CAIP-2 chain identifier supported by wallet automation

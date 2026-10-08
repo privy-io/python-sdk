@@ -51,6 +51,11 @@ class TestExternalFiatAccounts:
             account_owner_name="xxx",
             currency="currency",
             provider="bridge",
+            account_owner={
+                "first_name": "x",
+                "last_name": "x",
+                "type": "individual",
+            },
             address={
                 "city": "x",
                 "country": "xxx",
@@ -318,6 +323,11 @@ class TestAsyncExternalFiatAccounts:
             account_owner_name="xxx",
             currency="currency",
             provider="bridge",
+            account_owner={
+                "first_name": "x",
+                "last_name": "x",
+                "type": "individual",
+            },
             address={
                 "city": "x",
                 "country": "xxx",
