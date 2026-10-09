@@ -48,6 +48,12 @@ class KYCSubmitDataParam(TypedDict, total=False):
     residential_address: VerificationAddressParam
     """A postal address used in KYC and KYB data submission."""
 
+    stripe_link_shared_data_id: str
+    """
+    Stripe Link shared data ID that supplies name, date of birth, address, and US
+    SSN (omit those fields); retrieval errors surface in endorsements[].issues.
+    """
+
     transliterated_first_name: str
     """Latin-1 transliteration of the first name. Required for non-Latin-1 names."""
 

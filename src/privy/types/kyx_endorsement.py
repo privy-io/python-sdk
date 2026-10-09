@@ -12,6 +12,9 @@ __all__ = ["KyxEndorsement"]
 class KyxEndorsement(BaseModel):
     """An endorsement with its approval status and missing requirements."""
 
+    issues: Optional[List[str]] = None
+    """Provider issue codes, or null if none."""
+
     missing: Optional[List[str]] = None
     """Missing requirements, or null if complete."""
 
