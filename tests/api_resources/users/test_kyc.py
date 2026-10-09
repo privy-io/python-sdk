@@ -14,6 +14,7 @@ from privy.types import (
     KYCStatusListResponse,
 )
 from tests.utils import assert_matches_type
+from privy._utils import parse_datetime
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -210,10 +211,18 @@ class TestKYC:
                         "number": "number",
                     }
                 ],
+                "kyc_screen": {
+                    "result": "passed",
+                    "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                },
                 "last_name": "x",
                 "middle_name": "x",
                 "nationalities": ["xxx"],
                 "nonresident_alien_attestation": True,
+                "ofac_screen": {
+                    "result": "passed",
+                    "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                },
                 "phone": "phone",
                 "residential_address": {
                     "city": "x",
@@ -235,6 +244,9 @@ class TestKYC:
                     "street_line_2": "x",
                     "subdivision": "x",
                 },
+                "verified_database_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                "verified_govid_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                "verified_proof_of_address_at": parse_datetime("2019-12-27T18:11:19.117Z"),
             },
             provider="bridge",
             client_agreement_id="x",
@@ -478,10 +490,18 @@ class TestAsyncKYC:
                         "number": "number",
                     }
                 ],
+                "kyc_screen": {
+                    "result": "passed",
+                    "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                },
                 "last_name": "x",
                 "middle_name": "x",
                 "nationalities": ["xxx"],
                 "nonresident_alien_attestation": True,
+                "ofac_screen": {
+                    "result": "passed",
+                    "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                },
                 "phone": "phone",
                 "residential_address": {
                     "city": "x",
@@ -503,6 +523,9 @@ class TestAsyncKYC:
                     "street_line_2": "x",
                     "subdivision": "x",
                 },
+                "verified_database_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                "verified_govid_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                "verified_proof_of_address_at": parse_datetime("2019-12-27T18:11:19.117Z"),
             },
             provider="bridge",
             client_agreement_id="x",

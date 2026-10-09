@@ -91,6 +91,7 @@ from .captcha_provider import CaptchaProvider as CaptchaProvider
 from .deposit_metadata import DepositMetadata as DepositMetadata
 from .email_mfa_method import EmailMfaMethod as EmailMfaMethod
 from .kyx_capabilities import KyxCapabilities as KyxCapabilities
+from .kyx_screen_param import KyxScreenParam as KyxScreenParam
 from .kyx_tos_response import KyxTosResponse as KyxTosResponse
 from .moonpay_ui_theme import MoonpayUiTheme as MoonpayUiTheme
 from .owner_input_user import OwnerInputUser as OwnerInputUser
@@ -115,6 +116,7 @@ from .fee_configuration import FeeConfiguration as FeeConfiguration
 from .fiat_payment_rail import FiatPaymentRail as FiatPaymentRail
 from .intent_rpc_params import IntentRpcParams as IntentRpcParams
 from .kyb_business_type import KYBBusinessType as KYBBusinessType
+from .kyx_screen_result import KyxScreenResult as KyxScreenResult
 from .linked_mfa_method import LinkedMfaMethod as LinkedMfaMethod
 from .onramp_kyc_status import OnrampKYCStatus as OnrampKYCStatus
 from .owner_input_param import OwnerInputParam as OwnerInputParam

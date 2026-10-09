@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Iterable
-from typing_extensions import TypedDict
+from typing import Union, Iterable
+from datetime import date, datetime
+from typing_extensions import Annotated, TypedDict
 
 from .._types import SequenceNotStr
+from .._utils import PropertyInfo
+from .kyx_screen_param import KyxScreenParam
 from .verification_address_param import VerificationAddressParam
 from .verification_document_param import VerificationDocumentParam
 
@@ -27,6 +30,12 @@ class KYCSubmitDataParam(TypedDict, total=False):
     identifying_information: Iterable[VerificationDocumentParam]
     """Identifying documents."""
 
+    kyc_screen: KyxScreenParam
+    """
+    Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+    to accept, honoured only for developers enrolled in reliance.
+    """
+
     last_name: str
     """Legal last name."""
 
@@ -40,6 +49,12 @@ class KYCSubmitDataParam(TypedDict, total=False):
     """
     Attests the user is a nonresident alien to satisfy identification without a US
     tax ID (must be enabled for you).
+    """
+
+    ofac_screen: KyxScreenParam
+    """
+    Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+    to accept, honoured only for developers enrolled in reliance.
     """
 
     phone: str
@@ -65,3 +80,23 @@ class KYCSubmitDataParam(TypedDict, total=False):
 
     transliterated_residential_address: VerificationAddressParam
     """A postal address used in KYC and KYB data submission."""
+
+    verified_database_at: Annotated[Union[Union[str, datetime], Union[str, date]], PropertyInfo(format="iso8601")]
+    """
+    When you verified the user against a database source (ISO 8601), which loosens
+    the identifying-document requirement under reliance.
+    """
+
+    verified_govid_at: Annotated[Union[Union[str, datetime], Union[str, date]], PropertyInfo(format="iso8601")]
+    """
+    When you verified the government ID (ISO 8601), which loosens the
+    identifying-document requirement under reliance.
+    """
+
+    verified_proof_of_address_at: Annotated[
+        Union[Union[str, datetime], Union[str, date]], PropertyInfo(format="iso8601")
+    ]
+    """
+    When you verified proof of address (ISO 8601), required for EEA customers and
+    SEPA rails under reliance.
+    """

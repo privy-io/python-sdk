@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Iterable
-from typing_extensions import TypedDict
+from typing import Union, Iterable
+from datetime import date, datetime
+from typing_extensions import Annotated, TypedDict
 
 from .._types import SequenceNotStr
+from .._utils import PropertyInfo
+from .kyx_screen_param import KyxScreenParam
 from .kyb_business_type import KYBBusinessType
 from .kyb_account_purpose import KYBAccountPurpose
 from .kyb_source_of_funds import KYBSourceOfFunds
@@ -120,6 +123,18 @@ class KYBSubmitDataParam(TypedDict, total=False):
     is_dao: bool
     """Whether the business is a decentralized autonomous organization."""
 
+    kyb_screen: KyxScreenParam
+    """
+    Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+    to accept, honoured only for developers enrolled in reliance.
+    """
+
+    ofac_screen: KyxScreenParam
+    """
+    Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+    to accept, honoured only for developers enrolled in reliance.
+    """
+
     operates_in_prohibited_countries: bool
     """Whether the business operates in prohibited jurisdictions."""
 
@@ -172,3 +187,17 @@ class KYBSubmitDataParam(TypedDict, total=False):
 
     transliterated_registered_address: VerificationAddressParam
     """A postal address used in KYC and KYB data submission."""
+
+    verified_database_at: Annotated[Union[Union[str, datetime], Union[str, date]], PropertyInfo(format="iso8601")]
+    """When you verified the business against a database source (ISO 8601)."""
+
+    verified_govid_at: Annotated[Union[Union[str, datetime], Union[str, date]], PropertyInfo(format="iso8601")]
+    """When you verified the business registration documents (ISO 8601)."""
+
+    verified_proof_of_address_at: Annotated[
+        Union[Union[str, datetime], Union[str, date]], PropertyInfo(format="iso8601")
+    ]
+    """
+    When you verified the business proof of address (ISO 8601), required for EEA
+    customers and SEPA rails under reliance.
+    """

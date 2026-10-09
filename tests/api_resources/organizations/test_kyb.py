@@ -14,6 +14,7 @@ from privy.types import (
     KYBStatusListResponse,
 )
 from tests.utils import assert_matches_type
+from privy._utils import parse_datetime
 
 base_url = os.environ.get("TEST_API_BASE_URL", "http://127.0.0.1:4010")
 
@@ -237,6 +238,7 @@ class TestKYB:
                             "street_line_2": "x",
                             "subdivision": "x",
                         },
+                        "attested_ownership_structure_at": parse_datetime("2019-12-27T18:11:19.117Z"),
                         "documents": [
                             {
                                 "file": "x",
@@ -245,8 +247,16 @@ class TestKYB:
                             }
                         ],
                         "is_director": True,
+                        "kyc_screen": {
+                            "result": "passed",
+                            "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        },
                         "middle_name": "x",
                         "nationalities": ["xxx"],
+                        "ofac_screen": {
+                            "result": "passed",
+                            "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        },
                         "ownership_percentage": 0,
                         "phone": "phone",
                         "place_of_birth": {
@@ -266,6 +276,9 @@ class TestKYB:
                             "street_line_2": "x",
                             "subdivision": "x",
                         },
+                        "verified_database_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        "verified_govid_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        "verified_proof_of_address_at": parse_datetime("2019-12-27T18:11:19.117Z"),
                     }
                 ],
                 "business_description": "x",
@@ -304,6 +317,14 @@ class TestKYB:
                 ],
                 "incorporation_date": "7321-69-10",
                 "is_dao": True,
+                "kyb_screen": {
+                    "result": "passed",
+                    "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                },
+                "ofac_screen": {
+                    "result": "passed",
+                    "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                },
                 "operates_in_prohibited_countries": True,
                 "other_websites": ["string"],
                 "ownership_threshold": 5,
@@ -358,6 +379,9 @@ class TestKYB:
                     "street_line_2": "x",
                     "subdivision": "x",
                 },
+                "verified_database_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                "verified_govid_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                "verified_proof_of_address_at": parse_datetime("2019-12-27T18:11:19.117Z"),
             },
             provider="bridge",
             client_agreement_id="x",
@@ -628,6 +652,7 @@ class TestAsyncKYB:
                             "street_line_2": "x",
                             "subdivision": "x",
                         },
+                        "attested_ownership_structure_at": parse_datetime("2019-12-27T18:11:19.117Z"),
                         "documents": [
                             {
                                 "file": "x",
@@ -636,8 +661,16 @@ class TestAsyncKYB:
                             }
                         ],
                         "is_director": True,
+                        "kyc_screen": {
+                            "result": "passed",
+                            "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        },
                         "middle_name": "x",
                         "nationalities": ["xxx"],
+                        "ofac_screen": {
+                            "result": "passed",
+                            "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        },
                         "ownership_percentage": 0,
                         "phone": "phone",
                         "place_of_birth": {
@@ -657,6 +690,9 @@ class TestAsyncKYB:
                             "street_line_2": "x",
                             "subdivision": "x",
                         },
+                        "verified_database_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        "verified_govid_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                        "verified_proof_of_address_at": parse_datetime("2019-12-27T18:11:19.117Z"),
                     }
                 ],
                 "business_description": "x",
@@ -695,6 +731,14 @@ class TestAsyncKYB:
                 ],
                 "incorporation_date": "7321-69-10",
                 "is_dao": True,
+                "kyb_screen": {
+                    "result": "passed",
+                    "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                },
+                "ofac_screen": {
+                    "result": "passed",
+                    "screened_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                },
                 "operates_in_prohibited_countries": True,
                 "other_websites": ["string"],
                 "ownership_threshold": 5,
@@ -749,6 +793,9 @@ class TestAsyncKYB:
                     "street_line_2": "x",
                     "subdivision": "x",
                 },
+                "verified_database_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                "verified_govid_at": parse_datetime("2019-12-27T18:11:19.117Z"),
+                "verified_proof_of_address_at": parse_datetime("2019-12-27T18:11:19.117Z"),
             },
             provider="bridge",
             client_agreement_id="x",

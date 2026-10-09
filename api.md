@@ -1520,6 +1520,8 @@ from privy.types import (
     KyxEnvironment,
     KyxProvider,
     KyxProviderStatus,
+    KyxScreen,
+    KyxScreenResult,
     KyxTosRequestBody,
     KyxTosResponse,
     KyxTosStatus,

@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-from typing import Iterable
-from typing_extensions import Required, TypedDict
+from typing import Union, Iterable
+from datetime import date, datetime
+from typing_extensions import Required, Annotated, TypedDict
 
 from .._types import SequenceNotStr
+from .._utils import PropertyInfo
+from .kyx_screen_param import KyxScreenParam
 from .kyb_place_of_birth_param import KYBPlaceOfBirthParam
 from .verification_address_param import VerificationAddressParam
 from .verification_document_param import VerificationDocumentParam
@@ -47,17 +50,37 @@ class KYBAssociatedPersonParam(TypedDict, total=False):
     residential_address: Required[VerificationAddressParam]
     """A postal address used in KYC and KYB data submission."""
 
+    attested_ownership_structure_at: Annotated[
+        Union[Union[str, datetime], Union[str, date]], PropertyInfo(format="iso8601")
+    ]
+    """
+    When this person (a control person) attested to having verified the business
+    ownership structure (ISO 8601).
+    """
+
     documents: Iterable[KYBIndividualDocumentParam]
     """Supporting documents for this person, such as proof of address."""
 
     is_director: bool
     """Whether this person is a director."""
 
+    kyc_screen: KyxScreenParam
+    """
+    Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+    to accept, honoured only for developers enrolled in reliance.
+    """
+
     middle_name: str
     """Legal middle name."""
 
     nationalities: SequenceNotStr[str]
     """ISO 3166-1 alpha-3 codes for all nationalities held."""
+
+    ofac_screen: KyxScreenParam
+    """
+    Result of a KYC/AML or OFAC screen you performed and are relying on the provider
+    to accept, honoured only for developers enrolled in reliance.
+    """
 
     ownership_percentage: int
     """Percentage of the business this person owns."""
@@ -85,3 +108,14 @@ class KYBAssociatedPersonParam(TypedDict, total=False):
 
     transliterated_residential_address: VerificationAddressParam
     """A postal address used in KYC and KYB data submission."""
+
+    verified_database_at: Annotated[Union[Union[str, datetime], Union[str, date]], PropertyInfo(format="iso8601")]
+    """When you verified this person against a database source (ISO 8601)."""
+
+    verified_govid_at: Annotated[Union[Union[str, datetime], Union[str, date]], PropertyInfo(format="iso8601")]
+    """When you verified the government ID for this person (ISO 8601)."""
+
+    verified_proof_of_address_at: Annotated[
+        Union[Union[str, datetime], Union[str, date]], PropertyInfo(format="iso8601")
+    ]
+    """When you verified proof of address for this person (ISO 8601)."""
