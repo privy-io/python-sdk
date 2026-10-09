@@ -83,6 +83,12 @@ class Wallet(BaseModel):
     changed once set.
     """
 
+    parent_wallet_id: Optional[str] = None
+    """
+    ID of the HD root wallet this wallet was derived from, or null if it was not
+    derived from another wallet.
+    """
+
     public_key: Optional[str] = None
     """
     The compressed, raw public key for the wallet along the chain cryptographic

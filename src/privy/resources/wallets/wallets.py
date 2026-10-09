@@ -117,6 +117,7 @@ from ...types.wallet_entity_type import WalletEntityType
 from ...types.wallet_action_nonce import WalletActionNonce
 from ...types.wallet_rpc_response import WalletRpcResponse
 from ...types.raw_sign_input_params import RawSignInputParams
+from ...types.derivation_input_param import DerivationInputParam
 from ...types.fee_configuration_param import FeeConfigurationParam
 from ...types.signature_options_param import SignatureOptionsParam
 from ...types.rpc_sponsor_options_param import RpcSponsorOptionsParam
@@ -243,6 +244,7 @@ class WalletsResource(SyncAPIResource):
         *,
         chain_type: WalletChainType,
         additional_signers: AdditionalSignerInputParam | Omit = omit,
+        derivation: DerivationInputParam | Omit = omit,
         display_name: str | Omit = omit,
         entity: WalletEntityAssignmentRequestBodyParam | Omit = omit,
         external_id: str | Omit = omit,
@@ -264,6 +266,9 @@ class WalletsResource(SyncAPIResource):
           chain_type: The wallet chain types.
 
           additional_signers: Additional signers for the wallet.
+
+          derivation: Derives the new wallet from an existing HD root wallet so both share one seed
+              phrase.
 
           display_name: A human-readable label for the wallet.
 
@@ -299,6 +304,7 @@ class WalletsResource(SyncAPIResource):
                 {
                     "chain_type": chain_type,
                     "additional_signers": additional_signers,
+                    "derivation": derivation,
                     "display_name": display_name,
                     "entity": entity,
                     "external_id": external_id,
@@ -2902,6 +2908,7 @@ class AsyncWalletsResource(AsyncAPIResource):
         *,
         chain_type: WalletChainType,
         additional_signers: AdditionalSignerInputParam | Omit = omit,
+        derivation: DerivationInputParam | Omit = omit,
         display_name: str | Omit = omit,
         entity: WalletEntityAssignmentRequestBodyParam | Omit = omit,
         external_id: str | Omit = omit,
@@ -2923,6 +2930,9 @@ class AsyncWalletsResource(AsyncAPIResource):
           chain_type: The wallet chain types.
 
           additional_signers: Additional signers for the wallet.
+
+          derivation: Derives the new wallet from an existing HD root wallet so both share one seed
+              phrase.
 
           display_name: A human-readable label for the wallet.
 
@@ -2958,6 +2968,7 @@ class AsyncWalletsResource(AsyncAPIResource):
                 {
                     "chain_type": chain_type,
                     "additional_signers": additional_signers,
+                    "derivation": derivation,
                     "display_name": display_name,
                     "entity": entity,
                     "external_id": external_id,

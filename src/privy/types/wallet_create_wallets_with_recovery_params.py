@@ -7,6 +7,7 @@ from typing_extensions import Required, TypeAlias, TypedDict
 
 from .wallet_chain_type import WalletChainType
 from .policy_input_param import PolicyInputParam
+from .derivation_input_param import DerivationInputParam
 from .linked_account_email_input_param import LinkedAccountEmailInputParam
 from .linked_account_custom_jwt_input_param import LinkedAccountCustomJwtInputParam
 
@@ -42,6 +43,12 @@ class RecoveryUser(TypedDict, total=False):
 class Wallet(TypedDict, total=False):
     chain_type: Required[WalletChainType]
     """The wallet chain types."""
+
+    derivation: DerivationInputParam
+    """
+    Derives the new wallet from an existing HD root wallet so both share one seed
+    phrase.
+    """
 
     display_name: str
     """A human-readable label for the wallet."""

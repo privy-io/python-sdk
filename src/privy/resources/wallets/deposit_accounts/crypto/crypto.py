@@ -38,6 +38,7 @@ from .....types.wallets.deposit_accounts import (
     crypto_list_params,
     crypto_quote_params,
     crypto_create_params,
+    crypto_search_config_params,
     crypto_get_next_order_params,
 )
 from .....types.crypto_deposit_asset_param import CryptoDepositAssetParam
@@ -49,6 +50,7 @@ from .....types.deposit_account_crypto_quote_response import DepositAccountCrypt
 from .....types.create_crypto_deposit_account_response import CreateCryptoDepositAccountResponse
 from .....types.crypto_deposit_account_config_response import CryptoDepositAccountConfigResponse
 from .....types.deposit_account_crypto_quote_asset_param import DepositAccountCryptoQuoteAssetParam
+from .....types.crypto_deposit_account_config_search_response import CryptoDepositAccountConfigSearchResponse
 from .....types.get_crypto_deposit_account_next_order_response import GetCryptoDepositAccountNextOrderResponse
 
 __all__ = ["CryptoResource", "AsyncCryptoResource"]
@@ -403,6 +405,45 @@ class CryptoResource(SyncAPIResource):
             cast_to=DepositAccountCryptoQuoteResponse,
         )
 
+    def search_config(
+        self,
+        *,
+        q: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CryptoDepositAccountConfigSearchResponse:
+        """
+        Returns deposit-account source tokens matching a symbol, name, or contract
+        address. Results are limited to supported EVM and Solana source chains and can
+        include unverified tokens.
+
+        Args:
+          q: Token symbol, name, or contract address in any chain format.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return self._get(
+            "/v1/deposit_accounts/crypto/config/search",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=maybe_transform({"q": q}, crypto_search_config_params.CryptoSearchConfigParams),
+            ),
+            cast_to=CryptoDepositAccountConfigSearchResponse,
+        )
+
 
 class AsyncCryptoResource(AsyncAPIResource):
     """Operations related to wallets"""
@@ -755,6 +796,45 @@ class AsyncCryptoResource(AsyncAPIResource):
             cast_to=DepositAccountCryptoQuoteResponse,
         )
 
+    async def search_config(
+        self,
+        *,
+        q: str,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> CryptoDepositAccountConfigSearchResponse:
+        """
+        Returns deposit-account source tokens matching a symbol, name, or contract
+        address. Results are limited to supported EVM and Solana source chains and can
+        include unverified tokens.
+
+        Args:
+          q: Token symbol, name, or contract address in any chain format.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        return await self._get(
+            "/v1/deposit_accounts/crypto/config/search",
+            options=make_request_options(
+                extra_headers=extra_headers,
+                extra_query=extra_query,
+                extra_body=extra_body,
+                timeout=timeout,
+                query=await async_maybe_transform({"q": q}, crypto_search_config_params.CryptoSearchConfigParams),
+            ),
+            cast_to=CryptoDepositAccountConfigSearchResponse,
+        )
+
 
 class CryptoResourceWithRawResponse:
     def __init__(self, crypto: CryptoResource) -> None:
@@ -774,6 +854,9 @@ class CryptoResourceWithRawResponse:
         )
         self.quote = to_raw_response_wrapper(
             crypto.quote,
+        )
+        self.search_config = to_raw_response_wrapper(
+            crypto.search_config,
         )
 
     @cached_property
@@ -801,6 +884,9 @@ class AsyncCryptoResourceWithRawResponse:
         self.quote = async_to_raw_response_wrapper(
             crypto.quote,
         )
+        self.search_config = async_to_raw_response_wrapper(
+            crypto.search_config,
+        )
 
     @cached_property
     def orders(self) -> AsyncOrdersResourceWithRawResponse:
@@ -827,6 +913,9 @@ class CryptoResourceWithStreamingResponse:
         self.quote = to_streamed_response_wrapper(
             crypto.quote,
         )
+        self.search_config = to_streamed_response_wrapper(
+            crypto.search_config,
+        )
 
     @cached_property
     def orders(self) -> OrdersResourceWithStreamingResponse:
@@ -852,6 +941,9 @@ class AsyncCryptoResourceWithStreamingResponse:
         )
         self.quote = async_to_streamed_response_wrapper(
             crypto.quote,
+        )
+        self.search_config = async_to_streamed_response_wrapper(
+            crypto.search_config,
         )
 
     @cached_property

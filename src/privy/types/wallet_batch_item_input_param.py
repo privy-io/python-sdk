@@ -9,6 +9,7 @@ from .._types import SequenceNotStr
 from .owner_id_input import OwnerIDInput
 from .owner_input_param import OwnerInputParam
 from .wallet_chain_type import WalletChainType
+from .derivation_input_param import DerivationInputParam
 from .additional_signer_input_param import AdditionalSignerInputParam
 from .wallet_entity_assignment_request_body_param import WalletEntityAssignmentRequestBodyParam
 
@@ -23,6 +24,12 @@ class WalletBatchItemInputParam(TypedDict, total=False):
 
     additional_signers: AdditionalSignerInputParam
     """Additional signers for the wallet."""
+
+    derivation: DerivationInputParam
+    """
+    Derives the new wallet from an existing HD root wallet so both share one seed
+    phrase.
+    """
 
     display_name: str
     """A human-readable label for the wallet."""

@@ -13,6 +13,7 @@ from privy.types import (
     DepositAccountCryptoQuoteResponse,
     CreateCryptoDepositAccountResponse,
     CryptoDepositAccountConfigResponse,
+    CryptoDepositAccountConfigSearchResponse,
     GetCryptoDepositAccountNextOrderResponse,
 )
 from tests.utils import assert_matches_type
@@ -359,6 +360,40 @@ class TestCrypto:
 
         assert cast(Any, response.is_closed) is True
 
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_search_config(self, client: PrivyAPI) -> None:
+        crypto = client.wallets.deposit_accounts.crypto.search_config(
+            q="x",
+        )
+        assert_matches_type(CryptoDepositAccountConfigSearchResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_search_config(self, client: PrivyAPI) -> None:
+        response = client.wallets.deposit_accounts.crypto.with_raw_response.search_config(
+            q="x",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        crypto = response.parse()
+        assert_matches_type(CryptoDepositAccountConfigSearchResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_search_config(self, client: PrivyAPI) -> None:
+        with client.wallets.deposit_accounts.crypto.with_streaming_response.search_config(
+            q="x",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            crypto = response.parse()
+            assert_matches_type(CryptoDepositAccountConfigSearchResponse, crypto, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
 
 class TestAsyncCrypto:
     parametrize = pytest.mark.parametrize(
@@ -696,5 +731,39 @@ class TestAsyncCrypto:
 
             crypto = await response.parse()
             assert_matches_type(DepositAccountCryptoQuoteResponse, crypto, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_search_config(self, async_client: AsyncPrivyAPI) -> None:
+        crypto = await async_client.wallets.deposit_accounts.crypto.search_config(
+            q="x",
+        )
+        assert_matches_type(CryptoDepositAccountConfigSearchResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_search_config(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.wallets.deposit_accounts.crypto.with_raw_response.search_config(
+            q="x",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        crypto = await response.parse()
+        assert_matches_type(CryptoDepositAccountConfigSearchResponse, crypto, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_search_config(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.wallets.deposit_accounts.crypto.with_streaming_response.search_config(
+            q="x",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            crypto = await response.parse()
+            assert_matches_type(CryptoDepositAccountConfigSearchResponse, crypto, path=["response"])
 
         assert cast(Any, response.is_closed) is True

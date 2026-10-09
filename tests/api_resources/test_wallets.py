@@ -53,6 +53,7 @@ class TestWallets:
                     "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
                 }
             ],
+            derivation={"wallet_id": "wallet_id"},
             display_name="display_name",
             entity={
                 "id": "jorpjo4rfxj62nx1itt8y1zt",
@@ -3596,6 +3597,7 @@ class TestAsyncWallets:
                     "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
                 }
             ],
+            derivation={"wallet_id": "wallet_id"},
             display_name="display_name",
             entity={
                 "id": "jorpjo4rfxj62nx1itt8y1zt",

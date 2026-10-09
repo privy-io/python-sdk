@@ -567,6 +567,8 @@ from privy.types import (
     CryptoDepositAccountCaip2,
     CryptoDepositAccountChain,
     CryptoDepositAccountConfigResponse,
+    CryptoDepositAccountConfigSearchResponse,
+    CryptoDepositAccountSearchCurrency,
     CryptoDepositAccountSourceChain,
     CryptoDepositAccountSourceCurrency,
     CryptoDepositAddressRoute,
@@ -588,6 +590,7 @@ from privy.types import (
     DepositAccountCryptoQuoteAsset,
     DepositAccountCryptoQuoteRequestBody,
     DepositAccountCryptoQuoteResponse,
+    DerivationInput,
     DetachWalletAutomationRequestBody,
     DeveloperFee,
     EncryptedAuthorizationKey,
@@ -963,6 +966,7 @@ Methods:
 - <code title="get /v1/deposit_accounts/crypto/config">client.wallets.deposit_accounts.crypto.<a href="./src/privy/resources/wallets/deposit_accounts/crypto/crypto.py">get_config</a>() -> <a href="./src/privy/types/crypto_deposit_account_config_response.py">CryptoDepositAccountConfigResponse</a></code>
 - <code title="get /v1/wallets/{wallet_id}/deposit_accounts/crypto/next_order">client.wallets.deposit_accounts.crypto.<a href="./src/privy/resources/wallets/deposit_accounts/crypto/crypto.py">get_next_order</a>(wallet_id, \*\*<a href="src/privy/types/wallets/deposit_accounts/crypto_get_next_order_params.py">params</a>) -> <a href="./src/privy/types/get_crypto_deposit_account_next_order_response.py">GetCryptoDepositAccountNextOrderResponse</a></code>
 - <code title="post /v1/deposit_accounts/crypto/quote">client.wallets.deposit_accounts.crypto.<a href="./src/privy/resources/wallets/deposit_accounts/crypto/crypto.py">quote</a>(\*\*<a href="src/privy/types/wallets/deposit_accounts/crypto_quote_params.py">params</a>) -> <a href="./src/privy/types/deposit_account_crypto_quote_response.py">DepositAccountCryptoQuoteResponse</a></code>
+- <code title="get /v1/deposit_accounts/crypto/config/search">client.wallets.deposit_accounts.crypto.<a href="./src/privy/resources/wallets/deposit_accounts/crypto/crypto.py">search_config</a>(\*\*<a href="src/privy/types/wallets/deposit_accounts/crypto_search_config_params.py">params</a>) -> <a href="./src/privy/types/crypto_deposit_account_config_search_response.py">CryptoDepositAccountConfigSearchResponse</a></code>
 
 #### Orders
 

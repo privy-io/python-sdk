@@ -238,6 +238,7 @@ from .cross_app_smart_wallet import CrossAppSmartWallet as CrossAppSmartWallet
 from .custodial_wallet_chain import CustodialWalletChain as CustodialWalletChain
 from .deposit_completed_data import DepositCompletedData as DepositCompletedData
 from .deposit_started_source import DepositStartedSource as DepositStartedSource
+from .derivation_input_param import DerivationInputParam as DerivationInputParam
 from .first_class_chain_type import FirstClassChainType as FirstClassChainType
 from .intent_transfer_params import IntentTransferParams as IntentTransferParams
 from .key_quorum_list_params import KeyQuorumListParams as KeyQuorumListParams
@@ -763,6 +764,9 @@ from .create_crypto_deposit_account_response import (
 from .crypto_deposit_account_config_response import (
     CryptoDepositAccountConfigResponse as CryptoDepositAccountConfigResponse,
 )
+from .crypto_deposit_account_search_currency import (
+    CryptoDepositAccountSearchCurrency as CryptoDepositAccountSearchCurrency,
+)
 from .crypto_deposit_account_source_currency import (
     CryptoDepositAccountSourceCurrency as CryptoDepositAccountSourceCurrency,
 )
@@ -1138,6 +1142,9 @@ from .xrpl_sign_transaction_rpc_input_params_param import (
 )
 from .aptos_sign_transaction_rpc_input_params_param import (
     AptosSignTransactionRpcInputParamsParam as AptosSignTransactionRpcInputParamsParam,
+)
+from .crypto_deposit_account_config_search_response import (
+    CryptoDepositAccountConfigSearchResponse as CryptoDepositAccountConfigSearchResponse,
 )
 from .ethereum_personal_sign_rpc_input_params_param import (
     EthereumPersonalSignRpcInputParamsParam as EthereumPersonalSignRpcInputParamsParam,
