@@ -57,7 +57,20 @@ class TransactionsResource(SyncAPIResource):
         token: Union[TransactionTokenAddressInput, SequenceNotStr[TransactionTokenAddressInput]] | Omit = omit,
         asset: Union[
             Literal[
-                "usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "ousd", "pathusd", "sol", "trx"
+                "usdc",
+                "usdc.e",
+                "eth",
+                "avax",
+                "pol",
+                "bnb",
+                "mon",
+                "usdt",
+                "eurc",
+                "usdb",
+                "ousd",
+                "pathusd",
+                "sol",
+                "trx",
             ],
             List[WalletAsset],
         ]
@@ -155,7 +168,20 @@ class AsyncTransactionsResource(AsyncAPIResource):
         token: Union[TransactionTokenAddressInput, SequenceNotStr[TransactionTokenAddressInput]] | Omit = omit,
         asset: Union[
             Literal[
-                "usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "ousd", "pathusd", "sol", "trx"
+                "usdc",
+                "usdc.e",
+                "eth",
+                "avax",
+                "pol",
+                "bnb",
+                "mon",
+                "usdt",
+                "eurc",
+                "usdb",
+                "ousd",
+                "pathusd",
+                "sol",
+                "trx",
             ],
             List[WalletAsset],
         ]

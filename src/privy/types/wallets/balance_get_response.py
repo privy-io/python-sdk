@@ -11,7 +11,22 @@ __all__ = ["BalanceGetResponse", "Balance"]
 
 class Balance(BaseModel):
     asset: Union[
-        Literal["usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "ousd", "pathusd", "sol", "trx"],
+        Literal[
+            "usdc",
+            "usdc.e",
+            "eth",
+            "avax",
+            "pol",
+            "bnb",
+            "mon",
+            "usdt",
+            "eurc",
+            "usdb",
+            "ousd",
+            "pathusd",
+            "sol",
+            "trx",
+        ],
         str,
     ]
 

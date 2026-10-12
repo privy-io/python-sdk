@@ -55,7 +55,20 @@ class BalanceResource(SyncAPIResource):
         token: Union[str, SequenceNotStr[str]] | Omit = omit,
         asset: Union[
             Literal[
-                "usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "ousd", "pathusd", "sol", "trx"
+                "usdc",
+                "usdc.e",
+                "eth",
+                "avax",
+                "pol",
+                "bnb",
+                "mon",
+                "usdt",
+                "eurc",
+                "usdb",
+                "ousd",
+                "pathusd",
+                "sol",
+                "trx",
             ],
             List[WalletAsset],
         ]
@@ -83,6 +96,7 @@ class BalanceResource(SyncAPIResource):
                 "hyperevm",
                 "hypercore",
                 "arc",
+                "monad",
                 "tempo_testnet",
                 "hoodi",
                 "sepolia",
@@ -195,7 +209,20 @@ class AsyncBalanceResource(AsyncAPIResource):
         token: Union[str, SequenceNotStr[str]] | Omit = omit,
         asset: Union[
             Literal[
-                "usdc", "usdc.e", "eth", "avax", "pol", "bnb", "usdt", "eurc", "usdb", "ousd", "pathusd", "sol", "trx"
+                "usdc",
+                "usdc.e",
+                "eth",
+                "avax",
+                "pol",
+                "bnb",
+                "mon",
+                "usdt",
+                "eurc",
+                "usdb",
+                "ousd",
+                "pathusd",
+                "sol",
+                "trx",
             ],
             List[WalletAsset],
         ]
@@ -223,6 +250,7 @@ class AsyncBalanceResource(AsyncAPIResource):
                 "hyperevm",
                 "hypercore",
                 "arc",
+                "monad",
                 "tempo_testnet",
                 "hoodi",
                 "sepolia",

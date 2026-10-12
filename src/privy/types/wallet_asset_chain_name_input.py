@@ -28,6 +28,7 @@ WalletAssetChainNameInput: TypeAlias = Union[
         "hyperevm",
         "hypercore",
         "arc",
+        "monad",
         "tempo_testnet",
         "hoodi",
         "sepolia",
