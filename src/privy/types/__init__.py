@@ -62,6 +62,7 @@ from .spark_network import SparkNetwork as SparkNetwork
 from .tron_contract import TronContract as TronContract
 from .wallet_entity import WalletEntity as WalletEntity
 from .currency_asset import CurrencyAsset as CurrencyAsset
+from .denylist_entry import DenylistEntry as DenylistEntry
 from .funding_option import FundingOption as FundingOption
 from .kyx_tos_status import KyxTosStatus as KyxTosStatus
 from .linked_account import LinkedAccount as LinkedAccount
@@ -139,6 +140,7 @@ from .aggregation_method import AggregationMethod as AggregationMethod
 from .base_action_result import BaseActionResult as BaseActionResult
 from .chain_testnet_mode import ChainTestnetMode as ChainTestnetMode
 from .condition_operator import ConditionOperator as ConditionOperator
+from .denylist_rule_type import DenylistRuleType as DenylistRuleType
 from .fiat_currency_code import FiatCurrencyCode as FiatCurrencyCode
 from .gas_spend_currency import GasSpendCurrency as GasSpendCurrency
 from .icloud_client_type import ICloudClientType as ICloudClientType
@@ -238,6 +240,7 @@ from .bridge_onramp_provider import BridgeOnrampProvider as BridgeOnrampProvider
 from .bridge_refund_metadata import BridgeRefundMetadata as BridgeRefundMetadata
 from .cross_app_smart_wallet import CrossAppSmartWallet as CrossAppSmartWallet
 from .custodial_wallet_chain import CustodialWalletChain as CustodialWalletChain
+from .denylist_list_response import DenylistListResponse as DenylistListResponse
 from .deposit_completed_data import DepositCompletedData as DepositCompletedData
 from .deposit_started_source import DepositStartedSource as DepositStartedSource
 from .derivation_input_param import DerivationInputParam as DerivationInputParam
@@ -353,6 +356,8 @@ from .wallet_init_import_params import WalletInitImportParams as WalletInitImpor
 from .wallet_invite_input_param import WalletInviteInputParam as WalletInviteInputParam
 from .attached_wallet_automation import AttachedWalletAutomation as AttachedWalletAutomation
 from .crypto_deposit_asset_param import CryptoDepositAssetParam as CryptoDepositAssetParam
+from .denylist_email_input_param import DenylistEmailInputParam as DenylistEmailInputParam
+from .denylist_phone_input_param import DenylistPhoneInputParam as DenylistPhoneInputParam
 from .external_oauth_provider_id import ExternalOAuthProviderID as ExternalOAuthProviderID
 from .key_quorum_intent_response import KeyQuorumIntentResponse as KeyQuorumIntentResponse
 from .kraken_embed_sorting_order import KrakenEmbedSortingOrder as KrakenEmbedSortingOrder
@@ -585,6 +590,7 @@ from .xrpl_transaction_condition_param import XrplTransactionConditionParam as X
 from .automation_asset_filter_all_param import AutomationAssetFilterAllParam as AutomationAssetFilterAllParam
 from .automation_asset_spec_input_param import AutomationAssetSpecInputParam as AutomationAssetSpecInputParam
 from .crypto_deposit_asset_filter_param import CryptoDepositAssetFilterParam as CryptoDepositAssetFilterParam
+from .denylist_email_domain_input_param import DenylistEmailDomainInputParam as DenylistEmailDomainInputParam
 from .ethereum_calldata_condition_param import EthereumCalldataConditionParam as EthereumCalldataConditionParam
 from .external_fiat_account_owner_param import ExternalFiatAccountOwnerParam as ExternalFiatAccountOwnerParam
 from .intent_authorized_webhook_payload import IntentAuthorizedWebhookPayload as IntentAuthorizedWebhookPayload
@@ -650,6 +656,7 @@ from .bridge_static_memo_deposit_metadata import BridgeStaticMemoDepositMetadata
 from .crypto_deposit_account_source_chain import CryptoDepositAccountSourceChain as CryptoDepositAccountSourceChain
 from .crypto_deposit_asset_filter_exclude import CryptoDepositAssetFilterExclude as CryptoDepositAssetFilterExclude
 from .crypto_deposit_asset_filter_include import CryptoDepositAssetFilterInclude as CryptoDepositAssetFilterInclude
+from .denylist_solana_address_input_param import DenylistSolanaAddressInputParam as DenylistSolanaAddressInputParam
 from .deposit_account_crypto_quote_amount import DepositAccountCryptoQuoteAmount as DepositAccountCryptoQuoteAmount
 from .ethereum_personal_sign_rpc_response import EthereumPersonalSignRpcResponse as EthereumPersonalSignRpcResponse
 from .ethereum_secp_256k_1_sign_rpc_input import EthereumSecp256k1SignRpcInput as EthereumSecp256k1SignRpcInput
@@ -705,6 +712,9 @@ from .automation_trigger_config_input_param import (
     AutomationTriggerConfigInputParam as AutomationTriggerConfigInputParam,
 )
 from .crypto_deposit_asset_filter_all_param import CryptoDepositAssetFilterAllParam as CryptoDepositAssetFilterAllParam
+from .denylist_ethereum_address_input_param import (
+    DenylistEthereumAddressInputParam as DenylistEthereumAddressInputParam,
+)
 from .deposit_account_crypto_quote_response import (
     DepositAccountCryptoQuoteResponse as DepositAccountCryptoQuoteResponse,
 )
@@ -898,6 +908,9 @@ from .automation_destination_asset_input_param import (
 )
 from .create_fiat_deposit_account_source_param import (
     CreateFiatDepositAccountSourceParam as CreateFiatDepositAccountSourceParam,
+)
+from .denylist_entry_create_request_body_param import (
+    DenylistEntryCreateRequestBodyParam as DenylistEntryCreateRequestBodyParam,
 )
 from .deposit_account_crypto_quote_asset_param import (
     DepositAccountCryptoQuoteAssetParam as DepositAccountCryptoQuoteAssetParam,

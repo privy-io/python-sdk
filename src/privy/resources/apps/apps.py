@@ -7,6 +7,14 @@ import httpx
 from ...types import app_get_gas_spend_params
 from ..._types import Body, Query, Headers, NotGiven, SequenceNotStr, not_given
 from ..._utils import path_template, maybe_transform, async_maybe_transform
+from .denylist import (
+    DenylistResource,
+    AsyncDenylistResource,
+    DenylistResourceWithRawResponse,
+    AsyncDenylistResourceWithRawResponse,
+    DenylistResourceWithStreamingResponse,
+    AsyncDenylistResourceWithStreamingResponse,
+)
 from ..._compat import cached_property
 from .allowlist import (
     AllowlistResource,
@@ -38,6 +46,11 @@ class AppsResource(SyncAPIResource):
     def allowlist(self) -> AllowlistResource:
         """Operations related to app settings and allowlist management"""
         return AllowlistResource(self._client)
+
+    @cached_property
+    def denylist(self) -> DenylistResource:
+        """Operations related to app settings and allowlist management"""
+        return DenylistResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AppsResourceWithRawResponse:
@@ -181,6 +194,11 @@ class AsyncAppsResource(AsyncAPIResource):
     def allowlist(self) -> AsyncAllowlistResource:
         """Operations related to app settings and allowlist management"""
         return AsyncAllowlistResource(self._client)
+
+    @cached_property
+    def denylist(self) -> AsyncDenylistResource:
+        """Operations related to app settings and allowlist management"""
+        return AsyncDenylistResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> AsyncAppsResourceWithRawResponse:
@@ -336,6 +354,11 @@ class AppsResourceWithRawResponse:
         """Operations related to app settings and allowlist management"""
         return AllowlistResourceWithRawResponse(self._apps.allowlist)
 
+    @cached_property
+    def denylist(self) -> DenylistResourceWithRawResponse:
+        """Operations related to app settings and allowlist management"""
+        return DenylistResourceWithRawResponse(self._apps.denylist)
+
 
 class AsyncAppsResourceWithRawResponse:
     def __init__(self, apps: AsyncAppsResource) -> None:
@@ -355,6 +378,11 @@ class AsyncAppsResourceWithRawResponse:
     def allowlist(self) -> AsyncAllowlistResourceWithRawResponse:
         """Operations related to app settings and allowlist management"""
         return AsyncAllowlistResourceWithRawResponse(self._apps.allowlist)
+
+    @cached_property
+    def denylist(self) -> AsyncDenylistResourceWithRawResponse:
+        """Operations related to app settings and allowlist management"""
+        return AsyncDenylistResourceWithRawResponse(self._apps.denylist)
 
 
 class AppsResourceWithStreamingResponse:
@@ -376,6 +404,11 @@ class AppsResourceWithStreamingResponse:
         """Operations related to app settings and allowlist management"""
         return AllowlistResourceWithStreamingResponse(self._apps.allowlist)
 
+    @cached_property
+    def denylist(self) -> DenylistResourceWithStreamingResponse:
+        """Operations related to app settings and allowlist management"""
+        return DenylistResourceWithStreamingResponse(self._apps.denylist)
+
 
 class AsyncAppsResourceWithStreamingResponse:
     def __init__(self, apps: AsyncAppsResource) -> None:
@@ -395,3 +428,8 @@ class AsyncAppsResourceWithStreamingResponse:
     def allowlist(self) -> AsyncAllowlistResourceWithStreamingResponse:
         """Operations related to app settings and allowlist management"""
         return AsyncAllowlistResourceWithStreamingResponse(self._apps.allowlist)
+
+    @cached_property
+    def denylist(self) -> AsyncDenylistResourceWithStreamingResponse:
+        """Operations related to app settings and allowlist management"""
+        return AsyncDenylistResourceWithStreamingResponse(self._apps.denylist)

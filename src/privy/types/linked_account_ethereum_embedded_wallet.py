@@ -35,6 +35,9 @@ class LinkedAccountEthereumEmbeddedWallet(BaseModel):
 
     type: Literal["wallet"]
 
+    user_can_sign: bool
+    """Whether the user can unilaterally sign with this wallet."""
+
     verified_at: float
 
     wallet_client: Literal["privy"]
@@ -42,6 +45,3 @@ class LinkedAccountEthereumEmbeddedWallet(BaseModel):
     wallet_client_type: Literal["privy"]
 
     wallet_index: float
-
-    user_can_sign: Optional[bool] = None
-    """Whether the user can unilaterally sign with this wallet."""

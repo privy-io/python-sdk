@@ -13,6 +13,16 @@ from privy.types import (
     CaptchaProvider,
     Currency,
     CurrencyAsset,
+    DenylistEmailDomainInput,
+    DenylistEmailInput,
+    DenylistEntry,
+    DenylistEntryCreateRequestBody,
+    DenylistEntryDeleteRequestBody,
+    DenylistEthereumAddressInput,
+    DenylistListResponse,
+    DenylistPhoneInput,
+    DenylistRuleType,
+    DenylistSolanaAddressInput,
     EmailDomain,
     EmailDomainInviteInput,
     EmailInviteInput,
@@ -57,6 +67,14 @@ Methods:
 - <code title="post /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/privy/resources/apps/allowlist.py">create</a>(app_id, \*\*<a href="src/privy/types/apps/allowlist_create_params.py">params</a>) -> <a href="./src/privy/types/allowlist_entry.py">AllowlistEntry</a></code>
 - <code title="get /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/privy/resources/apps/allowlist.py">list</a>(app_id) -> <a href="./src/privy/types/apps/allowlist_list_response.py">AllowlistListResponse</a></code>
 - <code title="delete /v1/apps/{app_id}/allowlist">client.apps.allowlist.<a href="./src/privy/resources/apps/allowlist.py">delete</a>(app_id, \*\*<a href="src/privy/types/apps/allowlist_delete_params.py">params</a>) -> <a href="./src/privy/types/allowlist_deletion_response.py">AllowlistDeletionResponse</a></code>
+
+## Denylist
+
+Methods:
+
+- <code title="post /v1/apps/{app_id}/denylist">client.apps.denylist.<a href="./src/privy/resources/apps/denylist.py">create</a>(app_id, \*\*<a href="src/privy/types/apps/denylist_create_params.py">params</a>) -> <a href="./src/privy/types/denylist_entry.py">DenylistEntry</a></code>
+- <code title="get /v1/apps/{app_id}/denylist">client.apps.denylist.<a href="./src/privy/resources/apps/denylist.py">list</a>(app_id, \*\*<a href="src/privy/types/apps/denylist_list_params.py">params</a>) -> <a href="./src/privy/types/denylist_entry.py">SyncCursor[DenylistEntry]</a></code>
+- <code title="delete /v1/apps/{app_id}/denylist">client.apps.denylist.<a href="./src/privy/resources/apps/denylist.py">delete</a>(app_id, \*\*<a href="src/privy/types/apps/denylist_delete_params.py">params</a>) -> None</code>
 
 # Cards
 

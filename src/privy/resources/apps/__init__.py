@@ -8,6 +8,14 @@ from .apps import (
     AppsResourceWithStreamingResponse,
     AsyncAppsResourceWithStreamingResponse,
 )
+from .denylist import (
+    DenylistResource,
+    AsyncDenylistResource,
+    DenylistResourceWithRawResponse,
+    AsyncDenylistResourceWithRawResponse,
+    DenylistResourceWithStreamingResponse,
+    AsyncDenylistResourceWithStreamingResponse,
+)
 from .allowlist import (
     AllowlistResource,
     AsyncAllowlistResource,
@@ -24,6 +32,12 @@ __all__ = [
     "AsyncAllowlistResourceWithRawResponse",
     "AllowlistResourceWithStreamingResponse",
     "AsyncAllowlistResourceWithStreamingResponse",
+    "DenylistResource",
+    "AsyncDenylistResource",
+    "DenylistResourceWithRawResponse",
+    "AsyncDenylistResourceWithRawResponse",
+    "DenylistResourceWithStreamingResponse",
+    "AsyncDenylistResourceWithStreamingResponse",
     "AppsResource",
     "AsyncAppsResource",
     "AppsResourceWithRawResponse",
