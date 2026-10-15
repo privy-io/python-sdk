@@ -5,13 +5,13 @@ from __future__ import annotations
 from typing_extensions import Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
-from .raw_sign_input_params import RawSignInputParams
+from .raw_sign_input_params_param import RawSignInputParamsParam
 
 __all__ = ["WalletRawSignParams"]
 
 
 class WalletRawSignParams(TypedDict, total=False):
-    params: Required[RawSignInputParams]
+    params: Required[RawSignInputParamsParam]
     """Parameters for the `raw_sign` RPC."""
 
     privy_authorization_signature: Annotated[str, PropertyInfo(alias="privy-authorization-signature")]

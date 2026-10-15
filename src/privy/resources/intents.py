@@ -11,7 +11,6 @@ from ..types import (
     Hex,
     Caip2,
     AmountType,
-    IntentType,
     IntentStatus,
     OwnerIDInput,
     PolicyAction,
@@ -20,6 +19,7 @@ from ..types import (
     WalletActionNonce,
     intent_rpc_params,
     intent_list_params,
+    intent_raw_sign_params,
     intent_transfer_params,
     intent_update_policy_params,
     intent_update_wallet_params,
@@ -42,13 +42,13 @@ from ..pagination import SyncCursor, AsyncCursor
 from .._base_client import AsyncPaginator, make_request_options
 from ..types.caip_2 import Caip2
 from ..types.amount_type import AmountType
-from ..types.intent_type import IntentType
 from ..types.intent_status import IntentStatus
 from ..types.policy_action import PolicyAction
 from ..types.policy_method import PolicyMethod
 from ..types.spark_network import SparkNetwork
 from ..types.owner_id_input import OwnerIDInput
 from ..types.intent_response import IntentResponse
+from ..types.intent_type_param import IntentTypeParam
 from ..types.owner_input_param import OwnerInputParam
 from ..types.rpc_intent_response import RpcIntentResponse
 from ..types.wallet_action_nonce import WalletActionNonce
@@ -57,9 +57,11 @@ from ..types.policy_intent_response import PolicyIntentResponse
 from ..types.wallet_intent_response import WalletIntentResponse
 from ..types.fee_configuration_param import FeeConfigurationParam
 from ..types.signature_options_param import SignatureOptionsParam
+from ..types.raw_sign_intent_response import RawSignIntentResponse
 from ..types.transfer_intent_response import TransferIntentResponse
 from ..types.rpc_sponsor_options_param import RpcSponsorOptionsParam
 from ..types.key_quorum_intent_response import KeyQuorumIntentResponse
+from ..types.raw_sign_input_params_param import RawSignInputParamsParam
 from ..types.rule_delete_intent_response import RuleDeleteIntentResponse
 from ..types.rule_mutate_intent_response import RuleMutateIntentResponse
 from ..types.token_transfer_source_param import TokenTransferSourceParam
@@ -69,8 +71,10 @@ from ..types.private_key_export_input_param import PrivateKeyExportInputParam
 from ..types.seed_phrase_export_input_param import SeedPhraseExportInputParam
 from ..types.transfer_custody_options_param import TransferCustodyOptionsParam
 from ..types.token_transfer_destination_param import TokenTransferDestinationParam
+from ..types.condition_set_item_intent_response import ConditionSetItemIntentResponse
 from ..types.spark_transfer_rpc_input_params_param import SparkTransferRpcInputParamsParam
 from ..types.spark_withdraw_rpc_input_params_param import SparkWithdrawRpcInputParamsParam
+from ..types.condition_set_items_request_body_param import ConditionSetItemsRequestBodyParam
 from ..types.ethereum_send_calls_rpc_input_params_param import EthereumSendCallsRpcInputParamsParam
 from ..types.solana_sign_message_rpc_input_params_param import SolanaSignMessageRpcInputParamsParam
 from ..types.spark_transfer_tokens_rpc_input_params_param import SparkTransferTokensRpcInputParamsParam
@@ -134,7 +138,7 @@ class IntentsResource(SyncAPIResource):
         created_by_id: str | Omit = omit,
         current_user_has_signed: Literal["true", "false"] | Omit = omit,
         cursor: str | Omit = omit,
-        intent_type: IntentType | Omit = omit,
+        intent_type: IntentTypeParam | Omit = omit,
         limit: Optional[float] | Omit = omit,
         pending_member_id: str | Omit = omit,
         resource_id: str | Omit = omit,
@@ -201,6 +205,52 @@ class IntentsResource(SyncAPIResource):
                 ),
             ),
             model=cast(Any, IntentResponse),  # Union types cannot be passed in as arguments in the type system
+        )
+
+    def create_condition_set_items(
+        self,
+        condition_set_id: str,
+        *,
+        condition_set_items_request_body: ConditionSetItemsRequestBodyParam,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetItemIntentResponse:
+        """Create an intent to add items to a condition set.
+
+        The intent must be authorized
+        by the condition set owner before it can be executed.
+
+        Args:
+          condition_set_items_request_body: Array of values to add to the condition set. Maximum 100 items per request.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not condition_set_id:
+            raise ValueError(f"Expected a non-empty value for `condition_set_id` but received {condition_set_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return self._post(
+            path_template(
+                "/v1/intents/condition_sets/{condition_set_id}/condition_set_items", condition_set_id=condition_set_id
+            ),
+            body=maybe_transform(condition_set_items_request_body, ConditionSetItemsRequestBodyParam),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ConditionSetItemIntentResponse,
         )
 
     def create_policy_rule(
@@ -350,6 +400,52 @@ class IntentsResource(SyncAPIResource):
                 ),
                 cast_to=cast(Any, IntentResponse),  # Union types cannot be passed in as arguments in the type system
             ),
+        )
+
+    def raw_sign(
+        self,
+        wallet_id: str,
+        *,
+        params: RawSignInputParamsParam,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> RawSignIntentResponse:
+        """Create an intent to sign a raw hash or bytes with a wallet.
+
+        The intent must be
+        authorized by either the wallet owner or signers before it can be executed.
+
+        Args:
+          wallet_id: ID of the wallet.
+
+          params: Parameters for the `raw_sign` RPC.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not wallet_id:
+            raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return self._post(
+            path_template("/v1/intents/wallets/{wallet_id}/raw_sign", wallet_id=wallet_id),
+            body=maybe_transform({"params": params}, intent_raw_sign_params.IntentRawSignParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=RawSignIntentResponse,
         )
 
     def reject(
@@ -2112,7 +2208,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         created_by_id: str | Omit = omit,
         current_user_has_signed: Literal["true", "false"] | Omit = omit,
         cursor: str | Omit = omit,
-        intent_type: IntentType | Omit = omit,
+        intent_type: IntentTypeParam | Omit = omit,
         limit: Optional[float] | Omit = omit,
         pending_member_id: str | Omit = omit,
         resource_id: str | Omit = omit,
@@ -2179,6 +2275,52 @@ class AsyncIntentsResource(AsyncAPIResource):
                 ),
             ),
             model=cast(Any, IntentResponse),  # Union types cannot be passed in as arguments in the type system
+        )
+
+    async def create_condition_set_items(
+        self,
+        condition_set_id: str,
+        *,
+        condition_set_items_request_body: ConditionSetItemsRequestBodyParam,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetItemIntentResponse:
+        """Create an intent to add items to a condition set.
+
+        The intent must be authorized
+        by the condition set owner before it can be executed.
+
+        Args:
+          condition_set_items_request_body: Array of values to add to the condition set. Maximum 100 items per request.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not condition_set_id:
+            raise ValueError(f"Expected a non-empty value for `condition_set_id` but received {condition_set_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return await self._post(
+            path_template(
+                "/v1/intents/condition_sets/{condition_set_id}/condition_set_items", condition_set_id=condition_set_id
+            ),
+            body=await async_maybe_transform(condition_set_items_request_body, ConditionSetItemsRequestBodyParam),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ConditionSetItemIntentResponse,
         )
 
     async def create_policy_rule(
@@ -2328,6 +2470,52 @@ class AsyncIntentsResource(AsyncAPIResource):
                 ),
                 cast_to=cast(Any, IntentResponse),  # Union types cannot be passed in as arguments in the type system
             ),
+        )
+
+    async def raw_sign(
+        self,
+        wallet_id: str,
+        *,
+        params: RawSignInputParamsParam,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> RawSignIntentResponse:
+        """Create an intent to sign a raw hash or bytes with a wallet.
+
+        The intent must be
+        authorized by either the wallet owner or signers before it can be executed.
+
+        Args:
+          wallet_id: ID of the wallet.
+
+          params: Parameters for the `raw_sign` RPC.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not wallet_id:
+            raise ValueError(f"Expected a non-empty value for `wallet_id` but received {wallet_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return await self._post(
+            path_template("/v1/intents/wallets/{wallet_id}/raw_sign", wallet_id=wallet_id),
+            body=await async_maybe_transform({"params": params}, intent_raw_sign_params.IntentRawSignParams),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=RawSignIntentResponse,
         )
 
     async def reject(
@@ -4069,6 +4257,9 @@ class IntentsResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             intents.list,
         )
+        self.create_condition_set_items = to_raw_response_wrapper(
+            intents.create_condition_set_items,
+        )
         self.create_policy_rule = to_raw_response_wrapper(
             intents.create_policy_rule,
         )
@@ -4077,6 +4268,9 @@ class IntentsResourceWithRawResponse:
         )
         self.get = to_raw_response_wrapper(
             intents.get,
+        )
+        self.raw_sign = to_raw_response_wrapper(
+            intents.raw_sign,
         )
         self.reject = to_raw_response_wrapper(
             intents.reject,
@@ -4108,6 +4302,9 @@ class AsyncIntentsResourceWithRawResponse:
         self.list = async_to_raw_response_wrapper(
             intents.list,
         )
+        self.create_condition_set_items = async_to_raw_response_wrapper(
+            intents.create_condition_set_items,
+        )
         self.create_policy_rule = async_to_raw_response_wrapper(
             intents.create_policy_rule,
         )
@@ -4116,6 +4313,9 @@ class AsyncIntentsResourceWithRawResponse:
         )
         self.get = async_to_raw_response_wrapper(
             intents.get,
+        )
+        self.raw_sign = async_to_raw_response_wrapper(
+            intents.raw_sign,
         )
         self.reject = async_to_raw_response_wrapper(
             intents.reject,
@@ -4147,6 +4347,9 @@ class IntentsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             intents.list,
         )
+        self.create_condition_set_items = to_streamed_response_wrapper(
+            intents.create_condition_set_items,
+        )
         self.create_policy_rule = to_streamed_response_wrapper(
             intents.create_policy_rule,
         )
@@ -4155,6 +4358,9 @@ class IntentsResourceWithStreamingResponse:
         )
         self.get = to_streamed_response_wrapper(
             intents.get,
+        )
+        self.raw_sign = to_streamed_response_wrapper(
+            intents.raw_sign,
         )
         self.reject = to_streamed_response_wrapper(
             intents.reject,
@@ -4186,6 +4392,9 @@ class AsyncIntentsResourceWithStreamingResponse:
         self.list = async_to_streamed_response_wrapper(
             intents.list,
         )
+        self.create_condition_set_items = async_to_streamed_response_wrapper(
+            intents.create_condition_set_items,
+        )
         self.create_policy_rule = async_to_streamed_response_wrapper(
             intents.create_policy_rule,
         )
@@ -4194,6 +4403,9 @@ class AsyncIntentsResourceWithStreamingResponse:
         )
         self.get = async_to_streamed_response_wrapper(
             intents.get,
+        )
+        self.raw_sign = async_to_streamed_response_wrapper(
+            intents.raw_sign,
         )
         self.reject = async_to_streamed_response_wrapper(
             intents.reject,

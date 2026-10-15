@@ -5,8 +5,8 @@ from __future__ import annotations
 from typing import Optional
 from typing_extensions import Literal, TypedDict
 
-from .intent_type import IntentType
 from .intent_status import IntentStatus
+from .intent_type_param import IntentTypeParam
 
 __all__ = ["IntentListParams"]
 
@@ -24,7 +24,7 @@ class IntentListParams(TypedDict, total=False):
     cursor: str
     """Cursor returned by the previous page."""
 
-    intent_type: IntentType
+    intent_type: IntentTypeParam
     """Type of intent."""
 
     limit: Optional[float]

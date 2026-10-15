@@ -139,6 +139,8 @@ Types:
 from privy.types import (
     BaseActionResult,
     BaseIntentResponse,
+    ConditionSetItemIntentCreateRequestDetails,
+    ConditionSetItemIntentResponse,
     IntentAuthorization,
     IntentAuthorizationKeyMember,
     IntentAuthorizationKeyQuorum,
@@ -153,6 +155,8 @@ from privy.types import (
     KeyQuorumIntentResponse,
     PolicyIntentRequestDetails,
     PolicyIntentResponse,
+    RawSignIntentRequestDetails,
+    RawSignIntentResponse,
     RpcIntentRequestDetails,
     RpcIntentResponse,
     RuleDeleteIntentResponse,
@@ -172,9 +176,11 @@ from privy.types import (
 Methods:
 
 - <code title="get /v1/intents">client.intents.<a href="./src/privy/resources/intents.py">list</a>(\*\*<a href="src/privy/types/intent_list_params.py">params</a>) -> <a href="./src/privy/types/intent_response.py">SyncCursor[IntentResponse]</a></code>
+- <code title="post /v1/intents/condition_sets/{condition_set_id}/condition_set_items">client.intents.<a href="./src/privy/resources/intents.py">create_condition_set_items</a>(condition_set_id, \*\*<a href="src/privy/types/intent_create_condition_set_items_params.py">params</a>) -> <a href="./src/privy/types/condition_set_item_intent_response.py">ConditionSetItemIntentResponse</a></code>
 - <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/privy/resources/intents.py">create_policy_rule</a>(policy_id, \*\*<a href="src/privy/types/intent_create_policy_rule_params.py">params</a>) -> <a href="./src/privy/types/rule_mutate_intent_response.py">RuleMutateIntentResponse</a></code>
 - <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/privy/resources/intents.py">delete_policy_rule</a>(rule_id, \*, policy_id) -> <a href="./src/privy/types/rule_delete_intent_response.py">RuleDeleteIntentResponse</a></code>
 - <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/privy/resources/intents.py">get</a>(intent_id) -> <a href="./src/privy/types/intent_response.py">IntentResponse</a></code>
+- <code title="post /v1/intents/wallets/{wallet_id}/raw_sign">client.intents.<a href="./src/privy/resources/intents.py">raw_sign</a>(wallet_id, \*\*<a href="src/privy/types/intent_raw_sign_params.py">params</a>) -> <a href="./src/privy/types/raw_sign_intent_response.py">RawSignIntentResponse</a></code>
 - <code title="post /v1/intents/{intent_id}/reject">client.intents.<a href="./src/privy/resources/intents.py">reject</a>(intent_id) -> <a href="./src/privy/types/intent_response.py">IntentResponse</a></code>
 - <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/privy/resources/intents.py">rpc</a>(path_wallet_id, \*\*<a href="src/privy/types/intent_rpc_params.py">params</a>) -> <a href="./src/privy/types/rpc_intent_response.py">RpcIntentResponse</a></code>
 - <code title="post /v1/intents/wallets/{wallet_id}/transfer">client.intents.<a href="./src/privy/resources/intents.py">transfer</a>(wallet_id, \*\*<a href="src/privy/types/intent_transfer_params.py">params</a>) -> <a href="./src/privy/types/transfer_intent_response.py">TransferIntentResponse</a></code>

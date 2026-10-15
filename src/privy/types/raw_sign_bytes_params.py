@@ -1,23 +1,20 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-from __future__ import annotations
-
-from typing_extensions import Required, TypedDict
-
+from .._models import BaseModel
 from .raw_sign_bytes_encoding import RawSignBytesEncoding
 from .raw_sign_bytes_hash_function import RawSignBytesHashFunction
 
 __all__ = ["RawSignBytesParams"]
 
 
-class RawSignBytesParams(TypedDict, total=False):
+class RawSignBytesParams(BaseModel):
     """Parameters for hashing and signing bytes with the `raw_sign` RPC."""
 
-    bytes: Required[str]
+    bytes: str
     """The bytes to hash and sign."""
 
-    encoding: Required[RawSignBytesEncoding]
+    encoding: RawSignBytesEncoding
     """Encoding scheme for bytes in the `raw_sign` RPC."""
 
-    hash_function: Required[RawSignBytesHashFunction]
+    hash_function: RawSignBytesHashFunction
     """Hash function for bytes in the `raw_sign` RPC."""

@@ -28,7 +28,6 @@ from ...types import (
     WalletChainType,
     WalletEntityType,
     WalletActionNonce,
-    RawSignInputParams,
     WalletImportSupportedChains,
     wallet_get_params,
     wallet_rpc_params,
@@ -116,7 +115,6 @@ from ...types.policy_input_param import PolicyInputParam
 from ...types.wallet_entity_type import WalletEntityType
 from ...types.wallet_action_nonce import WalletActionNonce
 from ...types.wallet_rpc_response import WalletRpcResponse
-from ...types.raw_sign_input_params import RawSignInputParams
 from ...types.derivation_input_param import DerivationInputParam
 from ...types.fee_configuration_param import FeeConfigurationParam
 from ...types.signature_options_param import SignatureOptionsParam
@@ -129,6 +127,7 @@ from .deposit_accounts.deposit_accounts import (
     DepositAccountsResourceWithStreamingResponse,
     AsyncDepositAccountsResourceWithStreamingResponse,
 )
+from ...types.raw_sign_input_params_param import RawSignInputParamsParam
 from ...types.token_transfer_source_param import TokenTransferSourceParam
 from ...types.wallet_export_response_body import WalletExportResponseBody
 from ...types.wallet_init_import_response import WalletInitImportResponse
@@ -704,7 +703,7 @@ class WalletsResource(SyncAPIResource):
         self,
         wallet_id: str,
         *,
-        params: RawSignInputParams,
+        params: RawSignInputParamsParam,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -3368,7 +3367,7 @@ class AsyncWalletsResource(AsyncAPIResource):
         self,
         wallet_id: str,
         *,
-        params: RawSignInputParams,
+        params: RawSignInputParamsParam,
         privy_authorization_signature: str | Omit = omit,
         privy_idempotency_key: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
