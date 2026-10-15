@@ -414,6 +414,7 @@ def _map_identity_linked_account(account: dict[str, object]) -> dict[str, object
                 "chain_id": "",
                 "delegated": False,
                 "imported": False,
+                "user_can_sign": account.get("user_can_sign", True),
                 "public_key": "",
                 "wallet_index": 0,
                 "recovery_method": "privy-v2" if account.get("id") else "privy",
