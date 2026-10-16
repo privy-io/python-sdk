@@ -105,7 +105,7 @@ jobs:
     name: Notify Slack on failure
     runs-on: ubuntu-latest
     needs: [lint, build, unit, integration]
-    if: ${{ failure() && (github.ref_name == 'next' || github.ref_name == 'main') && github.event_name == 'push' }}
+    if: ${{ failure() && github.repository == 'privy-io/python-sdk-private' && (github.ref_name == 'next' || github.ref_name == 'main') && github.event_name == 'push' }}
     steps:
       - name: Notify Slack of CI failure
         uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a
