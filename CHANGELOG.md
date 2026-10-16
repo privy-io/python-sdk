@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.9.0](https://github.com/privy-io/python-sdk/compare/v0.8.0...v0.9.0) (2026-10-16)
+
+
+### Features
+
+* **api:** api update ([3886d22](https://github.com/privy-io/python-sdk/commit/3886d220d06ec7b96499d0dbb935d8fe88e1f626))
+* **api:** api update ([170b048](https://github.com/privy-io/python-sdk/commit/170b048f4e1406ec819a6fbc29e64fb4895eb14c))
+
 ## [0.8.0](https://github.com/privy-io/python-sdk/compare/v0.7.0...v0.8.0) (2026-10-16)
 
 
