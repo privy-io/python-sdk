@@ -4,4 +4,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["EthereumTransactionConditionField"]
 
-EthereumTransactionConditionField: TypeAlias = Literal["to", "value", "chain_id"]
+EthereumTransactionConditionField: TypeAlias = Literal["to", "value", "chain_id", "data_byte_length"]

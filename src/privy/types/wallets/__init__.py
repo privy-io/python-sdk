@@ -23,7 +23,6 @@ from .earn_position_apy_type import EarnPositionApyType as EarnPositionApyType
 from .ethereum_earn_provider import EthereumEarnProvider as EthereumEarnProvider
 from .transaction_get_params import TransactionGetParams as TransactionGetParams
 from .wallet_action_response import WalletActionResponse as WalletActionResponse
-from .wallet_action_step_type import WalletActionStepType as WalletActionStepType
 from .transaction_get_response import TransactionGetResponse as TransactionGetResponse
 from .transfer_action_response import TransferActionResponse as TransferActionResponse
 from .earn_incentive_reward_entry import EarnIncentiveRewardEntry as EarnIncentiveRewardEntry

@@ -7,7 +7,7 @@ from .condition_set import ConditionSet
 from .base_action_result import BaseActionResult
 from .condition_set_item import ConditionSetItem
 from .base_intent_response import BaseIntentResponse
-from .condition_set_item_intent_create_request_details import ConditionSetItemIntentCreateRequestDetails
+from .condition_set_item_intent_request_details import ConditionSetItemIntentRequestDetails
 
 __all__ = ["ConditionSetItemIntentResponse"]
 
@@ -17,8 +17,11 @@ class ConditionSetItemIntentResponse(BaseIntentResponse):
 
     intent_type: Literal["CONDITION_SET_ITEM"]
 
-    request_details: ConditionSetItemIntentCreateRequestDetails
-    """Request details for adding items to a condition set via intent."""
+    request_details: ConditionSetItemIntentRequestDetails
+    """The original condition set item request.
+
+    Method is POST (add items), PUT (replace items), or DELETE (delete an item)
+    """
 
     action_result: Optional[BaseActionResult] = None
     """

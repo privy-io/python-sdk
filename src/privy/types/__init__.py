@@ -472,6 +472,7 @@ from .automation_config_input_param import AutomationConfigInputParam as Automat
 from .automation_swap_action_config import AutomationSwapActionConfig as AutomationSwapActionConfig
 from .blockchain_transaction_status import BlockchainTransactionStatus as BlockchainTransactionStatus
 from .bridge_fiat_transfer_metadata import BridgeFiatTransferMetadata as BridgeFiatTransferMetadata
+from .condition_set_intent_response import ConditionSetIntentResponse as ConditionSetIntentResponse
 from .crypto_deposit_account_caip_2 import CryptoDepositAccountCaip2 as CryptoDepositAccountCaip2
 from .deposit_completed_destination import DepositCompletedDestination as DepositCompletedDestination
 from .embedded_wallet_config_schema import EmbeddedWalletConfigSchema as EmbeddedWalletConfigSchema
@@ -694,6 +695,7 @@ from .wallet_authenticate_with_jwt_params import WalletAuthenticateWithJwtParams
 from .wallet_get_wallet_by_address_params import WalletGetWalletByAddressParams as WalletGetWalletByAddressParams
 from .automation_action_config_input_param import AutomationActionConfigInputParam as AutomationActionConfigInputParam
 from .card_issuing_erc_4626_vault_provider import CardIssuingErc4626VaultProvider as CardIssuingErc4626VaultProvider
+from .condition_set_delete_intent_response import ConditionSetDeleteIntentResponse as ConditionSetDeleteIntentResponse
 from .condition_set_item_value_input_param import ConditionSetItemValueInputParam as ConditionSetItemValueInputParam
 from .ethereum_send_calls_rpc_input_params import EthereumSendCallsRpcInputParams as EthereumSendCallsRpcInputParams
 from .ethereum_transaction_condition_field import EthereumTransactionConditionField as EthereumTransactionConditionField
@@ -921,6 +923,9 @@ from .aptos_sign_transaction_rpc_response_data import (
 from .automation_destination_asset_input_param import (
     AutomationDestinationAssetInputParam as AutomationDestinationAssetInputParam,
 )
+from .condition_set_intent_delete_request_body import (
+    ConditionSetIntentDeleteRequestBody as ConditionSetIntentDeleteRequestBody,
+)
 from .create_fiat_deposit_account_source_param import (
     CreateFiatDepositAccountSourceParam as CreateFiatDepositAccountSourceParam,
 )
@@ -938,6 +943,9 @@ from .ethereum_sign_typed_data_rpc_input_param import (
 )
 from .intent_create_condition_set_items_params import (
     IntentCreateConditionSetItemsParams as IntentCreateConditionSetItemsParams,
+)
+from .intent_update_condition_set_items_params import (
+    IntentUpdateConditionSetItemsParams as IntentUpdateConditionSetItemsParams,
 )
 from .solana_sign_transaction_rpc_input_params import (
     SolanaSignTransactionRpcInputParams as SolanaSignTransactionRpcInputParams,
@@ -965,6 +973,15 @@ from .yield_withdraw_confirmed_webhook_payload import (
 )
 from .automation_swap_action_config_input_param import (
     AutomationSwapActionConfigInputParam as AutomationSwapActionConfigInputParam,
+)
+from .condition_set_item_delete_intent_response import (
+    ConditionSetItemDeleteIntentResponse as ConditionSetItemDeleteIntentResponse,
+)
+from .condition_set_item_intent_request_details import (
+    ConditionSetItemIntentRequestDetails as ConditionSetItemIntentRequestDetails,
+)
+from .condition_set_item_mutate_intent_response import (
+    ConditionSetItemMutateIntentResponse as ConditionSetItemMutateIntentResponse,
 )
 from .crypto_deposit_asset_filter_exclude_param import (
     CryptoDepositAssetFilterExcludeParam as CryptoDepositAssetFilterExcludeParam,
@@ -1067,6 +1084,9 @@ from .automation_asset_filter_input_exclude_param import (
 )
 from .automation_asset_filter_input_include_param import (
     AutomationAssetFilterInputIncludeParam as AutomationAssetFilterInputIncludeParam,
+)
+from .condition_set_intent_delete_request_details import (
+    ConditionSetIntentDeleteRequestDetails as ConditionSetIntentDeleteRequestDetails,
 )
 from .ethereum_7702_authorization_condition_param import (
     Ethereum7702AuthorizationConditionParam as Ethereum7702AuthorizationConditionParam,
@@ -1176,6 +1196,9 @@ from .xrpl_sign_transaction_rpc_input_params_param import (
 from .aptos_sign_transaction_rpc_input_params_param import (
     AptosSignTransactionRpcInputParamsParam as AptosSignTransactionRpcInputParamsParam,
 )
+from .condition_set_item_intent_delete_request_body import (
+    ConditionSetItemIntentDeleteRequestBody as ConditionSetItemIntentDeleteRequestBody,
+)
 from .crypto_deposit_account_config_search_response import (
     CryptoDepositAccountConfigSearchResponse as CryptoDepositAccountConfigSearchResponse,
 )
@@ -1262,6 +1285,12 @@ from .wallet_action_transfer_rejected_webhook_payload import (
 )
 from .condition_set_item_intent_create_request_details import (
     ConditionSetItemIntentCreateRequestDetails as ConditionSetItemIntentCreateRequestDetails,
+)
+from .condition_set_item_intent_delete_request_details import (
+    ConditionSetItemIntentDeleteRequestDetails as ConditionSetItemIntentDeleteRequestDetails,
+)
+from .condition_set_item_intent_update_request_details import (
+    ConditionSetItemIntentUpdateRequestDetails as ConditionSetItemIntentUpdateRequestDetails,
 )
 from .create_crypto_deposit_account_request_body_param import (
     CreateCryptoDepositAccountRequestBodyParam as CreateCryptoDepositAccountRequestBodyParam,

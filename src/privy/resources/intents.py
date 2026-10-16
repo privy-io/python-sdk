@@ -71,10 +71,12 @@ from ..types.private_key_export_input_param import PrivateKeyExportInputParam
 from ..types.seed_phrase_export_input_param import SeedPhraseExportInputParam
 from ..types.transfer_custody_options_param import TransferCustodyOptionsParam
 from ..types.token_transfer_destination_param import TokenTransferDestinationParam
-from ..types.condition_set_item_intent_response import ConditionSetItemIntentResponse
+from ..types.condition_set_delete_intent_response import ConditionSetDeleteIntentResponse
 from ..types.spark_transfer_rpc_input_params_param import SparkTransferRpcInputParamsParam
 from ..types.spark_withdraw_rpc_input_params_param import SparkWithdrawRpcInputParamsParam
 from ..types.condition_set_items_request_body_param import ConditionSetItemsRequestBodyParam
+from ..types.condition_set_item_delete_intent_response import ConditionSetItemDeleteIntentResponse
+from ..types.condition_set_item_mutate_intent_response import ConditionSetItemMutateIntentResponse
 from ..types.ethereum_send_calls_rpc_input_params_param import EthereumSendCallsRpcInputParamsParam
 from ..types.solana_sign_message_rpc_input_params_param import SolanaSignMessageRpcInputParamsParam
 from ..types.spark_transfer_tokens_rpc_input_params_param import SparkTransferTokensRpcInputParamsParam
@@ -219,7 +221,7 @@ class IntentsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ConditionSetItemIntentResponse:
+    ) -> ConditionSetItemMutateIntentResponse:
         """Create an intent to add items to a condition set.
 
         The intent must be authorized
@@ -250,7 +252,7 @@ class IntentsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ConditionSetItemIntentResponse,
+            cast_to=ConditionSetItemMutateIntentResponse,
         )
 
     def create_policy_rule(
@@ -310,6 +312,95 @@ class IntentsResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=RuleMutateIntentResponse,
+        )
+
+    def delete_condition_set(
+        self,
+        condition_set_id: str,
+        *,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetDeleteIntentResponse:
+        """Create an intent to delete a condition set.
+
+        The intent must be authorized by the
+        condition set owner before it can be executed.
+
+        Args:
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not condition_set_id:
+            raise ValueError(f"Expected a non-empty value for `condition_set_id` but received {condition_set_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return self._delete(
+            path_template("/v1/intents/condition_sets/{condition_set_id}", condition_set_id=condition_set_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ConditionSetDeleteIntentResponse,
+        )
+
+    def delete_condition_set_item(
+        self,
+        condition_set_item_id: str,
+        *,
+        condition_set_id: str,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetItemDeleteIntentResponse:
+        """Create an intent to delete an item from a condition set.
+
+        The intent must be
+        authorized by the condition set owner before it can be executed.
+
+        Args:
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not condition_set_id:
+            raise ValueError(f"Expected a non-empty value for `condition_set_id` but received {condition_set_id!r}")
+        if not condition_set_item_id:
+            raise ValueError(
+                f"Expected a non-empty value for `condition_set_item_id` but received {condition_set_item_id!r}"
+            )
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return self._delete(
+            path_template(
+                "/v1/intents/condition_sets/{condition_set_id}/condition_set_items/{condition_set_item_id}",
+                condition_set_id=condition_set_id,
+                condition_set_item_id=condition_set_item_id,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ConditionSetItemDeleteIntentResponse,
         )
 
     def delete_policy_rule(
@@ -1907,6 +1998,52 @@ class IntentsResource(SyncAPIResource):
             cast_to=TransferIntentResponse,
         )
 
+    def update_condition_set_items(
+        self,
+        condition_set_id: str,
+        *,
+        condition_set_items_request_body: ConditionSetItemsRequestBodyParam,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetItemMutateIntentResponse:
+        """Create an intent to replace all items in a condition set.
+
+        The intent must be
+        authorized by the condition set owner before it can be executed.
+
+        Args:
+          condition_set_items_request_body: Array of values to add to the condition set. Maximum 100 items per request.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not condition_set_id:
+            raise ValueError(f"Expected a non-empty value for `condition_set_id` but received {condition_set_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return self._put(
+            path_template(
+                "/v1/intents/condition_sets/{condition_set_id}/condition_set_items", condition_set_id=condition_set_id
+            ),
+            body=maybe_transform(condition_set_items_request_body, ConditionSetItemsRequestBodyParam),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ConditionSetItemMutateIntentResponse,
+        )
+
     def update_key_quorum(
         self,
         key_quorum_id: str,
@@ -2289,7 +2426,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> ConditionSetItemIntentResponse:
+    ) -> ConditionSetItemMutateIntentResponse:
         """Create an intent to add items to a condition set.
 
         The intent must be authorized
@@ -2320,7 +2457,7 @@ class AsyncIntentsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=ConditionSetItemIntentResponse,
+            cast_to=ConditionSetItemMutateIntentResponse,
         )
 
     async def create_policy_rule(
@@ -2380,6 +2517,95 @@ class AsyncIntentsResource(AsyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=RuleMutateIntentResponse,
+        )
+
+    async def delete_condition_set(
+        self,
+        condition_set_id: str,
+        *,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetDeleteIntentResponse:
+        """Create an intent to delete a condition set.
+
+        The intent must be authorized by the
+        condition set owner before it can be executed.
+
+        Args:
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not condition_set_id:
+            raise ValueError(f"Expected a non-empty value for `condition_set_id` but received {condition_set_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return await self._delete(
+            path_template("/v1/intents/condition_sets/{condition_set_id}", condition_set_id=condition_set_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ConditionSetDeleteIntentResponse,
+        )
+
+    async def delete_condition_set_item(
+        self,
+        condition_set_item_id: str,
+        *,
+        condition_set_id: str,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetItemDeleteIntentResponse:
+        """Create an intent to delete an item from a condition set.
+
+        The intent must be
+        authorized by the condition set owner before it can be executed.
+
+        Args:
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not condition_set_id:
+            raise ValueError(f"Expected a non-empty value for `condition_set_id` but received {condition_set_id!r}")
+        if not condition_set_item_id:
+            raise ValueError(
+                f"Expected a non-empty value for `condition_set_item_id` but received {condition_set_item_id!r}"
+            )
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return await self._delete(
+            path_template(
+                "/v1/intents/condition_sets/{condition_set_id}/condition_set_items/{condition_set_item_id}",
+                condition_set_id=condition_set_id,
+                condition_set_item_id=condition_set_item_id,
+            ),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ConditionSetItemDeleteIntentResponse,
         )
 
     async def delete_policy_rule(
@@ -3977,6 +4203,52 @@ class AsyncIntentsResource(AsyncAPIResource):
             cast_to=TransferIntentResponse,
         )
 
+    async def update_condition_set_items(
+        self,
+        condition_set_id: str,
+        *,
+        condition_set_items_request_body: ConditionSetItemsRequestBodyParam,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetItemMutateIntentResponse:
+        """Create an intent to replace all items in a condition set.
+
+        The intent must be
+        authorized by the condition set owner before it can be executed.
+
+        Args:
+          condition_set_items_request_body: Array of values to add to the condition set. Maximum 100 items per request.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not condition_set_id:
+            raise ValueError(f"Expected a non-empty value for `condition_set_id` but received {condition_set_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return await self._put(
+            path_template(
+                "/v1/intents/condition_sets/{condition_set_id}/condition_set_items", condition_set_id=condition_set_id
+            ),
+            body=await async_maybe_transform(condition_set_items_request_body, ConditionSetItemsRequestBodyParam),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=ConditionSetItemMutateIntentResponse,
+        )
+
     async def update_key_quorum(
         self,
         key_quorum_id: str,
@@ -4263,6 +4535,12 @@ class IntentsResourceWithRawResponse:
         self.create_policy_rule = to_raw_response_wrapper(
             intents.create_policy_rule,
         )
+        self.delete_condition_set = to_raw_response_wrapper(
+            intents.delete_condition_set,
+        )
+        self.delete_condition_set_item = to_raw_response_wrapper(
+            intents.delete_condition_set_item,
+        )
         self.delete_policy_rule = to_raw_response_wrapper(
             intents.delete_policy_rule,
         )
@@ -4280,6 +4558,9 @@ class IntentsResourceWithRawResponse:
         )
         self.transfer = to_raw_response_wrapper(
             intents.transfer,
+        )
+        self.update_condition_set_items = to_raw_response_wrapper(
+            intents.update_condition_set_items,
         )
         self.update_key_quorum = to_raw_response_wrapper(
             intents.update_key_quorum,
@@ -4308,6 +4589,12 @@ class AsyncIntentsResourceWithRawResponse:
         self.create_policy_rule = async_to_raw_response_wrapper(
             intents.create_policy_rule,
         )
+        self.delete_condition_set = async_to_raw_response_wrapper(
+            intents.delete_condition_set,
+        )
+        self.delete_condition_set_item = async_to_raw_response_wrapper(
+            intents.delete_condition_set_item,
+        )
         self.delete_policy_rule = async_to_raw_response_wrapper(
             intents.delete_policy_rule,
         )
@@ -4325,6 +4612,9 @@ class AsyncIntentsResourceWithRawResponse:
         )
         self.transfer = async_to_raw_response_wrapper(
             intents.transfer,
+        )
+        self.update_condition_set_items = async_to_raw_response_wrapper(
+            intents.update_condition_set_items,
         )
         self.update_key_quorum = async_to_raw_response_wrapper(
             intents.update_key_quorum,
@@ -4353,6 +4643,12 @@ class IntentsResourceWithStreamingResponse:
         self.create_policy_rule = to_streamed_response_wrapper(
             intents.create_policy_rule,
         )
+        self.delete_condition_set = to_streamed_response_wrapper(
+            intents.delete_condition_set,
+        )
+        self.delete_condition_set_item = to_streamed_response_wrapper(
+            intents.delete_condition_set_item,
+        )
         self.delete_policy_rule = to_streamed_response_wrapper(
             intents.delete_policy_rule,
         )
@@ -4370,6 +4666,9 @@ class IntentsResourceWithStreamingResponse:
         )
         self.transfer = to_streamed_response_wrapper(
             intents.transfer,
+        )
+        self.update_condition_set_items = to_streamed_response_wrapper(
+            intents.update_condition_set_items,
         )
         self.update_key_quorum = to_streamed_response_wrapper(
             intents.update_key_quorum,
@@ -4398,6 +4697,12 @@ class AsyncIntentsResourceWithStreamingResponse:
         self.create_policy_rule = async_to_streamed_response_wrapper(
             intents.create_policy_rule,
         )
+        self.delete_condition_set = async_to_streamed_response_wrapper(
+            intents.delete_condition_set,
+        )
+        self.delete_condition_set_item = async_to_streamed_response_wrapper(
+            intents.delete_condition_set_item,
+        )
         self.delete_policy_rule = async_to_streamed_response_wrapper(
             intents.delete_policy_rule,
         )
@@ -4415,6 +4720,9 @@ class AsyncIntentsResourceWithStreamingResponse:
         )
         self.transfer = async_to_streamed_response_wrapper(
             intents.transfer,
+        )
+        self.update_condition_set_items = async_to_streamed_response_wrapper(
+            intents.update_condition_set_items,
         )
         self.update_key_quorum = async_to_streamed_response_wrapper(
             intents.update_key_quorum,

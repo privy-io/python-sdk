@@ -6,5 +6,8 @@ from typing_extensions import Literal, TypeAlias
 __all__ = ["IntentType"]
 
 IntentType: TypeAlias = Union[
-    Literal["CONDITION_SET_ITEM", "KEY_QUORUM", "POLICY", "RAW_SIGN", "RULE", "RPC", "TRANSFER", "WALLET"], str
+    Literal[
+        "CONDITION_SET", "CONDITION_SET_ITEM", "KEY_QUORUM", "POLICY", "RAW_SIGN", "RULE", "RPC", "TRANSFER", "WALLET"
+    ],
+    str,
 ]
