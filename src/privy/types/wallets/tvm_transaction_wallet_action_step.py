@@ -26,3 +26,6 @@ class TvmTransactionWalletActionStep(BaseModel):
 
     failure_reason: Optional[FailureReason] = None
     """A description of why a wallet action (or a step within a wallet action) failed."""
+
+    gas_credits_charged_usd: Optional[str] = None
+    """Amount charged in USD for gas sponsorship on this step."""
