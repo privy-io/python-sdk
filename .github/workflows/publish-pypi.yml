@@ -3,15 +3,25 @@
 # You can run this workflow by navigating to https://www.github.com/privy-io/python-sdk/actions/workflows/publish-pypi.yml
 name: Publish PyPI
 on:
+  # Manual retries must target an existing release tag, for example:
+  # gh workflow run publish-pypi.yml --ref v0.8.0
   workflow_dispatch:
 
   release:
     types: [published]
 
+# Keep the default token read-only. Only the publishing job may request an OIDC token.
+permissions:
+  contents: read
+
 jobs:
   publish:
     name: publish
+    if: github.repository == 'privy-io/python-sdk' && startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
+    # PyPI's trusted publisher must require this exact environment. That registry-side
+    # binding prevents a branch copy of this workflow from removing the gate.
+    environment: package-release
     permissions:
       contents: read
       id-token: write
