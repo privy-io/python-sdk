@@ -11,13 +11,15 @@ from privy import PrivyAPI, AsyncPrivyAPI
 from privy.types import (
     IntentResponse,
     RpcIntentResponse,
-    PolicyIntentResponse,
     WalletIntentResponse,
     RawSignIntentResponse,
     TransferIntentResponse,
-    KeyQuorumIntentResponse,
     RuleDeleteIntentResponse,
     RuleMutateIntentResponse,
+    PolicyDeleteIntentResponse,
+    PolicyUpdateIntentResponse,
+    KeyQuorumDeleteIntentResponse,
+    KeyQuorumUpdateIntentResponse,
     ConditionSetDeleteIntentResponse,
     ConditionSetItemDeleteIntentResponse,
     ConditionSetItemMutateIntentResponse,
@@ -349,6 +351,108 @@ class TestIntents:
             client.intents.with_raw_response.delete_condition_set_item(
                 condition_set_item_id="",
                 condition_set_id="xxxxxxxxxxxxxxxxxxxxxxxx",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_delete_key_quorum(self, client: PrivyAPI) -> None:
+        intent = client.intents.delete_key_quorum(
+            key_quorum_id="key_quorum_id",
+        )
+        assert_matches_type(KeyQuorumDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_delete_key_quorum_with_all_params(self, client: PrivyAPI) -> None:
+        intent = client.intents.delete_key_quorum(
+            key_quorum_id="key_quorum_id",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(KeyQuorumDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_delete_key_quorum(self, client: PrivyAPI) -> None:
+        response = client.intents.with_raw_response.delete_key_quorum(
+            key_quorum_id="key_quorum_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        intent = response.parse()
+        assert_matches_type(KeyQuorumDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_delete_key_quorum(self, client: PrivyAPI) -> None:
+        with client.intents.with_streaming_response.delete_key_quorum(
+            key_quorum_id="key_quorum_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            intent = response.parse()
+            assert_matches_type(KeyQuorumDeleteIntentResponse, intent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_delete_key_quorum(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `key_quorum_id` but received ''"):
+            client.intents.with_raw_response.delete_key_quorum(
+                key_quorum_id="",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_delete_policy(self, client: PrivyAPI) -> None:
+        intent = client.intents.delete_policy(
+            policy_id="policy_id",
+        )
+        assert_matches_type(PolicyDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_method_delete_policy_with_all_params(self, client: PrivyAPI) -> None:
+        intent = client.intents.delete_policy(
+            policy_id="policy_id",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(PolicyDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_delete_policy(self, client: PrivyAPI) -> None:
+        response = client.intents.with_raw_response.delete_policy(
+            policy_id="policy_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        intent = response.parse()
+        assert_matches_type(PolicyDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_delete_policy(self, client: PrivyAPI) -> None:
+        with client.intents.with_streaming_response.delete_policy(
+            policy_id="policy_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            intent = response.parse()
+            assert_matches_type(PolicyDeleteIntentResponse, intent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_delete_policy(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `policy_id` but received ''"):
+            client.intents.with_raw_response.delete_policy(
+                policy_id="",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -3167,7 +3271,7 @@ class TestIntents:
         intent = client.intents.update_key_quorum(
             key_quorum_id="key_quorum_id",
         )
-        assert_matches_type(KeyQuorumIntentResponse, intent, path=["response"])
+        assert_matches_type(KeyQuorumUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -3181,7 +3285,7 @@ class TestIntents:
             user_ids=["string"],
             privy_request_expiry="privy-request-expiry",
         )
-        assert_matches_type(KeyQuorumIntentResponse, intent, path=["response"])
+        assert_matches_type(KeyQuorumUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -3193,7 +3297,7 @@ class TestIntents:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         intent = response.parse()
-        assert_matches_type(KeyQuorumIntentResponse, intent, path=["response"])
+        assert_matches_type(KeyQuorumUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -3205,7 +3309,7 @@ class TestIntents:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             intent = response.parse()
-            assert_matches_type(KeyQuorumIntentResponse, intent, path=["response"])
+            assert_matches_type(KeyQuorumUpdateIntentResponse, intent, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -3223,7 +3327,7 @@ class TestIntents:
         intent = client.intents.update_policy(
             policy_id="policy_id",
         )
-        assert_matches_type(PolicyIntentResponse, intent, path=["response"])
+        assert_matches_type(PolicyUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -3250,7 +3354,7 @@ class TestIntents:
             ],
             privy_request_expiry="privy-request-expiry",
         )
-        assert_matches_type(PolicyIntentResponse, intent, path=["response"])
+        assert_matches_type(PolicyUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -3262,7 +3366,7 @@ class TestIntents:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         intent = response.parse()
-        assert_matches_type(PolicyIntentResponse, intent, path=["response"])
+        assert_matches_type(PolicyUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -3274,7 +3378,7 @@ class TestIntents:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             intent = response.parse()
-            assert_matches_type(PolicyIntentResponse, intent, path=["response"])
+            assert_matches_type(PolicyUpdateIntentResponse, intent, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -3799,6 +3903,108 @@ class TestAsyncIntents:
             await async_client.intents.with_raw_response.delete_condition_set_item(
                 condition_set_item_id="",
                 condition_set_id="xxxxxxxxxxxxxxxxxxxxxxxx",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_delete_key_quorum(self, async_client: AsyncPrivyAPI) -> None:
+        intent = await async_client.intents.delete_key_quorum(
+            key_quorum_id="key_quorum_id",
+        )
+        assert_matches_type(KeyQuorumDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_delete_key_quorum_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        intent = await async_client.intents.delete_key_quorum(
+            key_quorum_id="key_quorum_id",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(KeyQuorumDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_delete_key_quorum(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.intents.with_raw_response.delete_key_quorum(
+            key_quorum_id="key_quorum_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        intent = await response.parse()
+        assert_matches_type(KeyQuorumDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_delete_key_quorum(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.intents.with_streaming_response.delete_key_quorum(
+            key_quorum_id="key_quorum_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            intent = await response.parse()
+            assert_matches_type(KeyQuorumDeleteIntentResponse, intent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_delete_key_quorum(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `key_quorum_id` but received ''"):
+            await async_client.intents.with_raw_response.delete_key_quorum(
+                key_quorum_id="",
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_delete_policy(self, async_client: AsyncPrivyAPI) -> None:
+        intent = await async_client.intents.delete_policy(
+            policy_id="policy_id",
+        )
+        assert_matches_type(PolicyDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_delete_policy_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        intent = await async_client.intents.delete_policy(
+            policy_id="policy_id",
+            privy_request_expiry="privy-request-expiry",
+        )
+        assert_matches_type(PolicyDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_delete_policy(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.intents.with_raw_response.delete_policy(
+            policy_id="policy_id",
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        intent = await response.parse()
+        assert_matches_type(PolicyDeleteIntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_delete_policy(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.intents.with_streaming_response.delete_policy(
+            policy_id="policy_id",
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            intent = await response.parse()
+            assert_matches_type(PolicyDeleteIntentResponse, intent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_delete_policy(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `policy_id` but received ''"):
+            await async_client.intents.with_raw_response.delete_policy(
+                policy_id="",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -6617,7 +6823,7 @@ class TestAsyncIntents:
         intent = await async_client.intents.update_key_quorum(
             key_quorum_id="key_quorum_id",
         )
-        assert_matches_type(KeyQuorumIntentResponse, intent, path=["response"])
+        assert_matches_type(KeyQuorumUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -6631,7 +6837,7 @@ class TestAsyncIntents:
             user_ids=["string"],
             privy_request_expiry="privy-request-expiry",
         )
-        assert_matches_type(KeyQuorumIntentResponse, intent, path=["response"])
+        assert_matches_type(KeyQuorumUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -6643,7 +6849,7 @@ class TestAsyncIntents:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         intent = await response.parse()
-        assert_matches_type(KeyQuorumIntentResponse, intent, path=["response"])
+        assert_matches_type(KeyQuorumUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -6655,7 +6861,7 @@ class TestAsyncIntents:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             intent = await response.parse()
-            assert_matches_type(KeyQuorumIntentResponse, intent, path=["response"])
+            assert_matches_type(KeyQuorumUpdateIntentResponse, intent, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 
@@ -6673,7 +6879,7 @@ class TestAsyncIntents:
         intent = await async_client.intents.update_policy(
             policy_id="policy_id",
         )
-        assert_matches_type(PolicyIntentResponse, intent, path=["response"])
+        assert_matches_type(PolicyUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -6700,7 +6906,7 @@ class TestAsyncIntents:
             ],
             privy_request_expiry="privy-request-expiry",
         )
-        assert_matches_type(PolicyIntentResponse, intent, path=["response"])
+        assert_matches_type(PolicyUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -6712,7 +6918,7 @@ class TestAsyncIntents:
         assert response.is_closed is True
         assert response.http_request.headers.get("X-Stainless-Lang") == "python"
         intent = await response.parse()
-        assert_matches_type(PolicyIntentResponse, intent, path=["response"])
+        assert_matches_type(PolicyUpdateIntentResponse, intent, path=["response"])
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
@@ -6724,7 +6930,7 @@ class TestAsyncIntents:
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
 
             intent = await response.parse()
-            assert_matches_type(PolicyIntentResponse, intent, path=["response"])
+            assert_matches_type(PolicyUpdateIntentResponse, intent, path=["response"])
 
         assert cast(Any, response.is_closed) is True
 

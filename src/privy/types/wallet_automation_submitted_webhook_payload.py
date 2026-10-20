@@ -1,5 +1,6 @@
 # File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
+from typing import Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
@@ -30,6 +31,11 @@ class WalletAutomationSubmittedWebhookPayload(BaseModel):
 
     trigger_id: str
     """The ID of the automation execution that fired."""
+
+    trigger_tx_hash: Optional[str] = None
+    """
+    Transaction hash of the triggering deposit, or null when triggered by a reindex.
+    """
 
     type: Literal["wallet_automation.submitted"]
     """The type of webhook event."""

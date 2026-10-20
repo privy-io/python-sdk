@@ -53,24 +53,26 @@ from ..types.owner_input_param import OwnerInputParam
 from ..types.rpc_intent_response import RpcIntentResponse
 from ..types.wallet_action_nonce import WalletActionNonce
 from ..types.policy_condition_param import PolicyConditionParam
-from ..types.policy_intent_response import PolicyIntentResponse
 from ..types.wallet_intent_response import WalletIntentResponse
 from ..types.fee_configuration_param import FeeConfigurationParam
 from ..types.signature_options_param import SignatureOptionsParam
 from ..types.raw_sign_intent_response import RawSignIntentResponse
 from ..types.transfer_intent_response import TransferIntentResponse
 from ..types.rpc_sponsor_options_param import RpcSponsorOptionsParam
-from ..types.key_quorum_intent_response import KeyQuorumIntentResponse
 from ..types.raw_sign_input_params_param import RawSignInputParamsParam
 from ..types.rule_delete_intent_response import RuleDeleteIntentResponse
 from ..types.rule_mutate_intent_response import RuleMutateIntentResponse
 from ..types.token_transfer_source_param import TokenTransferSourceParam
 from ..types.additional_signer_input_param import AdditionalSignerInputParam
+from ..types.policy_delete_intent_response import PolicyDeleteIntentResponse
+from ..types.policy_update_intent_response import PolicyUpdateIntentResponse
 from ..types.policy_rule_request_body_param import PolicyRuleRequestBodyParam
 from ..types.private_key_export_input_param import PrivateKeyExportInputParam
 from ..types.seed_phrase_export_input_param import SeedPhraseExportInputParam
 from ..types.transfer_custody_options_param import TransferCustodyOptionsParam
 from ..types.token_transfer_destination_param import TokenTransferDestinationParam
+from ..types.key_quorum_delete_intent_response import KeyQuorumDeleteIntentResponse
+from ..types.key_quorum_update_intent_response import KeyQuorumUpdateIntentResponse
 from ..types.condition_set_delete_intent_response import ConditionSetDeleteIntentResponse
 from ..types.spark_transfer_rpc_input_params_param import SparkTransferRpcInputParamsParam
 from ..types.spark_withdraw_rpc_input_params_param import SparkWithdrawRpcInputParamsParam
@@ -401,6 +403,90 @@ class IntentsResource(SyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=ConditionSetItemDeleteIntentResponse,
+        )
+
+    def delete_key_quorum(
+        self,
+        key_quorum_id: str,
+        *,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> KeyQuorumDeleteIntentResponse:
+        """Create an intent to delete a key quorum.
+
+        The intent must be authorized by the
+        key quorum members before it can be executed.
+
+        Args:
+          key_quorum_id: ID of the key quorum.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not key_quorum_id:
+            raise ValueError(f"Expected a non-empty value for `key_quorum_id` but received {key_quorum_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return self._delete(
+            path_template("/v1/intents/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=KeyQuorumDeleteIntentResponse,
+        )
+
+    def delete_policy(
+        self,
+        policy_id: str,
+        *,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> PolicyDeleteIntentResponse:
+        """Create an intent to delete a policy.
+
+        The intent must be authorized by the policy
+        owner before it can be executed.
+
+        Args:
+          policy_id: ID of the policy.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not policy_id:
+            raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return self._delete(
+            path_template("/v1/intents/policies/{policy_id}", policy_id=policy_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=PolicyDeleteIntentResponse,
         )
 
     def delete_policy_rule(
@@ -2060,7 +2146,7 @@ class IntentsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> KeyQuorumIntentResponse:
+    ) -> KeyQuorumUpdateIntentResponse:
         """Create an intent to update a key quorum.
 
         The intent must be authorized by the
@@ -2110,7 +2196,7 @@ class IntentsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=KeyQuorumIntentResponse,
+            cast_to=KeyQuorumUpdateIntentResponse,
         )
 
     def update_policy(
@@ -2128,7 +2214,7 @@ class IntentsResource(SyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> PolicyIntentResponse:
+    ) -> PolicyUpdateIntentResponse:
         """Create an intent to update a policy.
 
         The intent must be authorized by the policy
@@ -2173,7 +2259,7 @@ class IntentsResource(SyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PolicyIntentResponse,
+            cast_to=PolicyUpdateIntentResponse,
         )
 
     def update_policy_rule(
@@ -2606,6 +2692,90 @@ class AsyncIntentsResource(AsyncAPIResource):
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
             cast_to=ConditionSetItemDeleteIntentResponse,
+        )
+
+    async def delete_key_quorum(
+        self,
+        key_quorum_id: str,
+        *,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> KeyQuorumDeleteIntentResponse:
+        """Create an intent to delete a key quorum.
+
+        The intent must be authorized by the
+        key quorum members before it can be executed.
+
+        Args:
+          key_quorum_id: ID of the key quorum.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not key_quorum_id:
+            raise ValueError(f"Expected a non-empty value for `key_quorum_id` but received {key_quorum_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return await self._delete(
+            path_template("/v1/intents/key_quorums/{key_quorum_id}", key_quorum_id=key_quorum_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=KeyQuorumDeleteIntentResponse,
+        )
+
+    async def delete_policy(
+        self,
+        policy_id: str,
+        *,
+        privy_request_expiry: str | Omit = omit,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> PolicyDeleteIntentResponse:
+        """Create an intent to delete a policy.
+
+        The intent must be authorized by the policy
+        owner before it can be executed.
+
+        Args:
+          policy_id: ID of the policy.
+
+          privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
+              deadline by which the request must be processed.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not policy_id:
+            raise ValueError(f"Expected a non-empty value for `policy_id` but received {policy_id!r}")
+        extra_headers = {**strip_not_given({"privy-request-expiry": privy_request_expiry}), **(extra_headers or {})}
+        return await self._delete(
+            path_template("/v1/intents/policies/{policy_id}", policy_id=policy_id),
+            options=make_request_options(
+                extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+            ),
+            cast_to=PolicyDeleteIntentResponse,
         )
 
     async def delete_policy_rule(
@@ -4265,7 +4435,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> KeyQuorumIntentResponse:
+    ) -> KeyQuorumUpdateIntentResponse:
         """Create an intent to update a key quorum.
 
         The intent must be authorized by the
@@ -4315,7 +4485,7 @@ class AsyncIntentsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=KeyQuorumIntentResponse,
+            cast_to=KeyQuorumUpdateIntentResponse,
         )
 
     async def update_policy(
@@ -4333,7 +4503,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         extra_query: Query | None = None,
         extra_body: Body | None = None,
         timeout: float | httpx.Timeout | None | NotGiven = not_given,
-    ) -> PolicyIntentResponse:
+    ) -> PolicyUpdateIntentResponse:
         """Create an intent to update a policy.
 
         The intent must be authorized by the policy
@@ -4378,7 +4548,7 @@ class AsyncIntentsResource(AsyncAPIResource):
             options=make_request_options(
                 extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
             ),
-            cast_to=PolicyIntentResponse,
+            cast_to=PolicyUpdateIntentResponse,
         )
 
     async def update_policy_rule(
@@ -4541,6 +4711,12 @@ class IntentsResourceWithRawResponse:
         self.delete_condition_set_item = to_raw_response_wrapper(
             intents.delete_condition_set_item,
         )
+        self.delete_key_quorum = to_raw_response_wrapper(
+            intents.delete_key_quorum,
+        )
+        self.delete_policy = to_raw_response_wrapper(
+            intents.delete_policy,
+        )
         self.delete_policy_rule = to_raw_response_wrapper(
             intents.delete_policy_rule,
         )
@@ -4594,6 +4770,12 @@ class AsyncIntentsResourceWithRawResponse:
         )
         self.delete_condition_set_item = async_to_raw_response_wrapper(
             intents.delete_condition_set_item,
+        )
+        self.delete_key_quorum = async_to_raw_response_wrapper(
+            intents.delete_key_quorum,
+        )
+        self.delete_policy = async_to_raw_response_wrapper(
+            intents.delete_policy,
         )
         self.delete_policy_rule = async_to_raw_response_wrapper(
             intents.delete_policy_rule,
@@ -4649,6 +4831,12 @@ class IntentsResourceWithStreamingResponse:
         self.delete_condition_set_item = to_streamed_response_wrapper(
             intents.delete_condition_set_item,
         )
+        self.delete_key_quorum = to_streamed_response_wrapper(
+            intents.delete_key_quorum,
+        )
+        self.delete_policy = to_streamed_response_wrapper(
+            intents.delete_policy,
+        )
         self.delete_policy_rule = to_streamed_response_wrapper(
             intents.delete_policy_rule,
         )
@@ -4702,6 +4890,12 @@ class AsyncIntentsResourceWithStreamingResponse:
         )
         self.delete_condition_set_item = async_to_streamed_response_wrapper(
             intents.delete_condition_set_item,
+        )
+        self.delete_key_quorum = async_to_streamed_response_wrapper(
+            intents.delete_key_quorum,
+        )
+        self.delete_policy = async_to_streamed_response_wrapper(
+            intents.delete_policy,
         )
         self.delete_policy_rule = async_to_streamed_response_wrapper(
             intents.delete_policy_rule,

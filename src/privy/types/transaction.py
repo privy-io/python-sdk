@@ -3,6 +3,7 @@
 from typing import Optional
 
 from .._models import BaseModel
+from .currency_amount import CurrencyAmount
 from .blockchain_transaction_status import BlockchainTransactionStatus
 
 __all__ = ["Transaction"]
@@ -23,6 +24,9 @@ class Transaction(BaseModel):
     transaction_hash: Optional[str] = None
 
     wallet_id: str
+
+    gas_credits_charged: Optional[CurrencyAmount] = None
+    """A monetary value with its currency denomination."""
 
     reference_id: Optional[str] = None
     """Developer-provided reference ID, if one was included in the request."""

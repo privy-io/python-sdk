@@ -38,7 +38,11 @@ class WalletActionEarnWithdrawSucceededWebhookPayload(BaseModel):
     """The status of the wallet action."""
 
     steps: List[WalletActionStep]
-    """The steps of the wallet action, including transaction hashes."""
+    """
+    The steps of the wallet action, including transaction hashes;
+    `gas_credits_charged` on a step may still be `null` when this webhook fires, so
+    fetch the wallet action directly for up-to-date gas data.
+    """
 
     type: Literal["wallet_action.earn_withdraw.succeeded"]
     """The type of webhook event."""

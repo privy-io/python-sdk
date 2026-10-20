@@ -1,0 +1,29 @@
+# File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
+
+from typing import Optional
+from typing_extensions import Literal
+
+from .key_quorum import KeyQuorum
+from .base_action_result import BaseActionResult
+from .base_intent_response import BaseIntentResponse
+from .key_quorum_intent_request_details import KeyQuorumIntentRequestDetails
+
+__all__ = ["KeyQuorumUpdateIntentResponse"]
+
+
+class KeyQuorumUpdateIntentResponse(BaseIntentResponse):
+    """Response for a key quorum update intent"""
+
+    intent_type: Literal["KEY_QUORUM"]
+
+    request_details: KeyQuorumIntentRequestDetails
+    """Request details for a key quorum intent."""
+
+    action_result: Optional[BaseActionResult] = None
+    """
+    Result of key quorum update execution (only present if status is 'executed' or
+    'failed')
+    """
+
+    current_resource_data: Optional[KeyQuorum] = None
+    """A key quorum for authorizing wallet operations."""

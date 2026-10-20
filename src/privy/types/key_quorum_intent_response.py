@@ -3,29 +3,12 @@
 from typing import Optional
 from typing_extensions import Literal
 
-from .._models import BaseModel
 from .key_quorum import KeyQuorum
 from .base_action_result import BaseActionResult
 from .base_intent_response import BaseIntentResponse
-from .key_quorum_update_request_body import KeyQuorumUpdateRequestBody
+from .key_quorum_intent_request_details_union import KeyQuorumIntentRequestDetailsUnion
 
-__all__ = ["KeyQuorumIntentResponse", "KeyQuorumIntentResponseRequestDetails"]
-
-
-class KeyQuorumIntentResponseRequestDetails(BaseModel):
-    """
-    The original key quorum update request that would be sent to the key quorum endpoint
-    """
-
-    body: KeyQuorumUpdateRequestBody
-    """Request input for updating an existing key quorum.
-
-    At least one field must be provided.
-    """
-
-    method: Literal["PATCH"]
-
-    url: str
+__all__ = ["KeyQuorumIntentResponse"]
 
 
 class KeyQuorumIntentResponse(BaseIntentResponse):
@@ -33,15 +16,12 @@ class KeyQuorumIntentResponse(BaseIntentResponse):
 
     intent_type: Literal["KEY_QUORUM"]
 
-    request_details: KeyQuorumIntentResponseRequestDetails
-    """
-    The original key quorum update request that would be sent to the key quorum
-    endpoint
-    """
+    request_details: KeyQuorumIntentRequestDetailsUnion
+    """The original key quorum request. Method is PATCH (update) or DELETE (delete)."""
 
     action_result: Optional[BaseActionResult] = None
     """
-    Result of key quorum update execution (only present if status is 'executed' or
+    Result of key quorum execution (only present if status is 'executed' or
     'failed')
     """
 

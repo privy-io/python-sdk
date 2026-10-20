@@ -5,6 +5,7 @@ from typing_extensions import Literal
 
 from ..._models import BaseModel
 from .failure_reason import FailureReason
+from ..currency_amount import CurrencyAmount
 from .evm_wallet_action_step_status import EvmWalletActionStepStatus
 from .evm_user_operation_entrypoint_version import EvmUserOperationEntrypointVersion
 
@@ -46,5 +47,11 @@ class EvmUserOperationWalletActionStep(BaseModel):
     Absent until finality is confirmed.
     """
 
+    gas_credits_charged: Optional[CurrencyAmount] = None
+    """A monetary value with its currency denomination."""
+
     gas_credits_charged_usd: Optional[str] = None
-    """Amount charged in USD for gas sponsorship on this step."""
+    """
+    Deprecated, use `gas_credits_charged` instead; gas credits charged in USD for
+    this step, if sponsored, as a decimal string.
+    """

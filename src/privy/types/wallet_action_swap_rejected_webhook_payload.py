@@ -42,7 +42,11 @@ class WalletActionSwapRejectedWebhookPayload(BaseModel):
     """The status of the wallet action."""
 
     steps: List[WalletActionStep]
-    """The steps of the wallet action at the time of rejection."""
+    """
+    The steps of the wallet action at the time of rejection; `gas_credits_charged`
+    on a step may still be `null` when this webhook fires, so fetch the wallet
+    action directly for up-to-date gas data.
+    """
 
     type: Literal["wallet_action.swap.rejected"]
     """The type of webhook event."""

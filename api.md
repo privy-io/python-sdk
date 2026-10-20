@@ -162,9 +162,20 @@ from privy.types import (
     IntentResponse,
     IntentStatus,
     IntentType,
+    KeyQuorumDeleteIntentResponse,
+    KeyQuorumIntentDeleteRequestBody,
+    KeyQuorumIntentDeleteRequestDetails,
+    KeyQuorumIntentRequestDetails,
+    KeyQuorumIntentRequestDetailsUnion,
     KeyQuorumIntentResponse,
+    KeyQuorumUpdateIntentResponse,
+    PolicyDeleteIntentResponse,
+    PolicyIntentDeleteRequestBody,
+    PolicyIntentDeleteRequestDetails,
     PolicyIntentRequestDetails,
+    PolicyIntentRequestDetailsUnion,
     PolicyIntentResponse,
+    PolicyUpdateIntentResponse,
     RawSignIntentRequestDetails,
     RawSignIntentResponse,
     RpcIntentRequestDetails,
@@ -190,6 +201,8 @@ Methods:
 - <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/privy/resources/intents.py">create_policy_rule</a>(policy_id, \*\*<a href="src/privy/types/intent_create_policy_rule_params.py">params</a>) -> <a href="./src/privy/types/rule_mutate_intent_response.py">RuleMutateIntentResponse</a></code>
 - <code title="delete /v1/intents/condition_sets/{condition_set_id}">client.intents.<a href="./src/privy/resources/intents.py">delete_condition_set</a>(condition_set_id) -> <a href="./src/privy/types/condition_set_delete_intent_response.py">ConditionSetDeleteIntentResponse</a></code>
 - <code title="delete /v1/intents/condition_sets/{condition_set_id}/condition_set_items/{condition_set_item_id}">client.intents.<a href="./src/privy/resources/intents.py">delete_condition_set_item</a>(condition_set_item_id, \*, condition_set_id) -> <a href="./src/privy/types/condition_set_item_delete_intent_response.py">ConditionSetItemDeleteIntentResponse</a></code>
+- <code title="delete /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/privy/resources/intents.py">delete_key_quorum</a>(key_quorum_id) -> <a href="./src/privy/types/key_quorum_delete_intent_response.py">KeyQuorumDeleteIntentResponse</a></code>
+- <code title="delete /v1/intents/policies/{policy_id}">client.intents.<a href="./src/privy/resources/intents.py">delete_policy</a>(policy_id) -> <a href="./src/privy/types/policy_delete_intent_response.py">PolicyDeleteIntentResponse</a></code>
 - <code title="delete /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/privy/resources/intents.py">delete_policy_rule</a>(rule_id, \*, policy_id) -> <a href="./src/privy/types/rule_delete_intent_response.py">RuleDeleteIntentResponse</a></code>
 - <code title="get /v1/intents/{intent_id}">client.intents.<a href="./src/privy/resources/intents.py">get</a>(intent_id) -> <a href="./src/privy/types/intent_response.py">IntentResponse</a></code>
 - <code title="post /v1/intents/wallets/{wallet_id}/raw_sign">client.intents.<a href="./src/privy/resources/intents.py">raw_sign</a>(wallet_id, \*\*<a href="src/privy/types/intent_raw_sign_params.py">params</a>) -> <a href="./src/privy/types/raw_sign_intent_response.py">RawSignIntentResponse</a></code>
@@ -197,8 +210,8 @@ Methods:
 - <code title="post /v1/intents/wallets/{wallet_id}/rpc">client.intents.<a href="./src/privy/resources/intents.py">rpc</a>(path_wallet_id, \*\*<a href="src/privy/types/intent_rpc_params.py">params</a>) -> <a href="./src/privy/types/rpc_intent_response.py">RpcIntentResponse</a></code>
 - <code title="post /v1/intents/wallets/{wallet_id}/transfer">client.intents.<a href="./src/privy/resources/intents.py">transfer</a>(wallet_id, \*\*<a href="src/privy/types/intent_transfer_params.py">params</a>) -> <a href="./src/privy/types/transfer_intent_response.py">TransferIntentResponse</a></code>
 - <code title="put /v1/intents/condition_sets/{condition_set_id}/condition_set_items">client.intents.<a href="./src/privy/resources/intents.py">update_condition_set_items</a>(condition_set_id, \*\*<a href="src/privy/types/intent_update_condition_set_items_params.py">params</a>) -> <a href="./src/privy/types/condition_set_item_mutate_intent_response.py">ConditionSetItemMutateIntentResponse</a></code>
-- <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/privy/resources/intents.py">update_key_quorum</a>(key_quorum_id, \*\*<a href="src/privy/types/intent_update_key_quorum_params.py">params</a>) -> <a href="./src/privy/types/key_quorum_intent_response.py">KeyQuorumIntentResponse</a></code>
-- <code title="patch /v1/intents/policies/{policy_id}">client.intents.<a href="./src/privy/resources/intents.py">update_policy</a>(policy_id, \*\*<a href="src/privy/types/intent_update_policy_params.py">params</a>) -> <a href="./src/privy/types/policy_intent_response.py">PolicyIntentResponse</a></code>
+- <code title="patch /v1/intents/key_quorums/{key_quorum_id}">client.intents.<a href="./src/privy/resources/intents.py">update_key_quorum</a>(key_quorum_id, \*\*<a href="src/privy/types/intent_update_key_quorum_params.py">params</a>) -> <a href="./src/privy/types/key_quorum_update_intent_response.py">KeyQuorumUpdateIntentResponse</a></code>
+- <code title="patch /v1/intents/policies/{policy_id}">client.intents.<a href="./src/privy/resources/intents.py">update_policy</a>(policy_id, \*\*<a href="src/privy/types/intent_update_policy_params.py">params</a>) -> <a href="./src/privy/types/policy_update_intent_response.py">PolicyUpdateIntentResponse</a></code>
 - <code title="patch /v1/intents/policies/{policy_id}/rules/{rule_id}">client.intents.<a href="./src/privy/resources/intents.py">update_policy_rule</a>(rule_id, \*, policy_id, \*\*<a href="src/privy/types/intent_update_policy_rule_params.py">params</a>) -> <a href="./src/privy/types/rule_mutate_intent_response.py">RuleMutateIntentResponse</a></code>
 - <code title="patch /v1/intents/wallets/{wallet_id}">client.intents.<a href="./src/privy/resources/intents.py">update_wallet</a>(wallet_id, \*\*<a href="src/privy/types/intent_update_wallet_params.py">params</a>) -> <a href="./src/privy/types/wallet_intent_response.py">WalletIntentResponse</a></code>
 
@@ -1202,6 +1215,7 @@ from privy.types import (
     AccountDisplayName,
     AccountResponse,
     AccountWallet,
+    AccountWalletChainType,
     AccountWalletConfigurationItem,
     AccountWalletIDs,
     AccountWalletsConfiguration,
