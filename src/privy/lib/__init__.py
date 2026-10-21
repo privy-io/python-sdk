@@ -43,10 +43,12 @@ from .authorization import (
     format_request_for_authorization_signature,
 )
 from .organizations import PrivyOrganizationsService
-from .request_expiry import PrivyRequestExpiryOptions
+from .request_expiry import DEFAULT_REQUEST_EXPIRY_MS, DEFAULT_INTENT_REQUEST_EXPIRY_MS, PrivyRequestExpiryOptions
 from .request_options import PrivyRequestOptions
 
 __all__ = [
+    "DEFAULT_INTENT_REQUEST_EXPIRY_MS",
+    "DEFAULT_REQUEST_EXPIRY_MS",
     "AuthorizationContext",
     "ExportPrivateKeyResponse",
     "ExportSeedPhraseResponse",

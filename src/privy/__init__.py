@@ -4,6 +4,8 @@ import typing as _t
 
 from . import types
 from .lib import (
+    DEFAULT_REQUEST_EXPIRY_MS,
+    DEFAULT_INTENT_REQUEST_EXPIRY_MS,
     P256KeyPair,
     PrivyClient,
     PrivyAppJWKS,
@@ -139,6 +141,8 @@ __all__ = [
     "WebhookPayload",
     "PrivyRequestOptions",
     "PrivyRequestExpiryOptions",
+    "DEFAULT_REQUEST_EXPIRY_MS",
+    "DEFAULT_INTENT_REQUEST_EXPIRY_MS",
     "AuthorizationContext",
     "PreparedRequest",
     "VerifyAccessTokenResponse",

@@ -73,7 +73,7 @@ class PrivyClient:
         self.apps = PrivyAppsService(self._client)
         self.policies = PrivyPoliciesService(self._client, self.get_request_expiry, self._jwt_exchange)
         self.key_quorums = PrivyKeyQuorumsService(self._client, self.get_request_expiry, self._jwt_exchange)
-        self.intents = PrivyIntentsService(self._client, self._get_intent_request_expiry, self._jwt_exchange)
+        self.intents = PrivyIntentsService(self._client, self.get_intent_request_expiry, self._jwt_exchange)
         self.users = PrivyUsersService(self._client, self.auth)
         self.organizations = PrivyOrganizationsService(self._client)
         self.transactions = PrivyTransactionsService(self._client)
@@ -81,15 +81,20 @@ class PrivyClient:
         self.webhooks = PrivyWebhooksService(self._client, webhook_signing_secret)
 
     def get_request_expiry(self, expiry_ms_from_now: int | None = None) -> int | None:
-        """Return an absolute request-expiry timestamp in Unix milliseconds."""
+        """Return now plus a duration as an absolute Unix timestamp in milliseconds.
+
+        Uses the client's generic default duration when ``expiry_ms_from_now`` is
+        omitted. Returns ``None`` when automatic request expiry is disabled. Pass
+        the result to ``PrivyRequestOptions(request_expiry=...)``.
+        """
 
         if self._request_expiry_disabled:
             return None
         duration = self._default_request_expiry_ms if expiry_ms_from_now is None else expiry_ms_from_now
         return time.time_ns() // 1_000_000 + duration
 
-    def _get_intent_request_expiry(self, expiry_ms_from_now: int | None = None) -> int | None:
-        """Return an absolute request-expiry timestamp for an intent request."""
+    def get_intent_request_expiry(self, expiry_ms_from_now: int | None = None) -> int | None:
+        """Like ``get_request_expiry`` but defaults to the client's intent duration."""
 
         if self._request_expiry_disabled:
             return None
