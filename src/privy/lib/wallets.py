@@ -14,6 +14,7 @@ from ._hpke import HPKESender, HPKERecipient
 from .swaps import PrivySwapsService
 from .solana import PrivySolanaService
 from .._types import Omit, omit
+from .._utils import maybe_transform
 from .._client import PrivyAPI
 from .ethereum import PrivyEthereumService
 from .request_url import build_request_url
@@ -36,7 +37,11 @@ from ..types.wallet_raw_sign_params import WalletRawSignParams
 from ..types.wallet_transfer_params import WalletTransferParams
 from ..types.additional_signer_input_param import AdditionalSignerInputParam
 from ..types.wallet_import_supported_chains import WalletImportSupportedChains
+from ..types.wallet_attach_automations_params import WalletAttachAutomationsParams
+from ..types.wallet_detach_automations_params import WalletDetachAutomationsParams
 from ..types.wallets.transfer_action_response import TransferActionResponse
+from ..types.wallet_automation_success_response import WalletAutomationSuccessResponse
+from ..types.wallet_automation_attachment_list_response import WalletAutomationAttachmentListResponse
 from ..types.wallet_entity_assignment_request_body_param import WalletEntityAssignmentRequestBodyParam
 
 __all__ = [
@@ -91,7 +96,7 @@ class PrivyWalletsService(WalletsResource):
         self._request_expiry_provider = request_expiry_provider
         self.ethereum = PrivyEthereumService(self)
         self.solana = PrivySolanaService(self)
-        self.swaps = PrivySwapsService(client, jwt_exchanger)
+        self.swaps = PrivySwapsService(client, jwt_exchanger, request_expiry_provider)
         self.tron = PrivyTronService(self)
         self._earn = PrivyEarnService(client, jwt_exchanger, request_expiry_provider)
 
@@ -165,6 +170,72 @@ class PrivyWalletsService(WalletsResource):
             owner=owner,
             owner_id=owner_id,
             policy_ids=policy_ids,
+        )
+
+    def attach_automations(
+        self,
+        wallet_id: str,
+        *,
+        wallet_attach_automations_params: WalletAttachAutomationsParams,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> WalletAutomationAttachmentListResponse:
+        """Attach one or more automations to a wallet."""
+
+        options = request_options or PrivyRequestOptions()
+        request_expiry = resolve_request_expiry(options.request_expiry, self._request_expiry_provider)
+        body = dict(wallet_attach_automations_params)
+        prepared = prepare_request(
+            app_id=self._client.app_id,
+            method="POST",
+            url=build_request_url(self._client, f"/v1/wallets/{wallet_id}/automations/attach"),
+            # Sign the body as the generated method serializes it (e.g. any sequence of IDs becomes a list).
+            body=maybe_transform(body, WalletAttachAutomationsParams),
+            authorization_context=options.authorization_context,
+            request_expiry=request_expiry,
+            jwt_exchanger=self._jwt_exchanger,
+        )
+        signature = prepared.headers.get("privy-authorization-signature")
+        expiry_header = prepared.headers.get("privy-request-expiry")
+        generated: Any = self
+        attach = cast(Callable[..., WalletAutomationAttachmentListResponse], generated._attach_automations)
+        return attach(
+            wallet_id,
+            **body,
+            privy_authorization_signature=signature if signature is not None else omit,
+            privy_request_expiry=expiry_header if expiry_header is not None else omit,
+        )
+
+    def detach_automations(
+        self,
+        wallet_id: str,
+        *,
+        wallet_detach_automations_params: WalletDetachAutomationsParams,
+        request_options: PrivyRequestOptions | None = None,
+    ) -> WalletAutomationSuccessResponse:
+        """Detach one or more automations from a wallet."""
+
+        options = request_options or PrivyRequestOptions()
+        request_expiry = resolve_request_expiry(options.request_expiry, self._request_expiry_provider)
+        body = dict(wallet_detach_automations_params)
+        prepared = prepare_request(
+            app_id=self._client.app_id,
+            method="POST",
+            url=build_request_url(self._client, f"/v1/wallets/{wallet_id}/automations/detach"),
+            # Sign the body as the generated method serializes it (e.g. any sequence of IDs becomes a list).
+            body=maybe_transform(body, WalletDetachAutomationsParams),
+            authorization_context=options.authorization_context,
+            request_expiry=request_expiry,
+            jwt_exchanger=self._jwt_exchanger,
+        )
+        signature = prepared.headers.get("privy-authorization-signature")
+        expiry_header = prepared.headers.get("privy-request-expiry")
+        generated: Any = self
+        detach = cast(Callable[..., WalletAutomationSuccessResponse], generated._detach_automations)
+        return detach(
+            wallet_id,
+            **body,
+            privy_authorization_signature=signature if signature is not None else omit,
+            privy_request_expiry=expiry_header if expiry_header is not None else omit,
         )
 
     def update(

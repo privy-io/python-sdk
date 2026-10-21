@@ -1,11 +1,19 @@
 from __future__ import annotations
 
+import time
 import uuid
 
 import pytest
 
-from privy import PrivyClient, PrivySwapsService, PrivyRequestOptions, AuthorizationContext, generate_p256_key_pair
-from privy.types.wallets import SwapExecuteParams
+from privy import (
+    PrivyClient,
+    APIStatusError,
+    PrivySwapsService,
+    PrivyRequestOptions,
+    AuthorizationContext,
+    generate_p256_key_pair,
+)
+from privy.types.wallets import SwapQuoteParams, SwapExecuteParams
 
 pytestmark = [
     pytest.mark.integration,
@@ -14,6 +22,14 @@ pytestmark = [
 
 BASE_CAIP2 = "eip155:8453"
 TEST_TOKEN = "0x0000000000000000000000000000000000000001"
+QUOTE_PARAMS: SwapQuoteParams = {
+    "base_amount": "1000000000000000000",
+    "source": {"asset_address": "native", "caip2": BASE_CAIP2},
+    "destination": {"asset_address": TEST_TOKEN, "caip2": BASE_CAIP2},
+    "amount_type": "exact_input",
+}
+# Rejections must come from the request expiry check, not from another validation error.
+EXPIRY_ERROR = r"(?i)expir"
 
 
 def test_authorized_swap_quote(privy_client: PrivyClient) -> None:
@@ -100,3 +116,49 @@ def test_authorized_swap_execution_with_idempotency(privy_client: PrivyClient) -
     assert action.wallet_id == wallet.id
     assert action.status
     assert duplicate_action.id == action.id
+
+
+def test_authorized_swap_quote_with_a_per_call_request_expiry(privy_client: PrivyClient) -> None:
+    key_pair = generate_p256_key_pair()
+    wallet = privy_client.wallets.create(chain_type="ethereum", owner={"public_key": key_pair.public_key})
+
+    quote = privy_client.wallets.swaps.quote(
+        wallet.id,
+        swap_quote_params=QUOTE_PARAMS,
+        request_options=PrivyRequestOptions(
+            authorization_context=AuthorizationContext(authorization_private_keys=[key_pair.private_key]),
+            request_expiry=privy_client.get_request_expiry(20 * 60 * 1000),
+        ),
+    )
+
+    assert quote.input_amount
+
+
+def test_authorized_swap_quote_rejects_an_expired_request_expiry(privy_client: PrivyClient) -> None:
+    key_pair = generate_p256_key_pair()
+    wallet = privy_client.wallets.create(chain_type="ethereum", owner={"public_key": key_pair.public_key})
+
+    with pytest.raises(APIStatusError, match=EXPIRY_ERROR):
+        privy_client.wallets.swaps.quote(
+            wallet.id,
+            swap_quote_params=QUOTE_PARAMS,
+            request_options=PrivyRequestOptions(
+                authorization_context=AuthorizationContext(authorization_private_keys=[key_pair.private_key]),
+                request_expiry=time.time_ns() // 1_000_000 - 60_000,
+            ),
+        )
+
+
+def test_authorized_swap_execution_rejects_an_expired_request_expiry(privy_client: PrivyClient) -> None:
+    key_pair = generate_p256_key_pair()
+    wallet = privy_client.wallets.create(chain_type="ethereum", owner={"public_key": key_pair.public_key})
+
+    with pytest.raises(APIStatusError, match=EXPIRY_ERROR):
+        privy_client.wallets.swaps.execute(
+            wallet.id,
+            swap_execute_params={**QUOTE_PARAMS, "slippage_bps": 50},
+            request_options=PrivyRequestOptions(
+                authorization_context=AuthorizationContext(authorization_private_keys=[key_pair.private_key]),
+                request_expiry=time.time_ns() // 1_000_000 - 60_000,
+            ),
+        )
