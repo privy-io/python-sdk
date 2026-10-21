@@ -16,6 +16,7 @@ from .tron import PrivyTronService
 from .swaps import PrivySwapsService
 from .users import PrivyUsersService
 from .client import PrivyClient
+from .payout import PrivyPayoutService, PrivyPayoutFiatService
 from .solana import PrivySolanaService
 from .intents import PrivyIntentsService
 from .wallets import (
@@ -45,6 +46,7 @@ from .authorization import (
 from .organizations import PrivyOrganizationsService
 from .request_expiry import DEFAULT_REQUEST_EXPIRY_MS, DEFAULT_INTENT_REQUEST_EXPIRY_MS, PrivyRequestExpiryOptions
 from .request_options import PrivyRequestOptions
+from .deposit_accounts import PrivyDepositAccountsService, PrivyDepositAccountsCryptoService
 
 __all__ = [
     "DEFAULT_INTENT_REQUEST_EXPIRY_MS",
@@ -68,6 +70,10 @@ __all__ = [
     "PrivyEarnService",
     "PrivyEarnEthereumService",
     "PrivyEarnEthereumIncentiveService",
+    "PrivyDepositAccountsService",
+    "PrivyDepositAccountsCryptoService",
+    "PrivyPayoutService",
+    "PrivyPayoutFiatService",
     "PrivyRequestOptions",
     "PrivyRequestExpiryOptions",
     "PrivySolanaService",

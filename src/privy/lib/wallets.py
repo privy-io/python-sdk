@@ -12,6 +12,7 @@ from .earn import PrivyEarnService
 from .tron import PrivyTronService
 from ._hpke import HPKESender, HPKERecipient
 from .swaps import PrivySwapsService
+from .payout import PrivyPayoutService
 from .solana import PrivySolanaService
 from .._types import Omit, omit
 from .._utils import maybe_transform
@@ -25,6 +26,7 @@ from .authorization import prepare_request
 from .request_expiry import RequestExpiryProvider, resolve_request_expiry
 from .wallet_entropy import entropy_to_bytes
 from .request_options import PrivyRequestOptions
+from .deposit_accounts import PrivyDepositAccountsService
 from ..types.owner_id_input import OwnerIDInput
 from ..types.owner_input_param import OwnerInputParam
 from ..types.raw_sign_response import RawSignResponse
@@ -99,11 +101,23 @@ class PrivyWalletsService(WalletsResource):
         self.swaps = PrivySwapsService(client, jwt_exchanger, request_expiry_provider)
         self.tron = PrivyTronService(self)
         self._earn = PrivyEarnService(client, jwt_exchanger, request_expiry_provider)
+        self._deposit_accounts = PrivyDepositAccountsService(client, jwt_exchanger, request_expiry_provider)
+        self._payout = PrivyPayoutService(client, jwt_exchanger, request_expiry_provider)
 
     @property
     @override
     def earn(self) -> PrivyEarnService:
         return self._earn
+
+    @property
+    @override
+    def deposit_accounts(self) -> PrivyDepositAccountsService:
+        return self._deposit_accounts
+
+    @property
+    @override
+    def payout(self) -> PrivyPayoutService:
+        return self._payout
 
     @override
     def create(
