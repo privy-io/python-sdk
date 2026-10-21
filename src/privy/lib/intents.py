@@ -10,7 +10,9 @@ from __future__ import annotations
 
 from typing import Any, Callable, cast
 
-from .._types import Omit, omit
+import httpx
+
+from .._types import Omit, Headers, NotGiven, omit, not_given
 from .._client import PrivyAPI
 from .request_url import build_request_url
 from .jwt_exchange import JWTExchangeService
@@ -23,15 +25,21 @@ from ..types.rpc_intent_response import RpcIntentResponse
 from ..types.intent_transfer_params import IntentTransferParams
 from ..types.policy_intent_response import PolicyIntentResponse
 from ..types.wallet_intent_response import WalletIntentResponse
+from ..types.raw_sign_intent_response import RawSignIntentResponse
 from ..types.transfer_intent_response import TransferIntentResponse
 from ..types.key_quorum_intent_response import KeyQuorumIntentResponse
 from ..types.intent_update_policy_params import IntentUpdatePolicyParams
 from ..types.intent_update_wallet_params import IntentUpdateWalletParams
+from ..types.raw_sign_input_params_param import RawSignInputParamsParam
 from ..types.rule_delete_intent_response import RuleDeleteIntentResponse
 from ..types.rule_mutate_intent_response import RuleMutateIntentResponse
 from ..types.intent_update_key_quorum_params import IntentUpdateKeyQuorumParams
 from ..types.intent_create_policy_rule_params import IntentCreatePolicyRuleParams
 from ..types.intent_update_policy_rule_params import IntentUpdatePolicyRuleParams
+from ..types.condition_set_delete_intent_response import ConditionSetDeleteIntentResponse
+from ..types.condition_set_items_request_body_param import ConditionSetItemsRequestBodyParam
+from ..types.condition_set_item_delete_intent_response import ConditionSetItemDeleteIntentResponse
+from ..types.condition_set_item_mutate_intent_response import ConditionSetItemMutateIntentResponse
 
 __all__ = ["PrivyIntentsService"]
 
@@ -57,7 +65,12 @@ class PrivyIntentsService(IntentsResource):
         body: dict[str, object],
         request_options: PrivyRequestOptions | None,
         preserve_empty_body: bool = False,
+        privy_request_expiry: str | Omit = omit,
+        signed_body: object | None = None,
     ) -> tuple[str | Omit, dict[str, str] | None]:
+        # Overrides of flattened generated methods keep their privy_request_expiry keyword.
+        if not isinstance(privy_request_expiry, Omit):
+            body["privy_request_expiry"] = privy_request_expiry
         options = request_options or PrivyRequestOptions()
         raw_request_expiry = body.pop("privy_request_expiry", None)
         request_expiry = (
@@ -71,7 +84,7 @@ class PrivyIntentsService(IntentsResource):
             app_id=self._client.app_id,
             method=method,
             url=build_request_url(self._client, path),
-            body=body,
+            body=body if signed_body is None else signed_body,
             authorization_context=options.authorization_context,
             request_expiry=cast(Any, request_expiry),
             jwt_exchanger=self._jwt_exchanger,
@@ -267,3 +280,134 @@ class PrivyIntentsService(IntentsResource):
             privy_request_expiry=expiry_header,
             extra_headers=extra_headers,
         )
+
+    def raw_sign(
+        self,
+        wallet_id: str,
+        *,
+        params: RawSignInputParamsParam,
+        privy_request_expiry: str | Omit = omit,
+        request_options: PrivyRequestOptions | None = None,
+        extra_headers: Headers | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> RawSignIntentResponse:
+        expiry_header, signature_headers = self._prepare_request(
+            method="POST",
+            path=f"/v1/intents/wallets/{wallet_id}/raw_sign",
+            body={"params": params},
+            request_options=request_options,
+            privy_request_expiry=privy_request_expiry,
+        )
+        return super().raw_sign(
+            wallet_id,
+            params=params,
+            privy_request_expiry=expiry_header,
+            extra_headers=_merge_headers(signature_headers, extra_headers),
+            timeout=timeout,
+        )
+
+    def create_condition_set_items(
+        self,
+        condition_set_id: str,
+        *,
+        condition_set_items_request_body: ConditionSetItemsRequestBodyParam,
+        privy_request_expiry: str | Omit = omit,
+        request_options: PrivyRequestOptions | None = None,
+        extra_headers: Headers | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetItemMutateIntentResponse:
+        expiry_header, signature_headers = self._prepare_request(
+            method="POST",
+            path=f"/v1/intents/condition_sets/{condition_set_id}/condition_set_items",
+            body={},
+            request_options=request_options,
+            privy_request_expiry=privy_request_expiry,
+            signed_body=condition_set_items_request_body,
+        )
+        return super().create_condition_set_items(
+            condition_set_id,
+            condition_set_items_request_body=condition_set_items_request_body,
+            privy_request_expiry=expiry_header,
+            extra_headers=_merge_headers(signature_headers, extra_headers),
+            timeout=timeout,
+        )
+
+    def update_condition_set_items(
+        self,
+        condition_set_id: str,
+        *,
+        condition_set_items_request_body: ConditionSetItemsRequestBodyParam,
+        privy_request_expiry: str | Omit = omit,
+        request_options: PrivyRequestOptions | None = None,
+        extra_headers: Headers | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetItemMutateIntentResponse:
+        expiry_header, signature_headers = self._prepare_request(
+            method="PUT",
+            path=f"/v1/intents/condition_sets/{condition_set_id}/condition_set_items",
+            body={},
+            request_options=request_options,
+            privy_request_expiry=privy_request_expiry,
+            signed_body=condition_set_items_request_body,
+        )
+        return super().update_condition_set_items(
+            condition_set_id,
+            condition_set_items_request_body=condition_set_items_request_body,
+            privy_request_expiry=expiry_header,
+            extra_headers=_merge_headers(signature_headers, extra_headers),
+            timeout=timeout,
+        )
+
+    def delete_condition_set(
+        self,
+        condition_set_id: str,
+        *,
+        privy_request_expiry: str | Omit = omit,
+        request_options: PrivyRequestOptions | None = None,
+        extra_headers: Headers | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetDeleteIntentResponse:
+        expiry_header, signature_headers = self._prepare_request(
+            method="DELETE",
+            path=f"/v1/intents/condition_sets/{condition_set_id}",
+            body={},
+            request_options=request_options,
+            privy_request_expiry=privy_request_expiry,
+        )
+        return super().delete_condition_set(
+            condition_set_id,
+            privy_request_expiry=expiry_header,
+            extra_headers=_merge_headers(signature_headers, extra_headers),
+            timeout=timeout,
+        )
+
+    def delete_condition_set_item(
+        self,
+        condition_set_item_id: str,
+        *,
+        condition_set_id: str,
+        privy_request_expiry: str | Omit = omit,
+        request_options: PrivyRequestOptions | None = None,
+        extra_headers: Headers | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> ConditionSetItemDeleteIntentResponse:
+        expiry_header, signature_headers = self._prepare_request(
+            method="DELETE",
+            path=f"/v1/intents/condition_sets/{condition_set_id}/condition_set_items/{condition_set_item_id}",
+            body={},
+            request_options=request_options,
+            privy_request_expiry=privy_request_expiry,
+        )
+        return super().delete_condition_set_item(
+            condition_set_item_id,
+            condition_set_id=condition_set_id,
+            privy_request_expiry=expiry_header,
+            extra_headers=_merge_headers(signature_headers, extra_headers),
+            timeout=timeout,
+        )
+
+
+def _merge_headers(signature_headers: dict[str, str] | None, extra_headers: Headers | None) -> Headers | None:
+    if signature_headers is None:
+        return extra_headers
+    return {**signature_headers, **(extra_headers or {})}
