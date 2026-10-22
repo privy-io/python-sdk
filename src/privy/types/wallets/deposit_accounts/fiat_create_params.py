@@ -6,6 +6,7 @@ from typing_extensions import Literal, Required, TypedDict
 
 from ...environment import Environment
 from ...developer_fee_percent import DeveloperFeePercent
+from ...deposit_travel_rule_param import DepositTravelRuleParam
 from ...fiat_deposit_account_destination_param import FiatDepositAccountDestinationParam
 from ...create_fiat_deposit_account_source_param import CreateFiatDepositAccountSourceParam
 
@@ -30,3 +31,6 @@ class FiatCreateParams(TypedDict, total=False):
 
     environment: Environment
     """The Privy API environment."""
+
+    travel_rule: DepositTravelRuleParam
+    """Travel rule information about who sends deposits into a fiat deposit account."""

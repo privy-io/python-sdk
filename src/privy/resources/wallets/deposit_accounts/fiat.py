@@ -26,6 +26,7 @@ from ....types.environment import Environment
 from ....types.developer_fee_percent import DeveloperFeePercent
 from ....types.orchestration_provider import OrchestrationProvider
 from ....types.wallets.deposit_accounts import fiat_list_params, fiat_create_params
+from ....types.deposit_travel_rule_param import DepositTravelRuleParam
 from ....types.fiat_deposit_account_response import FiatDepositAccountResponse
 from ....types.list_fiat_deposit_accounts_response import ListFiatDepositAccountsResponse
 from ....types.fiat_deposit_account_destination_param import FiatDepositAccountDestinationParam
@@ -65,6 +66,7 @@ class FiatResource(SyncAPIResource):
         source: CreateFiatDepositAccountSourceParam,
         developer_fee_percent: DeveloperFeePercent | Omit = omit,
         environment: Environment | Omit = omit,
+        travel_rule: DepositTravelRuleParam | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -92,6 +94,8 @@ class FiatResource(SyncAPIResource):
 
           environment: The Privy API environment.
 
+          travel_rule: Travel rule information about who sends deposits into a fiat deposit account.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -111,6 +115,7 @@ class FiatResource(SyncAPIResource):
                     "source": source,
                     "developer_fee_percent": developer_fee_percent,
                     "environment": environment,
+                    "travel_rule": travel_rule,
                 },
                 fiat_create_params.FiatCreateParams,
             ),
@@ -247,6 +252,7 @@ class AsyncFiatResource(AsyncAPIResource):
         source: CreateFiatDepositAccountSourceParam,
         developer_fee_percent: DeveloperFeePercent | Omit = omit,
         environment: Environment | Omit = omit,
+        travel_rule: DepositTravelRuleParam | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -274,6 +280,8 @@ class AsyncFiatResource(AsyncAPIResource):
 
           environment: The Privy API environment.
 
+          travel_rule: Travel rule information about who sends deposits into a fiat deposit account.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -293,6 +301,7 @@ class AsyncFiatResource(AsyncAPIResource):
                     "source": source,
                     "developer_fee_percent": developer_fee_percent,
                     "environment": environment,
+                    "travel_rule": travel_rule,
                 },
                 fiat_create_params.FiatCreateParams,
             ),
