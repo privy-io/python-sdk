@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.9.0](https://github.com/privy-io/python-sdk/compare/v0.8.0...v0.9.0) (2026-10-22)
+
+
+### Features
+
+* **api:** api update ([8653089](https://github.com/privy-io/python-sdk/commit/8653089a529ce6aadee48ae74bbdef1514dac37e))
+* **api:** api update ([afb2693](https://github.com/privy-io/python-sdk/commit/afb26933f65e7a899c273e19944b51e648bc1a97))
+* **api:** api update ([ddbfb28](https://github.com/privy-io/python-sdk/commit/ddbfb28ec40d03a9da65873796779130f453154b))
+* **api:** api update ([3886d22](https://github.com/privy-io/python-sdk/commit/3886d220d06ec7b96499d0dbb935d8fe88e1f626))
+* **api:** api update ([170b048](https://github.com/privy-io/python-sdk/commit/170b048f4e1406ec819a6fbc29e64fb4895eb14c))
+* **client:** expose intent request expiry and export expiry defaults ([#85](https://github.com/privy-io/python-sdk/issues/85)) ([acd09fe](https://github.com/privy-io/python-sdk/commit/acd09fe66521f2acf9fc9a28fda7c4ca7ed48d1a))
+* **intents:** apply the intent expiry default to every intent mutation ([#89](https://github.com/privy-io/python-sdk/issues/89)) ([6dad32f](https://github.com/privy-io/python-sdk/commit/6dad32f8c01cbfbbbfbabf9e77231e65dc851182))
+* **wallets:** add signed deposit account and payout wrappers ([#88](https://github.com/privy-io/python-sdk/issues/88)) ([e9f2a04](https://github.com/privy-io/python-sdk/commit/e9f2a045c20e13e97d717aa84935bc847aef1bb3))
+* **wallets:** send request expiry on swaps and automation attach/detach ([#87](https://github.com/privy-io/python-sdk/issues/87)) ([2c295e2](https://github.com/privy-io/python-sdk/commit/2c295e2a5e70bf776962f88f7bea1769141b3159))
+
 ## [0.8.0](https://github.com/privy-io/python-sdk/compare/v0.7.0...v0.8.0) (2026-10-16)
 
 
