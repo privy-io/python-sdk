@@ -2223,7 +2223,7 @@ class IntentsResource(SyncAPIResource):
         Args:
           policy_id: ID of the policy.
 
-          name: Name to assign to policy.
+          name: Name to assign to the policy, up to 100 characters.
 
           owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
               null to remove the current owner.
@@ -4512,7 +4512,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         Args:
           policy_id: ID of the policy.
 
-          name: Name to assign to policy.
+          name: Name to assign to the policy, up to 100 characters.
 
           owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
               null to remove the current owner.

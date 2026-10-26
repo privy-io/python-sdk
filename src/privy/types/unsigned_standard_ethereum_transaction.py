@@ -16,7 +16,7 @@ __all__ = ["UnsignedStandardEthereumTransaction"]
 class UnsignedStandardEthereumTransaction(BaseModel):
     """An unsigned standard Ethereum transaction object.
 
-    Supports EVM transaction types 0, 1, 2, and 4.
+    Supports EVM transaction types 0, 2, and 4.
     """
 
     authorization_list: Optional[List[EthereumSign7702Authorization]] = None
@@ -67,7 +67,7 @@ class UnsignedStandardEthereumTransaction(BaseModel):
 
     to: Optional[str] = None
 
-    type: Optional[Literal[0, 1, 2, 4]] = None
+    type: Optional[Literal[0, 2, 4]] = None
 
     value: Optional[Quantity] = None
     """

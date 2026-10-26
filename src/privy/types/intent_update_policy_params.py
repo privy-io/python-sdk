@@ -15,7 +15,7 @@ __all__ = ["IntentUpdatePolicyParams"]
 
 class IntentUpdatePolicyParams(TypedDict, total=False):
     name: str
-    """Name to assign to policy."""
+    """Name to assign to the policy, up to 100 characters."""
 
     owner: Optional[OwnerInputParam]
     """

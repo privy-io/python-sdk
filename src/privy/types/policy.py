@@ -27,7 +27,7 @@ class Policy(BaseModel):
     """Unix timestamp of when the policy was created in milliseconds."""
 
     name: str
-    """Name to assign to policy."""
+    """Name to assign to the policy, up to 100 characters."""
 
     owner_id: Optional[KeyQuorumID] = None
     """A unique identifier for a key quorum."""

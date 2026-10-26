@@ -23,7 +23,7 @@ _UnsignedStandardEthereumTransactionParamReservedKeywords = TypedDict(
 class UnsignedStandardEthereumTransactionParam(_UnsignedStandardEthereumTransactionParamReservedKeywords, total=False):
     """An unsigned standard Ethereum transaction object.
 
-    Supports EVM transaction types 0, 1, 2, and 4.
+    Supports EVM transaction types 0, 2, and 4.
     """
 
     authorization_list: Iterable[EthereumSign7702AuthorizationParam]
@@ -72,7 +72,7 @@ class UnsignedStandardEthereumTransactionParam(_UnsignedStandardEthereumTransact
 
     to: str
 
-    type: Literal[0, 1, 2, 4]
+    type: Literal[0, 2, 4]
 
     value: QuantityParam
     """

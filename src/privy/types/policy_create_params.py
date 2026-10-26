@@ -21,7 +21,7 @@ class PolicyCreateParams(TypedDict, total=False):
     """The wallet chain types."""
 
     name: Required[str]
-    """Name to assign to policy."""
+    """Name to assign to the policy, up to 100 characters."""
 
     rules: Required[Iterable[Rule]]
 

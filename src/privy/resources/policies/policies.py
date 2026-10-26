@@ -103,7 +103,7 @@ class PoliciesResource(SyncAPIResource):
         Args:
           chain_type: The wallet chain types.
 
-          name: Name to assign to policy.
+          name: Name to assign to the policy, up to 100 characters.
 
           version: Version of the policy. Currently, 1.0 is the only version.
 
@@ -380,7 +380,7 @@ class PoliciesResource(SyncAPIResource):
         Update a policy by policy ID.
 
         Args:
-          name: Name to assign to policy.
+          name: Name to assign to the policy, up to 100 characters.
 
           owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
               null to remove the current owner.
@@ -620,7 +620,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
         Args:
           chain_type: The wallet chain types.
 
-          name: Name to assign to policy.
+          name: Name to assign to the policy, up to 100 characters.
 
           version: Version of the policy. Currently, 1.0 is the only version.
 
@@ -897,7 +897,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
         Update a policy by policy ID.
 
         Args:
-          name: Name to assign to policy.
+          name: Name to assign to the policy, up to 100 characters.
 
           owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
               null to remove the current owner.

@@ -28,8 +28,8 @@ class EthereumSendTransactionRpcResponseData(BaseModel):
     transaction_request: Optional[UnsignedEthereumTransaction] = None
     """An unsigned Ethereum transaction object.
 
-    Supports standard EVM transaction types (0, 1, 2, 4) and Tempo transactions
-    (type 118).
+    Supports standard EVM transaction types (0, 2, 4) and Tempo transactions (type
+    118).
     """
 
     user_operation_hash: Optional[str] = None

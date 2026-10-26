@@ -13,7 +13,7 @@ __all__ = ["PolicyIntentRequestDetails", "Body"]
 
 class Body(BaseModel):
     name: Optional[str] = None
-    """Name to assign to policy."""
+    """Name to assign to the policy, up to 100 characters."""
 
     owner: Optional[OwnerInput] = None
     """

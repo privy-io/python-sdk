@@ -1746,7 +1746,6 @@ from privy.types import (
     EthereumYieldWithdrawInput,
     EvmCaip2ChainID,
     VaultAsset,
-    YieldAuthorizationHeaders,
 )
 ```
 
