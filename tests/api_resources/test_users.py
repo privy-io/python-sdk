@@ -108,7 +108,7 @@ class TestUsers:
     def test_method_list_with_all_params(self, client: PrivyAPI) -> None:
         user = client.users.list(
             cursor="x",
-            limit=100,
+            limit=1,
         )
         assert_matches_type(SyncCursor[User], user, path=["response"])
 
@@ -1030,7 +1030,7 @@ class TestAsyncUsers:
     async def test_method_list_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
         user = await async_client.users.list(
             cursor="x",
-            limit=100,
+            limit=1,
         )
         assert_matches_type(AsyncCursor[User], user, path=["response"])
 

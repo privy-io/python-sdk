@@ -29,7 +29,7 @@ class TestConditionSets:
     def test_method_list_with_all_params(self, client: PrivyAPI) -> None:
         condition_set = client.policies.condition_sets.list(
             cursor="x",
-            limit=100,
+            limit=1,
         )
         assert_matches_type(SyncCursor[ConditionSet], condition_set, path=["response"])
 
@@ -72,7 +72,7 @@ class TestAsyncConditionSets:
     async def test_method_list_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
         condition_set = await async_client.policies.condition_sets.list(
             cursor="x",
-            limit=100,
+            limit=1,
         )
         assert_matches_type(AsyncCursor[ConditionSet], condition_set, path=["response"])
 

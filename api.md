@@ -526,6 +526,67 @@ Methods:
 - <code title="post /v1/users/{user_id}/kyc/tos">client.users.kyc.<a href="./src/privy/resources/users/kyc.py">initiate_tos</a>(user_id, \*\*<a href="src/privy/types/users/kyc_initiate_tos_params.py">params</a>) -> <a href="./src/privy/types/kyx_tos_response.py">KyxTosResponse</a></code>
 - <code title="post /v1/users/{user_id}/kyc/submit">client.users.kyc.<a href="./src/privy/resources/users/kyc.py">submit</a>(user_id, \*\*<a href="src/privy/types/users/kyc_submit_params.py">params</a>) -> <a href="./src/privy/types/kyc_status_response.py">KYCStatusResponse</a></code>
 
+## Mfa
+
+Types:
+
+```python
+from privy.types.users import (
+    MfaPasskeyAssertionResponse,
+    MfaPasskeyAttestationResponse,
+    MfaPasskeyAuthenticatorEnrollmentOptions,
+    MfaPasskeyAuthenticatorEnrollmentResponse,
+    MfaPasskeyAuthenticatorSelection,
+    MfaPasskeyAuthenticatorVerifyOptions,
+    MfaPasskeyAuthenticatorVerifyResponse,
+    MfaPasskeyClientExtensionResults,
+    MfaPasskeyCredPropsResult,
+    MfaPasskeyCredentialDescriptor,
+    MfaPasskeyEnrollmentExtensions,
+    MfaPasskeyPubKeyCredParam,
+    MfaPasskeyRelyingParty,
+    MfaPasskeyUser,
+    MfaPasskeyVerifyExtensions,
+    MfaVerificationResponse,
+    SMSMfaEnrollmentInitRequestBody,
+    SMSMfaVerifyRequestBody,
+    TotpMfaEnrollmentInitResponse,
+    TotpMfaEnrollmentOptions,
+    TotpMfaVerifyRequestBody,
+)
+```
+
+### SMS
+
+#### Enrollment
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/sms/enrollment/init">client.users.mfa.sms.enrollment.<a href="./src/privy/resources/users/mfa/sms/enrollment.py">init</a>(user_id, \*\*<a href="src/privy/types/users/mfa/sms/enrollment_init_params.py">params</a>) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
+- <code title="post /v1/users/{user_id}/mfa/sms/enrollment/verify">client.users.mfa.sms.enrollment.<a href="./src/privy/resources/users/mfa/sms/enrollment.py">verify</a>(user_id, \*\*<a href="src/privy/types/users/mfa/sms/enrollment_verify_params.py">params</a>) -> <a href="./src/privy/types/users/mfa_verification_response.py">MfaVerificationResponse</a></code>
+
+#### Verification
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/sms/verification/init">client.users.mfa.sms.verification.<a href="./src/privy/resources/users/mfa/sms/verification.py">init</a>(user_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
+- <code title="post /v1/users/{user_id}/mfa/sms/verification/verify">client.users.mfa.sms.verification.<a href="./src/privy/resources/users/mfa/sms/verification.py">verify</a>(user_id, \*\*<a href="src/privy/types/users/mfa/sms/verification_verify_params.py">params</a>) -> <a href="./src/privy/types/users/mfa_verification_response.py">MfaVerificationResponse</a></code>
+
+### Totp
+
+#### Enrollment
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/totp/enrollment/init">client.users.mfa.totp.enrollment.<a href="./src/privy/resources/users/mfa/totp/enrollment.py">init</a>(user_id) -> <a href="./src/privy/types/users/totp_mfa_enrollment_init_response.py">TotpMfaEnrollmentInitResponse</a></code>
+- <code title="post /v1/users/{user_id}/mfa/totp/enrollment/verify">client.users.mfa.totp.enrollment.<a href="./src/privy/resources/users/mfa/totp/enrollment.py">verify</a>(user_id, \*\*<a href="src/privy/types/users/mfa/totp/enrollment_verify_params.py">params</a>) -> <a href="./src/privy/types/users/mfa_verification_response.py">MfaVerificationResponse</a></code>
+
+#### Verification
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/totp/verification/verify">client.users.mfa.totp.verification.<a href="./src/privy/resources/users/mfa/totp/verification.py">verify</a>(user_id, \*\*<a href="src/privy/types/users/mfa/totp/verification_verify_params.py">params</a>) -> <a href="./src/privy/types/users/mfa_verification_response.py">MfaVerificationResponse</a></code>
+
 # WalletAutomations
 
 Types:

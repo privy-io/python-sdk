@@ -148,7 +148,7 @@ class TestPolicies:
     def test_method_list_with_all_params(self, client: PrivyAPI) -> None:
         policy = client.policies.list(
             cursor="x",
-            limit=100,
+            limit=1,
         )
         assert_matches_type(SyncCursor[PolicyListItem], policy, path=["response"])
 
@@ -820,7 +820,7 @@ class TestAsyncPolicies:
     async def test_method_list_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
         policy = await async_client.policies.list(
             cursor="x",
-            limit=100,
+            limit=1,
         )
         assert_matches_type(AsyncCursor[PolicyListItem], policy, path=["response"])
 

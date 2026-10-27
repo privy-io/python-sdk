@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Iterable, Optional
+from typing import Iterable
 from typing_extensions import overload
 
 import httpx
@@ -34,6 +34,14 @@ from ...types import (
     user_get_by_twitter_username_params,
     user_get_by_telegram_username_params,
     user_get_by_smart_wallet_address_params,
+)
+from .mfa.mfa import (
+    MfaResource,
+    AsyncMfaResource,
+    MfaResourceWithRawResponse,
+    AsyncMfaResourceWithRawResponse,
+    MfaResourceWithStreamingResponse,
+    AsyncMfaResourceWithStreamingResponse,
 )
 from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
 from ..._utils import path_template, required_args, maybe_transform, async_maybe_transform
@@ -77,6 +85,10 @@ class UsersResource(SyncAPIResource):
     def kyc(self) -> KYCResource:
         """Operations related to fiat onramping and offramping"""
         return KYCResource(self._client)
+
+    @cached_property
+    def mfa(self) -> MfaResource:
+        return MfaResource(self._client)
 
     @cached_property
     def with_raw_response(self) -> UsersResourceWithRawResponse:
@@ -148,7 +160,7 @@ class UsersResource(SyncAPIResource):
         self,
         *,
         cursor: str | Omit = omit,
-        limit: Optional[float] | Omit = omit,
+        limit: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -958,6 +970,10 @@ class AsyncUsersResource(AsyncAPIResource):
         return AsyncKYCResource(self._client)
 
     @cached_property
+    def mfa(self) -> AsyncMfaResource:
+        return AsyncMfaResource(self._client)
+
+    @cached_property
     def with_raw_response(self) -> AsyncUsersResourceWithRawResponse:
         """
         This property can be used as a prefix for any HTTP method call to return
@@ -1027,7 +1043,7 @@ class AsyncUsersResource(AsyncAPIResource):
         self,
         *,
         cursor: str | Omit = omit,
-        limit: Optional[float] | Omit = omit,
+        limit: int | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1912,6 +1928,10 @@ class UsersResourceWithRawResponse:
         """Operations related to fiat onramping and offramping"""
         return KYCResourceWithRawResponse(self._users.kyc)
 
+    @cached_property
+    def mfa(self) -> MfaResourceWithRawResponse:
+        return MfaResourceWithRawResponse(self._users.mfa)
+
 
 class AsyncUsersResourceWithRawResponse:
     def __init__(self, users: AsyncUsersResource) -> None:
@@ -1993,6 +2013,10 @@ class AsyncUsersResourceWithRawResponse:
     def kyc(self) -> AsyncKYCResourceWithRawResponse:
         """Operations related to fiat onramping and offramping"""
         return AsyncKYCResourceWithRawResponse(self._users.kyc)
+
+    @cached_property
+    def mfa(self) -> AsyncMfaResourceWithRawResponse:
+        return AsyncMfaResourceWithRawResponse(self._users.mfa)
 
 
 class UsersResourceWithStreamingResponse:
@@ -2076,6 +2100,10 @@ class UsersResourceWithStreamingResponse:
         """Operations related to fiat onramping and offramping"""
         return KYCResourceWithStreamingResponse(self._users.kyc)
 
+    @cached_property
+    def mfa(self) -> MfaResourceWithStreamingResponse:
+        return MfaResourceWithStreamingResponse(self._users.mfa)
+
 
 class AsyncUsersResourceWithStreamingResponse:
     def __init__(self, users: AsyncUsersResource) -> None:
@@ -2157,3 +2185,7 @@ class AsyncUsersResourceWithStreamingResponse:
     def kyc(self) -> AsyncKYCResourceWithStreamingResponse:
         """Operations related to fiat onramping and offramping"""
         return AsyncKYCResourceWithStreamingResponse(self._users.kyc)
+
+    @cached_property
+    def mfa(self) -> AsyncMfaResourceWithStreamingResponse:
+        return AsyncMfaResourceWithStreamingResponse(self._users.mfa)

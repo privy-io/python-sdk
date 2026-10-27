@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Union, Optional
+from typing import List, Union
 from typing_extensions import Literal, Required, TypedDict
 
 from ..._types import SequenceNotStr
@@ -53,6 +53,6 @@ class TransactionGetParams(TypedDict, total=False):
     include_archived: bool
     """Include archived wallets in lookup. Defaults to false."""
 
-    limit: Optional[float]
+    limit: int
 
     tx_hash: str

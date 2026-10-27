@@ -110,7 +110,7 @@ class TestWallets:
             entity_id="entity_id",
             external_id="external_id",
             include_archived=True,
-            limit=100,
+            limit=1,
             user_id="user_id",
         )
         assert_matches_type(SyncCursor[Wallet], wallet, path=["response"])
@@ -3654,7 +3654,7 @@ class TestAsyncWallets:
             entity_id="entity_id",
             external_id="external_id",
             include_archived=True,
-            limit=100,
+            limit=1,
             user_id="user_id",
         )
         assert_matches_type(AsyncCursor[Wallet], wallet, path=["response"])

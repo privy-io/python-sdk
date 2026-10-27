@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
 from typing_extensions import Literal, TypedDict
 
 from .intent_status import IntentStatus
@@ -27,7 +26,7 @@ class IntentListParams(TypedDict, total=False):
     intent_type: IntentTypeParam
     """Type of intent."""
 
-    limit: Optional[float]
+    limit: int
 
     pending_member_id: str
     """Filter by a user whose approval is still pending.

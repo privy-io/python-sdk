@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from typing import Optional
 from typing_extensions import TypedDict
 
 from .address import Address
@@ -42,7 +41,7 @@ class WalletListParams(TypedDict, total=False):
     include_archived: bool
     """Include archived wallets in lookup. Defaults to false."""
 
-    limit: Optional[float]
+    limit: int
 
     user_id: str
     """Filter wallets by user ID. Cannot be used together with authorization_key."""

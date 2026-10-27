@@ -282,7 +282,7 @@ class TestDenylist:
         denylist = client.apps.denylist.list(
             app_id="app_id",
             cursor="x",
-            limit=100,
+            limit=1,
         )
         assert_matches_type(SyncCursor[DenylistEntry], denylist, path=["response"])
 
@@ -636,7 +636,7 @@ class TestAsyncDenylist:
         denylist = await async_client.apps.denylist.list(
             app_id="app_id",
             cursor="x",
-            limit=100,
+            limit=1,
         )
         assert_matches_type(AsyncCursor[DenylistEntry], denylist, path=["response"])
 

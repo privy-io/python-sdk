@@ -8,6 +8,14 @@ from .kyc import (
     KYCResourceWithStreamingResponse,
     AsyncKYCResourceWithStreamingResponse,
 )
+from .mfa import (
+    MfaResource,
+    AsyncMfaResource,
+    MfaResourceWithRawResponse,
+    AsyncMfaResourceWithRawResponse,
+    MfaResourceWithStreamingResponse,
+    AsyncMfaResourceWithStreamingResponse,
+)
 from .users import (
     UsersResource,
     AsyncUsersResource,
@@ -38,6 +46,12 @@ __all__ = [
     "AsyncKYCResourceWithRawResponse",
     "KYCResourceWithStreamingResponse",
     "AsyncKYCResourceWithStreamingResponse",
+    "MfaResource",
+    "AsyncMfaResource",
+    "MfaResourceWithRawResponse",
+    "AsyncMfaResourceWithRawResponse",
+    "MfaResourceWithStreamingResponse",
+    "AsyncMfaResourceWithStreamingResponse",
     "UsersResource",
     "AsyncUsersResource",
     "UsersResourceWithRawResponse",

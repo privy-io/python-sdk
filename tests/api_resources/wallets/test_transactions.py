@@ -36,7 +36,7 @@ class TestTransactions:
             asset="usdc",
             cursor="x",
             include_archived=True,
-            limit=100,
+            limit=1,
             tx_hash="tx_hash",
         )
         assert_matches_type(TransactionGetResponse, transaction, path=["response"])
@@ -103,7 +103,7 @@ class TestAsyncTransactions:
             asset="usdc",
             cursor="x",
             include_archived=True,
-            limit=100,
+            limit=1,
             tx_hash="tx_hash",
         )
         assert_matches_type(TransactionGetResponse, transaction, path=["response"])

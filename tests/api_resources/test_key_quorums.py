@@ -75,7 +75,7 @@ class TestKeyQuorums:
     def test_method_list_with_all_params(self, client: PrivyAPI) -> None:
         key_quorum = client.key_quorums.list(
             cursor="x",
-            limit=100,
+            limit=1,
         )
         assert_matches_type(SyncCursor[KeyQuorum], key_quorum, path=["response"])
 
@@ -314,7 +314,7 @@ class TestAsyncKeyQuorums:
     async def test_method_list_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
         key_quorum = await async_client.key_quorums.list(
             cursor="x",
-            limit=100,
+            limit=1,
         )
         assert_matches_type(AsyncCursor[KeyQuorum], key_quorum, path=["response"])
 
