@@ -1096,6 +1096,9 @@ from .spark_get_static_deposit_address_rpc_input import (
 from .transaction_provider_error_webhook_payload import (
     TransactionProviderErrorWebhookPayload as TransactionProviderErrorWebhookPayload,
 )
+from .usage_ata_deposit_recorded_webhook_payload import (
+    UsageAtaDepositRecordedWebhookPayload as UsageAtaDepositRecordedWebhookPayload,
+)
 from .wallet_action_swap_created_webhook_payload import (
     WalletActionSwapCreatedWebhookPayload as WalletActionSwapCreatedWebhookPayload,
 )

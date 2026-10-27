@@ -1194,6 +1194,7 @@ from privy.types import (
     TransactionProviderErrorWebhookPayload,
     TransactionReplacedWebhookPayload,
     TransactionStillPendingWebhookPayload,
+    UsageAtaDepositRecordedWebhookPayload,
     UsageGasSponsorshipRecordedWebhookPayload,
     UsageSourceType,
     UsageSwapProviderFeeRecordedWebhookPayload,

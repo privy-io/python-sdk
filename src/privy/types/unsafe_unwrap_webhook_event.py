@@ -39,6 +39,7 @@ from .yield_withdraw_confirmed_webhook_payload import YieldWithdrawConfirmedWebh
 from .transaction_still_pending_webhook_payload import TransactionStillPendingWebhookPayload
 from .wallet_action_swap_failed_webhook_payload import WalletActionSwapFailedWebhookPayload
 from .transaction_provider_error_webhook_payload import TransactionProviderErrorWebhookPayload
+from .usage_ata_deposit_recorded_webhook_payload import UsageAtaDepositRecordedWebhookPayload
 from .wallet_action_swap_created_webhook_payload import WalletActionSwapCreatedWebhookPayload
 from .wallet_action_payout_failed_webhook_payload import WalletActionPayoutFailedWebhookPayload
 from .wallet_action_swap_rejected_webhook_payload import WalletActionSwapRejectedWebhookPayload
@@ -101,6 +102,7 @@ UnsafeUnwrapWebhookEvent: TypeAlias = Annotated[
         TransactionProviderErrorWebhookPayload,
         TransactionReplacedWebhookPayload,
         TransactionStillPendingWebhookPayload,
+        UsageAtaDepositRecordedWebhookPayload,
         UsageGasSponsorshipRecordedWebhookPayload,
         UsageSwapProviderFeeRecordedWebhookPayload,
         UserAuthenticatedWebhookPayload,
