@@ -124,8 +124,13 @@ $ ./scripts/format
 
 ## Publishing and releases
 
-Changes made to this repository via the automated release PR pipeline should publish to PyPI automatically. If
-the changes aren't made through the automated pipeline, you may want to make releases manually.
+Development happens on `main` in the private `privy-io/python-sdk-private` repo. The public
+[`privy-io/python-sdk`](https://github.com/privy-io/python-sdk) repo is updated only when a
+release is published, so its `main` matches the latest release. Releases are managed by
+[release-please](https://github.com/googleapis/release-please); see
+[RELEASING.md](./RELEASING.md) for how to cut a release.
+
+If a release doesn't publish through this pipeline, you may want to publish it manually.
 
 ### Publish with a GitHub workflow
 
@@ -135,3 +140,36 @@ You can release to package managers by using [the `Publish PyPI` GitHub action](
 
 If you need to manually release a package, you can run the `bin/publish-pypi` script with a `PYPI_TOKEN` set on
 the environment.
+
+### Contributing from the public repo
+
+You can open pull requests against `main` in `privy-io/python-sdk`, but they aren't merged
+there. A maintainer re-lands the change in the private repo with you as co-author and closes
+your PR. The change ships in the next release. The failing `Public PR` check on your PR is
+that reminder, not a problem with your change.
+
+### Importing a public pull request (maintainers)
+
+From a clone of `python-sdk-private`, with `N` set to the public PR number:
+
+```sh
+git fetch origin main
+git fetch https://github.com/privy-io/python-sdk.git "pull/$N/head:public-pr-$N"
+git switch -c "import/python-sdk-$N" origin/main
+git diff "$(git merge-base origin/main "public-pr-$N")" "public-pr-$N" | git apply -3
+```
+
+`git apply -3` stages the change and leaves conflict markers where it can't apply cleanly.
+Resolve them, then commit with the public PR's title and credit the author
+(`git log -1 --format='%an <%ae>' "public-pr-$N"`):
+
+```sh
+git commit -m "<public PR title>" \
+  -m "Imported from privy-io/python-sdk#$N" \
+  -m "Co-authored-by: <author name> <author email>"
+git push -u origin HEAD
+```
+
+Open a PR in `python-sdk-private` with the same `Imported from` and `Co-authored-by` lines in
+the body, so they survive a squash merge. Then close the public PR with a comment that the
+change was imported and will ship in the next release.
