@@ -30,6 +30,10 @@ jobs:
   lock:
     runs-on: ${{ vars.STLC_RUNNER || 'ubuntu-latest' }}
     if: github.repository == 'privy-io/python-sdk-private'
+    # Serialize status writers so overlapping triggers cannot append duplicates.
+    concurrency:
+      group: trunk-sync-lock
+      cancel-in-progress: false
     env:
       PRODUCTION_REPO: privy-io/python-sdk
       PRODUCTION_REPO_TOKEN: ${{ secrets.PRODUCTION_REPO_TOKEN }}
@@ -62,6 +66,14 @@ jobs:
           shas=$(gh pr list --repo "$GITHUB_REPOSITORY" --base main --state open --json headRefOid --jq '.[].headRefOid')
           if [ -z "$shas" ]; then echo "no open PRs targeting main"; exit 0; fi
           for sha in $shas; do
+            # The combined status returns only the latest status per context.
+            # Reposting unchanged statuses eventually hits GitHub's per-SHA/context limit.
+            current_state=$(gh api --paginate "repos/$GITHUB_REPOSITORY/commits/$sha/status?per_page=100" \
+              --jq '.statuses[] | select(.context == "trunk-synced") | .state')
+            if [ "$current_state" = "$state" ]; then
+              echo "trunk-synced=$state already posted to $sha"
+              continue
+            fi
             gh api -X POST "repos/$GITHUB_REPOSITORY/statuses/$sha" \
               -f state="$state" -f context="trunk-synced" -f description="$desc" >/dev/null
             echo "posted trunk-synced=$state to $sha"
