@@ -24,8 +24,22 @@ from .totp import (
     TotpResourceWithStreamingResponse,
     AsyncTotpResourceWithStreamingResponse,
 )
+from .passkey import (
+    PasskeyResource,
+    AsyncPasskeyResource,
+    PasskeyResourceWithRawResponse,
+    AsyncPasskeyResourceWithRawResponse,
+    PasskeyResourceWithStreamingResponse,
+    AsyncPasskeyResourceWithStreamingResponse,
+)
 
 __all__ = [
+    "PasskeyResource",
+    "AsyncPasskeyResource",
+    "PasskeyResourceWithRawResponse",
+    "AsyncPasskeyResourceWithRawResponse",
+    "PasskeyResourceWithStreamingResponse",
+    "AsyncPasskeyResourceWithStreamingResponse",
     "SMSResource",
     "AsyncSMSResource",
     "SMSResourceWithRawResponse",

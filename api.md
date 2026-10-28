@@ -548,6 +548,11 @@ from privy.types.users import (
     MfaPasskeyUser,
     MfaPasskeyVerifyExtensions,
     MfaVerificationResponse,
+    PasskeyMfaEnrollmentInitResponse,
+    PasskeyMfaEnrollmentVerifyRequestBody,
+    PasskeyMfaInitRequestBody,
+    PasskeyMfaVerificationInitResponse,
+    PasskeyMfaVerificationVerifyRequestBody,
     SMSMfaEnrollmentInitRequestBody,
     SMSMfaVerifyRequestBody,
     TotpMfaEnrollmentInitResponse,
@@ -555,6 +560,22 @@ from privy.types.users import (
     TotpMfaVerifyRequestBody,
 )
 ```
+
+### Passkey
+
+#### Enrollment
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/passkey/enrollment/init">client.users.mfa.passkey.enrollment.<a href="./src/privy/resources/users/mfa/passkey/enrollment.py">init</a>(user_id, \*\*<a href="src/privy/types/users/mfa/passkey/enrollment_init_params.py">params</a>) -> <a href="./src/privy/types/users/passkey_mfa_enrollment_init_response.py">PasskeyMfaEnrollmentInitResponse</a></code>
+- <code title="post /v1/users/{user_id}/mfa/passkey/enrollment/verify">client.users.mfa.passkey.enrollment.<a href="./src/privy/resources/users/mfa/passkey/enrollment.py">verify</a>(user_id, \*\*<a href="src/privy/types/users/mfa/passkey/enrollment_verify_params.py">params</a>) -> <a href="./src/privy/types/users/mfa_verification_response.py">MfaVerificationResponse</a></code>
+
+#### Verification
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/passkey/verification/init">client.users.mfa.passkey.verification.<a href="./src/privy/resources/users/mfa/passkey/verification.py">init</a>(user_id, \*\*<a href="src/privy/types/users/mfa/passkey/verification_init_params.py">params</a>) -> <a href="./src/privy/types/users/passkey_mfa_verification_init_response.py">PasskeyMfaVerificationInitResponse</a></code>
+- <code title="post /v1/users/{user_id}/mfa/passkey/verification/verify">client.users.mfa.passkey.verification.<a href="./src/privy/resources/users/mfa/passkey/verification.py">verify</a>(user_id, \*\*<a href="src/privy/types/users/mfa/passkey/verification_verify_params.py">params</a>) -> <a href="./src/privy/types/users/mfa_verification_response.py">MfaVerificationResponse</a></code>
 
 ### SMS
 

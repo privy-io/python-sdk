@@ -2,11 +2,43 @@
 
 from __future__ import annotations
 
+from .mfa_passkey_user import MfaPasskeyUser as MfaPasskeyUser
 from .kyc_submit_params import KYCSubmitParams as KYCSubmitParams
 from .kyc_initiate_tos_params import KYCInitiateTosParams as KYCInitiateTosParams
 from .kyc_initiate_links_params import KYCInitiateLinksParams as KYCInitiateLinksParams
+from .mfa_passkey_relying_party import MfaPasskeyRelyingParty as MfaPasskeyRelyingParty
 from .mfa_verification_response import MfaVerificationResponse as MfaVerificationResponse
 from .totp_mfa_enrollment_options import TotpMfaEnrollmentOptions as TotpMfaEnrollmentOptions
+from .mfa_passkey_cred_props_result import MfaPasskeyCredPropsResult as MfaPasskeyCredPropsResult
+from .mfa_passkey_verify_extensions import MfaPasskeyVerifyExtensions as MfaPasskeyVerifyExtensions
+from .mfa_passkey_pub_key_cred_param import MfaPasskeyPubKeyCredParam as MfaPasskeyPubKeyCredParam
 from .external_fiat_account_list_params import ExternalFiatAccountListParams as ExternalFiatAccountListParams
+from .mfa_passkey_credential_descriptor import MfaPasskeyCredentialDescriptor as MfaPasskeyCredentialDescriptor
+from .mfa_passkey_enrollment_extensions import MfaPasskeyEnrollmentExtensions as MfaPasskeyEnrollmentExtensions
 from .totp_mfa_enrollment_init_response import TotpMfaEnrollmentInitResponse as TotpMfaEnrollmentInitResponse
 from .external_fiat_account_create_params import ExternalFiatAccountCreateParams as ExternalFiatAccountCreateParams
+from .mfa_passkey_authenticator_selection import MfaPasskeyAuthenticatorSelection as MfaPasskeyAuthenticatorSelection
+from .mfa_passkey_cred_props_result_param import MfaPasskeyCredPropsResultParam as MfaPasskeyCredPropsResultParam
+from .mfa_passkey_assertion_response_param import MfaPasskeyAssertionResponseParam as MfaPasskeyAssertionResponseParam
+from .passkey_mfa_enrollment_init_response import PasskeyMfaEnrollmentInitResponse as PasskeyMfaEnrollmentInitResponse
+from .mfa_passkey_attestation_response_param import (
+    MfaPasskeyAttestationResponseParam as MfaPasskeyAttestationResponseParam,
+)
+from .passkey_mfa_verification_init_response import (
+    PasskeyMfaVerificationInitResponse as PasskeyMfaVerificationInitResponse,
+)
+from .mfa_passkey_authenticator_verify_options import (
+    MfaPasskeyAuthenticatorVerifyOptions as MfaPasskeyAuthenticatorVerifyOptions,
+)
+from .mfa_passkey_client_extension_results_param import (
+    MfaPasskeyClientExtensionResultsParam as MfaPasskeyClientExtensionResultsParam,
+)
+from .mfa_passkey_authenticator_enrollment_options import (
+    MfaPasskeyAuthenticatorEnrollmentOptions as MfaPasskeyAuthenticatorEnrollmentOptions,
+)
+from .mfa_passkey_authenticator_verify_response_param import (
+    MfaPasskeyAuthenticatorVerifyResponseParam as MfaPasskeyAuthenticatorVerifyResponseParam,
+)
+from .mfa_passkey_authenticator_enrollment_response_param import (
+    MfaPasskeyAuthenticatorEnrollmentResponseParam as MfaPasskeyAuthenticatorEnrollmentResponseParam,
+)

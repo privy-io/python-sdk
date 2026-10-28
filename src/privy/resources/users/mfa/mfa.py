@@ -20,11 +20,23 @@ from .totp.totp import (
 )
 from ...._compat import cached_property
 from ...._resource import SyncAPIResource, AsyncAPIResource
+from .passkey.passkey import (
+    PasskeyResource,
+    AsyncPasskeyResource,
+    PasskeyResourceWithRawResponse,
+    AsyncPasskeyResourceWithRawResponse,
+    PasskeyResourceWithStreamingResponse,
+    AsyncPasskeyResourceWithStreamingResponse,
+)
 
 __all__ = ["MfaResource", "AsyncMfaResource"]
 
 
 class MfaResource(SyncAPIResource):
+    @cached_property
+    def passkey(self) -> PasskeyResource:
+        return PasskeyResource(self._client)
+
     @cached_property
     def sms(self) -> SMSResource:
         return SMSResource(self._client)
@@ -54,6 +66,10 @@ class MfaResource(SyncAPIResource):
 
 
 class AsyncMfaResource(AsyncAPIResource):
+    @cached_property
+    def passkey(self) -> AsyncPasskeyResource:
+        return AsyncPasskeyResource(self._client)
+
     @cached_property
     def sms(self) -> AsyncSMSResource:
         return AsyncSMSResource(self._client)
@@ -87,6 +103,10 @@ class MfaResourceWithRawResponse:
         self._mfa = mfa
 
     @cached_property
+    def passkey(self) -> PasskeyResourceWithRawResponse:
+        return PasskeyResourceWithRawResponse(self._mfa.passkey)
+
+    @cached_property
     def sms(self) -> SMSResourceWithRawResponse:
         return SMSResourceWithRawResponse(self._mfa.sms)
 
@@ -98,6 +118,10 @@ class MfaResourceWithRawResponse:
 class AsyncMfaResourceWithRawResponse:
     def __init__(self, mfa: AsyncMfaResource) -> None:
         self._mfa = mfa
+
+    @cached_property
+    def passkey(self) -> AsyncPasskeyResourceWithRawResponse:
+        return AsyncPasskeyResourceWithRawResponse(self._mfa.passkey)
 
     @cached_property
     def sms(self) -> AsyncSMSResourceWithRawResponse:
@@ -113,6 +137,10 @@ class MfaResourceWithStreamingResponse:
         self._mfa = mfa
 
     @cached_property
+    def passkey(self) -> PasskeyResourceWithStreamingResponse:
+        return PasskeyResourceWithStreamingResponse(self._mfa.passkey)
+
+    @cached_property
     def sms(self) -> SMSResourceWithStreamingResponse:
         return SMSResourceWithStreamingResponse(self._mfa.sms)
 
@@ -124,6 +152,10 @@ class MfaResourceWithStreamingResponse:
 class AsyncMfaResourceWithStreamingResponse:
     def __init__(self, mfa: AsyncMfaResource) -> None:
         self._mfa = mfa
+
+    @cached_property
+    def passkey(self) -> AsyncPasskeyResourceWithStreamingResponse:
+        return AsyncPasskeyResourceWithStreamingResponse(self._mfa.passkey)
 
     @cached_property
     def sms(self) -> AsyncSMSResourceWithStreamingResponse:
