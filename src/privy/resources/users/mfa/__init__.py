@@ -24,6 +24,14 @@ from .totp import (
     TotpResourceWithStreamingResponse,
     AsyncTotpResourceWithStreamingResponse,
 )
+from .email import (
+    EmailResource,
+    AsyncEmailResource,
+    EmailResourceWithRawResponse,
+    AsyncEmailResourceWithRawResponse,
+    EmailResourceWithStreamingResponse,
+    AsyncEmailResourceWithStreamingResponse,
+)
 from .passkey import (
     PasskeyResource,
     AsyncPasskeyResource,
@@ -34,6 +42,12 @@ from .passkey import (
 )
 
 __all__ = [
+    "EmailResource",
+    "AsyncEmailResource",
+    "EmailResourceWithRawResponse",
+    "AsyncEmailResourceWithRawResponse",
+    "EmailResourceWithStreamingResponse",
+    "AsyncEmailResourceWithStreamingResponse",
     "PasskeyResource",
     "AsyncPasskeyResource",
     "PasskeyResourceWithRawResponse",

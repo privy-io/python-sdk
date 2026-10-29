@@ -532,6 +532,8 @@ Types:
 
 ```python
 from privy.types.users import (
+    EmailMfaEnrollmentInitRequestBody,
+    EmailMfaVerifyRequestBody,
     MfaPasskeyAssertionResponse,
     MfaPasskeyAttestationResponse,
     MfaPasskeyAuthenticatorEnrollmentOptions,
@@ -560,6 +562,22 @@ from privy.types.users import (
     TotpMfaVerifyRequestBody,
 )
 ```
+
+### Email
+
+#### Enrollment
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/email/enrollment/init">client.users.mfa.email.enrollment.<a href="./src/privy/resources/users/mfa/email/enrollment.py">init</a>(user_id, \*\*<a href="src/privy/types/users/mfa/email/enrollment_init_params.py">params</a>) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
+- <code title="post /v1/users/{user_id}/mfa/email/enrollment/verify">client.users.mfa.email.enrollment.<a href="./src/privy/resources/users/mfa/email/enrollment.py">verify</a>(user_id, \*\*<a href="src/privy/types/users/mfa/email/enrollment_verify_params.py">params</a>) -> <a href="./src/privy/types/users/mfa_verification_response.py">MfaVerificationResponse</a></code>
+
+#### Verification
+
+Methods:
+
+- <code title="post /v1/users/{user_id}/mfa/email/verification/init">client.users.mfa.email.verification.<a href="./src/privy/resources/users/mfa/email/verification.py">init</a>(user_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
+- <code title="post /v1/users/{user_id}/mfa/email/verification/verify">client.users.mfa.email.verification.<a href="./src/privy/resources/users/mfa/email/verification.py">verify</a>(user_id, \*\*<a href="src/privy/types/users/mfa/email/verification_verify_params.py">params</a>) -> <a href="./src/privy/types/users/mfa_verification_response.py">MfaVerificationResponse</a></code>
 
 ### Passkey
 
@@ -1046,6 +1064,7 @@ from privy.types.wallets import (
     EthereumEarnPositionResponse,
     EthereumEarnProvider,
     EthereumEarnVaultDetailsResponse,
+    ExternalTransactionStepProvider,
     ExternalTransactionWalletActionStep,
     ExternalTransactionWalletActionStepStatus,
     FailureReason,

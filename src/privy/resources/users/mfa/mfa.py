@@ -19,6 +19,14 @@ from .totp.totp import (
     AsyncTotpResourceWithStreamingResponse,
 )
 from ...._compat import cached_property
+from .email.email import (
+    EmailResource,
+    AsyncEmailResource,
+    EmailResourceWithRawResponse,
+    AsyncEmailResourceWithRawResponse,
+    EmailResourceWithStreamingResponse,
+    AsyncEmailResourceWithStreamingResponse,
+)
 from ...._resource import SyncAPIResource, AsyncAPIResource
 from .passkey.passkey import (
     PasskeyResource,
@@ -33,6 +41,10 @@ __all__ = ["MfaResource", "AsyncMfaResource"]
 
 
 class MfaResource(SyncAPIResource):
+    @cached_property
+    def email(self) -> EmailResource:
+        return EmailResource(self._client)
+
     @cached_property
     def passkey(self) -> PasskeyResource:
         return PasskeyResource(self._client)
@@ -66,6 +78,10 @@ class MfaResource(SyncAPIResource):
 
 
 class AsyncMfaResource(AsyncAPIResource):
+    @cached_property
+    def email(self) -> AsyncEmailResource:
+        return AsyncEmailResource(self._client)
+
     @cached_property
     def passkey(self) -> AsyncPasskeyResource:
         return AsyncPasskeyResource(self._client)
@@ -103,6 +119,10 @@ class MfaResourceWithRawResponse:
         self._mfa = mfa
 
     @cached_property
+    def email(self) -> EmailResourceWithRawResponse:
+        return EmailResourceWithRawResponse(self._mfa.email)
+
+    @cached_property
     def passkey(self) -> PasskeyResourceWithRawResponse:
         return PasskeyResourceWithRawResponse(self._mfa.passkey)
 
@@ -118,6 +138,10 @@ class MfaResourceWithRawResponse:
 class AsyncMfaResourceWithRawResponse:
     def __init__(self, mfa: AsyncMfaResource) -> None:
         self._mfa = mfa
+
+    @cached_property
+    def email(self) -> AsyncEmailResourceWithRawResponse:
+        return AsyncEmailResourceWithRawResponse(self._mfa.email)
 
     @cached_property
     def passkey(self) -> AsyncPasskeyResourceWithRawResponse:
@@ -137,6 +161,10 @@ class MfaResourceWithStreamingResponse:
         self._mfa = mfa
 
     @cached_property
+    def email(self) -> EmailResourceWithStreamingResponse:
+        return EmailResourceWithStreamingResponse(self._mfa.email)
+
+    @cached_property
     def passkey(self) -> PasskeyResourceWithStreamingResponse:
         return PasskeyResourceWithStreamingResponse(self._mfa.passkey)
 
@@ -152,6 +180,10 @@ class MfaResourceWithStreamingResponse:
 class AsyncMfaResourceWithStreamingResponse:
     def __init__(self, mfa: AsyncMfaResource) -> None:
         self._mfa = mfa
+
+    @cached_property
+    def email(self) -> AsyncEmailResourceWithStreamingResponse:
+        return AsyncEmailResourceWithStreamingResponse(self._mfa.email)
 
     @cached_property
     def passkey(self) -> AsyncPasskeyResourceWithStreamingResponse:

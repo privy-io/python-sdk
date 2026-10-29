@@ -5,6 +5,7 @@ from typing_extensions import Literal
 
 from ..._models import BaseModel
 from .failure_reason import FailureReason
+from .external_transaction_step_provider import ExternalTransactionStepProvider
 from .external_transaction_wallet_action_step_status import ExternalTransactionWalletActionStepStatus
 
 __all__ = ["ExternalTransactionWalletActionStep"]
@@ -14,6 +15,9 @@ class ExternalTransactionWalletActionStep(BaseModel):
     """
     A wallet action step representing a cross-chain/cross-asset fill by an external provider.
     """
+
+    provider: Optional[ExternalTransactionStepProvider] = None
+    """External provider that fills an external transaction step."""
 
     status: ExternalTransactionWalletActionStepStatus
     """Status of an external transaction step in a wallet action."""
