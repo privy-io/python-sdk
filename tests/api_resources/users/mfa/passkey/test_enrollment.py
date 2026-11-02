@@ -26,7 +26,7 @@ class TestEnrollment:
         enrollment = client.users.mfa.passkey.enrollment.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(PasskeyMfaEnrollmentInitResponse, enrollment, path=["response"])
 
@@ -36,8 +36,8 @@ class TestEnrollment:
         enrollment = client.users.mfa.passkey.enrollment.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
-            privy_mfa_token="x",
+            user_jwt="x",
+            mfa_token="x",
         )
         assert_matches_type(PasskeyMfaEnrollmentInitResponse, enrollment, path=["response"])
 
@@ -47,7 +47,7 @@ class TestEnrollment:
         response = client.users.mfa.passkey.enrollment.with_raw_response.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -61,7 +61,7 @@ class TestEnrollment:
         with client.users.mfa.passkey.enrollment.with_streaming_response.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -78,7 +78,7 @@ class TestEnrollment:
             client.users.mfa.passkey.enrollment.with_raw_response.init(
                 user_id="",
                 relying_party="https://example.com",
-                privy_user_token="x",
+                user_jwt="x",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -96,7 +96,7 @@ class TestEnrollment:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, enrollment, path=["response"])
 
@@ -124,7 +124,7 @@ class TestEnrollment:
                 "type": "public-key",
                 "authenticator_attachment": "authenticator_attachment",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, enrollment, path=["response"])
 
@@ -143,7 +143,7 @@ class TestEnrollment:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -166,7 +166,7 @@ class TestEnrollment:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -192,7 +192,7 @@ class TestEnrollment:
                     },
                     "type": "public-key",
                 },
-                privy_user_token="x",
+                user_jwt="x",
             )
 
 
@@ -207,7 +207,7 @@ class TestAsyncEnrollment:
         enrollment = await async_client.users.mfa.passkey.enrollment.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(PasskeyMfaEnrollmentInitResponse, enrollment, path=["response"])
 
@@ -217,8 +217,8 @@ class TestAsyncEnrollment:
         enrollment = await async_client.users.mfa.passkey.enrollment.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
-            privy_mfa_token="x",
+            user_jwt="x",
+            mfa_token="x",
         )
         assert_matches_type(PasskeyMfaEnrollmentInitResponse, enrollment, path=["response"])
 
@@ -228,7 +228,7 @@ class TestAsyncEnrollment:
         response = await async_client.users.mfa.passkey.enrollment.with_raw_response.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -242,7 +242,7 @@ class TestAsyncEnrollment:
         async with async_client.users.mfa.passkey.enrollment.with_streaming_response.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -259,7 +259,7 @@ class TestAsyncEnrollment:
             await async_client.users.mfa.passkey.enrollment.with_raw_response.init(
                 user_id="",
                 relying_party="https://example.com",
-                privy_user_token="x",
+                user_jwt="x",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -277,7 +277,7 @@ class TestAsyncEnrollment:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, enrollment, path=["response"])
 
@@ -305,7 +305,7 @@ class TestAsyncEnrollment:
                 "type": "public-key",
                 "authenticator_attachment": "authenticator_attachment",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, enrollment, path=["response"])
 
@@ -324,7 +324,7 @@ class TestAsyncEnrollment:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -347,7 +347,7 @@ class TestAsyncEnrollment:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -373,5 +373,5 @@ class TestAsyncEnrollment:
                     },
                     "type": "public-key",
                 },
-                privy_user_token="x",
+                user_jwt="x",
             )

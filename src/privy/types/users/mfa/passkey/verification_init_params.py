@@ -13,5 +13,5 @@ class VerificationInitParams(TypedDict, total=False):
     relying_party: Required[str]
     """Origin where the authenticator runs, such as https://app.example.com."""
 
-    privy_user_token: Required[Annotated[str, PropertyInfo(alias="privy-user-token")]]
+    user_jwt: Required[Annotated[str, PropertyInfo(alias="privy-user-token")]]
     """Access token or custom authentication JWT for the user the request acts on."""

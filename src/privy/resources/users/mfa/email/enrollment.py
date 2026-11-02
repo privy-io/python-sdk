@@ -49,8 +49,8 @@ class EnrollmentResource(SyncAPIResource):
         user_id: str,
         *,
         email_address: str,
-        privy_user_token: str,
-        privy_mfa_token: str | Omit = omit,
+        user_jwt: str,
+        mfa_token: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -62,9 +62,9 @@ class EnrollmentResource(SyncAPIResource):
         Sends an email MFA enrollment code to an email address.
 
         Args:
-          privy_user_token: Access token or custom authentication JWT for the user the request acts on.
+          user_jwt: Access token or custom authentication JWT for the user the request acts on.
 
-          privy_mfa_token: MFA token from a completed MFA verification, required on MFA-protected requests
+          mfa_token: MFA token from a completed MFA verification, required on MFA-protected requests
               for users with MFA enrolled.
 
           extra_headers: Send extra headers
@@ -80,8 +80,8 @@ class EnrollmentResource(SyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
-                    "privy-user-token": privy_user_token,
-                    "privy-mfa-token": privy_mfa_token,
+                    "privy-user-token": user_jwt,
+                    "privy-mfa-token": mfa_token,
                 }
             ),
             **(extra_headers or {}),
@@ -100,7 +100,7 @@ class EnrollmentResource(SyncAPIResource):
         user_id: str,
         *,
         code: str,
-        privy_user_token: str,
+        user_jwt: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -112,7 +112,7 @@ class EnrollmentResource(SyncAPIResource):
         Enrolls the email address from init using the code sent to it.
 
         Args:
-          privy_user_token: Access token or custom authentication JWT for the user the request acts on.
+          user_jwt: Access token or custom authentication JWT for the user the request acts on.
 
           extra_headers: Send extra headers
 
@@ -124,7 +124,7 @@ class EnrollmentResource(SyncAPIResource):
         """
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
-        extra_headers = {"privy-user-token": privy_user_token, **(extra_headers or {})}
+        extra_headers = {"privy-user-token": user_jwt, **(extra_headers or {})}
         return self._post(
             path_template("/v1/users/{user_id}/mfa/email/enrollment/verify", user_id=user_id),
             body=maybe_transform({"code": code}, enrollment_verify_params.EnrollmentVerifyParams),
@@ -162,8 +162,8 @@ class AsyncEnrollmentResource(AsyncAPIResource):
         user_id: str,
         *,
         email_address: str,
-        privy_user_token: str,
-        privy_mfa_token: str | Omit = omit,
+        user_jwt: str,
+        mfa_token: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -175,9 +175,9 @@ class AsyncEnrollmentResource(AsyncAPIResource):
         Sends an email MFA enrollment code to an email address.
 
         Args:
-          privy_user_token: Access token or custom authentication JWT for the user the request acts on.
+          user_jwt: Access token or custom authentication JWT for the user the request acts on.
 
-          privy_mfa_token: MFA token from a completed MFA verification, required on MFA-protected requests
+          mfa_token: MFA token from a completed MFA verification, required on MFA-protected requests
               for users with MFA enrolled.
 
           extra_headers: Send extra headers
@@ -193,8 +193,8 @@ class AsyncEnrollmentResource(AsyncAPIResource):
         extra_headers = {
             **strip_not_given(
                 {
-                    "privy-user-token": privy_user_token,
-                    "privy-mfa-token": privy_mfa_token,
+                    "privy-user-token": user_jwt,
+                    "privy-mfa-token": mfa_token,
                 }
             ),
             **(extra_headers or {}),
@@ -215,7 +215,7 @@ class AsyncEnrollmentResource(AsyncAPIResource):
         user_id: str,
         *,
         code: str,
-        privy_user_token: str,
+        user_jwt: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -227,7 +227,7 @@ class AsyncEnrollmentResource(AsyncAPIResource):
         Enrolls the email address from init using the code sent to it.
 
         Args:
-          privy_user_token: Access token or custom authentication JWT for the user the request acts on.
+          user_jwt: Access token or custom authentication JWT for the user the request acts on.
 
           extra_headers: Send extra headers
 
@@ -239,7 +239,7 @@ class AsyncEnrollmentResource(AsyncAPIResource):
         """
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
-        extra_headers = {"privy-user-token": privy_user_token, **(extra_headers or {})}
+        extra_headers = {"privy-user-token": user_jwt, **(extra_headers or {})}
         return await self._post(
             path_template("/v1/users/{user_id}/mfa/email/enrollment/verify", user_id=user_id),
             body=await async_maybe_transform({"code": code}, enrollment_verify_params.EnrollmentVerifyParams),

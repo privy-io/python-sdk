@@ -17,5 +17,5 @@ class EnrollmentVerifyParams(TypedDict, total=False):
     specification.
     """
 
-    privy_user_token: Required[Annotated[str, PropertyInfo(alias="privy-user-token")]]
+    user_jwt: Required[Annotated[str, PropertyInfo(alias="privy-user-token")]]
     """Access token or custom authentication JWT for the user the request acts on."""

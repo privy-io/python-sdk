@@ -26,7 +26,7 @@ class TestVerification:
         verification = client.users.mfa.passkey.verification.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(PasskeyMfaVerificationInitResponse, verification, path=["response"])
 
@@ -36,7 +36,7 @@ class TestVerification:
         response = client.users.mfa.passkey.verification.with_raw_response.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -50,7 +50,7 @@ class TestVerification:
         with client.users.mfa.passkey.verification.with_streaming_response.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -67,7 +67,7 @@ class TestVerification:
             client.users.mfa.passkey.verification.with_raw_response.init(
                 user_id="",
                 relying_party="https://example.com",
-                privy_user_token="x",
+                user_jwt="x",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -86,7 +86,7 @@ class TestVerification:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, verification, path=["response"])
 
@@ -112,7 +112,7 @@ class TestVerification:
                 "type": "public-key",
                 "authenticator_attachment": "authenticator_attachment",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, verification, path=["response"])
 
@@ -132,7 +132,7 @@ class TestVerification:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -156,7 +156,7 @@ class TestVerification:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -183,7 +183,7 @@ class TestVerification:
                     },
                     "type": "public-key",
                 },
-                privy_user_token="x",
+                user_jwt="x",
             )
 
 
@@ -198,7 +198,7 @@ class TestAsyncVerification:
         verification = await async_client.users.mfa.passkey.verification.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(PasskeyMfaVerificationInitResponse, verification, path=["response"])
 
@@ -208,7 +208,7 @@ class TestAsyncVerification:
         response = await async_client.users.mfa.passkey.verification.with_raw_response.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -222,7 +222,7 @@ class TestAsyncVerification:
         async with async_client.users.mfa.passkey.verification.with_streaming_response.init(
             user_id="user_id",
             relying_party="https://example.com",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -239,7 +239,7 @@ class TestAsyncVerification:
             await async_client.users.mfa.passkey.verification.with_raw_response.init(
                 user_id="",
                 relying_party="https://example.com",
-                privy_user_token="x",
+                user_jwt="x",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -258,7 +258,7 @@ class TestAsyncVerification:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, verification, path=["response"])
 
@@ -284,7 +284,7 @@ class TestAsyncVerification:
                 "type": "public-key",
                 "authenticator_attachment": "authenticator_attachment",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, verification, path=["response"])
 
@@ -304,7 +304,7 @@ class TestAsyncVerification:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -328,7 +328,7 @@ class TestAsyncVerification:
                 },
                 "type": "public-key",
             },
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -355,5 +355,5 @@ class TestAsyncVerification:
                     },
                     "type": "public-key",
                 },
-                privy_user_token="x",
+                user_jwt="x",
             )

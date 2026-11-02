@@ -24,7 +24,7 @@ class TestEnrollment:
         enrollment = client.users.mfa.email.enrollment.init(
             user_id="user_id",
             email_address="dev@stainless.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(SuccessResponse, enrollment, path=["response"])
 
@@ -34,8 +34,8 @@ class TestEnrollment:
         enrollment = client.users.mfa.email.enrollment.init(
             user_id="user_id",
             email_address="dev@stainless.com",
-            privy_user_token="x",
-            privy_mfa_token="x",
+            user_jwt="x",
+            mfa_token="x",
         )
         assert_matches_type(SuccessResponse, enrollment, path=["response"])
 
@@ -45,7 +45,7 @@ class TestEnrollment:
         response = client.users.mfa.email.enrollment.with_raw_response.init(
             user_id="user_id",
             email_address="dev@stainless.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -59,7 +59,7 @@ class TestEnrollment:
         with client.users.mfa.email.enrollment.with_streaming_response.init(
             user_id="user_id",
             email_address="dev@stainless.com",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -76,7 +76,7 @@ class TestEnrollment:
             client.users.mfa.email.enrollment.with_raw_response.init(
                 user_id="",
                 email_address="dev@stainless.com",
-                privy_user_token="x",
+                user_jwt="x",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -85,7 +85,7 @@ class TestEnrollment:
         enrollment = client.users.mfa.email.enrollment.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, enrollment, path=["response"])
 
@@ -95,7 +95,7 @@ class TestEnrollment:
         response = client.users.mfa.email.enrollment.with_raw_response.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -109,7 +109,7 @@ class TestEnrollment:
         with client.users.mfa.email.enrollment.with_streaming_response.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -126,7 +126,7 @@ class TestEnrollment:
             client.users.mfa.email.enrollment.with_raw_response.verify(
                 user_id="",
                 code="xxxxxx",
-                privy_user_token="x",
+                user_jwt="x",
             )
 
 
@@ -141,7 +141,7 @@ class TestAsyncEnrollment:
         enrollment = await async_client.users.mfa.email.enrollment.init(
             user_id="user_id",
             email_address="dev@stainless.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(SuccessResponse, enrollment, path=["response"])
 
@@ -151,8 +151,8 @@ class TestAsyncEnrollment:
         enrollment = await async_client.users.mfa.email.enrollment.init(
             user_id="user_id",
             email_address="dev@stainless.com",
-            privy_user_token="x",
-            privy_mfa_token="x",
+            user_jwt="x",
+            mfa_token="x",
         )
         assert_matches_type(SuccessResponse, enrollment, path=["response"])
 
@@ -162,7 +162,7 @@ class TestAsyncEnrollment:
         response = await async_client.users.mfa.email.enrollment.with_raw_response.init(
             user_id="user_id",
             email_address="dev@stainless.com",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -176,7 +176,7 @@ class TestAsyncEnrollment:
         async with async_client.users.mfa.email.enrollment.with_streaming_response.init(
             user_id="user_id",
             email_address="dev@stainless.com",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -193,7 +193,7 @@ class TestAsyncEnrollment:
             await async_client.users.mfa.email.enrollment.with_raw_response.init(
                 user_id="",
                 email_address="dev@stainless.com",
-                privy_user_token="x",
+                user_jwt="x",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -202,7 +202,7 @@ class TestAsyncEnrollment:
         enrollment = await async_client.users.mfa.email.enrollment.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, enrollment, path=["response"])
 
@@ -212,7 +212,7 @@ class TestAsyncEnrollment:
         response = await async_client.users.mfa.email.enrollment.with_raw_response.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -226,7 +226,7 @@ class TestAsyncEnrollment:
         async with async_client.users.mfa.email.enrollment.with_streaming_response.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -243,5 +243,5 @@ class TestAsyncEnrollment:
             await async_client.users.mfa.email.enrollment.with_raw_response.verify(
                 user_id="",
                 code="xxxxxx",
-                privy_user_token="x",
+                user_jwt="x",
             )

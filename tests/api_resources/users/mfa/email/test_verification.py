@@ -23,7 +23,7 @@ class TestVerification:
     def test_method_init(self, client: PrivyAPI) -> None:
         verification = client.users.mfa.email.verification.init(
             user_id="user_id",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(SuccessResponse, verification, path=["response"])
 
@@ -32,7 +32,7 @@ class TestVerification:
     def test_raw_response_init(self, client: PrivyAPI) -> None:
         response = client.users.mfa.email.verification.with_raw_response.init(
             user_id="user_id",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -45,7 +45,7 @@ class TestVerification:
     def test_streaming_response_init(self, client: PrivyAPI) -> None:
         with client.users.mfa.email.verification.with_streaming_response.init(
             user_id="user_id",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -61,7 +61,7 @@ class TestVerification:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
             client.users.mfa.email.verification.with_raw_response.init(
                 user_id="",
-                privy_user_token="x",
+                user_jwt="x",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -70,7 +70,7 @@ class TestVerification:
         verification = client.users.mfa.email.verification.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, verification, path=["response"])
 
@@ -80,7 +80,7 @@ class TestVerification:
         response = client.users.mfa.email.verification.with_raw_response.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -94,7 +94,7 @@ class TestVerification:
         with client.users.mfa.email.verification.with_streaming_response.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -111,7 +111,7 @@ class TestVerification:
             client.users.mfa.email.verification.with_raw_response.verify(
                 user_id="",
                 code="xxxxxx",
-                privy_user_token="x",
+                user_jwt="x",
             )
 
 
@@ -125,7 +125,7 @@ class TestAsyncVerification:
     async def test_method_init(self, async_client: AsyncPrivyAPI) -> None:
         verification = await async_client.users.mfa.email.verification.init(
             user_id="user_id",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(SuccessResponse, verification, path=["response"])
 
@@ -134,7 +134,7 @@ class TestAsyncVerification:
     async def test_raw_response_init(self, async_client: AsyncPrivyAPI) -> None:
         response = await async_client.users.mfa.email.verification.with_raw_response.init(
             user_id="user_id",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -147,7 +147,7 @@ class TestAsyncVerification:
     async def test_streaming_response_init(self, async_client: AsyncPrivyAPI) -> None:
         async with async_client.users.mfa.email.verification.with_streaming_response.init(
             user_id="user_id",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -163,7 +163,7 @@ class TestAsyncVerification:
         with pytest.raises(ValueError, match=r"Expected a non-empty value for `user_id` but received ''"):
             await async_client.users.mfa.email.verification.with_raw_response.init(
                 user_id="",
-                privy_user_token="x",
+                user_jwt="x",
             )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
@@ -172,7 +172,7 @@ class TestAsyncVerification:
         verification = await async_client.users.mfa.email.verification.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         )
         assert_matches_type(MfaVerificationResponse, verification, path=["response"])
 
@@ -182,7 +182,7 @@ class TestAsyncVerification:
         response = await async_client.users.mfa.email.verification.with_raw_response.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         )
 
         assert response.is_closed is True
@@ -196,7 +196,7 @@ class TestAsyncVerification:
         async with async_client.users.mfa.email.verification.with_streaming_response.verify(
             user_id="user_id",
             code="xxxxxx",
-            privy_user_token="x",
+            user_jwt="x",
         ) as response:
             assert not response.is_closed
             assert response.http_request.headers.get("X-Stainless-Lang") == "python"
@@ -213,5 +213,5 @@ class TestAsyncVerification:
             await async_client.users.mfa.email.verification.with_raw_response.verify(
                 user_id="",
                 code="xxxxxx",
-                privy_user_token="x",
+                user_jwt="x",
             )

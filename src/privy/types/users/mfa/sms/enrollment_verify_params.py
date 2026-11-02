@@ -12,5 +12,5 @@ __all__ = ["EnrollmentVerifyParams"]
 class EnrollmentVerifyParams(TypedDict, total=False):
     code: Required[str]
 
-    privy_user_token: Required[Annotated[str, PropertyInfo(alias="privy-user-token")]]
+    user_jwt: Required[Annotated[str, PropertyInfo(alias="privy-user-token")]]
     """Access token or custom authentication JWT for the user the request acts on."""

@@ -48,7 +48,7 @@ class VerificationResource(SyncAPIResource):
         self,
         user_id: str,
         *,
-        privy_user_token: str,
+        user_jwt: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -60,7 +60,7 @@ class VerificationResource(SyncAPIResource):
         Sends an SMS MFA verification code to the enrolled phone number.
 
         Args:
-          privy_user_token: Access token or custom authentication JWT for the user the request acts on.
+          user_jwt: Access token or custom authentication JWT for the user the request acts on.
 
           extra_headers: Send extra headers
 
@@ -72,7 +72,7 @@ class VerificationResource(SyncAPIResource):
         """
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
-        extra_headers = {"privy-user-token": privy_user_token, **(extra_headers or {})}
+        extra_headers = {"privy-user-token": user_jwt, **(extra_headers or {})}
         return self._post(
             path_template("/v1/users/{user_id}/mfa/sms/verification/init", user_id=user_id),
             options=make_request_options(
@@ -86,7 +86,7 @@ class VerificationResource(SyncAPIResource):
         user_id: str,
         *,
         code: str,
-        privy_user_token: str,
+        user_jwt: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -98,7 +98,7 @@ class VerificationResource(SyncAPIResource):
         Verifies the code sent to the enrolled phone number.
 
         Args:
-          privy_user_token: Access token or custom authentication JWT for the user the request acts on.
+          user_jwt: Access token or custom authentication JWT for the user the request acts on.
 
           extra_headers: Send extra headers
 
@@ -110,7 +110,7 @@ class VerificationResource(SyncAPIResource):
         """
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
-        extra_headers = {"privy-user-token": privy_user_token, **(extra_headers or {})}
+        extra_headers = {"privy-user-token": user_jwt, **(extra_headers or {})}
         return self._post(
             path_template("/v1/users/{user_id}/mfa/sms/verification/verify", user_id=user_id),
             body=maybe_transform({"code": code}, verification_verify_params.VerificationVerifyParams),
@@ -147,7 +147,7 @@ class AsyncVerificationResource(AsyncAPIResource):
         self,
         user_id: str,
         *,
-        privy_user_token: str,
+        user_jwt: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -159,7 +159,7 @@ class AsyncVerificationResource(AsyncAPIResource):
         Sends an SMS MFA verification code to the enrolled phone number.
 
         Args:
-          privy_user_token: Access token or custom authentication JWT for the user the request acts on.
+          user_jwt: Access token or custom authentication JWT for the user the request acts on.
 
           extra_headers: Send extra headers
 
@@ -171,7 +171,7 @@ class AsyncVerificationResource(AsyncAPIResource):
         """
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
-        extra_headers = {"privy-user-token": privy_user_token, **(extra_headers or {})}
+        extra_headers = {"privy-user-token": user_jwt, **(extra_headers or {})}
         return await self._post(
             path_template("/v1/users/{user_id}/mfa/sms/verification/init", user_id=user_id),
             options=make_request_options(
@@ -185,7 +185,7 @@ class AsyncVerificationResource(AsyncAPIResource):
         user_id: str,
         *,
         code: str,
-        privy_user_token: str,
+        user_jwt: str,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -197,7 +197,7 @@ class AsyncVerificationResource(AsyncAPIResource):
         Verifies the code sent to the enrolled phone number.
 
         Args:
-          privy_user_token: Access token or custom authentication JWT for the user the request acts on.
+          user_jwt: Access token or custom authentication JWT for the user the request acts on.
 
           extra_headers: Send extra headers
 
@@ -209,7 +209,7 @@ class AsyncVerificationResource(AsyncAPIResource):
         """
         if not user_id:
             raise ValueError(f"Expected a non-empty value for `user_id` but received {user_id!r}")
-        extra_headers = {"privy-user-token": privy_user_token, **(extra_headers or {})}
+        extra_headers = {"privy-user-token": user_jwt, **(extra_headers or {})}
         return await self._post(
             path_template("/v1/users/{user_id}/mfa/sms/verification/verify", user_id=user_id),
             body=await async_maybe_transform({"code": code}, verification_verify_params.VerificationVerifyParams),
