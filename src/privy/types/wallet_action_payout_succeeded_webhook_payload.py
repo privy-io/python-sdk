@@ -36,6 +36,12 @@ class WalletActionPayoutSucceededWebhookPayload(BaseModel):
     environment: Environment
     """The Privy API environment."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     provider: OrchestrationProvider
     """Supported fiat orchestration providers."""
 

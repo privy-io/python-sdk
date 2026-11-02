@@ -23,6 +23,12 @@ class WalletActionSwapRejectedWebhookPayload(BaseModel):
     created_at: str
     """ISO 8601 timestamp of when the wallet action was created."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     failure_reason: FailureReason
     """A description of why a wallet action (or a step within a wallet action) failed."""
 

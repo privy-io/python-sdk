@@ -21,6 +21,12 @@ class WalletActionTransferCreatedWebhookPayload(BaseModel):
     destination_address: str
     """Recipient address."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     source_chain: str
     """Chain name (e.g. "tempo", "base")."""
 

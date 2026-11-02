@@ -25,6 +25,12 @@ class WalletActionSwapSucceededWebhookPayload(BaseModel):
     created_at: str
     """ISO 8601 timestamp of when the wallet action was created."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     input_amount: Optional[str] = None
     """Amount of input token in base units. Populated after onchain confirmation."""
 

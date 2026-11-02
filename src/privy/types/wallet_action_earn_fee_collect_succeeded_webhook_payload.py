@@ -28,6 +28,12 @@ class WalletActionEarnFeeCollectSucceededWebhookPayload(BaseModel):
     created_at: str
     """ISO 8601 timestamp of when the wallet action was created."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     raw_amount: str
     """Base-unit amount of fees collected (e.g. "1500000")."""
 

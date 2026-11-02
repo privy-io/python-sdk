@@ -24,6 +24,12 @@ class WalletActionEarnIncentiveClaimFailedWebhookPayload(BaseModel):
     created_at: str
     """ISO 8601 timestamp of when the wallet action was created."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     failed_at: str
     """ISO 8601 timestamp of when the wallet action failed."""
 

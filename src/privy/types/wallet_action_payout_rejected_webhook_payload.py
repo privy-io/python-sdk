@@ -34,6 +34,12 @@ class WalletActionPayoutRejectedWebhookPayload(BaseModel):
     environment: Environment
     """The Privy API environment."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     failure_reason: FailureReason
     """A description of why a wallet action (or a step within a wallet action) failed."""
 
