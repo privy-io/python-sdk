@@ -288,6 +288,7 @@ from .ethereum_yield_provider import EthereumYieldProvider as EthereumYieldProvi
 from .fee_configuration_param import FeeConfigurationParam as FeeConfigurationParam
 from .fiat_onramp_environment import FiatOnrampEnvironment as FiatOnrampEnvironment
 from .gas_spend_response_body import GasSpendResponseBody as GasSpendResponseBody
+from .intent_authorize_params import IntentAuthorizeParams as IntentAuthorizeParams
 from .kraken_embed_quote_type import KrakenEmbedQuoteType as KrakenEmbedQuoteType
 from .kyx_verification_status import KyxVerificationStatus as KyxVerificationStatus
 from .linked_account_ethereum import LinkedAccountEthereum as LinkedAccountEthereum

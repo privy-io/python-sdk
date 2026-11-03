@@ -16,9 +16,9 @@ class UsageSwapProviderFeeRecordedWebhookPayload(BaseModel):
     amount_usd: str
 
     event_id: str
-    """An opaque, stable identifier for this charge.
-
-    Use it to deduplicate webhook deliveries.
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
     """
 
     recorded_at: int

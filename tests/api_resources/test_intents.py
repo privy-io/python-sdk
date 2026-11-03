@@ -80,6 +80,56 @@ class TestIntents:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
+    def test_method_authorize(self, client: PrivyAPI) -> None:
+        intent = client.intents._authorize(
+            intent_id="intent_id",
+            signature="signature",
+            timestamp=0,
+        )
+        assert_matches_type(IntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_raw_response_authorize(self, client: PrivyAPI) -> None:
+        response = client.intents.with_raw_response._authorize(
+            intent_id="intent_id",
+            signature="signature",
+            timestamp=0,
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        intent = response.parse()
+        assert_matches_type(IntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_streaming_response_authorize(self, client: PrivyAPI) -> None:
+        with client.intents.with_streaming_response._authorize(
+            intent_id="intent_id",
+            signature="signature",
+            timestamp=0,
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            intent = response.parse()
+            assert_matches_type(IntentResponse, intent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    def test_path_params_authorize(self, client: PrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `intent_id` but received ''"):
+            client.intents.with_raw_response._authorize(
+                intent_id="",
+                signature="signature",
+                timestamp=0,
+            )
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
     def test_method_create_condition_set_items(self, client: PrivyAPI) -> None:
         intent = client.intents.create_condition_set_items(
             condition_set_id="xxxxxxxxxxxxxxxxxxxxxxxx",
@@ -3629,6 +3679,56 @@ class TestAsyncIntents:
             assert_matches_type(AsyncCursor[IntentResponse], intent, path=["response"])
 
         assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_authorize(self, async_client: AsyncPrivyAPI) -> None:
+        intent = await async_client.intents._authorize(
+            intent_id="intent_id",
+            signature="signature",
+            timestamp=0,
+        )
+        assert_matches_type(IntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_raw_response_authorize(self, async_client: AsyncPrivyAPI) -> None:
+        response = await async_client.intents.with_raw_response._authorize(
+            intent_id="intent_id",
+            signature="signature",
+            timestamp=0,
+        )
+
+        assert response.is_closed is True
+        assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+        intent = await response.parse()
+        assert_matches_type(IntentResponse, intent, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_streaming_response_authorize(self, async_client: AsyncPrivyAPI) -> None:
+        async with async_client.intents.with_streaming_response._authorize(
+            intent_id="intent_id",
+            signature="signature",
+            timestamp=0,
+        ) as response:
+            assert not response.is_closed
+            assert response.http_request.headers.get("X-Stainless-Lang") == "python"
+
+            intent = await response.parse()
+            assert_matches_type(IntentResponse, intent, path=["response"])
+
+        assert cast(Any, response.is_closed) is True
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_path_params_authorize(self, async_client: AsyncPrivyAPI) -> None:
+        with pytest.raises(ValueError, match=r"Expected a non-empty value for `intent_id` but received ''"):
+            await async_client.intents.with_raw_response._authorize(
+                intent_id="",
+                signature="signature",
+                timestamp=0,
+            )
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize

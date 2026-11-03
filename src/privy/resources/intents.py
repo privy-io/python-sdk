@@ -21,6 +21,7 @@ from ..types import (
     intent_list_params,
     intent_raw_sign_params,
     intent_transfer_params,
+    intent_authorize_params,
     intent_update_policy_params,
     intent_update_wallet_params,
     intent_update_key_quorum_params,
@@ -209,6 +210,60 @@ class IntentsResource(SyncAPIResource):
                 ),
             ),
             model=cast(Any, IntentResponse),  # Union types cannot be passed in as arguments in the type system
+        )
+
+    def _authorize(
+        self,
+        intent_id: str,
+        *,
+        signature: str,
+        timestamp: float,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> IntentResponse:
+        """Authorize a pending intent by providing a signature.
+
+        Can be called by the wallet
+        owner (via user token) or with the app secret.
+
+        Args:
+          intent_id: ID of the intent.
+
+          signature: Signature authorizing the intent.
+
+          timestamp: Unix timestamp (in milliseconds) when the signature was created. Used to verify
+              the signature was created when the signing key was valid.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not intent_id:
+            raise ValueError(f"Expected a non-empty value for `intent_id` but received {intent_id!r}")
+        return cast(
+            IntentResponse,
+            self._post(
+                path_template("/v1/intents/{intent_id}/authorize", intent_id=intent_id),
+                body=maybe_transform(
+                    {
+                        "signature": signature,
+                        "timestamp": timestamp,
+                    },
+                    intent_authorize_params.IntentAuthorizeParams,
+                ),
+                options=make_request_options(
+                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                ),
+                cast_to=cast(Any, IntentResponse),  # Union types cannot be passed in as arguments in the type system
+            ),
         )
 
     def create_condition_set_items(
@@ -2500,6 +2555,60 @@ class AsyncIntentsResource(AsyncAPIResource):
             model=cast(Any, IntentResponse),  # Union types cannot be passed in as arguments in the type system
         )
 
+    async def _authorize(
+        self,
+        intent_id: str,
+        *,
+        signature: str,
+        timestamp: float,
+        # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
+        # The extra values given here take precedence over values defined on the client or passed to this method.
+        extra_headers: Headers | None = None,
+        extra_query: Query | None = None,
+        extra_body: Body | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> IntentResponse:
+        """Authorize a pending intent by providing a signature.
+
+        Can be called by the wallet
+        owner (via user token) or with the app secret.
+
+        Args:
+          intent_id: ID of the intent.
+
+          signature: Signature authorizing the intent.
+
+          timestamp: Unix timestamp (in milliseconds) when the signature was created. Used to verify
+              the signature was created when the signing key was valid.
+
+          extra_headers: Send extra headers
+
+          extra_query: Add additional query parameters to the request
+
+          extra_body: Add additional JSON properties to the request
+
+          timeout: Override the client-level default timeout for this request, in seconds
+        """
+        if not intent_id:
+            raise ValueError(f"Expected a non-empty value for `intent_id` but received {intent_id!r}")
+        return cast(
+            IntentResponse,
+            await self._post(
+                path_template("/v1/intents/{intent_id}/authorize", intent_id=intent_id),
+                body=await async_maybe_transform(
+                    {
+                        "signature": signature,
+                        "timestamp": timestamp,
+                    },
+                    intent_authorize_params.IntentAuthorizeParams,
+                ),
+                options=make_request_options(
+                    extra_headers=extra_headers, extra_query=extra_query, extra_body=extra_body, timeout=timeout
+                ),
+                cast_to=cast(Any, IntentResponse),  # Union types cannot be passed in as arguments in the type system
+            ),
+        )
+
     async def create_condition_set_items(
         self,
         condition_set_id: str,
@@ -4699,6 +4808,9 @@ class IntentsResourceWithRawResponse:
         self.list = to_raw_response_wrapper(
             intents.list,
         )
+        self._authorize = to_raw_response_wrapper(
+            intents._authorize,
+        )
         self.create_condition_set_items = to_raw_response_wrapper(
             intents.create_condition_set_items,
         )
@@ -4758,6 +4870,9 @@ class AsyncIntentsResourceWithRawResponse:
 
         self.list = async_to_raw_response_wrapper(
             intents.list,
+        )
+        self._authorize = async_to_raw_response_wrapper(
+            intents._authorize,
         )
         self.create_condition_set_items = async_to_raw_response_wrapper(
             intents.create_condition_set_items,
@@ -4819,6 +4934,9 @@ class IntentsResourceWithStreamingResponse:
         self.list = to_streamed_response_wrapper(
             intents.list,
         )
+        self._authorize = to_streamed_response_wrapper(
+            intents._authorize,
+        )
         self.create_condition_set_items = to_streamed_response_wrapper(
             intents.create_condition_set_items,
         )
@@ -4878,6 +4996,9 @@ class AsyncIntentsResourceWithStreamingResponse:
 
         self.list = async_to_streamed_response_wrapper(
             intents.list,
+        )
+        self._authorize = async_to_streamed_response_wrapper(
+            intents._authorize,
         )
         self.create_condition_set_items = async_to_streamed_response_wrapper(
             intents.create_condition_set_items,

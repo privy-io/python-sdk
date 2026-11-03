@@ -197,6 +197,7 @@ from privy.types import (
 Methods:
 
 - <code title="get /v1/intents">client.intents.<a href="./src/privy/resources/intents.py">list</a>(\*\*<a href="src/privy/types/intent_list_params.py">params</a>) -> <a href="./src/privy/types/intent_response.py">SyncCursor[IntentResponse]</a></code>
+- <code title="post /v1/intents/{intent_id}/authorize">client.intents.<a href="./src/privy/resources/intents.py">\_authorize</a>(intent_id, \*\*<a href="src/privy/types/intent_authorize_params.py">params</a>) -> <a href="./src/privy/types/intent_response.py">IntentResponse</a></code>
 - <code title="post /v1/intents/condition_sets/{condition_set_id}/condition_set_items">client.intents.<a href="./src/privy/resources/intents.py">create_condition_set_items</a>(condition_set_id, \*\*<a href="src/privy/types/intent_create_condition_set_items_params.py">params</a>) -> <a href="./src/privy/types/condition_set_item_mutate_intent_response.py">ConditionSetItemMutateIntentResponse</a></code>
 - <code title="post /v1/intents/policies/{policy_id}/rules">client.intents.<a href="./src/privy/resources/intents.py">create_policy_rule</a>(policy_id, \*\*<a href="src/privy/types/intent_create_policy_rule_params.py">params</a>) -> <a href="./src/privy/types/rule_mutate_intent_response.py">RuleMutateIntentResponse</a></code>
 - <code title="delete /v1/intents/condition_sets/{condition_set_id}">client.intents.<a href="./src/privy/resources/intents.py">delete_condition_set</a>(condition_set_id) -> <a href="./src/privy/types/condition_set_delete_intent_response.py">ConditionSetDeleteIntentResponse</a></code>
@@ -247,10 +248,13 @@ from privy.types import (
     CreateOrganizationSecretResponse,
     Organization,
     OrganizationCreateRequestBody,
+    OrganizationDefaultWalletConfigurations,
+    OrganizationDefaultWalletConfigurationsUpdate,
     OrganizationSecretIDInput,
     OrganizationSecretView,
     OrganizationSecretsListResponse,
     OrganizationUpdateRequestBody,
+    OrganizationWalletConfiguration,
     OrganizationsListResponse,
     UpdateOrganizationSecretSigningKeyInput,
 )
