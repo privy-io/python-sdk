@@ -4,6 +4,7 @@ from typing import Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
+from .stellar_address import StellarAddress
 
 __all__ = ["PrivyFee"]
 
@@ -16,4 +17,8 @@ class PrivyFee(BaseModel):
 
     type: Literal["privy"]
 
-    recipient: Optional[str] = None
+    recipient: Optional[StellarAddress] = None
+    """
+    Stellar account address: an ed25519 public key in StrKey encoding, starting with
+    G.
+    """

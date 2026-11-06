@@ -15,6 +15,12 @@ class UserAuthenticatedWebhookPayload(BaseModel):
     account: LinkedAccount
     """A linked account for the user."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     type: Literal["user.authenticated"]
     """The type of webhook event."""
 

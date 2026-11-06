@@ -16,6 +16,14 @@ from .mfa import (
     MfaResourceWithStreamingResponse,
     AsyncMfaResourceWithStreamingResponse,
 )
+from .earn import (
+    EarnResource,
+    AsyncEarnResource,
+    EarnResourceWithRawResponse,
+    AsyncEarnResourceWithRawResponse,
+    EarnResourceWithStreamingResponse,
+    AsyncEarnResourceWithStreamingResponse,
+)
 from .users import (
     UsersResource,
     AsyncUsersResource,
@@ -34,6 +42,12 @@ from .external_fiat_accounts import (
 )
 
 __all__ = [
+    "EarnResource",
+    "AsyncEarnResource",
+    "EarnResourceWithRawResponse",
+    "AsyncEarnResourceWithRawResponse",
+    "EarnResourceWithStreamingResponse",
+    "AsyncEarnResourceWithStreamingResponse",
     "ExternalFiatAccountsResource",
     "AsyncExternalFiatAccountsResource",
     "ExternalFiatAccountsResourceWithRawResponse",

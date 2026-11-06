@@ -2,6 +2,7 @@
 
 from .._models import BaseModel
 from .key_quorum_id import KeyQuorumID
+from .organization_default_wallet_configurations import OrganizationDefaultWalletConfigurations
 
 __all__ = ["Organization"]
 
@@ -17,6 +18,12 @@ class Organization(BaseModel):
 
     default_key_quorum_id: KeyQuorumID
     """A unique identifier for a key quorum."""
+
+    default_wallet_configurations: OrganizationDefaultWalletConfigurations
+    """
+    Defaults applied to wallets created with the organization as their entity, keyed
+    by chain type.
+    """
 
     display_name: str
     """Organization display name"""

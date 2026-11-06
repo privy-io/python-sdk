@@ -31,6 +31,44 @@ class TestOrganizations:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
+    def test_method_create_with_all_params(self, client: PrivyAPI) -> None:
+        organization = client.organizations.create(
+            default_key_quorum_id="string",
+            display_name="x",
+            default_wallet_configurations={
+                "ethereum": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+                "solana": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+                "tron": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+            },
+        )
+        assert_matches_type(Organization, organization, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
     def test_raw_response_create(self, client: PrivyAPI) -> None:
         response = client.organizations.with_raw_response.create(
             default_key_quorum_id="string",
@@ -71,6 +109,35 @@ class TestOrganizations:
         organization = client.organizations.update(
             organization_id="organization_id",
             default_key_quorum_id="string",
+            default_wallet_configurations={
+                "ethereum": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+                "solana": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+                "tron": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+            },
             display_name="x",
         )
         assert_matches_type(Organization, organization, path=["response"])
@@ -247,6 +314,44 @@ class TestAsyncOrganizations:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
+    async def test_method_create_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        organization = await async_client.organizations.create(
+            default_key_quorum_id="string",
+            display_name="x",
+            default_wallet_configurations={
+                "ethereum": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+                "solana": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+                "tron": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+            },
+        )
+        assert_matches_type(Organization, organization, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
     async def test_raw_response_create(self, async_client: AsyncPrivyAPI) -> None:
         response = await async_client.organizations.with_raw_response.create(
             default_key_quorum_id="string",
@@ -287,6 +392,35 @@ class TestAsyncOrganizations:
         organization = await async_client.organizations.update(
             organization_id="organization_id",
             default_key_quorum_id="string",
+            default_wallet_configurations={
+                "ethereum": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+                "solana": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+                "tron": {
+                    "additional_signers": [
+                        {
+                            "signer_id": "string",
+                            "override_policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                        }
+                    ],
+                    "policy_ids": ["xxxxxxxxxxxxxxxxxxxxxxxx"],
+                },
+            },
             display_name="x",
         )
         assert_matches_type(Organization, organization, path=["response"])

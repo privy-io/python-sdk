@@ -142,7 +142,12 @@ class TestIntents:
     def test_method_create_condition_set_items_with_all_params(self, client: PrivyAPI) -> None:
         intent = client.intents.create_condition_set_items(
             condition_set_id="xxxxxxxxxxxxxxxxxxxxxxxx",
-            condition_set_items_request_body=[{"value": "x"}],
+            condition_set_items_request_body=[
+                {
+                    "value": "x",
+                    "name": "x",
+                }
+            ],
             privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(ConditionSetItemMutateIntentResponse, intent, path=["response"])
@@ -3273,7 +3278,12 @@ class TestIntents:
     def test_method_update_condition_set_items_with_all_params(self, client: PrivyAPI) -> None:
         intent = client.intents.update_condition_set_items(
             condition_set_id="xxxxxxxxxxxxxxxxxxxxxxxx",
-            condition_set_items_request_body=[{"value": "x"}],
+            condition_set_items_request_body=[
+                {
+                    "value": "x",
+                    "name": "x",
+                }
+            ],
             privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(ConditionSetItemMutateIntentResponse, intent, path=["response"])
@@ -3744,7 +3754,12 @@ class TestAsyncIntents:
     async def test_method_create_condition_set_items_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
         intent = await async_client.intents.create_condition_set_items(
             condition_set_id="xxxxxxxxxxxxxxxxxxxxxxxx",
-            condition_set_items_request_body=[{"value": "x"}],
+            condition_set_items_request_body=[
+                {
+                    "value": "x",
+                    "name": "x",
+                }
+            ],
             privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(ConditionSetItemMutateIntentResponse, intent, path=["response"])
@@ -6875,7 +6890,12 @@ class TestAsyncIntents:
     async def test_method_update_condition_set_items_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
         intent = await async_client.intents.update_condition_set_items(
             condition_set_id="xxxxxxxxxxxxxxxxxxxxxxxx",
-            condition_set_items_request_body=[{"value": "x"}],
+            condition_set_items_request_body=[
+                {
+                    "value": "x",
+                    "name": "x",
+                }
+            ],
             privy_request_expiry="privy-request-expiry",
         )
         assert_matches_type(ConditionSetItemMutateIntentResponse, intent, path=["response"])

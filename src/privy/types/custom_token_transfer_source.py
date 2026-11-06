@@ -3,6 +3,7 @@
 from typing import Optional
 
 from .._models import BaseModel
+from .stellar_address import StellarAddress
 
 __all__ = ["CustomTokenTransferSource"]
 
@@ -12,10 +13,10 @@ class CustomTokenTransferSource(BaseModel):
     Source for a transfer identified by a token contract address (EVM) or mint address (Solana). Use this variant for tokens that are not first-class assets.
     """
 
-    asset_address: str
+    asset_address: StellarAddress
     """
-    The token contract address (EVM) or mint address (Solana) of the asset to
-    transfer.
+    Stellar account address: an ed25519 public key in StrKey encoding, starting with
+    G.
     """
 
     chain: str

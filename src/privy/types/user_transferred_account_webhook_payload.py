@@ -20,6 +20,12 @@ class UserTransferredAccountWebhookPayload(BaseModel):
 
     deleted_user: Literal[True] = FieldInfo(alias="deletedUser")
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     from_user: UserReference = FieldInfo(alias="fromUser")
     """A reference to a user by their unique identifier."""
 

@@ -20,6 +20,12 @@ class UserKYCUpdatedWebhookEvent(BaseModel):
     environment: KyxEnvironment
     """Provider environment (production or sandbox)."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     provider: KyxProvider
     """KYC/KYB provider identifier."""
 

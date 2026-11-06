@@ -46,6 +46,14 @@ from .mfa.mfa import (
 from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, SequenceNotStr, omit, not_given
 from ..._utils import path_template, required_args, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
+from .earn.earn import (
+    EarnResource,
+    AsyncEarnResource,
+    EarnResourceWithRawResponse,
+    AsyncEarnResourceWithRawResponse,
+    EarnResourceWithStreamingResponse,
+    AsyncEarnResourceWithStreamingResponse,
+)
 from ..._resource import SyncAPIResource, AsyncAPIResource
 from ..._response import (
     to_raw_response_wrapper,
@@ -75,6 +83,10 @@ __all__ = ["UsersResource", "AsyncUsersResource"]
 
 class UsersResource(SyncAPIResource):
     """Operations related to users"""
+
+    @cached_property
+    def earn(self) -> EarnResource:
+        return EarnResource(self._client)
 
     @cached_property
     def external_fiat_accounts(self) -> ExternalFiatAccountsResource:
@@ -958,6 +970,10 @@ class UsersResource(SyncAPIResource):
 
 class AsyncUsersResource(AsyncAPIResource):
     """Operations related to users"""
+
+    @cached_property
+    def earn(self) -> AsyncEarnResource:
+        return AsyncEarnResource(self._client)
 
     @cached_property
     def external_fiat_accounts(self) -> AsyncExternalFiatAccountsResource:
@@ -1919,6 +1935,10 @@ class UsersResourceWithRawResponse:
         )
 
     @cached_property
+    def earn(self) -> EarnResourceWithRawResponse:
+        return EarnResourceWithRawResponse(self._users.earn)
+
+    @cached_property
     def external_fiat_accounts(self) -> ExternalFiatAccountsResourceWithRawResponse:
         """Operations related to fiat onramping and offramping"""
         return ExternalFiatAccountsResourceWithRawResponse(self._users.external_fiat_accounts)
@@ -2003,6 +2023,10 @@ class AsyncUsersResourceWithRawResponse:
         self.unlink_linked_account = async_to_raw_response_wrapper(
             users.unlink_linked_account,
         )
+
+    @cached_property
+    def earn(self) -> AsyncEarnResourceWithRawResponse:
+        return AsyncEarnResourceWithRawResponse(self._users.earn)
 
     @cached_property
     def external_fiat_accounts(self) -> AsyncExternalFiatAccountsResourceWithRawResponse:
@@ -2091,6 +2115,10 @@ class UsersResourceWithStreamingResponse:
         )
 
     @cached_property
+    def earn(self) -> EarnResourceWithStreamingResponse:
+        return EarnResourceWithStreamingResponse(self._users.earn)
+
+    @cached_property
     def external_fiat_accounts(self) -> ExternalFiatAccountsResourceWithStreamingResponse:
         """Operations related to fiat onramping and offramping"""
         return ExternalFiatAccountsResourceWithStreamingResponse(self._users.external_fiat_accounts)
@@ -2175,6 +2203,10 @@ class AsyncUsersResourceWithStreamingResponse:
         self.unlink_linked_account = async_to_streamed_response_wrapper(
             users.unlink_linked_account,
         )
+
+    @cached_property
+    def earn(self) -> AsyncEarnResourceWithStreamingResponse:
+        return AsyncEarnResourceWithStreamingResponse(self._users.earn)
 
     @cached_property
     def external_fiat_accounts(self) -> AsyncExternalFiatAccountsResourceWithStreamingResponse:

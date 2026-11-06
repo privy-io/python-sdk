@@ -14,7 +14,7 @@ class Transaction(BaseModel):
 
     created_at: float
 
-    details: TransactionDetail
+    details: Optional[TransactionDetail] = None
     """Details of a wallet transaction, varying by transaction type."""
 
     privy_transaction_id: Optional[str] = None

@@ -20,6 +20,12 @@ class WalletAutomationSubmittedWebhookPayload(BaseModel):
     created_at: str
     """ISO 8601 timestamp of when the automation was submitted."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     trigger_asset_address: str
     """
     Contract address of the triggering deposit's asset, or 'native-token' for the

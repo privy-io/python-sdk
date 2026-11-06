@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing_extensions import Required, TypedDict
 
+from .stellar_address import StellarAddress
+
 __all__ = ["TokenTransferDestinationParam"]
 
 
@@ -13,8 +15,11 @@ class TokenTransferDestinationParam(TypedDict, total=False):
     Optionally specify a different asset or chain for cross-asset or cross-chain transfers.
     """
 
-    address: Required[str]
-    """Recipient address (hex for EVM, base58 for Solana, base58check for Tron)"""
+    address: Required[StellarAddress]
+    """
+    Stellar account address: an ed25519 public key in StrKey encoding, starting with
+    G.
+    """
 
     asset: str
     """The destination asset.

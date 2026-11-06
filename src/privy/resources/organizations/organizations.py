@@ -12,7 +12,12 @@ from .kyb import (
     KYBResourceWithStreamingResponse,
     AsyncKYBResourceWithStreamingResponse,
 )
-from ...types import KeyQuorumID, organization_list_params, organization_create_params, organization_update_params
+from ...types import (
+    KeyQuorumID,
+    organization_list_params,
+    organization_create_params,
+    organization_update_params,
+)
 from ..._types import Body, Omit, Query, Headers, NoneType, NotGiven, omit, not_given
 from ..._utils import path_template, maybe_transform, async_maybe_transform
 from ..._compat import cached_property
@@ -34,6 +39,10 @@ from .external_fiat_accounts import (
     AsyncExternalFiatAccountsResourceWithRawResponse,
     ExternalFiatAccountsResourceWithStreamingResponse,
     AsyncExternalFiatAccountsResourceWithStreamingResponse,
+)
+from ...types.organization_default_wallet_configurations_param import OrganizationDefaultWalletConfigurationsParam
+from ...types.organization_default_wallet_configurations_update_param import (
+    OrganizationDefaultWalletConfigurationsUpdateParam,
 )
 
 __all__ = ["OrganizationsResource", "AsyncOrganizationsResource"]
@@ -76,6 +85,7 @@ class OrganizationsResource(SyncAPIResource):
         *,
         default_key_quorum_id: KeyQuorumID,
         display_name: str,
+        default_wallet_configurations: OrganizationDefaultWalletConfigurationsParam | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -88,6 +98,9 @@ class OrganizationsResource(SyncAPIResource):
 
         Args:
           default_key_quorum_id: A unique identifier for a key quorum.
+
+          default_wallet_configurations: Defaults applied to wallets created with the organization as their entity, keyed
+              by chain type.
 
           extra_headers: Send extra headers
 
@@ -103,6 +116,7 @@ class OrganizationsResource(SyncAPIResource):
                 {
                     "default_key_quorum_id": default_key_quorum_id,
                     "display_name": display_name,
+                    "default_wallet_configurations": default_wallet_configurations,
                 },
                 organization_create_params.OrganizationCreateParams,
             ),
@@ -117,6 +131,7 @@ class OrganizationsResource(SyncAPIResource):
         organization_id: str,
         *,
         default_key_quorum_id: KeyQuorumID | Omit = omit,
+        default_wallet_configurations: OrganizationDefaultWalletConfigurationsUpdateParam | Omit = omit,
         display_name: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -133,6 +148,9 @@ class OrganizationsResource(SyncAPIResource):
 
           default_key_quorum_id: A unique identifier for a key quorum.
 
+          default_wallet_configurations: Changes to the defaults, keyed by chain type. Omitted chains and fields are
+              unchanged, and `null` removes a chain.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -148,6 +166,7 @@ class OrganizationsResource(SyncAPIResource):
             body=maybe_transform(
                 {
                     "default_key_quorum_id": default_key_quorum_id,
+                    "default_wallet_configurations": default_wallet_configurations,
                     "display_name": display_name,
                 },
                 organization_update_params.OrganizationUpdateParams,
@@ -312,6 +331,7 @@ class AsyncOrganizationsResource(AsyncAPIResource):
         *,
         default_key_quorum_id: KeyQuorumID,
         display_name: str,
+        default_wallet_configurations: OrganizationDefaultWalletConfigurationsParam | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -324,6 +344,9 @@ class AsyncOrganizationsResource(AsyncAPIResource):
 
         Args:
           default_key_quorum_id: A unique identifier for a key quorum.
+
+          default_wallet_configurations: Defaults applied to wallets created with the organization as their entity, keyed
+              by chain type.
 
           extra_headers: Send extra headers
 
@@ -339,6 +362,7 @@ class AsyncOrganizationsResource(AsyncAPIResource):
                 {
                     "default_key_quorum_id": default_key_quorum_id,
                     "display_name": display_name,
+                    "default_wallet_configurations": default_wallet_configurations,
                 },
                 organization_create_params.OrganizationCreateParams,
             ),
@@ -353,6 +377,7 @@ class AsyncOrganizationsResource(AsyncAPIResource):
         organization_id: str,
         *,
         default_key_quorum_id: KeyQuorumID | Omit = omit,
+        default_wallet_configurations: OrganizationDefaultWalletConfigurationsUpdateParam | Omit = omit,
         display_name: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -369,6 +394,9 @@ class AsyncOrganizationsResource(AsyncAPIResource):
 
           default_key_quorum_id: A unique identifier for a key quorum.
 
+          default_wallet_configurations: Changes to the defaults, keyed by chain type. Omitted chains and fields are
+              unchanged, and `null` removes a chain.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -384,6 +412,7 @@ class AsyncOrganizationsResource(AsyncAPIResource):
             body=await async_maybe_transform(
                 {
                     "default_key_quorum_id": default_key_quorum_id,
+                    "default_wallet_configurations": default_wallet_configurations,
                     "display_name": display_name,
                 },
                 organization_update_params.OrganizationUpdateParams,

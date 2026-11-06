@@ -346,6 +346,7 @@ from privy.types import (
     TronTransactionCondition,
     TronTransactionConditionField,
     TypedDataInput,
+    UpdateConditionSetItemRequestBody,
     UpdateConditionSetRequestBody,
     XrplTransactionCondition,
     XrplTransactionConditionField,
@@ -511,6 +512,14 @@ Methods:
 - <code title="post /v1/users/{user_id}/custom_metadata">client.users.<a href="./src/privy/resources/users/users.py">set_custom_metadata</a>(user_id, \*\*<a href="src/privy/types/user_set_custom_metadata_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
 - <code title="delete /v1/users/{user_id}/freeze">client.users.<a href="./src/privy/resources/users/users.py">unfreeze</a>(user_id) -> <a href="./src/privy/types/success_response.py">SuccessResponse</a></code>
 - <code title="post /v1/users/{user_id}/accounts/unlink">client.users.<a href="./src/privy/resources/users/users.py">unlink_linked_account</a>(user_id, \*\*<a href="src/privy/types/user_unlink_linked_account_params.py">params</a>) -> <a href="./src/privy/types/user.py">User</a></code>
+
+## Earn
+
+### Tmmf
+
+Methods:
+
+- <code title="get /v1/users/{user_id}/earn/tmmf">client.users.earn.tmmf.<a href="./src/privy/resources/users/earn/tmmf.py">get</a>(user_id, \*\*<a href="src/privy/types/users/earn/tmmf_get_params.py">params</a>) -> <a href="./src/privy/types/wallets/tmmf_user_response.py">TmmfUserResponse</a></code>
 
 ## ExternalFiatAccounts
 
@@ -1083,6 +1092,26 @@ from privy.types.wallets import (
     TvmWalletActionStepStatus,
     TempoVaultDetails,
     TempoZoneSettlementWalletActionStep,
+    TmmfChain,
+    TmmfCurrency,
+    TmmfDecimalAmount,
+    TmmfDepositActionResponse,
+    TmmfDepositRequestBody,
+    TmmfFund,
+    TmmfOrderActionResponse,
+    TmmfOrderType,
+    TmmfPosition,
+    TmmfPositionResponse,
+    TmmfProvider,
+    TmmfProviderWalletStatus,
+    TmmfRegisterRequestBody,
+    TmmfRegistrationStatus,
+    TmmfUserRegistration,
+    TmmfUserResponse,
+    TmmfUserWalletResponse,
+    TmmfWalletResponse,
+    TmmfWithdrawActionResponse,
+    TmmfWithdrawRequestBody,
     TransferActionResponse,
     VedaVaultDetails,
     WalletActionInclude,
@@ -1091,6 +1120,13 @@ from privy.types.wallets import (
     WalletActionStep,
     WalletActionStepType,
     WalletActionType,
+    WisdomTreeSettlementDepositAssetAmount,
+    WisdomTreeSettlementFundAmount,
+    WisdomTreeSettlementReceivedAmount,
+    WisdomTreeSettlementRequestedAmount,
+    WisdomTreeSettlementWalletActionStep,
+    WisdomTreeSettlementWalletActionStepStatus,
+    WisdomTreeSettlementWithdrawAssetAmount,
 )
 ```
 
@@ -1154,6 +1190,15 @@ Methods:
 
 - <code title="get /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/privy/resources/wallets/earn/ethereum/incentive.py">list</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/ethereum/incentive_list_params.py">params</a>) -> <a href="./src/privy/types/wallets/earn_incentive_rewards_response.py">EarnIncentiveRewardsResponse</a></code>
 - <code title="post /v1/wallets/{wallet_id}/earn/ethereum/incentive/claim">client.wallets.earn.ethereum.incentive.<a href="./src/privy/resources/wallets/earn/ethereum/incentive.py">\_claim</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/ethereum/incentive_claim_params.py">params</a>) -> <a href="./src/privy/types/wallets/earn_incentive_claim_action_response.py">EarnIncentiveClaimActionResponse</a></code>
+
+### Tmmf
+
+Methods:
+
+- <code title="post /v1/wallets/{wallet_id}/earn/tmmf/deposit">client.wallets.earn.tmmf.<a href="./src/privy/resources/wallets/earn/tmmf.py">\_deposit</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/tmmf_deposit_params.py">params</a>) -> <a href="./src/privy/types/wallets/tmmf_deposit_action_response.py">TmmfDepositActionResponse</a></code>
+- <code title="post /v1/wallets/{wallet_id}/earn/tmmf/withdraw">client.wallets.earn.tmmf.<a href="./src/privy/resources/wallets/earn/tmmf.py">\_withdraw</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/tmmf_withdraw_params.py">params</a>) -> <a href="./src/privy/types/wallets/tmmf_withdraw_action_response.py">TmmfWithdrawActionResponse</a></code>
+- <code title="get /v1/wallets/{wallet_id}/earn/tmmf/positions">client.wallets.earn.tmmf.<a href="./src/privy/resources/wallets/earn/tmmf.py">list_positions</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/tmmf_list_positions_params.py">params</a>) -> <a href="./src/privy/types/wallets/tmmf_position_response.py">TmmfPositionResponse</a></code>
+- <code title="post /v1/wallets/{wallet_id}/earn/tmmf/register">client.wallets.earn.tmmf.<a href="./src/privy/resources/wallets/earn/tmmf.py">register</a>(wallet_id, \*\*<a href="src/privy/types/wallets/earn/tmmf_register_params.py">params</a>) -> <a href="./src/privy/types/wallets/tmmf_wallet_response.py">TmmfWalletResponse</a></code>
 
 ## Payout
 
@@ -1231,6 +1276,7 @@ from privy.types import (
     RefundMetadata,
     RelayRefundDetails,
     SeedPhraseExportWebhookPayload,
+    TmmfWalletUpdatedWebhookPayload,
     TransactionBroadcastedWebhookPayload,
     TransactionConfirmedWebhookPayload,
     TransactionExecutionRevertedWebhookPayload,
@@ -1279,6 +1325,14 @@ from privy.types import (
     WalletActionSwapFailedWebhookPayload,
     WalletActionSwapRejectedWebhookPayload,
     WalletActionSwapSucceededWebhookPayload,
+    WalletActionTmmfDepositCreatedWebhookPayload,
+    WalletActionTmmfDepositFailedWebhookPayload,
+    WalletActionTmmfDepositRejectedWebhookPayload,
+    WalletActionTmmfDepositSucceededWebhookPayload,
+    WalletActionTmmfWithdrawCreatedWebhookPayload,
+    WalletActionTmmfWithdrawFailedWebhookPayload,
+    WalletActionTmmfWithdrawRejectedWebhookPayload,
+    WalletActionTmmfWithdrawSucceededWebhookPayload,
     WalletActionTransferCreatedWebhookPayload,
     WalletActionTransferFailedWebhookPayload,
     WalletActionTransferRejectedWebhookPayload,
@@ -1599,6 +1653,7 @@ from privy.types import (
     P256PublicKey,
     SolanaAddress,
     SolanaCaip2,
+    StellarAddress,
     SuccessResponse,
     TokenIdentifier,
     TronAddress,

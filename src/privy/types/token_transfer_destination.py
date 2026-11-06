@@ -3,6 +3,7 @@
 from typing import Optional
 
 from .._models import BaseModel
+from .stellar_address import StellarAddress
 
 __all__ = ["TokenTransferDestination"]
 
@@ -13,8 +14,11 @@ class TokenTransferDestination(BaseModel):
     Optionally specify a different asset or chain for cross-asset or cross-chain transfers.
     """
 
-    address: str
-    """Recipient address (hex for EVM, base58 for Solana, base58check for Tron)"""
+    address: StellarAddress
+    """
+    Stellar account address: an ed25519 public key in StrKey encoding, starting with
+    G.
+    """
 
     asset: Optional[str] = None
     """The destination asset.

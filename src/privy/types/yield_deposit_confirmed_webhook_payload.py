@@ -14,6 +14,12 @@ class YieldDepositConfirmedWebhookPayload(BaseModel):
 
     caip2: str
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     owner: str
 
     sender: str

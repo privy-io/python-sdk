@@ -9,9 +9,12 @@ __all__ = ["ConditionSetItemsRequestBodyParam", "ConditionSetItemValueInputParam
 
 
 class ConditionSetItemValueInputParam(TypedDict, total=False):
-    """A single value to add to a condition set."""
+    """A value to add to a condition set, with an optional name."""
 
     value: Required[str]
+
+    name: str
+    """Optional label for the item, unique within the condition set ignoring case."""
 
 
 ConditionSetItemsRequestBodyParam: TypeAlias = List[ConditionSetItemValueInputParam]

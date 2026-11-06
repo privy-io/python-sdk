@@ -16,6 +16,12 @@ class IntentCreatedWebhookPayload(BaseModel):
     created_at: float
     """Unix timestamp when the intent was created."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     expires_at: float
     """Unix timestamp when the intent expires."""
 

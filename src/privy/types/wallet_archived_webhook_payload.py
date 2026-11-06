@@ -16,6 +16,12 @@ class WalletArchivedWebhookPayload(BaseModel):
     chain_type: str
     """The chain type of the archived wallet."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     type: Literal["wallet.archived"]
     """The type of webhook event."""
 

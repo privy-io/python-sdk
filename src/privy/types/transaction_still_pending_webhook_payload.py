@@ -18,6 +18,12 @@ class TransactionStillPendingWebhookPayload(BaseModel):
     mainnet).
     """
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     transaction_hash: str
     """The blockchain transaction hash."""
 

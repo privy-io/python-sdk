@@ -88,6 +88,7 @@ from .kyx_endorsement import KyxEndorsement as KyxEndorsement
 from .kyx_environment import KyxEnvironment as KyxEnvironment
 from .oauth_code_type import OAuthCodeType as OAuthCodeType
 from .onramp_provider import OnrampProvider as OnrampProvider
+from .stellar_address import StellarAddress as StellarAddress
 from .totp_mfa_method import TotpMfaMethod as TotpMfaMethod
 from .abi_schema_param import AbiSchemaParam as AbiSchemaParam
 from .captcha_provider import CaptchaProvider as CaptchaProvider
@@ -624,6 +625,7 @@ from .linked_account_wallet_input_param import LinkedAccountWalletInputParam as 
 from .named_token_transfer_source_param import NamedTokenTransferSourceParam as NamedTokenTransferSourceParam
 from .organization_kyb_updated_kyb_data import OrganizationKYBUpdatedKYBData as OrganizationKYBUpdatedKYBData
 from .organization_kyb_updated_tos_data import OrganizationKYBUpdatedTosData as OrganizationKYBUpdatedTosData
+from .organization_wallet_configuration import OrganizationWalletConfiguration as OrganizationWalletConfiguration
 from .policy_intent_delete_request_body import PolicyIntentDeleteRequestBody as PolicyIntentDeleteRequestBody
 from .solana_instruction_data_condition import SolanaInstructionDataCondition as SolanaInstructionDataCondition
 from .solana_sign_transaction_rpc_input import SolanaSignTransactionRpcInput as SolanaSignTransactionRpcInput
@@ -657,6 +659,7 @@ from .private_key_export_webhook_payload import PrivateKeyExportWebhookPayload a
 from .rule_intent_create_request_details import RuleIntentCreateRequestDetails as RuleIntentCreateRequestDetails
 from .rule_intent_delete_request_details import RuleIntentDeleteRequestDetails as RuleIntentDeleteRequestDetails
 from .rule_intent_update_request_details import RuleIntentUpdateRequestDetails as RuleIntentUpdateRequestDetails
+from .seed_phrase_export_webhook_payload import SeedPhraseExportWebhookPayload as SeedPhraseExportWebhookPayload
 from .smart_wallet_configuration_enabled import SmartWalletConfigurationEnabled as SmartWalletConfigurationEnabled
 from .smart_wallet_network_configuration import SmartWalletNetworkConfiguration as SmartWalletNetworkConfiguration
 from .spark_transfer_tokens_rpc_response import SparkTransferTokensRpcResponse as SparkTransferTokensRpcResponse
@@ -695,6 +698,7 @@ from .list_fiat_deposit_accounts_response import ListFiatDepositAccountsResponse
 from .policy_intent_request_details_union import PolicyIntentRequestDetailsUnion as PolicyIntentRequestDetailsUnion
 from .smart_wallet_configuration_disabled import SmartWalletConfigurationDisabled as SmartWalletConfigurationDisabled
 from .solana_sign_message_rpc_input_param import SolanaSignMessageRpcInputParam as SolanaSignMessageRpcInputParam
+from .tmmf_wallet_updated_webhook_payload import TmmfWalletUpdatedWebhookPayload as TmmfWalletUpdatedWebhookPayload
 from .travel_rule_self_counterparty_param import TravelRuleSelfCounterpartyParam as TravelRuleSelfCounterpartyParam
 from .typed_data_types_input_params_param import TypedDataTypesInputParamsParam as TypedDataTypesInputParamsParam
 from .unsigned_ethereum_transaction_param import UnsignedEthereumTransactionParam as UnsignedEthereumTransactionParam
@@ -899,6 +903,9 @@ from .near_sign_transaction_rpc_response_data import (
 from .near_unsigned_transaction_borsh_base_64 import (
     NearUnsignedTransactionBorshBase64 as NearUnsignedTransactionBorshBase64,
 )
+from .organization_wallet_configuration_param import (
+    OrganizationWalletConfigurationParam as OrganizationWalletConfigurationParam,
+)
 from .solana_instruction_data_condition_param import (
     SolanaInstructionDataConditionParam as SolanaInstructionDataConditionParam,
 )
@@ -1075,6 +1082,9 @@ from .external_fiat_account_business_owner_param import (
 )
 from .oauth_token_device_code_pending_error_code import (
     OAuthTokenDeviceCodePendingErrorCode as OAuthTokenDeviceCodePendingErrorCode,
+)
+from .organization_default_wallet_configurations import (
+    OrganizationDefaultWalletConfigurations as OrganizationDefaultWalletConfigurations,
 )
 from .solana_program_instruction_condition_param import (
     SolanaProgramInstructionConditionParam as SolanaProgramInstructionConditionParam,
@@ -1340,6 +1350,9 @@ from .ethereum_sign_transaction_rpc_input_params_param import (
 from .kraken_embed_include_current_day_pnl_query_param import (
     KrakenEmbedIncludeCurrentDayPnlQueryParam as KrakenEmbedIncludeCurrentDayPnlQueryParam,
 )
+from .organization_default_wallet_configurations_param import (
+    OrganizationDefaultWalletConfigurationsParam as OrganizationDefaultWalletConfigurationsParam,
+)
 from .solana_sign_and_send_transaction_rpc_input_param import (
     SolanaSignAndSendTransactionRpcInputParam as SolanaSignAndSendTransactionRpcInputParam,
 )
@@ -1391,6 +1404,9 @@ from .spark_sign_message_with_identity_key_rpc_response import (
 from .wallet_action_earn_deposit_failed_webhook_payload import (
     WalletActionEarnDepositFailedWebhookPayload as WalletActionEarnDepositFailedWebhookPayload,
 )
+from .wallet_action_tmmf_deposit_failed_webhook_payload import (
+    WalletActionTmmfDepositFailedWebhookPayload as WalletActionTmmfDepositFailedWebhookPayload,
+)
 from .ethereum_sign_7702_authorization_rpc_response_data import (
     EthereumSign7702AuthorizationRpcResponseData as EthereumSign7702AuthorizationRpcResponseData,
 )
@@ -1409,6 +1425,12 @@ from .wallet_action_earn_deposit_created_webhook_payload import (
 from .wallet_action_earn_withdraw_failed_webhook_payload import (
     WalletActionEarnWithdrawFailedWebhookPayload as WalletActionEarnWithdrawFailedWebhookPayload,
 )
+from .wallet_action_tmmf_deposit_created_webhook_payload import (
+    WalletActionTmmfDepositCreatedWebhookPayload as WalletActionTmmfDepositCreatedWebhookPayload,
+)
+from .wallet_action_tmmf_withdraw_failed_webhook_payload import (
+    WalletActionTmmfWithdrawFailedWebhookPayload as WalletActionTmmfWithdrawFailedWebhookPayload,
+)
 from .ethereum_sign_user_operation_rpc_input_params_param import (
     EthereumSignUserOperationRpcInputParamsParam as EthereumSignUserOperationRpcInputParamsParam,
 )
@@ -1420,6 +1442,12 @@ from .wallet_action_earn_deposit_rejected_webhook_payload import (
 )
 from .wallet_action_earn_withdraw_created_webhook_payload import (
     WalletActionEarnWithdrawCreatedWebhookPayload as WalletActionEarnWithdrawCreatedWebhookPayload,
+)
+from .wallet_action_tmmf_deposit_rejected_webhook_payload import (
+    WalletActionTmmfDepositRejectedWebhookPayload as WalletActionTmmfDepositRejectedWebhookPayload,
+)
+from .wallet_action_tmmf_withdraw_created_webhook_payload import (
+    WalletActionTmmfWithdrawCreatedWebhookPayload as WalletActionTmmfWithdrawCreatedWebhookPayload,
 )
 from .wallet_deposit_account_deposit_failed_webhook_event import (
     WalletDepositAccountDepositFailedWebhookEvent as WalletDepositAccountDepositFailedWebhookEvent,
@@ -1438,6 +1466,12 @@ from .wallet_action_earn_deposit_succeeded_webhook_payload import (
 )
 from .wallet_action_earn_withdraw_rejected_webhook_payload import (
     WalletActionEarnWithdrawRejectedWebhookPayload as WalletActionEarnWithdrawRejectedWebhookPayload,
+)
+from .wallet_action_tmmf_deposit_succeeded_webhook_payload import (
+    WalletActionTmmfDepositSucceededWebhookPayload as WalletActionTmmfDepositSucceededWebhookPayload,
+)
+from .wallet_action_tmmf_withdraw_rejected_webhook_payload import (
+    WalletActionTmmfWithdrawRejectedWebhookPayload as WalletActionTmmfWithdrawRejectedWebhookPayload,
 )
 from .wallet_deposit_account_deposit_started_webhook_event import (
     WalletDepositAccountDepositStartedWebhookEvent as WalletDepositAccountDepositStartedWebhookEvent,
@@ -1460,6 +1494,9 @@ from .wallet_action_earn_fee_collect_failed_webhook_payload import (
 from .wallet_action_earn_withdraw_succeeded_webhook_payload import (
     WalletActionEarnWithdrawSucceededWebhookPayload as WalletActionEarnWithdrawSucceededWebhookPayload,
 )
+from .wallet_action_tmmf_withdraw_succeeded_webhook_payload import (
+    WalletActionTmmfWithdrawSucceededWebhookPayload as WalletActionTmmfWithdrawSucceededWebhookPayload,
+)
 from .spark_get_claim_static_deposit_quote_rpc_response_data import (
     SparkGetClaimStaticDepositQuoteRpcResponseData as SparkGetClaimStaticDepositQuoteRpcResponseData,
 )
@@ -1474,6 +1511,9 @@ from .wallet_deposit_account_deposit_completed_webhook_event import (
 )
 from .ethereum_sign_7702_authorization_rpc_input_params_param import (
     EthereumSign7702AuthorizationRpcInputParamsParam as EthereumSign7702AuthorizationRpcInputParamsParam,
+)
+from .organization_default_wallet_configurations_update_param import (
+    OrganizationDefaultWalletConfigurationsUpdateParam as OrganizationDefaultWalletConfigurationsUpdateParam,
 )
 from .solana_sign_and_send_transaction_rpc_input_params_param import (
     SolanaSignAndSendTransactionRpcInputParamsParam as SolanaSignAndSendTransactionRpcInputParamsParam,

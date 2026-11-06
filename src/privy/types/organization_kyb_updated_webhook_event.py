@@ -20,6 +20,12 @@ class OrganizationKYBUpdatedWebhookEvent(BaseModel):
     environment: KyxEnvironment
     """Provider environment (production or sandbox)."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     organization_id: str
 
     provider: KyxProvider

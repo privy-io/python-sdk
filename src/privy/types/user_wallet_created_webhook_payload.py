@@ -12,6 +12,12 @@ __all__ = ["UserWalletCreatedWebhookPayload"]
 class UserWalletCreatedWebhookPayload(BaseModel):
     """Payload for the user.wallet_created webhook event."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     type: Literal["user.wallet_created"]
     """The type of webhook event."""
 

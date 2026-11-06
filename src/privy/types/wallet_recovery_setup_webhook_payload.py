@@ -11,6 +11,12 @@ __all__ = ["WalletRecoverySetupWebhookPayload"]
 class WalletRecoverySetupWebhookPayload(BaseModel):
     """Payload for the wallet.recovery_setup webhook event."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     method: WalletRecoverySetupMethod
     """Recovery method types for embedded wallet recovery setup webhooks."""
 

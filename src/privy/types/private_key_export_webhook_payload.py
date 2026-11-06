@@ -12,6 +12,12 @@ __all__ = ["PrivateKeyExportWebhookPayload"]
 class PrivateKeyExportWebhookPayload(BaseModel):
     """Payload for the wallet.private_key_export webhook event."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     type: Literal["wallet.private_key_export"]
     """The type of webhook event."""
 

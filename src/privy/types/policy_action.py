@@ -4,4 +4,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["PolicyAction"]
 
-PolicyAction: TypeAlias = Literal["ALLOW", "DENY"]
+PolicyAction: TypeAlias = Literal["ALLOW", "DENY", "ALLOW_WITH_MFA"]

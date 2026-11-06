@@ -11,6 +11,12 @@ __all__ = ["MfaEnabledWebhookPayload"]
 class MfaEnabledWebhookPayload(BaseModel):
     """Payload for the mfa.enabled webhook event."""
 
+    event_id: str
+    """
+    The ID of this event, stable across repeat deliveries so clients can deduplicate
+    on it.
+    """
+
     method: MfaMethod
     """A multi-factor authentication method supported by the app."""
 

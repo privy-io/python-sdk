@@ -8,7 +8,9 @@ from .payout_response import PayoutResponse
 from .swap_action_response import SwapActionResponse
 from .transfer_action_response import TransferActionResponse
 from .earn_deposit_action_response import EarnDepositActionResponse
+from .tmmf_deposit_action_response import TmmfDepositActionResponse
 from .earn_withdraw_action_response import EarnWithdrawActionResponse
+from .tmmf_withdraw_action_response import TmmfWithdrawActionResponse
 from .earn_fee_collect_action_response import EarnFeeCollectActionResponse
 from .earn_incentive_claim_action_response import EarnIncentiveClaimActionResponse
 
@@ -23,6 +25,8 @@ WalletActionResponse: TypeAlias = Annotated[
         EarnIncentiveClaimActionResponse,
         EarnFeeCollectActionResponse,
         PayoutResponse,
+        TmmfDepositActionResponse,
+        TmmfWithdrawActionResponse,
     ],
     PropertyInfo(discriminator="type"),
 ]

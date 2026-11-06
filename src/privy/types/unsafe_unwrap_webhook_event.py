@@ -20,8 +20,10 @@ from .wallet_restored_webhook_payload import WalletRestoredWebhookPayload
 from .wallet_recovered_webhook_payload import WalletRecoveredWebhookPayload
 from .intent_authorized_webhook_payload import IntentAuthorizedWebhookPayload
 from .private_key_export_webhook_payload import PrivateKeyExportWebhookPayload
+from .seed_phrase_export_webhook_payload import SeedPhraseExportWebhookPayload
 from .transaction_failed_webhook_payload import TransactionFailedWebhookPayload
 from .user_authenticated_webhook_payload import UserAuthenticatedWebhookPayload
+from .tmmf_wallet_updated_webhook_payload import TmmfWalletUpdatedWebhookPayload
 from .user_linked_account_webhook_payload import UserLinkedAccountWebhookPayload
 from .user_wallet_created_webhook_payload import UserWalletCreatedWebhookPayload
 from .transaction_replaced_webhook_payload import TransactionReplacedWebhookPayload
@@ -56,16 +58,24 @@ from .wallet_action_transfer_rejected_webhook_payload import WalletActionTransfe
 from .usage_swap_provider_fee_recorded_webhook_payload import UsageSwapProviderFeeRecordedWebhookPayload
 from .wallet_action_transfer_succeeded_webhook_payload import WalletActionTransferSucceededWebhookPayload
 from .wallet_action_earn_deposit_failed_webhook_payload import WalletActionEarnDepositFailedWebhookPayload
+from .wallet_action_tmmf_deposit_failed_webhook_payload import WalletActionTmmfDepositFailedWebhookPayload
 from .wallet_action_earn_deposit_created_webhook_payload import WalletActionEarnDepositCreatedWebhookPayload
 from .wallet_action_earn_withdraw_failed_webhook_payload import WalletActionEarnWithdrawFailedWebhookPayload
+from .wallet_action_tmmf_deposit_created_webhook_payload import WalletActionTmmfDepositCreatedWebhookPayload
+from .wallet_action_tmmf_withdraw_failed_webhook_payload import WalletActionTmmfWithdrawFailedWebhookPayload
 from .wallet_action_earn_deposit_rejected_webhook_payload import WalletActionEarnDepositRejectedWebhookPayload
 from .wallet_action_earn_withdraw_created_webhook_payload import WalletActionEarnWithdrawCreatedWebhookPayload
+from .wallet_action_tmmf_deposit_rejected_webhook_payload import WalletActionTmmfDepositRejectedWebhookPayload
+from .wallet_action_tmmf_withdraw_created_webhook_payload import WalletActionTmmfWithdrawCreatedWebhookPayload
 from .wallet_deposit_account_deposit_failed_webhook_event import WalletDepositAccountDepositFailedWebhookEvent
 from .wallet_action_earn_deposit_succeeded_webhook_payload import WalletActionEarnDepositSucceededWebhookPayload
 from .wallet_action_earn_withdraw_rejected_webhook_payload import WalletActionEarnWithdrawRejectedWebhookPayload
+from .wallet_action_tmmf_deposit_succeeded_webhook_payload import WalletActionTmmfDepositSucceededWebhookPayload
+from .wallet_action_tmmf_withdraw_rejected_webhook_payload import WalletActionTmmfWithdrawRejectedWebhookPayload
 from .wallet_deposit_account_deposit_started_webhook_event import WalletDepositAccountDepositStartedWebhookEvent
 from .wallet_action_earn_fee_collect_failed_webhook_payload import WalletActionEarnFeeCollectFailedWebhookPayload
 from .wallet_action_earn_withdraw_succeeded_webhook_payload import WalletActionEarnWithdrawSucceededWebhookPayload
+from .wallet_action_tmmf_withdraw_succeeded_webhook_payload import WalletActionTmmfWithdrawSucceededWebhookPayload
 from .wallet_action_earn_fee_collect_created_webhook_payload import WalletActionEarnFeeCollectCreatedWebhookPayload
 from .wallet_deposit_account_deposit_completed_webhook_event import WalletDepositAccountDepositCompletedWebhookEvent
 from .wallet_action_earn_fee_collect_rejected_webhook_payload import WalletActionEarnFeeCollectRejectedWebhookPayload
@@ -95,6 +105,7 @@ UnsafeUnwrapWebhookEvent: TypeAlias = Annotated[
         MfaDisabledWebhookPayload,
         MfaEnabledWebhookPayload,
         OrganizationKYBUpdatedWebhookEvent,
+        TmmfWalletUpdatedWebhookPayload,
         TransactionBroadcastedWebhookPayload,
         TransactionConfirmedWebhookPayload,
         TransactionExecutionRevertedWebhookPayload,
@@ -125,6 +136,7 @@ UnsafeUnwrapWebhookEvent: TypeAlias = Annotated[
         WalletRecoveredWebhookPayload,
         WalletRecoverySetupWebhookPayload,
         WalletRestoredWebhookPayload,
+        SeedPhraseExportWebhookPayload,
         WalletActionEarnDepositCreatedWebhookPayload,
         WalletActionEarnDepositFailedWebhookPayload,
         WalletActionEarnDepositRejectedWebhookPayload,
@@ -149,6 +161,14 @@ UnsafeUnwrapWebhookEvent: TypeAlias = Annotated[
         WalletActionSwapFailedWebhookPayload,
         WalletActionSwapRejectedWebhookPayload,
         WalletActionSwapSucceededWebhookPayload,
+        WalletActionTmmfDepositCreatedWebhookPayload,
+        WalletActionTmmfDepositFailedWebhookPayload,
+        WalletActionTmmfDepositRejectedWebhookPayload,
+        WalletActionTmmfDepositSucceededWebhookPayload,
+        WalletActionTmmfWithdrawCreatedWebhookPayload,
+        WalletActionTmmfWithdrawFailedWebhookPayload,
+        WalletActionTmmfWithdrawRejectedWebhookPayload,
+        WalletActionTmmfWithdrawSucceededWebhookPayload,
         WalletActionTransferCreatedWebhookPayload,
         WalletActionTransferFailedWebhookPayload,
         WalletActionTransferRejectedWebhookPayload,
