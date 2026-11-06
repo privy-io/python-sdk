@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from typing_extensions import Literal, Required, TypedDict
+from typing_extensions import Literal, Required, Annotated, TypedDict
+
+from .._utils import PropertyInfo
 
 __all__ = ["WalletAuthenticateWithJwtParams"]
 
@@ -22,3 +24,9 @@ class WalletAuthenticateWithJwtParams(TypedDict, total=False):
 
     user_jwt: Required[str]
     """The user's JWT, to be used to authenticate the user."""
+
+    mfa_token: Annotated[str, PropertyInfo(alias="privy-mfa-token")]
+    """
+    MFA token from a completed MFA verification, required on MFA-protected requests
+    for users with MFA enrolled.
+    """

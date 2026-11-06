@@ -3351,6 +3351,17 @@ class TestWallets:
 
     @pytest.mark.skip(reason="Mock server tests are disabled")
     @parametrize
+    def test_method_authenticate_with_jwt_with_all_params(self, client: PrivyAPI) -> None:
+        wallet = client.wallets.authenticate_with_jwt(
+            encryption_type="HPKE",
+            recipient_public_key="DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1",
+            user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
+            mfa_token="x",
+        )
+        assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
     def test_raw_response_authenticate_with_jwt(self, client: PrivyAPI) -> None:
         response = client.wallets.with_raw_response.authenticate_with_jwt(
             encryption_type="HPKE",
@@ -6890,6 +6901,17 @@ class TestAsyncWallets:
             encryption_type="HPKE",
             recipient_public_key="DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1",
             user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
+        )
+        assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
+
+    @pytest.mark.skip(reason="Mock server tests are disabled")
+    @parametrize
+    async def test_method_authenticate_with_jwt_with_all_params(self, async_client: AsyncPrivyAPI) -> None:
+        wallet = await async_client.wallets.authenticate_with_jwt(
+            encryption_type="HPKE",
+            recipient_public_key="DAQcDQgAEx4aoeD72yykviK+fckqE2CItVIGn1rCnvCXZ1HgpOcMEMialRmTrqIK4oZlYd1",
+            user_jwt="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30",
+            mfa_token="x",
         )
         assert_matches_type(WalletAuthenticateWithJwtResponse, wallet, path=["response"])
 

@@ -2630,6 +2630,7 @@ class WalletsResource(SyncAPIResource):
         encryption_type: Literal["HPKE"],
         recipient_public_key: str,
         user_jwt: str,
+        mfa_token: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -2650,6 +2651,9 @@ class WalletsResource(SyncAPIResource):
 
           user_jwt: The user's JWT, to be used to authenticate the user.
 
+          mfa_token: MFA token from a completed MFA verification, required on MFA-protected requests
+              for users with MFA enrolled.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -2658,6 +2662,7 @@ class WalletsResource(SyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {**strip_not_given({"privy-mfa-token": mfa_token}), **(extra_headers or {})}
         return cast(
             WalletAuthenticateWithJwtResponse,
             self._post(
@@ -5294,6 +5299,7 @@ class AsyncWalletsResource(AsyncAPIResource):
         encryption_type: Literal["HPKE"],
         recipient_public_key: str,
         user_jwt: str,
+        mfa_token: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -5314,6 +5320,9 @@ class AsyncWalletsResource(AsyncAPIResource):
 
           user_jwt: The user's JWT, to be used to authenticate the user.
 
+          mfa_token: MFA token from a completed MFA verification, required on MFA-protected requests
+              for users with MFA enrolled.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -5322,6 +5331,7 @@ class AsyncWalletsResource(AsyncAPIResource):
 
           timeout: Override the client-level default timeout for this request, in seconds
         """
+        extra_headers = {**strip_not_given({"privy-mfa-token": mfa_token}), **(extra_headers or {})}
         return cast(
             WalletAuthenticateWithJwtResponse,
             await self._post(
