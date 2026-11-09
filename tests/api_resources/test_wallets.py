@@ -3097,7 +3097,7 @@ class TestWallets:
                 "chain": "tempo",
                 "amount": "10.5",
             },
-            amount="amount",
+            amount=".2166991022",
             amount_type="exact_input",
             custody_options={
                 "initiation": {
@@ -6652,7 +6652,7 @@ class TestAsyncWallets:
                 "chain": "tempo",
                 "amount": "10.5",
             },
-            amount="amount",
+            amount=".2166991022",
             amount_type="exact_input",
             custody_options={
                 "initiation": {
