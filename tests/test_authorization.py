@@ -46,6 +46,101 @@ def test_none_body_is_formatted_as_json_null() -> None:
     assert _format_body(None).startswith(b'{"body":null')
 
 
+_EXAMPLE_SUFFIX = (
+    b',"headers":{"privy-app-id":"app_123"},"method":"POST","url":"https://api.privy.io/v1/example","version":1}'
+)
+
+
+def _format_example(body: object) -> bytes:
+    return format_request_for_authorization_signature(
+        WalletAPIRequestSignatureInput(
+            method="POST",
+            url="https://api.privy.io/v1/example",
+            body=body,
+            headers={"privy-app-id": "app_123"},
+        )
+    )
+
+
+def test_conformance_vector_a_sorts_body_and_headers() -> None:
+    payload = format_request_for_authorization_signature(
+        WalletAPIRequestSignatureInput(
+            method="PATCH",
+            url="https://api.privy.io/v1/wallets/w_123",
+            body={"z": 2, "a": True},
+            headers={
+                "privy-request-expiry": "1750000000000",
+                "privy-idempotency-key": "idem_1",
+                "privy-app-id": "app_123",
+            },
+        )
+    )
+
+    assert payload == (
+        b'{"body":{"a":true,"z":2},"headers":{"privy-app-id":"app_123","privy-idempotency-key":"idem_1",'
+        b'"privy-request-expiry":"1750000000000"},"method":"PATCH","url":"https://api.privy.io/v1/wallets/w_123",'
+        b'"version":1}'
+    )
+
+
+def test_conformance_vector_b_empty_body() -> None:
+    payload = format_request_for_authorization_signature(
+        WalletAPIRequestSignatureInput(
+            method="POST",
+            url="https://api.privy.io/v1/wallets/w_123/rpc",
+            body={},
+            headers={"privy-app-id": "app_123"},
+        )
+    )
+
+    assert payload == (
+        b'{"body":"","headers":{"privy-app-id":"app_123"},"method":"POST",'
+        b'"url":"https://api.privy.io/v1/wallets/w_123/rpc","version":1}'
+    )
+
+
+def test_conformance_vector_c_utf8_and_integral_floats() -> None:
+    payload = _format_example({"text": "café", "values": [1.0, False, None], "nested": {"b": 2, "a": 0.0}})
+
+    assert payload == b'{"body":{"nested":{"a":0,"b":2},"text":"caf\xc3\xa9","values":[1,false,null]}' + _EXAMPLE_SUFFIX
+
+
+def test_conformance_vector_d_ecmascript_exponents() -> None:
+    payload = _format_example({"tiny": 1e-7, "large": 1e21})
+
+    assert payload == b'{"body":{"large":1e+21,"tiny":1e-7}' + _EXAMPLE_SUFFIX
+
+
+def test_conformance_vector_e_utf16_key_ordering() -> None:
+    payload = _format_example({"�": 2, "\U0001f600": 1})
+
+    # U+1F600 encodes as the surrogate pair D83D DE00, which sorts before U+FFFD in UTF-16.
+    assert payload == b'{"body":{"\xf0\x9f\x98\x80":1,"\xef\xbf\xbd":2}' + _EXAMPLE_SUFFIX
+
+
+@pytest.mark.parametrize("value", [float("nan"), float("inf"), float("-inf")])
+def test_non_finite_numbers_are_rejected(value: float) -> None:
+    with pytest.raises(ValueError):
+        _format_example({"amount": value})
+
+
+def test_formatting_does_not_mutate_the_body() -> None:
+    nested: dict[str, object] = {"�": 1, "\U0001f600": 0.5}
+    items: list[object] = [3.0, {"y": 1, "x": 2}]
+    body: dict[str, object] = {"z": items, "a": nested}
+
+    _format_example(body)
+
+    assert body == {"z": [3.0, {"y": 1, "x": 2}], "a": {"�": 1, "\U0001f600": 0.5}}
+    assert list(body) == ["z", "a"]
+    assert list(nested) == ["�", "\U0001f600"]
+    assert body["z"] is items and body["a"] is nested
+
+
+def test_formatting_is_independent_of_key_insertion_order() -> None:
+    assert _format_example({"b": 1, "a": {"d": 2, "c": 3}}) == _format_example({"a": {"c": 3, "d": 2}, "b": 1})
+
+
 def test_authorization_context_accepts_precomputed_signatures() -> None:
     context = AuthorizationContext(signatures=["first", "second"])
 

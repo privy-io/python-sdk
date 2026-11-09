@@ -11,8 +11,6 @@ attrs==25.4.0
     # via svix
 backports-asyncio-runner==1.2.0 ; python_full_version < '3.11'
     # via pytest-asyncio
-canonicaljson==2.0.0
-    # via privy-client
 certifi==2026.1.4
     # via
     #   httpcore
@@ -104,6 +102,8 @@ python-dateutil==2.9.0.post0
     #   svix
     #   time-machine
 respx==0.22.0
+rfc8785==0.1.4
+    # via privy-client
 rich==14.2.0
 ruff==0.14.13
 six==1.17.0

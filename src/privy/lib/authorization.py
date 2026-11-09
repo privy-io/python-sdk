@@ -6,7 +6,7 @@ import base64
 from typing import Literal, Mapping, Callable, Protocol, Sequence, cast
 from dataclasses import field, dataclass
 
-import canonicaljson
+import rfc8785
 from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import ec
 
@@ -142,7 +142,7 @@ class WalletAPIRequestSignatureInput:
 def format_request_for_authorization_signature(
     input: WalletAPIRequestSignatureInput, *, preserve_empty_body: bool = False
 ) -> bytes:
-    """Return deterministic UTF-8 JSON bytes for an authorization request."""
+    """Return RFC 8785 (JCS) canonical UTF-8 JSON bytes for an authorization request."""
 
     body = input.body
     if not preserve_empty_body and (
@@ -156,7 +156,7 @@ def format_request_for_authorization_signature(
         "body": body,
         "headers": dict(input.headers),
     }
-    return canonicaljson.encode_canonical_json(payload)
+    return rfc8785.dumps(cast("rfc8785._impl._Value", payload))
 
 
 def prepare_request(

@@ -124,6 +124,38 @@ def test_sign_typed_data(privy_client: PrivyClient, ethereum_wallet: WalletUnder
     assert response.signature.startswith("0x")
 
 
+def test_sign_typed_data_with_non_ascii_text_and_float_values(
+    privy_client: PrivyClient, ethereum_wallet: WalletUnderTest
+) -> None:
+    # The transport sends `1.0`, but the server verifies against RFC 8785 bytes where it is `1`,
+    # so this only succeeds when the authorization signature uses the same canonical form.
+    response = privy_client.wallets.ethereum.sign_typed_data(
+        ethereum_wallet.wallet.id,
+        params={
+            "typed_data": {
+                "domain": {
+                    "name": "Café 😀",
+                    "version": "1",
+                    "chainId": 1.0,
+                    "verifyingContract": "0x1234567890123456789012345678901234567890",
+                },
+                "primary_type": "Message",
+                "types": {
+                    "Message": [
+                        {"name": "content", "type": "string"},
+                        {"name": "amount", "type": "uint256"},
+                    ]
+                },
+                "message": {"content": "naïve café 😀", "amount": 1.0},
+            }
+        },
+        request_options=ethereum_wallet.request_options,
+    )
+
+    assert response.encoding == "hex"
+    assert response.signature.startswith("0x")
+
+
 @pytest.mark.skip(reason="Requires a funded wallet")
 def test_sign_user_operation(privy_client: PrivyClient, ethereum_wallet: WalletUnderTest) -> None:
     response = privy_client.wallets.ethereum.sign_user_operation(
