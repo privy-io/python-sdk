@@ -5,6 +5,7 @@ from typing_extensions import Literal
 
 from .._models import BaseModel
 from .environment import Environment
+from .external_fiat_account_payment_rails import ExternalFiatAccountPaymentRails
 
 __all__ = ["OrganizationExternalFiatAccount"]
 
@@ -33,3 +34,9 @@ class OrganizationExternalFiatAccount(BaseModel):
     bank_name: Optional[str] = None
 
     last_4: Optional[str] = None
+
+    payment_rails: Optional[ExternalFiatAccountPaymentRails] = None
+    """
+    Payment rails supported by an external fiat account and reasons other rails are
+    unavailable.
+    """

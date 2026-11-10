@@ -1688,6 +1688,7 @@ from privy.types import (
     ExternalFiatAccountIbanData,
     ExternalFiatAccountIndividualOwner,
     ExternalFiatAccountOwner,
+    ExternalFiatAccountPaymentRails,
     ExternalFiatAccountPixData,
     ExternalFiatAccountResponse,
     ExternalFiatAccountSwiftCategory,
