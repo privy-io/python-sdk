@@ -1520,6 +1520,7 @@ from privy.types import (
     MfaEmailInitRequestBody,
     MfaEmailInitVerifyInput,
     MfaEmailVerifyRequestBody,
+    MfaEnrollResponseBody,
     MfaPasskeyEnrollmentRequestBody,
     MfaPasskeyInitRequestBody,
     MfaPasskeyInitResponseBody,
