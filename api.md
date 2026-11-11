@@ -245,18 +245,13 @@ Types:
 
 ```python
 from privy.types import (
-    CreateOrganizationSecretResponse,
     Organization,
     OrganizationCreateRequestBody,
     OrganizationDefaultWalletConfigurations,
     OrganizationDefaultWalletConfigurationsUpdate,
-    OrganizationSecretIDInput,
-    OrganizationSecretView,
-    OrganizationSecretsListResponse,
     OrganizationUpdateRequestBody,
     OrganizationWalletConfiguration,
     OrganizationsListResponse,
-    UpdateOrganizationSecretSigningKeyInput,
 )
 ```
 
