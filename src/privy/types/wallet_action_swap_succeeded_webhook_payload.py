@@ -65,5 +65,11 @@ class WalletActionSwapSucceededWebhookPayload(BaseModel):
     wallet_id: str
     """The ID of the wallet involved in the action."""
 
+    destination_caip2: Optional[str] = None
+    """CAIP-2 identifier of the chain that settled the swap output."""
+
+    destination_transaction_hash: Optional[str] = None
+    """Transaction hash on the destination chain that settled the swap output."""
+
     reference_id: Optional[str] = None
     """Developer-provided reference ID, if one was included in the request."""
