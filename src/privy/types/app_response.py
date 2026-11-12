@@ -12,6 +12,7 @@ from .smart_wallet_configuration import SmartWalletConfiguration
 from .telegram_auth_config_schema import TelegramAuthConfigSchema
 from .embedded_wallet_config_schema import EmbeddedWalletConfigSchema
 from .funding_config_response_schema import FundingConfigResponseSchema
+from .transaction_mfa_enforcement_mode import TransactionMfaEnforcementMode
 
 __all__ = ["AppResponse"]
 
@@ -148,6 +149,9 @@ class AppResponse(BaseModel):
 
     funding_config: Optional[FundingConfigResponseSchema] = None
     """Configuration for funding and on-ramp options."""
+
+    mfa_enforcement_mode: Optional[TransactionMfaEnforcementMode] = None
+    """How the app enforces multi-factor authentication for wallet operations."""
 
     telegram_auth_config: Optional[TelegramAuthConfigSchema] = None
     """Configuration for Telegram authentication."""

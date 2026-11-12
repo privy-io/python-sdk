@@ -42,6 +42,7 @@ from privy.types import (
     TelegramAuthConfigSchema,
     TestAccount,
     TestAccountsResponse,
+    TransactionMfaEnforcementMode,
     UserInviteInput,
     UserOwnedRecoveryOption,
     WalletInviteInput,
