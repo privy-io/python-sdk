@@ -33,9 +33,11 @@ from ..types.intent_update_wallet_params import IntentUpdateWalletParams
 from ..types.raw_sign_input_params_param import RawSignInputParamsParam
 from ..types.rule_delete_intent_response import RuleDeleteIntentResponse
 from ..types.rule_mutate_intent_response import RuleMutateIntentResponse
+from ..types.policy_delete_intent_response import PolicyDeleteIntentResponse
 from ..types.intent_update_key_quorum_params import IntentUpdateKeyQuorumParams
 from ..types.intent_create_policy_rule_params import IntentCreatePolicyRuleParams
 from ..types.intent_update_policy_rule_params import IntentUpdatePolicyRuleParams
+from ..types.key_quorum_delete_intent_response import KeyQuorumDeleteIntentResponse
 from ..types.condition_set_delete_intent_response import ConditionSetDeleteIntentResponse
 from ..types.condition_set_items_request_body_param import ConditionSetItemsRequestBodyParam
 from ..types.condition_set_item_delete_intent_response import ConditionSetItemDeleteIntentResponse
@@ -401,6 +403,52 @@ class PrivyIntentsService(IntentsResource):
         return super().delete_condition_set_item(
             condition_set_item_id,
             condition_set_id=condition_set_id,
+            privy_request_expiry=expiry_header,
+            extra_headers=_merge_headers(signature_headers, extra_headers),
+            timeout=timeout,
+        )
+
+    def delete_policy(
+        self,
+        policy_id: str,
+        *,
+        privy_request_expiry: str | Omit = omit,
+        request_options: PrivyRequestOptions | None = None,
+        extra_headers: Headers | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> PolicyDeleteIntentResponse:
+        expiry_header, signature_headers = self._prepare_request(
+            method="DELETE",
+            path=f"/v1/intents/policies/{policy_id}",
+            body={},
+            request_options=request_options,
+            privy_request_expiry=privy_request_expiry,
+        )
+        return super().delete_policy(
+            policy_id,
+            privy_request_expiry=expiry_header,
+            extra_headers=_merge_headers(signature_headers, extra_headers),
+            timeout=timeout,
+        )
+
+    def delete_key_quorum(
+        self,
+        key_quorum_id: str,
+        *,
+        privy_request_expiry: str | Omit = omit,
+        request_options: PrivyRequestOptions | None = None,
+        extra_headers: Headers | None = None,
+        timeout: float | httpx.Timeout | None | NotGiven = not_given,
+    ) -> KeyQuorumDeleteIntentResponse:
+        expiry_header, signature_headers = self._prepare_request(
+            method="DELETE",
+            path=f"/v1/intents/key_quorums/{key_quorum_id}",
+            body={},
+            request_options=request_options,
+            privy_request_expiry=privy_request_expiry,
+        )
+        return super().delete_key_quorum(
+            key_quorum_id,
             privy_request_expiry=expiry_header,
             extra_headers=_merge_headers(signature_headers, extra_headers),
             timeout=timeout,
