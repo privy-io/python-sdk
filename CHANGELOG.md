@@ -1,5 +1,49 @@
 # Changelog
 
+## [0.9.0](https://github.com/privy-io/python-sdk-private/compare/v0.8.0...v0.9.0) (2026-11-13)
+
+
+### Features
+
+* **api:** api update ([47b67eb](https://github.com/privy-io/python-sdk-private/commit/47b67eb533bb505f0d7ce564288b98a25eab4b54))
+* **api:** api update ([491922d](https://github.com/privy-io/python-sdk-private/commit/491922d50f234c302102f146be32fead1bad1e80))
+* **api:** api update ([f423fd1](https://github.com/privy-io/python-sdk-private/commit/f423fd1d606e1b9018a732cd12970ff729c282b1))
+* **api:** api update ([5739fd0](https://github.com/privy-io/python-sdk-private/commit/5739fd04f8932422a06716b97d51ecbc816f51dc))
+* **api:** api update ([20b5f67](https://github.com/privy-io/python-sdk-private/commit/20b5f6740bef6e0cc594417be781840d6fc5bc9a))
+* **api:** api update ([37cf9ad](https://github.com/privy-io/python-sdk-private/commit/37cf9ad2f73d7ec6037654b62a3dfd9e56b6c529))
+* **api:** api update ([57f8e70](https://github.com/privy-io/python-sdk-private/commit/57f8e7072543779b84e88f5479d1c078b57e9a58))
+* **api:** api update ([79435e4](https://github.com/privy-io/python-sdk-private/commit/79435e433c6975a8f72b2b11db9e879f4ee8355f))
+* **api:** api update ([3243e58](https://github.com/privy-io/python-sdk-private/commit/3243e58e962c40df4f65dec0d69047fc6da392aa))
+* **api:** api update ([511b522](https://github.com/privy-io/python-sdk-private/commit/511b522e0db12fce49500c8861d673fce7828312))
+* **api:** api update ([337737d](https://github.com/privy-io/python-sdk-private/commit/337737dfa543a5d44a52c66ade179307debd85ba))
+* **api:** api update ([37198ab](https://github.com/privy-io/python-sdk-private/commit/37198ab25b6679c6ec384647341e4ba4bf441e18))
+* **api:** api update ([045e008](https://github.com/privy-io/python-sdk-private/commit/045e008ed5d84f868ef13699e5f5bf991d434876))
+* **api:** api update ([c5256da](https://github.com/privy-io/python-sdk-private/commit/c5256da7a82dfc58b4ed7b3236a9ae69fbb1cbcb))
+* **api:** api update ([25fd3fa](https://github.com/privy-io/python-sdk-private/commit/25fd3fa17290c8b0de478f23f98c9aef3574e3c5))
+* **api:** api update ([17a000d](https://github.com/privy-io/python-sdk-private/commit/17a000d49b61e58a79b6896959f55c03d3d29245))
+* **api:** api update ([7831428](https://github.com/privy-io/python-sdk-private/commit/7831428073fd5dfe87d719810e45d26793569ef0))
+* **api:** api update ([8653089](https://github.com/privy-io/python-sdk-private/commit/8653089a529ce6aadee48ae74bbdef1514dac37e))
+* **api:** api update ([afb2693](https://github.com/privy-io/python-sdk-private/commit/afb26933f65e7a899c273e19944b51e648bc1a97))
+* **api:** api update ([ddbfb28](https://github.com/privy-io/python-sdk-private/commit/ddbfb28ec40d03a9da65873796779130f453154b))
+* **api:** api update ([3886d22](https://github.com/privy-io/python-sdk-private/commit/3886d220d06ec7b96499d0dbb935d8fe88e1f626))
+* **api:** api update ([170b048](https://github.com/privy-io/python-sdk-private/commit/170b048f4e1406ec819a6fbc29e64fb4895eb14c))
+* **client:** expose intent request expiry and export expiry defaults ([#85](https://github.com/privy-io/python-sdk-private/issues/85)) ([acd09fe](https://github.com/privy-io/python-sdk-private/commit/acd09fe66521f2acf9fc9a28fda7c4ca7ed48d1a))
+* **intents:** apply the intent expiry default to every intent mutation ([#89](https://github.com/privy-io/python-sdk-private/issues/89)) ([6dad32f](https://github.com/privy-io/python-sdk-private/commit/6dad32f8c01cbfbbbfbabf9e77231e65dc851182))
+* **intents:** default request expiry on delete policy and key quorum intents ([#93](https://github.com/privy-io/python-sdk-private/issues/93)) ([a976749](https://github.com/privy-io/python-sdk-private/commit/a976749e6fff3e1557bf205ad629cb2f8fa346e5))
+* **wallets:** add signed deposit account and payout wrappers ([#88](https://github.com/privy-io/python-sdk-private/issues/88)) ([e9f2a04](https://github.com/privy-io/python-sdk-private/commit/e9f2a045c20e13e97d717aa84935bc847aef1bb3))
+* **wallets:** send request expiry on swaps and automation attach/detach ([#87](https://github.com/privy-io/python-sdk-private/issues/87)) ([2c295e2](https://github.com/privy-io/python-sdk-private/commit/2c295e2a5e70bf776962f88f7bea1769141b3159))
+
+
+### Bug Fixes
+
+* **auth:** canonicalize authorization payloads per RFC 8785 ([#78](https://github.com/privy-io/python-sdk-private/issues/78)) ([663dc1e](https://github.com/privy-io/python-sdk-private/commit/663dc1e9ad66e8f98a91596e99dac41e9d058348))
+
+
+### Chores
+
+* **ci:** point at renamed privy-io/sdks config repo ([#98](https://github.com/privy-io/python-sdk-private/issues/98)) ([9f1cc95](https://github.com/privy-io/python-sdk-private/commit/9f1cc95c7bb37a518a5e13f94ede60cd37338fd1))
+* rename privy-io/stainless-sdks-config to privy-io/sdks ([#97](https://github.com/privy-io/python-sdk-private/issues/97)) ([edc2c4d](https://github.com/privy-io/python-sdk-private/commit/edc2c4dd5812f628db7630b72910799b398bfec4))
+
 ## [0.8.0](https://github.com/privy-io/python-sdk/compare/v0.7.0...v0.8.0) (2026-10-16)
 
 
