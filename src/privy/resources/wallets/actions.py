@@ -70,7 +70,7 @@ class ActionsResource(SyncAPIResource):
 
           action_id: ID of the wallet action.
 
-          include: Expandable relations to include on a wallet action response.
+          include: Include step-level details in the response.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -155,7 +155,7 @@ class AsyncActionsResource(AsyncAPIResource):
 
           action_id: ID of the wallet action.
 
-          include: Expandable relations to include on a wallet action response.
+          include: Include step-level details in the response.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.

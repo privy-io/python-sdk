@@ -15,7 +15,7 @@ class ActionGetParams(TypedDict, total=False):
     """ID of the wallet."""
 
     include: WalletActionInclude
-    """Expandable relations to include on a wallet action response."""
+    """Include step-level details in the response."""
 
     privy_authorization_signature: Annotated[str, PropertyInfo(alias="privy-authorization-signature")]
     """Request authorization signature.

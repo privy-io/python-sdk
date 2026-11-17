@@ -124,6 +124,16 @@ class AppsResource(SyncAPIResource):
         Maximum 100 wallet IDs and 30-day range per request.
 
         Args:
+          end_timestamp: Unix timestamp in milliseconds, exclusive. Must be greater than or equal to
+              `start_timestamp`, and the range from `start_timestamp` to `end_timestamp` must
+              not exceed 30 days.
+
+          start_timestamp: Unix timestamp in milliseconds, inclusive. Must be less than or equal to
+              `end_timestamp`, and the range from `start_timestamp` to `end_timestamp` must
+              not exceed 30 days.
+
+          wallet_ids: List of wallet IDs to query gas spend for. Maximum 100.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -272,6 +282,16 @@ class AsyncAppsResource(AsyncAPIResource):
         Maximum 100 wallet IDs and 30-day range per request.
 
         Args:
+          end_timestamp: Unix timestamp in milliseconds, exclusive. Must be greater than or equal to
+              `start_timestamp`, and the range from `start_timestamp` to `end_timestamp` must
+              not exceed 30 days.
+
+          start_timestamp: Unix timestamp in milliseconds, inclusive. Must be less than or equal to
+              `end_timestamp`, and the range from `start_timestamp` to `end_timestamp` must
+              not exceed 30 days.
+
+          wallet_ids: List of wallet IDs to query gas spend for. Maximum 100.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
