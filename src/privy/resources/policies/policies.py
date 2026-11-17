@@ -8,6 +8,7 @@ from typing_extensions import Literal
 import httpx
 
 from ...types import (
+    PolicyID,
     OwnerIDInput,
     PolicyAction,
     PolicyMethod,
@@ -39,6 +40,7 @@ from .condition_sets import (
     ConditionSetsResourceWithStreamingResponse,
     AsyncConditionSetsResourceWithStreamingResponse,
 )
+from ...types.policy_id import PolicyID
 from ...types.policy_action import PolicyAction
 from ...types.policy_method import PolicyMethod
 from ...types.owner_id_input import OwnerIDInput
@@ -191,7 +193,7 @@ class PoliciesResource(SyncAPIResource):
 
     def _create_rule(
         self,
-        policy_id: str,
+        policy_id: PolicyID,
         *,
         action: PolicyAction,
         conditions: Iterable[PolicyConditionParam],
@@ -210,6 +212,8 @@ class PoliciesResource(SyncAPIResource):
         Create a new rule for a policy.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           action: The action to take when a policy rule matches.
 
           method: Method the rule applies to.
@@ -258,7 +262,7 @@ class PoliciesResource(SyncAPIResource):
 
     def _delete_policy(
         self,
-        policy_id: str,
+        policy_id: PolicyID,
         *,
         privy_authorization_signature: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -273,6 +277,8 @@ class PoliciesResource(SyncAPIResource):
         Delete a policy by policy ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
 
@@ -310,7 +316,7 @@ class PoliciesResource(SyncAPIResource):
         self,
         rule_id: str,
         *,
-        policy_id: str,
+        policy_id: PolicyID,
         privy_authorization_signature: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -324,6 +330,8 @@ class PoliciesResource(SyncAPIResource):
         Delete a rule by policy ID and rule ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
 
@@ -361,7 +369,7 @@ class PoliciesResource(SyncAPIResource):
 
     def _update(
         self,
-        policy_id: str,
+        policy_id: PolicyID,
         *,
         name: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
@@ -380,6 +388,8 @@ class PoliciesResource(SyncAPIResource):
         Update a policy by policy ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           name: Name to assign to the policy, up to 100 characters.
 
           owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
@@ -434,7 +444,7 @@ class PoliciesResource(SyncAPIResource):
         self,
         rule_id: str,
         *,
-        policy_id: str,
+        policy_id: PolicyID,
         action: PolicyAction,
         conditions: Iterable[PolicyConditionParam],
         method: PolicyMethod,
@@ -452,6 +462,8 @@ class PoliciesResource(SyncAPIResource):
         Update a rule by policy ID and rule ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           action: The action to take when a policy rule matches.
 
           method: Method the rule applies to.
@@ -502,7 +514,7 @@ class PoliciesResource(SyncAPIResource):
 
     def get(
         self,
-        policy_id: str,
+        policy_id: PolicyID,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -515,6 +527,8 @@ class PoliciesResource(SyncAPIResource):
         Get a policy by policy ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -537,7 +551,7 @@ class PoliciesResource(SyncAPIResource):
         self,
         rule_id: str,
         *,
-        policy_id: str,
+        policy_id: PolicyID,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -549,6 +563,8 @@ class PoliciesResource(SyncAPIResource):
         Get a rule by policy ID and rule ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -708,7 +724,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
 
     async def _create_rule(
         self,
-        policy_id: str,
+        policy_id: PolicyID,
         *,
         action: PolicyAction,
         conditions: Iterable[PolicyConditionParam],
@@ -727,6 +743,8 @@ class AsyncPoliciesResource(AsyncAPIResource):
         Create a new rule for a policy.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           action: The action to take when a policy rule matches.
 
           method: Method the rule applies to.
@@ -775,7 +793,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
 
     async def _delete_policy(
         self,
-        policy_id: str,
+        policy_id: PolicyID,
         *,
         privy_authorization_signature: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
@@ -790,6 +808,8 @@ class AsyncPoliciesResource(AsyncAPIResource):
         Delete a policy by policy ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
 
@@ -827,7 +847,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
         self,
         rule_id: str,
         *,
-        policy_id: str,
+        policy_id: PolicyID,
         privy_authorization_signature: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -841,6 +861,8 @@ class AsyncPoliciesResource(AsyncAPIResource):
         Delete a rule by policy ID and rule ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
 
@@ -878,7 +900,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
 
     async def _update(
         self,
-        policy_id: str,
+        policy_id: PolicyID,
         *,
         name: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
@@ -897,6 +919,8 @@ class AsyncPoliciesResource(AsyncAPIResource):
         Update a policy by policy ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           name: Name to assign to the policy, up to 100 characters.
 
           owner: The owner of the resource, specified as a Privy user ID, a P-256 public key, or
@@ -951,7 +975,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
         self,
         rule_id: str,
         *,
-        policy_id: str,
+        policy_id: PolicyID,
         action: PolicyAction,
         conditions: Iterable[PolicyConditionParam],
         method: PolicyMethod,
@@ -969,6 +993,8 @@ class AsyncPoliciesResource(AsyncAPIResource):
         Update a rule by policy ID and rule ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           action: The action to take when a policy rule matches.
 
           method: Method the rule applies to.
@@ -1019,7 +1045,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
 
     async def get(
         self,
-        policy_id: str,
+        policy_id: PolicyID,
         *,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -1032,6 +1058,8 @@ class AsyncPoliciesResource(AsyncAPIResource):
         Get a policy by policy ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request
@@ -1054,7 +1082,7 @@ class AsyncPoliciesResource(AsyncAPIResource):
         self,
         rule_id: str,
         *,
-        policy_id: str,
+        policy_id: PolicyID,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
         extra_headers: Headers | None = None,
@@ -1066,6 +1094,8 @@ class AsyncPoliciesResource(AsyncAPIResource):
         Get a rule by policy ID and rule ID.
 
         Args:
+          policy_id: A unique identifier for a policy.
+
           extra_headers: Send extra headers
 
           extra_query: Add additional query parameters to the request

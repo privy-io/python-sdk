@@ -14,6 +14,7 @@ from .hd_path import HDPath as HDPath
 from .currency import Currency as Currency
 from .quantity import Quantity as Quantity
 from .entity_id import EntityID as EntityID
+from .policy_id import PolicyID as PolicyID
 from .privy_fee import PrivyFee as PrivyFee
 from .abi_schema import AbiSchema as AbiSchema
 from .block_info import BlockInfo as BlockInfo
@@ -387,6 +388,7 @@ from .verification_address_param import VerificationAddressParam as Verification
 from .wallet_automation_response import WalletAutomationResponse as WalletAutomationResponse
 from .wallet_batch_create_result import WalletBatchCreateResult as WalletBatchCreateResult
 from .wallet_create_batch_params import WalletCreateBatchParams as WalletCreateBatchParams
+from .wallet_update_request_body import WalletUpdateRequestBody as WalletUpdateRequestBody
 from .xrpl_transaction_condition import XrplTransactionCondition as XrplTransactionCondition
 from .aggregation_condition_param import AggregationConditionParam as AggregationConditionParam
 from .allowlist_deletion_response import AllowlistDeletionResponse as AllowlistDeletionResponse

@@ -51,6 +51,7 @@ from ..types.owner_id_input import OwnerIDInput
 from ..types.intent_response import IntentResponse
 from ..types.intent_type_param import IntentTypeParam
 from ..types.owner_input_param import OwnerInputParam
+from ..types.policy_input_param import PolicyInputParam
 from ..types.rpc_intent_response import RpcIntentResponse
 from ..types.wallet_action_nonce import WalletActionNonce
 from ..types.policy_condition_param import PolicyConditionParam
@@ -2390,7 +2391,7 @@ class IntentsResource(SyncAPIResource):
         external_id: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
         owner_id: Optional[OwnerIDInput] | Omit = omit,
-        policy_ids: SequenceNotStr[str] | Omit = omit,
+        policy_ids: PolicyInputParam | Omit = omit,
         privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -2421,8 +2422,7 @@ class IntentsResource(SyncAPIResource):
           owner_id: The key quorum ID to set as the owner of the resource. If you provide this, do
               not specify an owner.
 
-          policy_ids: New policy IDs to enforce on the wallet. Currently, only one policy is supported
-              per wallet.
+          policy_ids: An optional list of up to one policy ID to enforce on the wallet.
 
           privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
               deadline by which the request must be processed.
@@ -4733,7 +4733,7 @@ class AsyncIntentsResource(AsyncAPIResource):
         external_id: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
         owner_id: Optional[OwnerIDInput] | Omit = omit,
-        policy_ids: SequenceNotStr[str] | Omit = omit,
+        policy_ids: PolicyInputParam | Omit = omit,
         privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
         # The extra values given here take precedence over values defined on the client or passed to this method.
@@ -4764,8 +4764,7 @@ class AsyncIntentsResource(AsyncAPIResource):
           owner_id: The key quorum ID to set as the owner of the resource. If you provide this, do
               not specify an owner.
 
-          policy_ids: New policy IDs to enforce on the wallet. Currently, only one policy is supported
-              per wallet.
+          policy_ids: An optional list of up to one policy ID to enforce on the wallet.
 
           privy_request_expiry: Request expiry. Value is a Unix timestamp in milliseconds representing the
               deadline by which the request must be processed.

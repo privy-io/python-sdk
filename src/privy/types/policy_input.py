@@ -3,6 +3,8 @@
 from typing import List
 from typing_extensions import TypeAlias
 
+from .policy_id import PolicyID
+
 __all__ = ["PolicyInput"]
 
-PolicyInput: TypeAlias = List[str]
+PolicyInput: TypeAlias = List[PolicyID]

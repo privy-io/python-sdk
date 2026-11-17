@@ -6,6 +6,7 @@ from typing import Iterable
 from typing_extensions import Required, Annotated, TypedDict
 
 from .._utils import PropertyInfo
+from .policy_id import PolicyID
 from .policy_action import PolicyAction
 from .policy_method import PolicyMethod
 from .policy_condition_param import PolicyConditionParam
@@ -14,7 +15,8 @@ __all__ = ["PolicyUpdateRuleParams"]
 
 
 class PolicyUpdateRuleParams(TypedDict, total=False):
-    policy_id: Required[str]
+    policy_id: Required[PolicyID]
+    """A unique identifier for a policy."""
 
     action: Required[PolicyAction]
     """The action to take when a policy rule matches."""

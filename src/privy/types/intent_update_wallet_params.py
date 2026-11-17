@@ -5,10 +5,10 @@ from __future__ import annotations
 from typing import Optional
 from typing_extensions import Annotated, TypedDict
 
-from .._types import SequenceNotStr
 from .._utils import PropertyInfo
 from .owner_id_input import OwnerIDInput
 from .owner_input_param import OwnerInputParam
+from .policy_input_param import PolicyInputParam
 from .additional_signer_input_param import AdditionalSignerInputParam
 
 __all__ = ["IntentUpdateWalletParams"]
@@ -40,11 +40,8 @@ class IntentUpdateWalletParams(TypedDict, total=False):
     If you provide this, do not specify an owner.
     """
 
-    policy_ids: SequenceNotStr[str]
-    """New policy IDs to enforce on the wallet.
-
-    Currently, only one policy is supported per wallet.
-    """
+    policy_ids: PolicyInputParam
+    """An optional list of up to one policy ID to enforce on the wallet."""
 
     privy_request_expiry: Annotated[str, PropertyInfo(alias="privy-request-expiry")]
     """Request expiry.

@@ -6,6 +6,7 @@ from typing import Iterable
 from typing_extensions import Required, TypedDict
 
 from .._types import SequenceNotStr
+from .policy_id import PolicyID
 from .key_quorum_id import KeyQuorumID
 from .wallet_chain_type import WalletChainType
 from .custom_metadata_param import CustomMetadataParam
@@ -28,7 +29,7 @@ class WalletAdditionalSigner(TypedDict, total=False):
     signer_id: Required[KeyQuorumID]
     """A unique identifier for a key quorum."""
 
-    override_policy_ids: SequenceNotStr[str]
+    override_policy_ids: SequenceNotStr[PolicyID]
     """The array of policy IDs that will be applied to wallet requests.
 
     If specified, this will override the base policy IDs set on the wallet.
@@ -49,7 +50,7 @@ class Wallet(TypedDict, total=False):
     Only supported for wallets with `chain_type: "ethereum"`.
     """
 
-    policy_ids: SequenceNotStr[str]
+    policy_ids: SequenceNotStr[PolicyID]
     """Policy IDs to enforce on the wallet.
 
     Currently, only one policy is supported per wallet.

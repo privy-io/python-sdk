@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing_extensions import Required, TypedDict
 
 from .._types import SequenceNotStr
+from .policy_id import PolicyID
 from .key_quorum_id import KeyQuorumID
 
 __all__ = ["WalletCreationAdditionalSignerItemParam"]
@@ -16,7 +17,7 @@ class WalletCreationAdditionalSignerItemParam(TypedDict, total=False):
     signer_id: Required[KeyQuorumID]
     """A unique identifier for a key quorum."""
 
-    override_policy_ids: SequenceNotStr[str]
+    override_policy_ids: SequenceNotStr[PolicyID]
     """The array of policy IDs that will be applied to wallet requests.
 
     If specified, this will override the base policy IDs set on the wallet.

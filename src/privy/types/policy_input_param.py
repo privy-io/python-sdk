@@ -5,8 +5,8 @@ from __future__ import annotations
 from typing import List
 from typing_extensions import TypeAlias
 
-__all__ = ["PolicyInputParam", "PolicyInputParamItem"]
+__all__ = ["PolicyInputParam", "PolicyID"]
 
-PolicyInputParamItem: TypeAlias = str
+PolicyID: TypeAlias = str
 
-PolicyInputParam: TypeAlias = List[str]
+PolicyInputParam: TypeAlias = List[PolicyID]

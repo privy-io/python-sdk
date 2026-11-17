@@ -2462,7 +2462,7 @@ class WalletsResource(SyncAPIResource):
         external_id: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
         owner_id: Optional[OwnerIDInput] | Omit = omit,
-        policy_ids: SequenceNotStr[str] | Omit = omit,
+        policy_ids: PolicyInputParam | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -2492,8 +2492,7 @@ class WalletsResource(SyncAPIResource):
           owner_id: The key quorum ID to set as the owner of the resource. If you provide this, do
               not specify an owner.
 
-          policy_ids: New policy IDs to enforce on the wallet. Currently, only one policy is supported
-              per wallet.
+          policy_ids: An optional list of up to one policy ID to enforce on the wallet.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.
@@ -5131,7 +5130,7 @@ class AsyncWalletsResource(AsyncAPIResource):
         external_id: str | Omit = omit,
         owner: Optional[OwnerInputParam] | Omit = omit,
         owner_id: Optional[OwnerIDInput] | Omit = omit,
-        policy_ids: SequenceNotStr[str] | Omit = omit,
+        policy_ids: PolicyInputParam | Omit = omit,
         privy_authorization_signature: str | Omit = omit,
         privy_request_expiry: str | Omit = omit,
         # Use the following arguments if you need to pass additional parameters to the API that aren't available via kwargs.
@@ -5161,8 +5160,7 @@ class AsyncWalletsResource(AsyncAPIResource):
           owner_id: The key quorum ID to set as the owner of the resource. If you provide this, do
               not specify an owner.
 
-          policy_ids: New policy IDs to enforce on the wallet. Currently, only one policy is supported
-              per wallet.
+          policy_ids: An optional list of up to one policy ID to enforce on the wallet.
 
           privy_authorization_signature: Request authorization signature. If multiple signatures are required, they
               should be comma separated.

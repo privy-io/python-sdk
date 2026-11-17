@@ -4,6 +4,7 @@ from typing import Optional
 from typing_extensions import Literal
 
 from .._models import BaseModel
+from .policy_id import PolicyID
 from .key_quorum_id import KeyQuorumID
 from .wallet_chain_type import WalletChainType
 
@@ -13,11 +14,8 @@ __all__ = ["PolicyListItem"]
 class PolicyListItem(BaseModel):
     """A policy without its rules, as returned when listing policies."""
 
-    id: str
-    """Unique ID of the created policy.
-
-    This will be the primary identifier when using the policy in the future.
-    """
+    id: PolicyID
+    """A unique identifier for a policy."""
 
     chain_type: WalletChainType
     """The wallet chain types."""

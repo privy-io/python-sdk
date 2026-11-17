@@ -6,6 +6,7 @@ from typing import Optional
 from typing_extensions import Required, TypedDict
 
 from .._types import SequenceNotStr
+from .policy_id import PolicyID
 from .owner_id_input import OwnerIDInput
 from .owner_input_param import OwnerInputParam
 from .wallet_chain_type import WalletChainType
@@ -56,7 +57,7 @@ class WalletBatchItemInputParam(TypedDict, total=False):
     If you provide this, do not specify an owner.
     """
 
-    policy_ids: SequenceNotStr[str]
+    policy_ids: SequenceNotStr[PolicyID]
     """List of policy IDs for policies that should be enforced on the wallet.
 
     Currently, only one policy is supported per wallet.

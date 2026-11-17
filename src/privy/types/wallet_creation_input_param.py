@@ -6,6 +6,7 @@ from typing import Iterable
 from typing_extensions import Required, TypedDict
 
 from .._types import SequenceNotStr
+from .policy_id import PolicyID
 from .wallet_chain_type import WalletChainType
 from .wallet_creation_additional_signer_item_param import WalletCreationAdditionalSignerItemParam
 
@@ -36,7 +37,7 @@ class WalletCreationInputParam(TypedDict, total=False):
     max 64 characters.
     """
 
-    policy_ids: SequenceNotStr[str]
+    policy_ids: SequenceNotStr[PolicyID]
     """Policy IDs to enforce on the wallet.
 
     Currently, only one policy is supported per wallet.

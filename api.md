@@ -1648,6 +1648,7 @@ from privy.types import (
     OwnerInputPublicKey,
     OwnerInputUser,
     P256PublicKey,
+    PolicyID,
     SolanaAddress,
     SolanaCaip2,
     StellarAddress,
