@@ -13,7 +13,7 @@ __all__ = ["TmmfWalletUpdatedWebhookPayload"]
 
 class TmmfWalletUpdatedWebhookPayload(BaseModel):
     """
-    Payload for the tmmf.wallet.updated webhook event: a register request created or confirmed a tMMF wallet.
+    Payload for the tmmf.wallet.updated webhook event: the status of a tMMF wallet with the provider changed.
     """
 
     address: str
@@ -51,3 +51,15 @@ class TmmfWalletUpdatedWebhookPayload(BaseModel):
 
     wallet_id: str
     """ID of the Privy wallet registered to trade and hold fund shares."""
+
+    emitted_at: Optional[int] = None
+    """
+    Unix timestamp in milliseconds when the provider emitted the event of the
+    change; absent when no provider event reported it.
+    """
+
+    sequence: Optional[int] = None
+    """
+    The provider's sequence number of the change, higher for later changes to the
+    resource; absent when no provider event reported it.
+    """

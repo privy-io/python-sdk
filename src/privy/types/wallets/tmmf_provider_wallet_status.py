@@ -5,4 +5,4 @@ from typing_extensions import Literal, TypeAlias
 
 __all__ = ["TmmfProviderWalletStatus"]
 
-TmmfProviderWalletStatus: TypeAlias = Union[Literal["created", "approved", "rejected"], str]
+TmmfProviderWalletStatus: TypeAlias = Union[Literal["created", "approved", "rejected", "deactivated"], str]
