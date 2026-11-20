@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.11.0](https://github.com/privy-io/python-sdk-private/compare/v0.10.0...v0.11.0) (2026-11-20)
+
+
+### Features
+
+* **api:** api update ([96914b3](https://github.com/privy-io/python-sdk-private/commit/96914b3bf4a31e1f98343ed6a06af28f2108a4fb))
+* **api:** api update ([be2777f](https://github.com/privy-io/python-sdk-private/commit/be2777f762e8cb4b573302333b75ff436462b8a9))
+* **api:** api update ([867677e](https://github.com/privy-io/python-sdk-private/commit/867677e25c93fb9494401d2c8719bc93ab652286))
+* **api:** api update ([72692d4](https://github.com/privy-io/python-sdk-private/commit/72692d4a996df340404c9b2287a5804b9b686ef4))
+* **api:** api update ([cc02d2e](https://github.com/privy-io/python-sdk-private/commit/cc02d2e3b85bf1d9a7070f60661865c4ee776a87))
+
 ## [0.10.0](https://github.com/privy-io/python-sdk-private/compare/v0.9.0...v0.10.0) (2026-11-16)
 
 
