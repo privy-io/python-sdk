@@ -18,11 +18,38 @@ __all__ = ["KYCSubmitDataParam"]
 class KYCSubmitDataParam(TypedDict, total=False):
     """KYC verification data for headless submission."""
 
+    account_purpose: str
+    """
+    Primary purpose of the individual's account, as one of the provider's
+    [accepted values](https://apidocs.bridge.xyz/platform/customers/customers/api).
+    """
+
+    account_purpose_other: str
+    """
+    Free-text account purpose, required by the provider when `account_purpose` is
+    `other`.
+    """
+
+    acting_as_intermediary: bool
+    """Whether the individual is acting as an intermediary for a third party."""
+
     date_of_birth: str
     """Date of birth in YYYY-MM-DD format."""
 
     email: str
     """Email address."""
+
+    employment_status: str
+    """
+    The individual's employment status, as one of the provider's
+    [accepted values](https://apidocs.bridge.xyz/platform/customers/customers/api).
+    """
+
+    expected_monthly_payments_usd: str
+    """
+    The individual's expected monthly payments, as one of the provider's
+    [USD buckets](https://apidocs.bridge.xyz/platform/customers/customers/api).
+    """
 
     first_name: str
     """Legal first name."""
@@ -41,6 +68,12 @@ class KYCSubmitDataParam(TypedDict, total=False):
 
     middle_name: str
     """Legal middle name."""
+
+    most_recent_occupation: str
+    """
+    The individual's most recent occupation, as an ISCO code, passed through to the
+    provider.
+    """
 
     nationalities: SequenceNotStr[str]
     """ISO 3166-1 alpha-3 codes for all nationalities held."""
@@ -62,6 +95,12 @@ class KYCSubmitDataParam(TypedDict, total=False):
 
     residential_address: VerificationAddressParam
     """A postal address used in KYC and KYB data submission."""
+
+    source_of_funds: str
+    """
+    Primary source of the individual's funds, as one of the provider's
+    [accepted values](https://apidocs.bridge.xyz/platform/customers/customers/api).
+    """
 
     stripe_link_shared_data_id: str
     """

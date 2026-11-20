@@ -197,8 +197,13 @@ class TestKYC:
         kyc = client.users.kyc.submit(
             user_id="user_id",
             data={
+                "account_purpose": "x",
+                "account_purpose_other": "x",
+                "acting_as_intermediary": True,
                 "date_of_birth": "7321-69-10",
                 "email": "dev@stainless.com",
+                "employment_status": "x",
+                "expected_monthly_payments_usd": "x",
                 "first_name": "x",
                 "identifying_information": [
                     {
@@ -217,6 +222,7 @@ class TestKYC:
                 },
                 "last_name": "x",
                 "middle_name": "x",
+                "most_recent_occupation": "x",
                 "nationalities": ["xxx"],
                 "nonresident_alien_attestation": True,
                 "ofac_screen": {
@@ -232,6 +238,7 @@ class TestKYC:
                     "street_line_2": "x",
                     "subdivision": "x",
                 },
+                "source_of_funds": "x",
                 "stripe_link_shared_data_id": "lsd_J!Q0Ok0bzJb7",
                 "transliterated_first_name": "x",
                 "transliterated_last_name": "x",
@@ -476,8 +483,13 @@ class TestAsyncKYC:
         kyc = await async_client.users.kyc.submit(
             user_id="user_id",
             data={
+                "account_purpose": "x",
+                "account_purpose_other": "x",
+                "acting_as_intermediary": True,
                 "date_of_birth": "7321-69-10",
                 "email": "dev@stainless.com",
+                "employment_status": "x",
+                "expected_monthly_payments_usd": "x",
                 "first_name": "x",
                 "identifying_information": [
                     {
@@ -496,6 +508,7 @@ class TestAsyncKYC:
                 },
                 "last_name": "x",
                 "middle_name": "x",
+                "most_recent_occupation": "x",
                 "nationalities": ["xxx"],
                 "nonresident_alien_attestation": True,
                 "ofac_screen": {
@@ -511,6 +524,7 @@ class TestAsyncKYC:
                     "street_line_2": "x",
                     "subdivision": "x",
                 },
+                "source_of_funds": "x",
                 "stripe_link_shared_data_id": "lsd_J!Q0Ok0bzJb7",
                 "transliterated_first_name": "x",
                 "transliterated_last_name": "x",

@@ -12,5 +12,7 @@ class ListCryptoDepositAccountsResponse(BaseModel):
     """A page of active crypto deposit accounts for a destination wallet."""
 
     data: List[CryptoDepositAddressRoute]
+    """Items in this page."""
 
     next_cursor: Optional[str] = None
+    """Cursor for the next page. Null when there are no further pages."""

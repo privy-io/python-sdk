@@ -12,5 +12,7 @@ class OrganizationsListResponse(BaseModel):
     """Response returned when listing organizations for an app."""
 
     data: List[Organization]
+    """Items in this page."""
 
     next_cursor: Optional[str] = None
+    """Cursor for the next page. Null when there are no further pages."""

@@ -12,7 +12,7 @@ class ConditionSetsResponse(BaseModel):
     """Paginated list of condition sets in an app."""
 
     data: List[ConditionSet]
-    """Condition sets in this page."""
+    """Items in this page."""
 
     next_cursor: Optional[str] = None
     """Cursor for the next page. Null when there are no further pages."""

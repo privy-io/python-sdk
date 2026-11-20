@@ -12,7 +12,7 @@ class KeyQuorumsResponse(BaseModel):
     """Paginated list of key quorums in an app."""
 
     data: List[KeyQuorum]
-    """Key quorums in this page."""
+    """Items in this page."""
 
     next_cursor: Optional[str] = None
     """Cursor for the next page. Null when there are no further pages."""

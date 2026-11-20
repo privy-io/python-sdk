@@ -12,7 +12,7 @@ class PoliciesResponse(BaseModel):
     """Paginated list of policies in an app."""
 
     data: List[PolicyListItem]
-    """Policies in this page."""
+    """Items in this page."""
 
     next_cursor: Optional[str] = None
     """Cursor for the next page. Null when there are no further pages."""
